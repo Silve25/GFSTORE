@@ -1,19 +1,23 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GF Store — Liste produits (simple)</title>
   <style>
-    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:0;padding:20px;background:#f6f7fb}
-    h1{margin:0 0 16px}
-    #status{margin:8px 0 16px;color:#444}
+    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:0;padding:16px;background:#f6f7fb;color:#0f172a}
+    h1{font-size:20px;margin:0 0 12px}
+    #status{padding:10px;border-radius:8px;background:#fff8e1;border:1px solid #facc15;color:#92400e;margin-bottom:12px}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-    .card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px}
-    .card img{width:100%;height:150px;object-fit:contain;background:#fafafa;border-radius:8px}
-    .title{font-weight:600;margin:8px 0 4px}
-    .price{font-weight:700}
-    .muted{color:#6b7280;font-size:.9rem}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:10px;display:flex;flex-direction:column}
+    .thumb{width:100%;height:160px;object-fit:contain;border:1px solid #eee;border-radius:8px;background:#fafafa}
+    .title{font-weight:700;margin-top:8px}
+    .muted{color:#6b7280;font-size:13px}
+    .bad{color:#b91c1c}
+    .ok{color:#065f46}
+    .footer{margin-top:8px;display:flex;justify-content:space-between;align-items:center}
+    .link{font-size:13px}
+    .pill{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid #e5e7eb}
   </style>
 </head>
 <body>
@@ -21,97 +25,106 @@
   <div id="status">Chargement…</div>
   <div id="grid" class="grid"></div>
 
-  <script>
-    // 1) Essaie JSON à la racine de ton repo
-    const CANDIDATES = [
-      'data/products.json',       // <-- mets ton fichier ici
-      './data/products.json',
-      'produits.json',
-      './produits.json'
-    ];
-
-    // Helpers pour récupérer les champs même si les noms varient
-    const g = (o, keys) => {
-      for (const k of keys) { if (o && o[k] != null) return o[k]; }
-      return undefined;
+  <!-- IMPORTANT : on charge le module JS de données -->
+  <script type="module">
+    // Petite aide visuelle
+    const status = (msg, cls='')=>{
+      const el=document.getElementById('status');
+      el.textContent = msg;
+      el.className = cls;
     };
 
-    async function loadProducts() {
-      const status = document.getElementById('status');
-
-      // 1) Tenter JSON
-      for (const url of CANDIDATES) {
-        try {
-          const res = await fetch(url, { cache: 'no-store' });
-          if (!res.ok) continue;
-          const data = await res.json();
-          const products = Array.isArray(data) ? data : (Array.isArray(data.products) ? data.products : null);
-          if (products) {
-            console.log('Produits chargés depuis', url);
-            status.textContent = `OK: chargés depuis ${url}`;
-            return products;
-          }
-        } catch(e) {/* essaie suivant */}
-      }
-
-      // 2) Fallback (optionnel) : si tu tiens à rester en .js qui pose problème,
-      //    tu peux créer un fichier data/products-global.js qui définit window.PRODUCTS,
-      //    puis décommenter le bloc ci-dessous pour l’injecter dynamiquement.
-      /*
-      try {
-        await new Promise((resolve, reject)=>{
-          const s=document.createElement('script');
-          s.src='data/products-global.js'; // ce fichier DOIT faire: window.PRODUCTS = [ ... ];
-          s.onload=()=>resolve();
-          s.onerror=()=>reject(new Error('Echec chargement products-global.js'));
-          document.head.appendChild(s);
-        });
-        if (Array.isArray(window.PRODUCTS)) {
-          status.textContent = 'OK: chargés depuis data/products-global.js';
-          return window.PRODUCTS;
-        }
-      } catch(e) {}
-      */
-
-      status.textContent = 'Échec du chargement des produits (aucun JSON valide trouvé).';
-      throw new Error('Aucun fichier JSON valide trouvé');
+    // Récupérer i) image locale si disponible, ii) sinon 1ère http(s), iii) sinon placeholder
+    function pickImage(p){
+      const list = Array.isArray(p.images)? p.images.filter(Boolean): [];
+      // normaliser éventuels antislashs Windows
+      const norm = u => (u||'').replaceAll('\\\\','/').replaceAll('\\','/');
+      // 1) image locale dans assets/
+      const local = list.map(norm).find(u => u.startsWith('assets/'));
+      if(local) return local;
+      // 2) première URL http(s)
+      const web = list.map(norm).find(u => /^https?:\/\//i.test(u));
+      if(web) return web;
+      // 3) placeholder
+      return 'assets/img/opengraph-default.jpg';
     }
 
+    // Produit → URL de page produit (existe dans ton repo: produits/<slug>-<id>.html)
+    function productUrl(p){
+      return `produits/${p.slug}-${p.id}.html`;
+    }
+
+    // Rendu ultra simple des cartes
     function render(products){
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
 
-      products.forEach(p=>{
-        const name = g(p, ['Nom du Produit','name','title']) || 'Sans nom';
-        const price = g(p, ['Prix (€)','price','prix']);
-        const category = g(p, ['Catégorie','category']);
-        const images = g(p, ['Images','images']) || [];
-        const imageUrl = g(p, ['Image URL','image','image_url']) || images[0] || 'assets/img/opengraph-default.jpg';
+      if(!Array.isArray(products) || products.length===0){
+        status('Aucun produit à afficher.', 'bad');
+        return;
+      }
 
-        const card = document.createElement('div');
+      let hiddenCount = 0;
+
+      products.forEach(p=>{
+        // Sélection d’image
+        const imgSrc = pickImage(p);
+
+        // Détection d’images impossibles (anciens chemins Windows / file://)
+        const invalids = (p.images||[]).filter(u => /^([a-zA-Z]:\\|file:\/\/\/|C:)/.test(u||''));
+        if(invalids.length){
+          console.warn(`[IMAGES INVALIDE] ${p.name} →`, invalids);
+        }
+
+        const card = document.createElement('article');
         card.className = 'card';
         card.innerHTML = `
-          <img src="${imageUrl}" alt="">
-          <div class="title">${name}</div>
-          <div class="muted">${category || ''}</div>
-          <div class="price">${(typeof price === 'number') ? price.toFixed(2).replace('.',',')+' €' : (price || '')}</div>
+          <img class="thumb" src="${imgSrc}" alt="${p.name}" onerror="this.src='assets/img/opengraph-default.jpg'">
+          <div class="title">${p.name || '(Sans nom)'}</div>
+          <div class="muted">${p.brand ? `Marque: ${p.brand}` : ''} ${p.stock!=null ? `• Stock: ${p.stock}` : ''}</div>
+          <div class="muted">${p.slug || ''}</div>
+          <div class="footer">
+            <a class="link" href="${productUrl(p)}">Voir la fiche</a>
+            <span class="pill">${p.id}</span>
+          </div>
         `;
         grid.appendChild(card);
       });
 
-      if (products.length === 0) {
-        document.getElementById('status').textContent = 'Aucun produit à afficher.';
-      }
+      status(`OK • ${products.length} produit(s) chargé(s)`, 'ok');
     }
 
-    (async function(){
-      try {
-        const products = await loadProducts();
+    // Chargement dynamique du module (chemin sensible à la casse !)
+    (async ()=>{
+      try{
+        // ⚠️ Chemin EXACT : ton fichier est à data/products.js
+        const mod = await import('./data/products.js');
+        const products = (mod && (mod.default || mod.PRODUCTS)) || [];
+        if(!Array.isArray(products)) {
+          console.error('Le module data/products.js n’exporte pas un tableau.');
+          status('Erreur : data/products.js n’exporte pas un tableau.', 'bad');
+          return;
+        }
+        // Info debug
+        console.debug('Produits chargés :', products.length);
+        // Affichage
         render(products);
-      } catch (e) {
-        console.error(e);
+      }catch(e){
+        console.error('Échec import ./data/products.js', e);
+        status('Échec du chargement des produits.\n' +
+               '• Vérifie que GitHub Pages est activé\n' +
+               '• Vérifie que le fichier existe: data/products.js (casse exacte)\n' +
+               '• Vérifie qu’il commence par: const PRODUCTS = [...] ; export default PRODUCTS;', 'bad');
       }
     })();
   </script>
+
+  <!-- Notes / Debug visibles pour toi :
+    - Si tu vois des WARNING [IMAGES INVALIDE] dans la console : ce sont d’anciens chemins (C:\... ou file:///...) qui ne peuvent PAS marcher sur GitHub Pages.
+      => Pas grave : on prend automatiquement une autre image si possible, sinon un placeholder.
+    - La page de détail est devinée par: produits/<slug>-<id>.html (structure déjà présente dans ton repo).
+    - Pas de produits fictifs : on utilise uniquement ce que contient data/products.js (id, slug, name, description, images, brand, stock).
+    - Si rien ne s’affiche, contrôle la casse du chemin "data/products.js" et que GitHub Pages est bien activé (Settings → Pages → Deploy from branch → main / root).
+  -->
 </body>
 </html>
