@@ -3,350 +3,101 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>GF Store — Accueil</title>
-  <meta name="description" content="GF Store — Électronique grand public premium. Livraison 24-48h, assistance 24/7, paiement sécurisé." />
-
+  <title>GF Store — Produits (simple)</title>
   <style>
-    :root{
-      --bg:#f6f7fb; --card:#fff; --muted:#6b7280; --text:#0f172a; --accent:#0ea5a4; --danger:#ef4444;
-      --glass: rgba(255,255,255,0.6);
-      --shadow: 0 6px 18px rgba(15,23,42,0.06);
-    }
-    [data-theme="dark"]{
-      --bg:#071026; --card:#071827; --muted:#9aa4b2; --text:#e6eef7; --accent:#34d399; --danger:#f87171;
-      --glass: rgba(255,255,255,0.03);
-      --shadow: 0 8px 24px rgba(0,0,0,0.6);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background:linear-gradient(180deg,var(--bg), #e9eef6 120%); color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-    }
-
-    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;backdrop-filter: blur(6px);background:var(--glass);box-shadow:var(--shadow);position:sticky;top:0;z-index:50}
-    .brand{display:flex;gap:12px;align-items:center}
-    .brand .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
-    .search{flex:1;margin:0 20px}
-    .search input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:transparent;color:var(--text)}
-    .actions{display:flex;gap:12px;align-items:center}
-    .btn{padding:8px 12px;border-radius:8px;border:0;background:var(--card);box-shadow:var(--shadow);cursor:pointer}
-    .icon-btn{display:inline-flex;align-items:center;gap:8px}
-
-    .hero{display:grid;grid-template-columns:1fr 420px;gap:24px;padding:32px}
-    .hero-card{background:var(--card);padding:22px;border-radius:14px;box-shadow:var(--shadow)}
-
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;padding:20px}
-    .product{background:var(--card);padding:12px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
-    .product img{width:100%;height:160px;object-fit:contain;border-radius:8px;background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01))}
-    .meta{display:flex;justify-content:space-between;align-items:center}
-    .title{font-weight:600}
-    .badges{display:flex;gap:6px;flex-wrap:wrap}
-    .badge-small{background:rgba(14,165,164,0.12);color:var(--accent);padding:6px;border-radius:8px;font-weight:600;font-size:0.8rem}
-
-    .cta{display:flex;gap:8px}
-    .add{flex:1;padding:10px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#06b6d4);color:white;border:0;cursor:pointer}
-    .info{padding:8px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:transparent;cursor:pointer}
-
-    .minicart{position:fixed;right:18px;bottom:18px;background:var(--card);padding:12px;border-radius:12px;box-shadow:var(--shadow);width:320px;max-height:70vh;overflow:auto}
-    .minicart h4{margin:0 0 10px 0}
-    .cart-item{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed rgba(0,0,0,0.06)}
-    .cart-item img{width:48px;height:48px;object-fit:contain}
-
-    footer{padding:18px 28px;color:var(--muted);font-size:0.95rem}
-
-    details.debug{margin:20px;padding:12px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12}
-    details.debug summary{cursor:pointer;font-weight:700}
-    pre{white-space:pre-wrap}
-    @media (max-width:900px){.hero{grid-template-columns:1fr;}.topbar{flex-wrap:wrap}.search{order:3;width:100%;margin:10px 0}}
+    body{font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial; margin:16px;}
+    h1{margin:0 0 10px}
+    #status{margin:0 0 12px; color:#555}
+    .grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:12px}
+    .card{border:1px solid #ddd; border-radius:8px; padding:10px}
+    .card img{width:100%; height:150px; object-fit:contain; background:#f5f5f5; border-radius:6px}
+    .name{font-weight:600; margin:8px 0 4px}
+    .muted{color:#666; font-size:0.9rem; margin-bottom:6px}
+    .price{font-weight:700}
   </style>
 </head>
 <body>
+  <h1>Produits</h1>
+  <div id="status">Chargement…</div>
+  <div id="grid" class="grid"></div>
 
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo">GF</div>
-      <div>
-        <div style="font-weight:800">GF Store</div>
-        <div style="font-size:12px;color:var(--muted)">Électronique premium — Livraison 24-48h</div>
-      </div>
-    </div>
-
-    <div class="search">
-      <input id="searchInput" placeholder="Rechercher : PS5, MacBook, AirPods..." />
-    </div>
-
-    <div class="actions">
-      <button class="btn icon-btn" id="themeToggle" title="Basculer thème">🌙 / ☀️</button>
-      <button class="btn icon-btn" id="cartBtn">Panier (<span id="cartCount">0</span>)</button>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div class="hero-card">
-        <h1 style="margin:0">Boutique high-tech</h1>
-        <p style="margin:6px 0;color:var(--muted)">Produits réels issus de <code>data/products.js</code> (aucun produit fictif).</p>
-        <ul style="margin:0;color:var(--muted)">
-          <li>Les produits sans champs obligatoires (id/slug/name) sont ignorés <em>(voir bloc debug en bas)</em>.</li>
-          <li>Images : on prend le premier visuel valide (URL http/https ou <code>assets/…</code>). Sinon, image par défaut.</li>
-          <li>Stock 0 → badge « Rupture ». Le produit reste visible (pas masqué).</li>
-        </ul>
-      </div>
-      <div class="hero-card">
-        <h3>Top ventes</h3>
-        <div id="topList" style="display:grid;gap:10px;margin-top:10px"></div>
-      </div>
-    </section>
-
-    <section style="padding:12px 20px">
-      <h2 style="margin:8px 0">Nos produits</h2>
-      <div class="grid" id="productsGrid">Chargement...</div>
-    </section>
-
-    <details class="debug" id="debugBox" open>
-      <summary>🛠 Debug — produits ignorés / raisons</summary>
-      <div id="debugList" style="margin-top:10px"></div>
-      <!--
-        Ce bloc te montre clairement pourquoi un produit n’apparaît pas :
-        - Champs manquants (id/slug/name)
-        - Objet non conforme (pas un objet)
-        - etc.
-        Les mêmes infos sont aussi en console.warn().
-      -->
-    </details>
-  </main>
-
-  <div id="minicart" class="minicart" hidden>
-    <h4>Panier</h4>
-    <div id="cartItems"></div>
-    <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
-      <div><strong>Total:</strong> <span id="cartTotal">0 €</span></div>
-      <div><button class="btn" id="goCheckout">Commander</button></div>
-    </div>
-  </div>
-
-  <footer>
-    © GF Store — Tous droits réservés • Paiement sécurisé • Assistance 24/7
-  </footer>
-
-  <!-- On importe TA base produits réelle -->
   <script type="module">
+    // ⚠️ Nécessite data/products.js avec: export default PRODUCTS;
     import PRODUCTS from './data/products.js';
 
-    /*********************** Utilitaires **************************/
-    const $ = s => document.querySelector(s);
-    const $grid = $('#productsGrid');
-    const $top = $('#topList');
-    const $debugList = $('#debugList');
-    const placeholder = 'assets/img/opengraph-default.jpg'; // présent dans ton repo
+    const grid = document.getElementById('grid');
+    const status = document.getElementById('status');
 
-    // Normalise un chemin d’image. Accepte http(s), data/assets, et “répare” les anciens file:///C:/.../gf-store/assets/...
-    function normalizeImage(url){
-      if(!url || typeof url !== 'string') return placeholder;
-      const u = url.trim();
-      if(/^https?:\/\//i.test(u)) return u;                         // URL distante (Boulanger, Amazon, etc.)
-      if(u.includes('/assets/')) return u.slice(u.indexOf('assets/'));  // on garde un chemin relatif /assets/...
-      if(u.includes('\\assets\\')) return u.slice(u.indexOf('\\assets\\')).replaceAll('\\','/'); // windows → web
-      if(/^file:\/\//i.test(u) && u.toLowerCase().includes('/gf-store/')){
-        // Transforme file:///C:/.../gf-store/assets/img/... → assets/img/...
-        const idx = u.toLowerCase().indexOf('/gf-store/');
-        const rest = u.slice(idx + '/gf-store/'.length);
-        return rest.startsWith('assets/') ? rest : placeholder;
+    // Image de secours déjà présente dans ton repo
+    const FALLBACK = 'assets/img/opengraph-default.jpg';
+
+    // Renvoie une image "propre" à partir des champs possibles
+    function pickImage(p){
+      // priorité à p.image, sinon 1ère de p.images, sinon colonnes Excel, sinon fallback
+      const candidates = [];
+      if (typeof p.image === 'string') candidates.push(p.image);
+      if (Array.isArray(p.images)) candidates.push(...p.images);
+      if (typeof p.imageUrl === 'string') candidates.push(p.imageUrl);
+      if (typeof p['Image URL'] === 'string') candidates.push(p['Image URL']);
+
+      for (const raw of candidates){
+        if (!raw || typeof raw !== 'string') continue;
+        const u = raw.trim();
+        // http(s) direct
+        if (/^https?:\/\//i.test(u)) return u;
+        // chemins locaux → garder la partie "assets/..."
+        if (u.includes('assets/')) return u.slice(u.indexOf('assets/'));
+        if (u.includes('\\assets\\')) return u.slice(u.indexOf('\\assets\\')).replaceAll('\\','/');
+        // anciens file:///C:/.../gf-store/assets/... → "assets/..."
+        if (/^file:\/\//i.test(u) && u.toLowerCase().includes('/gf-store/')){
+          const rest = u.slice(u.toLowerCase().indexOf('/gf-store/') + '/gf-store/'.length);
+          if (rest.startsWith('assets/')) return rest;
+        }
       }
-      return placeholder;
+      return FALLBACK;
     }
 
-    // Petites helpers
-    const truncate = (t, n=120) => (t || '').length > n ? t.slice(0,n-1)+'…' : (t || '');
-    const euro = v => (typeof v === 'number') ? v.toFixed(2).replace('.', ',')+' €' : '—';
+    function euro(v){
+      if (typeof v === 'number' && Number.isFinite(v)) return v.toFixed(2).replace('.', ',') + ' €';
+      if (typeof v === 'string' && v.trim() !== '') return v;
+      return '—';
+    }
 
-    /*********************** Thème ********************************/
-    const themeToggle = document.getElementById('themeToggle');
-    const userTheme = localStorage.getItem('gf_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', userTheme === 'dark' ? 'dark' : 'light');
-    themeToggle.addEventListener('click', ()=>{
-      const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', cur);
-      localStorage.setItem('gf_theme', cur);
+    // Récupère le tableau depuis products.js (sans injecter de faux produits)
+    const data = Array.isArray(PRODUCTS) ? PRODUCTS
+                : (Array.isArray(PRODUCTS?.products) ? PRODUCTS.products : []);
+
+    let shown = 0;
+    let skipped = 0;
+
+    data.forEach(p=>{
+      if (!p || typeof p !== 'object'){ skipped++; return; }
+      const name = p.name || p['Nom du Produit'] || p.title || p.slug || '';
+      if (!name){ skipped++; return; }
+
+      const price = (p.price ?? p['Prix (€)'] ?? p.promoPrice ?? p['Prix Promo (€)']);
+      const img = pickImage(p);
+      const brand = p.brand || p['Marque'] || '';
+      const model = p.model || p['Modèle'] || '';
+      const category = p.category || p['Catégorie'] || '';
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${img}" alt="">
+        <div class="name">${name}</div>
+        <div class="muted">${brand} ${model}</div>
+        <div class="muted">${category}</div>
+        <div class="price">${euro(Number(price))}</div>
+      `;
+      grid.appendChild(card);
+      shown++;
     });
 
-    /*********************** Cart *********************************/
-    const CART_KEY = 'gf_cart_v1';
-    const loadCart = ()=>{ try{ return JSON.parse(localStorage.getItem(CART_KEY) || '[]') }catch(e){return []} };
-    const saveCart = (c)=>{ localStorage.setItem(CART_KEY, JSON.stringify(c)); renderCartCount(); };
-    function addToCart(p){
-      const cart = loadCart();
-      const found = cart.find(i=>i.id===p.id);
-      const price = (typeof p.price === 'number') ? p.price : 0; // si pas de prix dans products.js → 0
-      if(found){ found.qty++; } else { cart.push({id:p.id, title:p.name, price, image:(p._image||placeholder), qty:1}); }
-      saveCart(cart);
-      openMiniCart();
+    status.textContent = `Affichés: ${shown} • Ignorés: ${skipped}`;
+    if (skipped > 0) {
+      console.warn('Certains items ont été ignorés (ex: nom manquant ou entrée non-objet). Compteur ignorés =', skipped);
     }
-    function renderCartCount(){
-      const total = loadCart().reduce((s,i)=>s+i.qty,0);
-      document.getElementById('cartCount').textContent = total;
-    }
-    function renderMiniCart(){
-      const items = loadCart();
-      const container = document.getElementById('cartItems');
-      container.innerHTML='';
-      if(items.length===0){
-        container.innerHTML='<div style="color:var(--muted)">Votre panier est vide.</div>';
-        document.getElementById('cartTotal').textContent = '0 €'; return;
-      }
-      let total = 0;
-      items.forEach(it=>{
-        total += it.price * it.qty;
-        const div = document.createElement('div'); div.className='cart-item';
-        div.innerHTML = `
-          <img src="${it.image || '${placeholder}'}" alt="">
-          <div style="flex:1">
-            <div style="font-weight:700">${it.title}</div>
-            <div style="font-size:0.9rem;color:var(--muted)">${it.qty} x ${euro(it.price)}</div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:6px">
-            <button class="info" data-action="plus" data-id="${it.id}">+</button>
-            <button class="info" data-action="minus" data-id="${it.id}">-</button>
-          </div>
-        `;
-        container.appendChild(div);
-      });
-      document.getElementById('cartTotal').textContent = euro(total);
-    }
-    document.getElementById('cartItems').addEventListener('click', (e)=>{
-      const btn = e.target.closest('button[data-action]');
-      if(!btn) return;
-      const id = btn.getAttribute('data-id'); const act = btn.getAttribute('data-action');
-      const cart = loadCart();
-      const idx = cart.findIndex(i=>i.id===id);
-      if(idx===-1) return;
-      if(act==='plus') cart[idx].qty++;
-      if(act==='minus'){ cart[idx].qty--; if(cart[idx].qty<=0) cart.splice(idx,1); }
-      saveCart(cart); renderMiniCart();
-    });
-    document.getElementById('cartBtn').addEventListener('click', ()=>{ openMiniCart(); });
-    document.getElementById('goCheckout').addEventListener('click', ()=>{ alert('Checkout non implémenté ici.'); });
-    function openMiniCart(){ document.getElementById('minicart').hidden=false; renderMiniCart(); }
-    renderCartCount();
-
-    /*********************** Chargement & validation produits ******/
-
-    // ⚠️ IMPORTANT : on ne crée PAS de produits fictifs.
-    // On prend exactement ce que fournit data/products.js (export default PRODUCTS).
-    const RAW = Array.isArray(PRODUCTS) ? PRODUCTS : [];
-
-    const filtered = [];
-    const skipped = []; // pour expliquer clairement les raisons
-
-    RAW.forEach((p, idx)=>{
-      const reasons = [];
-
-      if(!p || typeof p !== 'object'){ reasons.push('Entrée non-objet'); }
-      if(!p?.id)   reasons.push('id manquant');
-      if(!p?.slug) reasons.push('slug manquant');
-      if(!p?.name) reasons.push('name manquant');
-
-      // Image principale → on prend le 1er visuel valide s'il existe
-      const imgs = Array.isArray(p?.images) ? p.images : [];
-      const firstImg = imgs.find(x => typeof x === 'string' && x.trim().length>0);
-      const resolved = normalizeImage(firstImg);
-
-      if(reasons.length){
-        skipped.push({ index: idx, candidate: p?.name || '(sans nom)', reasons });
-        console.warn('[GF/skip]', p, reasons);
-        return; // on n’ajoute pas au rendu
-      }
-
-      filtered.push({
-        ...p,
-        _image: resolved // on stocke l’image résolue à part pour l’UI
-      });
-    });
-
-    /*********************** Rendu UI *****************************/
-    function renderProducts(list){
-      $grid.innerHTML='';
-      list.forEach(p=>{
-        const article = document.createElement('article'); article.className='product';
-        const rupture = (typeof p.stock === 'number' && p.stock<=0);
-        const low = (typeof p.stock === 'number' && p.stock>0 && p.stock<=5);
-        article.innerHTML = `
-          <img src="${p._image || placeholder}" alt="${p.name}">
-          <div class="meta">
-            <div class="title">${p.name}</div>
-            <div style="font-size:0.95rem;color:var(--muted)">${p.brand || ''}</div>
-          </div>
-          <div style="color:var(--muted);font-size:0.9rem">${truncate(p.description, 140)}</div>
-          <div class="badges">
-            ${ rupture ? '<div class="badge-small" style="color:#b91c1c;background:rgba(239,68,68,.12)">Rupture</div>' : '' }
-            ${ low ? '<div class="badge-small">Stock: '+p.stock+'</div>' : '' }
-          </div>
-          <div class="cta" style="margin-top:auto">
-            <button class="info" data-view="${p.id}">Voir</button>
-            <button class="add" ${rupture?'disabled':''} data-add="${p.id}">${rupture?'Indispo':'Ajouter'}</button>
-          </div>
-        `;
-        $grid.appendChild(article);
-      });
-    }
-
-    function renderTop(){
-      const topCandidates = filtered.slice(0,4);
-      $top.innerHTML='';
-      topCandidates.forEach(t=>{
-        const d = document.createElement('div'); d.style.display='flex'; d.style.alignItems='center'; d.style.gap='10px';
-        d.innerHTML = `<img src="${t._image||placeholder}" style="width:64px;height:64px;object-fit:contain;border-radius:8px"><div><div style="font-weight:700">${t.name}</div><div style="color:var(--muted)">${t.brand||''}</div></div>`;
-        $top.appendChild(d);
-      });
-    }
-
-    // Événements « Voir » / « Ajouter »
-    $grid.addEventListener('click', (e)=>{
-      const btnV = e.target.closest('button[data-view]');
-      if(btnV){
-        const id = btnV.getAttribute('data-view');
-        const p = filtered.find(x=>x.id===id);
-        if(!p) return alert('Produit introuvable');
-        alert(`${p.name}\n\n${p.description || 'Aucune description.'}`);
-        return;
-      }
-      const btnA = e.target.closest('button[data-add]');
-      if(btnA){
-        const id = btnA.getAttribute('data-add');
-        const p = filtered.find(x=>x.id===id);
-        if(!p) return alert('Produit introuvable');
-        if(typeof p.stock === 'number' && p.stock<=0) return alert('Produit en rupture.');
-        addToCart(p);
-      }
-    });
-
-    // Recherche simple par nom, marque, slug, description
-    document.getElementById('searchInput').addEventListener('input', (e)=>{
-      const q = e.target.value.trim().toLowerCase();
-      if(!q){ renderProducts(filtered); return; }
-      const f = filtered.filter(p=>{
-        const hay = [p.name, p.brand, p.slug, p.description].map(x=>(x||'').toLowerCase()).join(' ');
-        return hay.includes(q) || hay.indexOf(q) >= 0 || hay.match(q);
-      });
-      renderProducts(f);
-    });
-
-    // Remplit le bloc debug avec les raisons des produits ignorés
-    (function renderDebug(){
-      if(skipped.length===0){ $debugList.innerHTML = '<em>Aucun produit ignoré 🎉</em>'; return; }
-      const ul = document.createElement('ul'); ul.style.margin='0'; ul.style.paddingLeft='18px';
-      skipped.forEach(s=>{
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>${s.candidate}</strong> — ${s.reasons.join(', ')} <span style="color:#9ca3af">(index ${s.index})</span>`;
-        ul.appendChild(li);
-      });
-      $debugList.replaceChildren(ul);
-    })();
-
-    // Boot
-    renderProducts(filtered);
-    renderTop();
   </script>
 </body>
 </html>
