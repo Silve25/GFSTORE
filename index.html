@@ -1,113 +1,92 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <title>GF Store — Test Produits (simple)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <title>GF Store — Liste produits (simple)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body{font-family:system-ui,Segoe UI,Arial,sans-serif;margin:0;padding:20px;background:#f6f7fb}
-    h1{margin:0 0 12px 0}
-    #status{margin:8px 0 16px 0;color:#555}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-    .card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px}
-    .card img{width:100%;height:160px;object-fit:contain;background:#fafafa;border:1px solid #eee;border-radius:8px}
-    .title{font-weight:700;margin-top:8px}
-    .muted{color:#6b7280;font-size:0.9rem}
-    .note{color:#b45309;font-size:0.85rem;margin-top:6px}
-    .error{white-space:pre-wrap;background:#fee2e2;border:1px solid #ef4444;color:#991b1b;padding:10px;border-radius:8px}
+    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:0;padding:20px;background:#fafafa;color:#111}
+    h1{margin:0 0 10px}
+    #status{margin:8px 0 16px;color:#b91c1c}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+    .card{background:#fff;border:1px solid #eee;border-radius:10px;padding:12px}
+    .card img{width:100%;height:160px;object-fit:contain;background:#f4f4f5;border-radius:8px}
+    .name{font-weight:700;margin:8px 0 6px}
+    .price{font-weight:800}
+    .old{color:#6b7280;text-decoration:line-through;margin-left:8px}
+    .muted{color:#6b7280;font-size:.9rem}
   </style>
 </head>
 <body>
-  <h1>GF Store — Liste produits (simple)</h1>
+  <h1>GF Store — Produits</h1>
   <div id="status">Chargement…</div>
-  <div id="errors"></div>
   <div id="grid" class="grid"></div>
 
-  <script type="module">
-    const $ = s => document.querySelector(s);
-    const statusEl = $("#status");
-    const errorsEl = $("#errors");
-    const grid = $("#grid");
+  <!-- 1) Charge tes produits en “global” (voir snippet à ajouter dans products.js) -->
+  <script src="data/products.js"></script>
 
-    function showError(msg){
-      const div = document.createElement('div');
-      div.className = 'error';
-      div.textContent = msg;
-      errorsEl.appendChild(div);
-      console.error(msg);
+  <script>
+  (function () {
+    const statusEl = document.getElementById('status');
+    const grid = document.getElementById('grid');
+
+    // Petit helper format prix
+    const priceFmt = (v) => {
+      const n = Number(v);
+      if (Number.isFinite(n)) return n.toFixed(2).replace('.', ',') + ' €';
+      return v || '';
+    };
+
+    // 2) Vérifs de base
+    if (!Array.isArray(window.PRODUCTS)) {
+      statusEl.textContent = "⚠️ Impossible de charger data/products.js. Ouvre la console (F12 > Network) : si tu vois une page HTML/404 à la place du JS, c’est un mauvais chemin ou GitHub Pages pas actif.";
+      console.warn("DEBUG: window.PRODUCTS n'existe pas. Causes possibles :");
+      console.warn("- Mauvais chemin: data/products.js (la casse compte sur le web)");
+      console.warn("- GitHub Pages pas activé (Settings → Pages)");
+      console.warn("- Erreur de syntaxe dans products.js");
+      return;
     }
-
-    // Aide: messages utiles si ça ne s'affiche pas
-    function environmentHints(){
-      // Si la page n'est pas servie en http(s), c'est quasi sûr que ça casse
-      if(location.protocol !== 'http:' && location.protocol !== 'https:'){
-        showError("⚠️ Cette page n'est pas servie via HTTP. Les modules ES (import) ne fonctionnent pas en file://.\n" +
-                  "Solution : dans le dossier gf-store, lancez `py -m http.server 8080` puis ouvrez http://localhost:8080/");
-      }
+    if (window.PRODUCTS.length === 0) {
+      statusEl.textContent = "Aucun produit dans PRODUCTS.";
+      console.warn("DEBUG: PRODUCTS est vide.");
+      return;
     }
+    statusEl.remove();
 
-    async function main(){
-      environmentHints();
+    // 3) Rendu minimal
+    window.PRODUCTS.forEach((p, idx) => {
+      // essais d'images : images[0] -> image -> placeholder
+      const imgSrc = (Array.isArray(p.images) && p.images[0]) || p.image || 'assets/img/opengraph-default.jpg';
 
-      // On essaye d'importer le module produits
-      let mod;
-      try{
-        mod = await import('./data/products.js');  // chemin attendu: gf-store/data/products.js
-      }catch(e){
-        showError("Impossible de charger ./data/products.js\n" + (e?.message || e));
-        statusEl.textContent = "Échec du chargement des produits.";
-        return;
-      }
-
-      // On supporte deux styles: export default ou export nommé { PRODUCTS }
-      const arr = Array.isArray(mod?.default) ? mod.default :
-                  (Array.isArray(mod?.PRODUCTS) ? mod.PRODUCTS : []);
-
-      if(!Array.isArray(arr) || arr.length === 0){
-        showError("Aucun produit trouvé dans products.js\n" +
-                  "Vérifiez que le fichier exporte un tableau (ex: `export const PRODUCTS = [...]` et `export default PRODUCTS;`).");
-        statusEl.textContent = "0 produit.";
-        return;
+      // si img manquante, log utile
+      if (!imgSrc || typeof imgSrc !== 'string') {
+        console.warn(`Produit #${idx} (${p.name || p['Nom du Produit'] || p.id}) sans image valide`, p);
       }
 
-      statusEl.textContent = `${arr.length} produit(s) chargé(s).`;
+      // prix promo ou normal (essaie plusieurs clés au cas où)
+      const price = Number(p.promoPrice ?? p['Prix Promo (€)'] ?? p.price ?? p['Prix (€)']);
+      const old   = Number.isFinite(Number(p.price)) && Number.isFinite(Number(p.oldPrice)) ? Number(p.oldPrice) : null;
 
-      // Rendu des cartes
-      grid.innerHTML = '';
-      arr.forEach((p, i) => {
-        const card = document.createElement('article');
-        card.className = 'card';
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${imgSrc}" alt="${(p.name || p['Nom du Produit'] || '').replace(/"/g,'&quot;')}" loading="lazy"
+             onerror="this.src='assets/img/opengraph-default.jpg'; this.closest('.card').dataset.imgError='1'">
+        <div class="name">${p.name || p['Nom du Produit'] || '(Sans nom)'}</div>
+        <div class="muted">${p.category || p['Catégorie'] || ''}</div>
+        <div class="price">${priceFmt(price)}${old?`<span class="old">${priceFmt(old)}</span>`:''}</div>
+      `;
+      grid.appendChild(card);
+    });
 
-        const name  = p?.name || p?.Nom || p?.title || p?.id || `Produit #${i+1}`;
-        const brand = p?.brand || p?.Marque || '';
-        const imgs  = Array.isArray(p?.images) ? p.images : [];
-        // On prend la 1ère image existante
-        const imgSrc = imgs.find(u => typeof u === 'string' && u.trim().length) || '';
-
-        // Notes d’aide : on explique pourquoi une image ne s’affiche pas
-        let notes = [];
-        if(!imgSrc) notes.push("⚠️ Aucune image fournie.");
-        if(typeof imgSrc === 'string' && (imgSrc.startsWith('C:\\\\') || imgSrc.startsWith('file:///') || imgSrc.startsWith('/C:/'))){
-          notes.push("⚠️ Chemin d'image local détecté. Utilisez un chemin relatif du repo (ex: assets/img/...) pour que ça marche en ligne.");
-        }
-
-        card.innerHTML = `
-          ${ imgSrc ? `<img src="${imgSrc}" alt="">` : `<div class="muted" style="height:160px;display:flex;align-items:center;justify-content:center;border:1px dashed #ddd;border-radius:8px">Pas d'image</div>` }
-          <div class="title">${name}</div>
-          <div class="muted">${brand}</div>
-          ${ notes.length ? `<div class="note">${notes.join('<br>')}</div>` : '' }
-        `;
-        // On log aussi en console pour debug
-        if(notes.length){ console.warn(name, notes); }
-
-        grid.appendChild(card);
-      });
+    // 4) Petit récap en console pour t’aider
+    const total = window.PRODUCTS.length;
+    const imgErrors = Array.from(document.querySelectorAll('.card[data-img-error="1"]')).length;
+    console.info(`Produits affichés: ${total}. Images en erreur: ${imgErrors}.`);
+    if (imgErrors > 0) {
+      console.info("Astuce: vérifie que les chemins d'images sont RELATIFS, ex: assets/img/... (pas de C:/..., pas de file:///...)");
     }
-
-    // Attrape toutes les erreurs runtime pour qu'on les voie à l'écran
-    window.addEventListener('error', (e)=> showError("Erreur JS: " + (e?.message || e)));
-
-    main();
+  })();
   </script>
 </body>
 </html>
