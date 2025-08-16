@@ -1,2652 +1,634 @@
-[
-  {
-    "id": "1001",
-    "sku": "GF-AIRPOD-PRO-000",
-    "name": "AirPod Pro",
-    "category": "Casque/Ecouteurs",
-    "brand": "AirPod",
-    "model": "AirPod Pro",
-    "description": "AirPod Pro — Casque/Ecouteurs AirPod haute performance. Points clés : réduction de bruit active • Bluetooth multipoint • autonomie 24–30 h • charge USB‑C • confort longue durée. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez AirPod Pro au meilleur prix sur GF Store.",
-    "price": 279.0,
-    "promoPrice": 179.99,
-    "stock": 56,
-    "images": [
-      "assets/img/airpod-pro/image_airpod_1.jpg",
-      "assets/img/airpod-pro/image_airpod_2.jpg",
-      "assets/img/airpod-pro/image_airpod_3.jpg",
-      "assets/img/airpod-pro/image_airpod_4.jpg",
-      "assets/img/airpod-pro/image_airpod_5.jpg"
-    ],
-    "imageCover": "assets/img/airpod-pro/image_airpod_1.jpg",
-    "supplier": "Distributeur EU",
-    "cost": 195.3,
-    "marginPct": -8.51,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.6,
-    "ratingCount": 0,
-    "options": {
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        }
-      ],
-      "Accessoires": [
-        {
-          "value": "Standard",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Housse rigide",
-          "priceDelta": 20.0
-        },
-        {
-          "value": "Câble audio 1.2 m",
-          "priceDelta": 10.0
-        }
-      ]
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>GF Store — Accueil</title>
+  <meta name="description" content="GF Store — Électronique premium. Livraison 24‑48h, assistance 24/7, paiement sécurisé." />
+
+  <style>
+    /* =====================
+       Design tokens
+    ===================== */
+    :root{
+      --bg:#f6f7fb; --card:#fff; --muted:#6b7280; --text:#0f172a; --accent:#0ea5a4; --danger:#ef4444;
+      --glass: rgba(255,255,255,0.65); --shadow: 0 10px 30px rgba(15,23,42,0.10);
+      --ring: 0 0 0 3px rgba(14,165,164,0.2);
+      --radius: 14px; --radius-lg: 16px;
+      --pad: 16px; --pad-lg: 24px;
+      --safe-bottom: env(safe-area-inset-bottom);
+      --safe-top: env(safe-area-inset-top);
+      --container: 1200px;
     }
-  },
-  {
-    "id": "1002",
-    "sku": "GF-APPLE-AIRPODS-4-001",
-    "name": "Apple AirPods 4",
-    "category": "Casque/Ecouteurs",
-    "brand": "Apple",
-    "model": "Apple AirPods 4",
-    "description": "Apple AirPods 4 — Casque/Ecouteurs Apple haute performance. Points clés : réduction de bruit active • Bluetooth multipoint • autonomie 24–30 h • charge USB‑C • confort longue durée. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Apple AirPods 4 au meilleur prix sur GF Store.",
-    "price": 149.0,
-    "promoPrice": 95.99,
-    "stock": 104,
-    "images": [
-      "https://m.media-amazon.com/images/I/61DvMw16ITL._AC_SX679_.jpg",
-      "https://m.media-amazon.com/images/I/51MlTIMDdsL._AC_SX679_.jpg",
-      "https://m.media-amazon.com/images/I/7116YXe-ThL._AC_SX679_.jpg",
-      "https://m.media-amazon.com/images/I/61sVcmbGHEL._AC_SX679_.jpg"
-    ],
-    "imageCover": "https://m.media-amazon.com/images/I/61DvMw16ITL._AC_SX679_.jpg",
-    "supplier": "Distributeur EU",
-    "cost": 104.3,
-    "marginPct": -8.66,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.7,
-    "ratingCount": 0,
-    "options": {
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        }
-      ],
-      "Accessoires": [
-        {
-          "value": "Standard",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Housse rigide",
-          "priceDelta": 20.0
-        },
-        {
-          "value": "Câble audio 1.2 m",
-          "priceDelta": 10.0
-        }
-      ]
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:linear-gradient(180deg,var(--bg), #e9eef6 160%); color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      /* Avoid iOS font zoom on inputs */
+      text-size-adjust:100%;
     }
-  },
-  {
-    "id": "1003",
-    "sku": "GF-APPLE-IPAD-PRO-11-M4-256GO-SILVER-002",
-    "name": "Apple IPAD Pro 11 M4 256Go Silver",
-    "category": "Tablette",
-    "brand": "Apple",
-    "model": "Apple IPAD Pro 11 M4 256Go Silver",
-    "description": "Apple IPAD Pro 11 M4 256Go Silver — Tablette Apple haute performance. Points clés : écran haute fidélité • puce performante • USB‑C/Thunderbolt • compatibilité stylet • autonomie prolongée. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Apple IPAD Pro 11 M4 256Go Silver au meilleur prix sur GF Store.",
-    "price": 1219.0,
-    "promoPrice": 780.99,
-    "stock": 25,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 914.25,
-    "marginPct": -17.06,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.8,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        }
-      ],
-      "Connectivité": [
-        {
-          "value": "Wi‑Fi",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Wi‑Fi + Cellulaire",
-          "priceDelta": 150.0
-        }
-      ]
+    a{color:inherit}
+    img{max-width:100%; display:block}
+
+    /* Utils */
+    .container{max-width:var(--container); margin:0 auto; padding:0 var(--pad)}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+    .shadow{box-shadow:var(--shadow)}
+
+    /* Topbar */
+    .topbar-wrap{position:sticky;top:0;z-index:50;backdrop-filter: blur(8px);background:var(--glass)}
+    .topbar{display:flex;align-items:center;gap:12px;min-height:64px; padding:14px var(--pad)}
+    .brand{display:flex;gap:10px;align-items:center;min-width:0}
+    .brand .logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;flex:none}
+    .brand .title-wrap{min-width:0}
+    .brand .shop{font-weight:800;white-space:nowrap}
+    .brand .sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    .search{flex:1;min-width:160px}
+    .searchbox{position:relative}
+    .search input{width:100%;padding:12px 14px 12px 40px;border-radius:14px;border:1px solid rgba(0,0,0,0.06);background:transparent;color:var(--text);box-shadow:0 1px 0 rgba(0,0,0,0.02)}
+    .search input:focus{outline:none; box-shadow:var(--ring)}
+    .search input[type="search"]::-webkit-search-cancel-button{cursor:pointer}
+    .search .lens{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted)}
+    .suggest{position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid rgba(0,0,0,0.06);border-radius:12px;box-shadow:var(--shadow);margin-top:6px;display:none;z-index:60;max-height:50vh;overflow:auto}
+    .suggest.open{display:block}
+    .suggest-item{padding:10px 12px;display:flex;gap:10px;align-items:center;cursor:pointer}
+    .suggest-item:hover{background:rgba(0,0,0,0.04)}
+    .suggest-item img{width:36px;height:36px;object-fit:contain;border-radius:8px}
+
+    .actions{display:flex;gap:10px;align-items:center}
+    .btn{position:relative;overflow:hidden;padding:10px 14px;border-radius:12px;border:0;background:var(--card);box-shadow:var(--shadow);cursor:pointer;transition:transform .06s ease; touch-action: manipulation; min-height:44px}
+    .btn:active{transform:scale(0.98)}
+    .icon-btn{display:inline-flex;align-items:center;gap:8px}
+
+    /* Icons */
+    .icon{width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:middle}
+    .icon-lg{width:22px;height:22px}
+    .icon-white{filter: invert(1) brightness(2)}
+
+    /* Ripple */
+    .ripple{position:absolute;border-radius:999px;transform:scale(0);animation:rip 600ms ease-out;pointer-events:none;background:rgba(0,0,0,0.08)}
+    @keyframes rip{to{transform:scale(6);opacity:0}}
+
+    /* Page sections */
+    main{padding:var(--pad) 0}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:24px;padding:0 var(--pad)}
+    .hero-card{background:var(--card);padding:22px;border-radius:var(--radius-lg);box-shadow:var(--shadow)}
+    .promo{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .promo .badge{background:linear-gradient(90deg,#ff7a59,#ffb86b);color:#fff;padding:6px 10px;border-radius:10px;font-weight:800}
+
+    /* Controls (filters) */
+    .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:6px 0 12px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;overflow:auto;padding-bottom:6px}
+    .chip{padding:8px 12px;background:rgba(14,165,164,0.10);color:var(--accent);border:1px solid rgba(14,165,164,0.18);border-radius:999px;font-weight:700;cursor:pointer;touch-action:manipulation;min-height:38px}
+    .chip.active{background:linear-gradient(90deg,var(--accent),#06b6d4);color:#fff;border-color:transparent}
+    .field{display:flex;gap:8px;align-items:center}
+    .field input,.field select{padding:10px 12px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);background:transparent;min-height:40px}
+    .field input:focus,.field select:focus{outline:none; box-shadow:var(--ring)}
+
+    /* Grid */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;padding:0 var(--pad)}
+    .product{background:var(--card);padding:12px;border-radius:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;transition:transform .18s ease, box-shadow .18s ease}
+    .product:hover{transform:translateY(-2px)}
+    .product img{width:100%;height:170px;object-fit:contain;border-radius:10px;background:linear-gradient(180deg, rgba(0,0,0,0.03), rgba(0,0,0,0.01))}
+    .meta{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .title{font-weight:700}
+    .price{font-size:1.06rem;font-weight:800;white-space:nowrap}
+    .old{color:var(--muted);text-decoration:line-through;font-size:0.9rem;margin-left:8px}
+    .badges{display:flex;gap:6px;flex-wrap:wrap}
+    .badge-small{background:rgba(14,165,164,0.12);color:var(--accent);padding:6px;border-radius:8px;font-weight:700;font-size:0.8rem}
+
+    .cta{display:flex;gap:8px}
+    .add{flex:1;padding:10px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#06b6d4);color:white;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px}
+    .info{padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:transparent;cursor:pointer;min-height:44px}
+
+    /* Mini cart (drawer/bottom sheet) */
+    .minicart{position:fixed;right:18px;bottom:calc(18px + var(--safe-bottom));left:auto;background:var(--card);padding:12px;border-radius:14px;box-shadow:var(--shadow);width:360px;max-height:70vh;overflow:auto;opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .22s ease, transform .22s ease}
+    .minicart.open{opacity:1;transform:translateY(0);pointer-events:auto}
+    .minicart h4{margin:0}
+    .minicart .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .close-x{background:transparent;border:0;font-size:18px;cursor:pointer;border-radius:10px;width:36px;height:36px}
+    .close-x:hover{background:rgba(0,0,0,0.06)}
+    .cart-item{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed rgba(0,0,0,0.06)}
+    .cart-item img{width:48px;height:48px;object-fit:contain}
+
+    /* Cart FAB (bulle) */
+    .fab{position:fixed;right:18px;bottom:calc(18px + var(--safe-bottom));border:0;border-radius:999px;padding:14px 16px;background:linear-gradient(90deg,var(--accent),#06b6d4);color:#fff;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;cursor:pointer;transition:transform .2s ease, opacity .2s ease}
+    .fab.hide{transform:scale(.9);opacity:0;pointer-events:none}
+    .badge-dot{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;border-radius:999px;background:#fff;color:#0f172a;font-weight:800;font-size:12px;padding:0 6px}
+
+    /* Footer */
+    footer{padding:18px var(--pad);color:var(--muted);font-size:0.95rem}
+
+    /* Compteur résultats */
+    .count{font-size:0.95rem;color:var(--muted);margin:4px var(--pad)}
+
+    /* Modal (product quick view) */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:20px}
+    .modal.open{display:flex}
+    .modal-card{background:var(--card);max-width:920px;width:100%;border-radius:16px;box-shadow:var(--shadow);padding:16px;max-height:92vh;overflow:auto}
+    .modal-body{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+    .thumbs img{width:100%;height:70px;object-fit:contain;border:1px solid rgba(0,0,0,.06);border-radius:8px;cursor:pointer}
+
+    /* Skeleton */
+    .skeleton{background:linear-gradient(90deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02), rgba(0,0,0,0.06));background-size:200% 100%;animation:shimmer 1.2s infinite;}
+    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+    /* =====================
+       Responsive
+    ===================== */
+    @media (max-width:1200px){
+      .hero{grid-template-columns:1fr 360px}
     }
-  },
-  {
-    "id": "1004",
-    "sku": "GF-APPLE-IPHONE-15-PRO-TITANE-BLANC-1TO-5G-003",
-    "name": "APPLE iPhone 15 Pro Titane Blanc 1To 5G",
-    "category": "Smartphone",
-    "brand": "Apple",
-    "model": "APPLE iPhone 15 Pro Titane Blanc 1To 5G",
-    "description": "APPLE iPhone 15 Pro Titane Blanc 1To 5G — Smartphone Apple haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez APPLE iPhone 15 Pro Titane Blanc 1To 5G au meilleur prix sur GF Store.",
-    "price": 1559.0,
-    "promoPrice": 998.99,
-    "stock": 31,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_l_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_o_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0195949020919_v_0"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 1122.48,
-    "marginPct": -12.36,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.6,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
+    @media (max-width:1024px){
+      .hero{grid-template-columns:1fr;gap:16px;padding:0 var(--pad)}
+      .minicart{width:min(92vw,520px);right:4vw;left:auto}
     }
-  },
-  {
-    "id": "1005",
-    "sku": "GF-APPLE-IPHONE-15-PRO-TITANE-NATUREL-1TO-5-004",
-    "name": "APPLE iPhone 15 Pro Titane Naturel 1To 5G",
-    "category": "Smartphone",
-    "brand": "Apple",
-    "model": "APPLE iPhone 15 Pro Titane Naturel 1To 5G",
-    "description": "APPLE iPhone 15 Pro Titane Naturel 1To 5G — Smartphone Apple haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez APPLE iPhone 15 Pro Titane Naturel 1To 5G au meilleur prix sur GF Store.",
-    "price": 1559.0,
-    "promoPrice": 998.99,
-    "stock": 31,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_l_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_o_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0195949021091_v_0"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 1122.48,
-    "marginPct": -12.36,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.7,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
+    @media (max-width:768px){
+      .topbar{flex-wrap:wrap}
+      .brand .sub{display:none}
+      .actions{order:3;width:100%;justify-content:flex-end}
+      .search{order:2;width:100%}
+      .grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+      .product img{height:150px}
+      .hero{gap:12px}
+      .modal-body{grid-template-columns:1fr}
+      .modal-card{padding:12px}
     }
-  },
-  {
-    "id": "1006",
-    "sku": "GF-APPLE-IPHONE-16-BLANC-128GO-005",
-    "name": "APPLE iPhone 16 Blanc 128Go",
-    "category": "Smartphone",
-    "brand": "Apple",
-    "model": "APPLE iPhone 16 Blanc 128Go",
-    "description": "APPLE iPhone 16 Blanc 128Go — Smartphone Apple haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez APPLE iPhone 16 Blanc 128Go au meilleur prix sur GF Store.",
-    "price": 969.0,
-    "promoPrice": 620.99,
-    "stock": 42,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_b_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 697.68,
-    "marginPct": -12.35,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.7,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
+    @media (max-width:480px){
+      :root{--pad:12px}
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .product img{height:130px}
+      .hero-card{padding:16px}
+      .minicart{left:4vw;right:4vw;width:auto}
+      .actions .btn{padding:9px 12px}
     }
-  },
-  {
-    "id": "1007",
-    "sku": "GF-APPLE-IPHONE-16-OUTREMER-128GO-006",
-    "name": "APPLE iPhone 16 Outremer 128Go",
-    "category": "Smartphone",
-    "brand": "Apple",
-    "model": "APPLE iPhone 16 Outremer 128Go",
-    "description": "APPLE iPhone 16 Outremer 128Go — Smartphone Apple haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez APPLE iPhone 16 Outremer 128Go au meilleur prix sur GF Store.",
-    "price": 969.0,
-    "promoPrice": 620.99,
-    "stock": 22,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0195949822506_v_0"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 697.68,
-    "marginPct": -12.35,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.5,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
+
+    /* Accessibility: reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      .fab, .minicart, .ripple{transition:none !important; animation:none !important}
     }
-  },
-  {
-    "id": "1008",
-    "sku": "GF-APPLE-IPHONE-16-PRO-MAX-TITANE-NATUREL-2-007",
-    "name": "APPLE iPhone 16 Pro Max Titane Naturel 256Go",
-    "category": "Smartphone",
-    "brand": "Apple",
-    "model": "APPLE iPhone 16 Pro Max Titane Naturel 256Go",
-    "description": "APPLE iPhone 16 Pro Max Titane Naturel 256Go — Smartphone Apple haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez APPLE iPhone 16 Pro Max Titane Naturel 256Go au meilleur prix sur GF Store.",
-    "price": 1469.0,
-    "promoPrice": 940.99,
-    "stock": 38,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 1057.68,
-    "marginPct": -12.4,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.7,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
+  </style>
+</head>
+<body>
+  <header class="topbar-wrap shadow" role="banner">
+    <div class="topbar container">
+      <div class="brand" aria-label="GF Store">
+        <div class="logo" aria-hidden="true">GF</div>
+        <div class="title-wrap">
+          <div class="shop">GF Store</div>
+          <div class="sub">Électronique premium — Livraison 24‑48h</div>
+        </div>
+      </div>
+
+      <div class="search" role="search">
+        <div class="searchbox">
+          <span class="lens" aria-hidden="true">🔎</span>
+          <input id="searchInput" type="search" placeholder="Rechercher : iPhone, AirPods, PC…" autocomplete="off" enterkeyhint="search" aria-label="Rechercher des produits" />
+          <div id="searchSuggest" class="suggest" role="listbox" aria-expanded="false" aria-label="Suggestions de recherche"></div>
+        </div>
+      </div>
+
+      <div class="actions" aria-label="Compte et panier">
+        <button class="btn icon-btn" id="accountBtn"><img class="icon" alt="compte" src="https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000" referrerpolicy="no-referrer"/> Compte</button>
+        <button class="btn icon-btn" id="cartBtn"><img id="cartIcon" class="icon" alt="panier" src="https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000" referrerpolicy="no-referrer"/> Panier (<span id="cartCount">0</span>)</button>
+        <span class="sr-only" id="countLive" aria-live="polite"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="main">
+    <section class="hero" aria-label="Mise en avant">
+      <div class="hero-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+          <div style="min-width:260px;flex:1">
+            <h1 style="margin:0;display:flex;align-items:center;gap:8px">GF Store — Boutique high‑tech <img class="icon" alt="livraison" src="https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000" referrerpolicy="no-referrer"/></h1>
+            <p style="margin:6px 0;color:var(--muted)">Produits premium. Assistance 24/7. Paiement sécurisé. Garantie 1 an min.</p>
+
+            <div class="promo" style="margin-top:12px">
+              <div class="badge">Offre flash -20%</div>
+              <div id="flashTimer" style="font-weight:800;color:var(--danger)">Chargement…</div>
+            </div>
+
+            <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn" id="openCatalog">Voir le catalogue</button>
+              <button class="btn" id="openBundles">Bundles</button>
+            </div>
+          </div>
+
+          <aside style="width:340px;min-width:260px;flex:0 0 auto">
+            <div style="background:linear-gradient(180deg,#fff,#f1f7fb);padding:14px;border-radius:12px">
+              <h3 style="margin:0;display:flex;align-items:center;gap:8px"><img class="icon" alt="livraison" src="https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000" referrerpolicy="no-referrer"/> Livraison rapide</h3>
+              <p style="margin:6px 0;color:var(--muted)">24‑48h sur la majorité des produits.</p>
+              <ul style="margin:0;padding-left:18px;color:var(--muted)">
+                <li>Assistance 24/7</li>
+                <li>Paiement 100% sécurisé</li>
+                <li>Garantie légale respectée</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <div class="hero-card" aria-labelledby="top-ventes">
+        <h3 id="top-ventes" style="margin-top:0">Top ventes</h3>
+        <div id="topList" style="display:grid;gap:10px;margin-top:10px"></div>
+      </div>
+    </section>
+
+    <section style="padding:12px 0">
+      <h2 style="margin:8px var(--pad) 0">Nos produits</h2>
+
+      <!-- Barre de filtres -->
+      <div class="controls" aria-label="Filtres de recherche">
+        <div class="chips" id="catChips" role="tablist" aria-label="Catégories"></div>
+        <div class="field"><label for="minPrice">Min</label><input id="minPrice" type="number" placeholder="0" min="0" inputmode="decimal" style="width:110px"></div>
+        <div class="field"><label for="maxPrice">Max</label><input id="maxPrice" type="number" placeholder="2000" min="0" inputmode="decimal" style="width:110px"></div>
+        <div class="field"><input id="inStock" type="checkbox" /><label for="inStock">En stock</label></div>
+        <div class="field"><label for="sortSel">Tri</label>
+          <select id="sortSel">
+            <option value="reco">Recommandé</option>
+            <option value="price-asc">Prix ↑</option>
+            <option value="price-desc">Prix ↓</option>
+            <option value="name">Nom A→Z</option>
+          </select>
+        </div>
+        <button class="btn" id="clearFilters">Réinitialiser</button>
+      </div>
+
+      <div class="count" id="resultCount" aria-live="polite"></div>
+
+      <div class="grid" id="productsGrid">
+        <!-- skeletons -->
+        <article class="product skeleton" style="height:270px"></article>
+        <article class="product skeleton" style="height:270px"></article>
+        <article class="product skeleton" style="height:270px"></article>
+        <article class="product skeleton" style="height:270px"></article>
+      </div>
+    </section>
+  </main>
+
+  <div id="minicart" class="minicart" aria-label="Panier" aria-live="polite" aria-hidden="true">
+    <div class="head">
+      <h4>Panier</h4>
+      <button id="cartClose" class="close-x" title="Fermer" aria-label="Fermer le panier">✕</button>
+    </div>
+    <div id="cartItems"></div>
+    <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+      <div><strong>Total:</strong> <span id="cartTotal">0 €</span></div>
+      <div>
+        <button class="btn icon-btn" id="goCheckout"><img class="icon" alt="checkout" src="https://img.icons8.com/?size=100&id=qVsd2YOgeizO&format=png&color=000000" referrerpolicy="no-referrer"/> Commander</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart bubble -->
+  <button id="cartFab" class="fab" aria-label="Ouvrir le panier" style="display:none">
+    <img id="fabIcon" class="icon icon-white" alt="panier" src="https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000" referrerpolicy="no-referrer"/>
+    <span id="fabCount" class="badge-dot">0</span>
+  </button>
+
+  <!-- Quick view modal -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <h3 id="modalTitle" style="margin:0"></h3>
+        <button class="btn" id="modalClose" aria-label="Fermer la fenêtre">Fermer</button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <img id="modalImage" src="" alt="" style="width:100%;height:300px;object-fit:contain;border-radius:10px" />
+          <div id="modalThumbs" class="thumbs"></div>
+        </div>
+        <div>
+          <div id="modalPrice" class="price"></div>
+          <p id="modalDesc" style="color:var(--muted)"></p>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="add" id="modalAdd">Ajouter au panier</button>
+            <button class="info" id="modalInfo">Détails</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © GF Store — Tous droits réservés • Paiement sécurisé • Assistance 24/7
+  </footer>
+
+  <script>
+    /*********************** Configuration ************************/
+    const CANDIDATES = [
+      './produits.json', './products.json', './products.cleaned.json',
+      './data/produits.json', './data/products.json', './data/products.cleaned.json',
+      '/GFSTORE/produits.json', '/GFSTORE/data/produits.json', '/GFSTORE/data/products.json'
+    ];
+
+    const FLASH_HOURS = 24;
+
+    // Icônes
+    const ICONS = {
+      buy: 'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
+      cart: 'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
+      cartFull: 'https://img.icons8.com/?size=100&id=K5Jv3BfpxPYa&format=png&color=000000',
+      checkout: 'https://img.icons8.com/?size=100&id=qVsd2YOgeizO&format=png&color=000000',
+      truck: 'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
+      logout: 'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
+      user: 'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000'
+    };
+
+    /*********************** Utilitaires **************************/
+    const $ = sel => document.querySelector(sel);
+    const $all = sel => Array.from(document.querySelectorAll(sel));
+    const fmt = val => (typeof val === 'number' ? val.toFixed(2).replace('.',',') + ' €' : (val||''));
+
+    const PLACEHOLDER = 'https://via.placeholder.com/600x400?text=GF+Store';
+    const firstImage = (p) => p?.imageCover || (Array.isArray(p?.images) && p.images[0]) || p?.image || PLACEHOLDER;
+
+    function safeImg(img){
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.referrerPolicy = 'no-referrer';
+      img.onerror = () => { img.onerror = null; img.src = PLACEHOLDER; };
     }
-  },
-  {
-    "id": "1009",
-    "sku": "GF-APPLE-IPHONE-16-PRO-MAX-TITANE-NOIR-256G-008",
-    "name": "APPLE iPhone 16 Pro Max Titane Noir 256Go",
-    "category": "Smartphone",
-    "brand": "Apple",
-    "model": "APPLE iPhone 16 Pro Max Titane Noir 256Go",
-    "description": "APPLE iPhone 16 Pro Max Titane Noir 256Go — Smartphone Apple haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez APPLE iPhone 16 Pro Max Titane Noir 256Go au meilleur prix sur GF Store.",
-    "price": 1469.0,
-    "promoPrice": 940.99,
-    "stock": 25,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 1057.68,
-    "marginPct": -12.4,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.6,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
+
+    // Normalisation simple pour recherche sans accents
+    const normalize = (s='') => s.toString().normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase();
+
+    // Debounce
+    const debounce = (fn, d=220)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), d); } };
+
+    // Ripple helper
+    function addRipple(e){
+      const btn = e.currentTarget; const rect = btn.getBoundingClientRect();
+      const span = document.createElement('span'); span.className='ripple';
+      const size = Math.max(rect.width, rect.height); span.style.width = span.style.height = size+'px';
+      span.style.left = (e.clientX - rect.left - size/2)+'px'; span.style.top = (e.clientY - rect.top - size/2)+'px';
+      btn.appendChild(span); setTimeout(()=> span.remove(), 600);
     }
-  },
-  {
-    "id": "1010",
-    "sku": "GF-APPLE-IPHONE-16-PRO-MAX-TITANE-SABLE-256-009",
-    "name": "APPLE iPhone 16 Pro Max Titane Sable 256Go",
-    "category": "Smartphone",
-    "brand": "Apple",
-    "model": "APPLE iPhone 16 Pro Max Titane Sable 256Go",
-    "description": "APPLE iPhone 16 Pro Max Titane Sable 256Go — Smartphone Apple haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez APPLE iPhone 16 Pro Max Titane Sable 256Go au meilleur prix sur GF Store.",
-    "price": 1469.0,
-    "promoPrice": 940.99,
-    "stock": 22,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0195949806193_v_0"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 1057.68,
-    "marginPct": -12.4,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.6,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
+
+    /*********************** Panier ********************************/
+    const CART_KEY = 'gf_cart_v1';
+    const loadCart = ()=>{ try{ return JSON.parse(localStorage.getItem(CART_KEY) || '[]') }catch(e){return []} };
+    const saveCart = (c)=>{ localStorage.setItem(CART_KEY, JSON.stringify(c)); renderCartCount(); };
+    function addToCart(id, p){
+      const cart = loadCart();
+      const it = cart.find(i=>i.id===id);
+      if(it){ it.qty++; } else { cart.push({id, title:p.name, price:p.price, image:firstImage(p), qty:1}); }
+      saveCart(cart);
+      $('#cartFab').classList.remove('hide');
     }
-  },
-  {
-    "id": "1011",
-    "sku": "GF-APPLE-IPHONE-16-ROSE-128GO-010",
-    "name": "APPLE iPhone 16 Rose 128Go",
-    "category": "Smartphone",
-    "brand": "Apple",
-    "model": "APPLE iPhone 16 Rose 128Go",
-    "description": "APPLE iPhone 16 Rose 128Go — Smartphone Apple haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez APPLE iPhone 16 Rose 128Go au meilleur prix sur GF Store.",
-    "price": 969.0,
-    "promoPrice": 620.99,
-    "stock": 33,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 697.68,
-    "marginPct": -12.35,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.6,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
+    function renderCartCount(){
+      const cart = loadCart();
+      const total = cart.reduce((s,i)=>s+i.qty,0);
+      $('#cartCount').textContent = total; $('#fabCount').textContent = total;
+      $('#countLive').textContent = `${total} article${total>1?'s':''} dans le panier`;
+      const has = total>0;
+      const fab = $('#cartFab');
+      fab.style.display = has ? 'inline-flex' : 'none';
+      $('#fabIcon').src = has ? ICONS.cartFull : ICONS.cart;
+      $('#cartIcon').src = has ? ICONS.cartFull : ICONS.cart;
     }
-  },
-  {
-    "id": "1012",
-    "sku": "GF-APPLE-IPHONE-16-SARCELLE-128GO-011",
-    "name": "APPLE iPhone 16 Sarcelle 128Go",
-    "category": "Smartphone",
-    "brand": "Apple",
-    "model": "APPLE iPhone 16 Sarcelle 128Go",
-    "description": "APPLE iPhone 16 Sarcelle 128Go — Smartphone Apple haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez APPLE iPhone 16 Sarcelle 128Go au meilleur prix sur GF Store.",
-    "price": 969.0,
-    "promoPrice": 620.99,
-    "stock": 45,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_b_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 697.68,
-    "marginPct": -12.35,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.4,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
+    function renderMiniCart(){
+      const items = loadCart();
+      const ctn = $('#cartItems'); ctn.innerHTML='';
+      if(items.length===0){ ctn.innerHTML='<div style="color:var(--muted)">Votre panier est vide.</div>'; $('#cartTotal').textContent = '0 €'; return; }
+      let total = 0; items.forEach(it=>{
+        total += it.price * it.qty;
+        const d = document.createElement('div'); d.className='cart-item';
+        d.innerHTML = `
+          <img src="${it.image}" alt="" />
+          <div style="flex:1"><div style="font-weight:700">${it.title}</div><div style="font-size:.9rem;color:var(--muted)">${it.qty} x ${fmt(it.price)}</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><button class="info" onclick="window.__gf_changeQty('${it.id}',1)">+</button><button class="info" onclick="window.__gf_changeQty('${it.id}',-1)">-</button></div>`;
+        ctn.appendChild(d);
+      });
+      $('#cartTotal').textContent = fmt(total);
     }
-  },
-  {
-    "id": "1013",
-    "sku": "GF-APPLE-IPHONE-16E-NOIR-256GO-012",
-    "name": "APPLE iPhone 16e Noir 256Go",
-    "category": "Smartphone",
-    "brand": "Apple",
-    "model": "APPLE iPhone 16e Noir 256Go",
-    "description": "APPLE iPhone 16e Noir 256Go — Smartphone Apple haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez APPLE iPhone 16e Noir 256Go au meilleur prix sur GF Store.",
-    "price": 829.0,
-    "promoPrice": 531.99,
-    "stock": 39,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0195950376906_v_0"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 596.88,
-    "marginPct": -12.2,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.7,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
+    window.__gf_changeQty = (id,delta)=>{ const cart = loadCart(); const i = cart.findIndex(x=>x.id===id); if(i===-1) return; cart[i].qty += delta; if(cart[i].qty<=0) cart.splice(i,1); saveCart(cart); renderMiniCart(); };
+
+    function openMiniCart(){
+      const m = $('#minicart');
+      m.classList.add('open'); m.setAttribute('aria-hidden','false');
+      $('#cartFab').classList.add('hide');
+      renderMiniCart();
     }
-  },
-  {
-    "id": "1014",
-    "sku": "GF-APPLE-WATCH-SERIE-10-013",
-    "name": "APPLE WATCH Serie 10",
-    "category": "Montre",
-    "brand": "Apple",
-    "model": "APPLE WATCH Serie 10",
-    "description": "APPLE WATCH Serie 10 — Montre Apple haute performance. Points clés : GPS/GLONASS • ECG & suivi santé • écran AMOLED/LTPO • paiement sans contact • autonomie optimisée. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez APPLE WATCH Serie 10 au meilleur prix sur GF Store.",
-    "price": 449.0,
-    "promoPrice": 287.99,
-    "stock": 52,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0195949563768_v_0"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 332.26,
-    "marginPct": -15.37,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.5,
-    "ratingCount": 0,
-    "options": {
-      "Taille boîtier": [
-        {
-          "value": "S",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "M",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "L",
-          "priceDelta": 20.0
-        }
-      ],
-      "Connectivité": [
-        {
-          "value": "GPS",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "GPS + Cellular",
-          "priceDelta": 100.0
-        }
-      ]
+    function closeMiniCart(){
+      const m = $('#minicart');
+      m.classList.remove('open'); m.setAttribute('aria-hidden','true');
+      const has = (loadCart().reduce((s,i)=>s+i.qty,0))>0; if(has){ $('#cartFab').classList.remove('hide'); }
     }
-  },
-  {
-    "id": "1015",
-    "sku": "GF-APPLE-WATCH-ULTRA-2-014",
-    "name": "Apple Watch Ultra 2",
-    "category": "Montre",
-    "brand": "Apple",
-    "model": "Apple Watch Ultra 2",
-    "description": "Apple Watch Ultra 2 — Montre Apple haute performance. Points clés : GPS/GLONASS • ECG & suivi santé • écran AMOLED/LTPO • paiement sans contact • autonomie optimisée. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Apple Watch Ultra 2 au meilleur prix sur GF Store.",
-    "price": 899.0,
-    "promoPrice": 575.99,
-    "stock": 50,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 665.26,
-    "marginPct": -15.5,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.7,
-    "ratingCount": 0,
-    "options": {
-      "Taille boîtier": [
-        {
-          "value": "S",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "M",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "L",
-          "priceDelta": 20.0
-        }
-      ],
-      "Connectivité": [
-        {
-          "value": "GPS",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "GPS + Cellular",
-          "priceDelta": 100.0
-        }
-      ]
+
+    $('#cartBtn').addEventListener('click', openMiniCart);
+    $('#cartClose').addEventListener('click', closeMiniCart);
+    $('#cartFab').addEventListener('click', openMiniCart);
+    $('#goCheckout').addEventListener('click', ()=>alert('Page checkout non implémentée dans ce fichier.'));
+    renderCartCount();
+
+    // Réduire/fermer le panier au défilement
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', ()=>{
+      const dy = Math.abs(window.scrollY - lastScrollY);
+      if(dy>8){ closeMiniCart(); }
+      lastScrollY = window.scrollY;
+    }, {passive:true});
+
+    /*********************** Produits ******************************/
+    let PRODUCTS = [];
+
+    async function tryFetch(url){
+      try{
+        const r = await fetch(url, {cache:'no-store'});
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        const data = await r.json();
+        if(Array.isArray(data)) return data; if(Array.isArray(data.products)) return data.products; return null;
+      }catch(e){ return null }
     }
-  },
-  {
-    "id": "1016",
-    "sku": "GF-ASUS-ROG-STRIX-G16-2025-015",
-    "name": "Asus ROG Strix G16 (2025)",
-    "category": "PC Portable",
-    "brand": "Asus",
-    "model": "Asus ROG Strix G16 (2025)",
-    "description": "Asus ROG Strix G16 (2025) — PC Portable Asus haute performance. Points clés : CPU/GPUs récents • écran 120–240 Hz • SSD NVMe • Wi‑Fi 6E • châssis fin et léger. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Asus ROG Strix G16 (2025) au meilleur prix sur GF Store.",
-    "price": 3999.0,
-    "promoPrice": 2559.99,
-    "stock": 18,
-    "images": [
-      "assets/img/asus-rog-strix-g16-2025/image_asus_1.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_10.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_11.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_12.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_2.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_3.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_4.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_5.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_6.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_7.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_8.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_9.png"
-    ],
-    "imageCover": "assets/img/asus-rog-strix-g16-2025/image_asus_1.png",
-    "supplier": "Distributeur EU",
-    "cost": 2999.25,
-    "marginPct": -17.16,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.5,
-    "ratingCount": 0,
-    "options": {
-      "Mémoire RAM": [
-        {
-          "value": "16 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "32 Go",
-          "priceDelta": 150.0
-        },
-        {
-          "value": "64 Go",
-          "priceDelta": 350.0
-        }
-      ],
-      "Stockage SSD": [
-        {
-          "value": "512 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 120.0
-        },
-        {
-          "value": "2 To",
-          "priceDelta": 300.0
-        }
-      ],
-      "Clavier": [
-        {
-          "value": "AZERTY (FR)",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "QWERTY (EN)",
-          "priceDelta": 0.0
-        }
-      ]
+
+    async function loadProducts(){
+      let used = null; let data = null;
+      for(const u of CANDIDATES){ data = await tryFetch(u); if(data){ used = u; break; } }
+      if(!data){
+        console.warn('Aucun produits.json trouvé — fallback démo.');
+        PRODUCTS = [
+          {id:'demo-1', name:'AirPods (démo)', category:'Audio', price:199, stock:8, images:[PLACEHOLDER]},
+          {id:'demo-2', name:'iPhone (démo)', category:'Smartphones', price:999, oldPrice:1099, stock:2, images:[PLACEHOLDER]},
+          {id:'demo-3', name:'MacBook (démo)', category:'Informatique', price:2499, stock:4, images:[PLACEHOLDER]},
+        ];
+        return;
+      }
+      PRODUCTS = data.map((p,idx)=>({
+        id: p.id || p.slug || 'p-'+idx,
+        name: p.name || p.title || 'Produit',
+        price: p.price ?? p.prix ?? 0,
+        oldPrice: p.oldPrice || p.compareAtPrice || null,
+        category: p.category || p.categorie || '',
+        imageCover: p.imageCover || undefined,
+        images: Array.isArray(p.images) ? p.images : (p.image ? [p.image] : []),
+        description: p.description || '' ,
+        rating: p.rating || p.note || null,
+        stock: p.stock ?? p.quantity ?? null,
+        _raw:p
+      }));
     }
-  },
-  {
-    "id": "1017",
-    "sku": "GF-BOSE-QUIETCOMFORT-45-QC45-016",
-    "name": "Bose QuietComfort 45 (QC45)",
-    "category": "Accessoires",
-    "brand": "Bose",
-    "model": "Bose QuietComfort 45 (QC45)",
-    "description": "Bose QuietComfort 45 (QC45) — Accessoires Bose haute performance. Points clés : design premium • connectivité moderne • garantie 24 mois. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Bose QuietComfort 45 (QC45) au meilleur prix sur GF Store.",
-    "price": 499.0,
-    "promoPrice": 319.99,
-    "stock": 30,
-    "images": [
-      "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/images/QC45_TrinityRodman_pdp_1920x1440.jpg/jcr:content/renditions/cq5dam.web.1920.1920.jpeg",
-      "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/CREA-1003_QC45_TrinityRodman_GetLoud_01145_1200x1022.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg",
-      "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-W02.png/jcr:content/renditions/cq5dam.web.1000.1000.png",
-      "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-W03.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg",
-      "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-W05-AUX.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg",
-      "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-W04.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg",
-      "https://assets.bose.com/content/dam/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/images/QC45_PDP_inthebox_1x1.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg"
-    ],
-    "imageCover": "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/images/QC45_TrinityRodman_pdp_1920x1440.jpg/jcr:content/renditions/cq5dam.web.1920.1920.jpeg",
-    "supplier": "Distributeur EU",
-    "cost": 349.3,
-    "marginPct": -9.16,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.7,
-    "ratingCount": 0,
-    "options": {
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        }
-      ],
-      "Accessoires": [
-        {
-          "value": "Standard",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Housse rigide",
-          "priceDelta": 20.0
-        },
-        {
-          "value": "Câble audio 1.2 m",
-          "priceDelta": 10.0
-        }
-      ]
+
+    function productCard(p){
+      const el = document.createElement('article'); el.className='product';
+      const imgSrc = firstImage(p);
+      el.innerHTML = `
+        <img src="${imgSrc}" alt="${p.name}" />
+        <div class="meta"><div class="title">${p.name}</div><div class="price">${fmt(p.price)}${p.oldPrice?'<span class="old">'+fmt(p.oldPrice)+'</span>':''}</div></div>
+        <div style="color:var(--muted);font-size:.9rem">${p.category||''}</div>
+        <div class="badges">${ p.stock!=null && p.stock<=5 ? '<div class="badge-small">Stock: '+p.stock+'</div>' : '' }</div>
+        <div class="cta" style="margin-top:auto">
+          <button class="info" data-view>Voir</button>
+          <button class="add" data-add>Ajouter au panier</button>
+        </div>`;
+      const img = el.querySelector('img'); safeImg(img);
+      el.querySelector('[data-add]').addEventListener('click', ()=> addToCart(p.id, p));
+      el.querySelector('[data-view]').addEventListener('click', ()=> openQuickView(p));
+      return el;
     }
-  },
-  {
-    "id": "1018",
-    "sku": "GF-CONSOLE-PLAYSTATION-5-EDITION-DIGITALE-M-017",
-    "name": "Console PlayStation 5 - Edition Digitale (Modèle Slim)",
-    "category": "Accessoires",
-    "brand": "Console",
-    "model": "Console PlayStation 5 - Edition Digitale (Modèle Slim)",
-    "description": "Console PlayStation 5 - Edition Digitale (Modèle Slim) — Accessoires Console haute performance. Points clés : design premium • connectivité moderne • garantie 24 mois. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Console PlayStation 5 - Edition Digitale (Modèle Slim) au meilleur prix sur GF Store.",
-    "price": 499.0,
-    "promoPrice": 319.99,
-    "stock": 22,
-    "images": [
-      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_1.webp",
-      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_2.webp",
-      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_3.webp",
-      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_4.webp",
-      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_5.webp",
-      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_6.webp",
-      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_7.webp",
-      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_8.webp",
-      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_9.webp"
-    ],
-    "imageCover": "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_1.webp",
-    "supplier": "Distributeur EU",
-    "cost": 349.3,
-    "marginPct": -9.16,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.4,
-    "ratingCount": 0,
-    "options": {
-      "Pack": [
-        {
-          "value": "Console seule",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Avec 2e manette",
-          "priceDelta": 60.0
-        },
-        {
-          "value": "Avec 1 To NVMe",
-          "priceDelta": 120.0
-        },
-        {
-          "value": "Pack jeu + manette",
-          "priceDelta": 150.0
-        }
-      ]
+
+    function renderProducts(list){ const grid = $('#productsGrid'); grid.innerHTML=''; list.forEach(p=> grid.appendChild(productCard(p))); }
+
+    function renderTop(){ const top = PRODUCTS.slice(0,4); const container = $('#topList'); container.innerHTML=''; top.forEach(t=>{
+      const wrap = document.createElement('div'); wrap.style.display='flex'; wrap.style.alignItems='center'; wrap.style.gap='10px'; wrap.style.cursor='pointer'; wrap.setAttribute('role','button'); wrap.setAttribute('tabindex','0');
+      const img = document.createElement('img'); img.src = firstImage(t); img.style.width='64px'; img.style.height='64px'; img.style.objectFit='contain'; img.style.borderRadius='8px'; safeImg(img);
+      wrap.appendChild(img); const meta = document.createElement('div'); meta.innerHTML = `<div style="font-weight:800">${t.name}</div><div style="color:var(--muted)">${fmt(t.price)}</div>`; wrap.appendChild(meta); container.appendChild(wrap);
+      const open = ()=> openQuickView(t);
+      wrap.addEventListener('click', open);
+      wrap.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); open();} });
+    }); }
+
+    // --- Recherche améliorée (dynamique + suggestions) ---
+    const state = { q:'', category:null, minPrice:null, maxPrice:null, inStock:false, sort:'reco' };
+
+    function applyFilters(){
+      let list = PRODUCTS.slice();
+      // recherche texte
+      const nq = normalize(state.q);
+      if(nq){
+        const tokens = nq.split(/\s+/).filter(Boolean);
+        list = list.filter(p=>{
+          const hay = normalize((p.name||'') + ' ' + (p.category||'') + ' ' + (p.description||''));
+          return tokens.every(t=> hay.includes(t));
+        });
+      }
+      // catégorie
+      if(state.category){ list = list.filter(p=> (p.category||'') === state.category); }
+      // prix
+      if(state.minPrice!=null && state.minPrice!==''){ list = list.filter(p=> Number(p.price||0) >= Number(state.minPrice)); }
+      if(state.maxPrice!=null && state.maxPrice!==''){ list = list.filter(p=> Number(p.price||0) <= Number(state.maxPrice)); }
+      // stock
+      if(state.inStock){ list = list.filter(p=> (p.stock==null) ? true : p.stock>0 ); }
+      // tri
+      if(state.sort==='price-asc'){ list.sort((a,b)=> (a.price||0)-(b.price||0)); }
+      else if(state.sort==='price-desc'){ list.sort((a,b)=> (b.price||0)-(a.price||0)); }
+      else if(state.sort==='name'){ list.sort((a,b)=> (a.name||'').localeCompare(b.name||'')); }
+
+      renderProducts(list);
+      // mise à jour du compteur
+      const n = list.length; $('#resultCount').textContent = n + ' produit' + (n>1?'s':'');
+      // surlignage léger des correspondances
+      if(nq){ const tokens = nq.split(/\s+/).filter(Boolean); highlightTitles(tokens); }
+      attachRipples();
     }
-  },
-  {
-    "id": "1019",
-    "sku": "GF-CONSOLE-SONY-PS5-PRO-BLANC-ET-NOIR-018",
-    "name": "Console Sony PS5 Pro Blanc et Noir",
-    "category": "Accessoires",
-    "brand": "Console",
-    "model": "Console Sony PS5 Pro Blanc et Noir",
-    "description": "Console Sony PS5 Pro Blanc et Noir — Accessoires Console haute performance. Points clés : design premium • connectivité moderne • garantie 24 mois. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Console Sony PS5 Pro Blanc et Noir au meilleur prix sur GF Store.",
-    "price": 499.0,
-    "promoPrice": 319.99,
-    "stock": 37,
-    "images": [
-      "assets/img/console-sony-ps5-pro-blanc-et-noir/image_console_10.webp",
-      "assets/img/console-sony-ps5-pro-blanc-et-noir/image_console_11.webp",
-      "assets/img/console-sony-ps5-pro-blanc-et-noir/image_console_12.webp",
-      "assets/img/console-sony-ps5-pro-blanc-et-noir/image_console_13.webp",
-      "assets/img/console-sony-ps5-pro-blanc-et-noir/image_console_14.webp",
-      "assets/img/console-sony-ps5-pro-blanc-et-noir/image_console_15.webp",
-      "assets/img/console-sony-ps5-pro-blanc-et-noir/image_console_16.webp",
-      "assets/img/console-sony-ps5-pro-blanc-et-noir/image_console_17.webp"
-    ],
-    "imageCover": "assets/img/console-sony-ps5-pro-blanc-et-noir/image_console_10.webp",
-    "supplier": "Distributeur EU",
-    "cost": 349.3,
-    "marginPct": -9.16,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.5,
-    "ratingCount": 0,
-    "options": {
-      "Pack": [
-        {
-          "value": "Console seule",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Avec 2e manette",
-          "priceDelta": 60.0
-        },
-        {
-          "value": "Avec 1 To NVMe",
-          "priceDelta": 120.0
-        },
-        {
-          "value": "Pack jeu + manette",
-          "priceDelta": 150.0
-        }
-      ]
+
+    function highlightTitles(tokens){
+      const titles = $all('.product .title');
+      if(!tokens.length) return;
+      const rx = new RegExp('(' + tokens.map(t=> t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|') + ')','gi');
+      titles.forEach(t=>{ t.innerHTML = t.textContent.replace(rx,'<mark>$1<\/mark>'); });
     }
-  },
-  {
-    "id": "1020",
-    "sku": "GF-DELL-XPS-13-019",
-    "name": "Dell XPS 13",
-    "category": "Accessoires",
-    "brand": "Dell",
-    "model": "Dell XPS 13",
-    "description": "Dell XPS 13 — Accessoires Dell haute performance. Points clés : design premium • connectivité moderne • garantie 24 mois. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Dell XPS 13 au meilleur prix sur GF Store.",
-    "price": 499.0,
-    "promoPrice": 319.99,
-    "stock": 29,
-    "images": [
-      "assets/img/dell-xps-13/image_dell_1.avif",
-      "assets/img/dell-xps-13/image_dell_2.jpg",
-      "assets/img/dell-xps-13/image_dell_3.jpg",
-      "assets/img/dell-xps-13/image_dell_4.jpg",
-      "assets/img/dell-xps-13/image_dell_5.jpg"
-    ],
-    "imageCover": "assets/img/dell-xps-13/image_dell_1.avif",
-    "supplier": "Distributeur EU",
-    "cost": 349.3,
-    "marginPct": -9.16,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.5,
-    "ratingCount": 0,
-    "options": {
-      "Mémoire RAM": [
-        {
-          "value": "16 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "32 Go",
-          "priceDelta": 150.0
-        },
-        {
-          "value": "64 Go",
-          "priceDelta": 350.0
-        }
-      ],
-      "Stockage SSD": [
-        {
-          "value": "512 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 120.0
-        },
-        {
-          "value": "2 To",
-          "priceDelta": 300.0
-        }
-      ],
-      "Clavier": [
-        {
-          "value": "AZERTY (FR)",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "QWERTY (EN)",
-          "priceDelta": 0.0
-        }
-      ]
+
+    function buildCategories(){
+      const cats = Array.from(new Set(PRODUCTS.map(p=> p.category).filter(Boolean))).sort();
+      const ctn = $('#catChips'); ctn.innerHTML='';
+      const mk = (label,val)=>{ const b = document.createElement('button'); b.className='chip'; b.textContent = label; b.setAttribute('role','tab'); b.setAttribute('aria-selected','false'); b.addEventListener('click',()=>{ $all('.chip').forEach(x=>{x.classList.remove('active'); x.setAttribute('aria-selected','false');}); if(state.category===val){ state.category=null; } else { state.category=val; b.classList.add('active'); b.setAttribute('aria-selected','true'); } applyFilters(); }); return b; };
+      if(cats.length){ const all = mk('Toutes', null); all.classList.add('active'); all.setAttribute('aria-selected','true'); ctn.appendChild(all); }
+      cats.forEach(c=> ctn.appendChild(mk(c,c)));
     }
-  },
-  {
-    "id": "1021",
-    "sku": "GF-GARMIN-FENIX-7-PRO-SOLAR-EDITION-020",
-    "name": "GARMIN Fenix 7 Pro Solar Edition",
-    "category": "Accessoires",
-    "brand": "GARMIN",
-    "model": "GARMIN Fenix 7 Pro Solar Edition",
-    "description": "GARMIN Fenix 7 Pro Solar Edition — Accessoires GARMIN haute performance. Points clés : design premium • connectivité moderne • garantie 24 mois. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez GARMIN Fenix 7 Pro Solar Edition au meilleur prix sur GF Store.",
-    "price": 499.0,
-    "promoPrice": 319.99,
-    "stock": 30,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 349.3,
-    "marginPct": -9.16,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.3,
-    "ratingCount": 0,
-    "options": {
-      "Taille boîtier": [
-        {
-          "value": "S",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "M",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "L",
-          "priceDelta": 20.0
-        }
-      ],
-      "Connectivité": [
-        {
-          "value": "GPS",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "GPS + Cellular",
-          "priceDelta": 100.0
-        }
-      ]
+
+    function bindControls(){
+      const onSearch = debounce((e)=>{ state.q = e.target.value; buildSuggestions(state.q); applyFilters(); }, 200);
+      $('#searchInput').addEventListener('input', onSearch);
+
+      $('#minPrice').addEventListener('input', (e)=>{ state.minPrice = e.target.value; applyFilters(); });
+      $('#maxPrice').addEventListener('input', (e)=>{ state.maxPrice = e.target.value; applyFilters(); });
+      $('#inStock').addEventListener('change', (e)=>{ state.inStock = e.target.checked; applyFilters(); });
+      $('#sortSel').addEventListener('change', (e)=>{ state.sort = e.target.value; applyFilters(); });
+      $('#clearFilters').addEventListener('click', ()=>{ state.q=''; state.category=null; state.minPrice=''; state.maxPrice=''; state.inStock=false; state.sort='reco';
+        $('#searchInput').value=''; $('#minPrice').value=''; $('#maxPrice').value=''; $('#inStock').checked=false; $('#sortSel').value='reco'; $all('.chip').forEach(x=>{x.classList.remove('active'); x.setAttribute('aria-selected','false');}); const first = $('#catChips .chip'); if(first){ first.classList.add('active'); first.setAttribute('aria-selected','true'); } applyFilters(); });
+
+      // suggestions masquage
+      document.addEventListener('click', (e)=>{ if(!$('.searchbox').contains(e.target)) { const s = $('#searchSuggest'); s.classList.remove('open'); s.setAttribute('aria-expanded','false'); } });
     }
-  },
-  {
-    "id": "1022",
-    "sku": "GF-HP-SPECTRE-X360-021",
-    "name": "HP - Spectre x360",
-    "category": "Accessoires",
-    "brand": "HP",
-    "model": "HP - Spectre x360",
-    "description": "HP - Spectre x360 — Accessoires HP haute performance. Points clés : design premium • connectivité moderne • garantie 24 mois. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez HP - Spectre x360 au meilleur prix sur GF Store.",
-    "price": 499.0,
-    "promoPrice": 319.99,
-    "stock": 27,
-    "images": [
-      "assets/img/hp-spectre-x360/image_hp_1.jpg",
-      "assets/img/hp-spectre-x360/image_hp_2.jpg",
-      "assets/img/hp-spectre-x360/image_hp_3.jpg",
-      "assets/img/hp-spectre-x360/image_hp_4.jpg",
-      "assets/img/hp-spectre-x360/image_hp_5.jpg",
-      "assets/img/hp-spectre-x360/image_hp_6.jpg",
-      "assets/img/hp-spectre-x360/image_hp_7.jpg",
-      "assets/img/hp-spectre-x360/image_hp_8.jpg"
-    ],
-    "imageCover": "assets/img/hp-spectre-x360/image_hp_1.jpg",
-    "supplier": "Distributeur EU",
-    "cost": 349.3,
-    "marginPct": -9.16,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.6,
-    "ratingCount": 0,
-    "options": {
-      "Mémoire RAM": [
-        {
-          "value": "16 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "32 Go",
-          "priceDelta": 150.0
-        },
-        {
-          "value": "64 Go",
-          "priceDelta": 350.0
-        }
-      ],
-      "Stockage SSD": [
-        {
-          "value": "512 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 120.0
-        },
-        {
-          "value": "2 To",
-          "priceDelta": 300.0
-        }
-      ],
-      "Clavier": [
-        {
-          "value": "AZERTY (FR)",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "QWERTY (EN)",
-          "priceDelta": 0.0
-        }
-      ]
+
+    function buildSuggestions(q){
+      const box = $('#searchSuggest');
+      const input = $('#searchInput');
+      const nq = normalize(q);
+      if(!nq){ box.classList.remove('open'); box.innerHTML=''; box.setAttribute('aria-expanded','false'); return; }
+      const res = PRODUCTS.filter(p=> normalize(p.name||'').includes(nq) || normalize(p.category||'').includes(nq)).slice(0,6);
+      if(!res.length){ box.classList.remove('open'); box.innerHTML=''; box.setAttribute('aria-expanded','false'); return; }
+      box.innerHTML='';
+      res.forEach((p,idx)=>{
+        const row = document.createElement('div'); row.className='suggest-item'; row.setAttribute('role','option'); row.id = `sug-${idx}`;
+        row.innerHTML = `<img src="${firstImage(p)}" alt=""><div><div style=\"font-weight:700\">${p.name}</div><div style=\"font-size:12px;color:var(--muted)\">${p.category||''} • ${fmt(p.price)}</div></div>`;
+        row.addEventListener('click', ()=>{ input.value = p.name; state.q = p.name; applyFilters(); box.classList.remove('open'); box.setAttribute('aria-expanded','false'); openQuickView(p); });
+        box.appendChild(row);
+      });
+      box.classList.add('open');
+      box.setAttribute('aria-expanded','true');
     }
-  },
-  {
-    "id": "1023",
-    "sku": "GF-JBL-CHARGE-5-022",
-    "name": "JBL Charge 5",
-    "category": "Accessoires",
-    "brand": "JBL",
-    "model": "JBL Charge 5",
-    "description": "JBL Charge 5 — Accessoires JBL haute performance. Points clés : design premium • connectivité moderne • garantie 24 mois. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez JBL Charge 5 au meilleur prix sur GF Store.",
-    "price": 499.0,
-    "promoPrice": 319.99,
-    "stock": 23,
-    "images": [
-      "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw5bf3296f/JBL_CHARGE5_HERO_BLACK_0046_x1.png?sw=680&sh=680",
-      "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dwcaeecfe9/JBL_CHARGE5_FRONT_BLACK_0072_x1.png?sw=1605&sh=1605",
-      "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dwf55cb9a3/JBL_CHARGE5_BACK_CLOSED_BLACK_0127_x1.png?sw=1605&sh=1605",
-      "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw3e4f77a6/JBL_CHARGE5_LEFT_RIGHT_BLACK_0119_x1.png?sw=1605&sh=1605",
-      "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw69b06eff/JBL_CHARGE5_TOP_BLACK_0182_x1.png?sw=680&sh=680",
-      "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw674291a2/JBL_CHARGE5_BOTTOM_BLACK_0191_x1.png?sw=680&sh=680",
-      "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dwe4a6282b/JBL_CHARGE5_BACK_OPEN_BLACK_0127_x1.png?sw=680&sh=680",
-      "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw7dee5062/pdp/JBL_Charge_5_Lifestyle1_904x560px.png?sw=2034&sh=1260"
-    ],
-    "imageCover": "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw5bf3296f/JBL_CHARGE5_HERO_BLACK_0046_x1.png?sw=680&sh=680",
-    "supplier": "Distributeur EU",
-    "cost": 349.3,
-    "marginPct": -9.16,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.7,
-    "ratingCount": 0,
-    "options": {
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        }
-      ],
-      "Accessoires": [
-        {
-          "value": "Standard",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Housse rigide",
-          "priceDelta": 20.0
-        },
-        {
-          "value": "Câble audio 1.2 m",
-          "priceDelta": 10.0
-        }
-      ]
+
+    /*********************** Quick View ***************************/
+    function openQuickView(p){
+      $('#modalTitle').textContent = p.name;
+      $('#modalDesc').textContent = p.description || '';
+      $('#modalPrice').textContent = fmt(p.price) + (p.oldPrice? ' ' + '('+fmt(p.oldPrice)+')':'' );
+      const main = $('#modalImage'); main.src = firstImage(p); safeImg(main);
+      main.alt = p.name;
+      const thumbs = $('#modalThumbs'); thumbs.innerHTML=''; (p.images||[]).forEach(u=>{ const im = document.createElement('img'); im.src = u; safeImg(im); im.alt = p.name; im.addEventListener('click', ()=>{ main.src = u; }); thumbs.appendChild(im); });
+      $('#modalAdd').onclick = ()=> addToCart(p.id, p);
+      $('#modalInfo').onclick = ()=> alert(p.name + "\n\n" + (p.description||'Aucune description disponible.'));
+      $('#modal').classList.add('open'); $('#modal').setAttribute('aria-hidden','false');
     }
-  },
-  {
-    "id": "1024",
-    "sku": "GF-LG-31-5-UHD-4K-HDR-32UQ750-W-023",
-    "name": "LG 31.5″ UHD 4K HDR (32UQ750-W)",
-    "category": "Moniteur",
-    "brand": "LG",
-    "model": "LG 31.5″ UHD 4K HDR (32UQ750-W)",
-    "description": "LG 31.5″ UHD 4K HDR (32UQ750-W) — Moniteur LG haute performance. Points clés : dalle 4K/OLED • HDR • USB‑C 65W • 165–240 Hz • design sans bords. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez LG 31.5″ UHD 4K HDR (32UQ750-W) au meilleur prix sur GF Store.",
-    "price": 759.0,
-    "promoPrice": 486.99,
-    "stock": 29,
-    "images": [
-      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_1.jpg",
-      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_10.jpg",
-      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_2.jpg",
-      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_3.jpg",
-      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_4.jpg",
-      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_5.jpg",
-      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_6.jpg",
-      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_7.jpg",
-      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_8.jpg",
-      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_9.jpg"
-    ],
-    "imageCover": "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_1.jpg",
-    "supplier": "Distributeur EU",
-    "cost": 531.3,
-    "marginPct": -9.1,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.6,
-    "ratingCount": 0,
-    "options": {
-      "Diagonale": [
-        {
-          "value": "27″",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "32″",
-          "priceDelta": 80.0
-        }
-      ],
-      "Rafraîchissement": [
-        {
-          "value": "60 Hz",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "120 Hz",
-          "priceDelta": 30.0
-        },
-        {
-          "value": "240 Hz",
-          "priceDelta": 60.0
-        }
-      ]
+    $('#modalClose').addEventListener('click', ()=>{ $('#modal').classList.remove('open'); $('#modal').setAttribute('aria-hidden','true'); });
+    $('#modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') $('#modalClose').click(); });
+
+    /*********************** Flash timer **************************/
+    function initFlash(){
+      const key = 'gf_flash_end'; let end = localStorage.getItem(key);
+      if(!end){ end = Date.now() + FLASH_HOURS*3600*1000; localStorage.setItem(key, end); }
+      function tick(){ const remaining = parseInt(end) - Date.now(); if(remaining<=0){ $('#flashTimer').textContent = 'Offre terminée'; return; } const h = Math.floor(remaining/3600000); const m = Math.floor((remaining%3600000)/60000); const s = Math.floor((remaining%60000)/1000); $('#flashTimer').textContent = `-20% • ${h}h ${m}m ${s}s`; }
+      tick(); setInterval(tick,1000);
     }
-  },
-  {
-    "id": "1025",
-    "sku": "GF-MACBOOK-AIR-024",
-    "name": "MacBook Air",
-    "category": "PC Portable",
-    "brand": "MacBook",
-    "model": "MacBook Air",
-    "description": "MacBook Air — PC Portable MacBook haute performance. Points clés : CPU/GPUs récents • écran 120–240 Hz • SSD NVMe • Wi‑Fi 6E • châssis fin et léger. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez MacBook Air au meilleur prix sur GF Store.",
-    "price": 1199.0,
-    "promoPrice": 767.99,
-    "stock": 18,
-    "images": [
-      "assets/img/macbook-air/image_macbook_1.jpg",
-      "assets/img/macbook-air/image_macbook_10.jpg",
-      "assets/img/macbook-air/image_macbook_11.jpg",
-      "assets/img/macbook-air/image_macbook_12.jpg",
-      "assets/img/macbook-air/image_macbook_13.jpg",
-      "assets/img/macbook-air/image_macbook_14.jpg",
-      "assets/img/macbook-air/image_macbook_15.jpg",
-      "assets/img/macbook-air/image_macbook_16.jpg",
-      "assets/img/macbook-air/image_macbook_17.jpg",
-      "assets/img/macbook-air/image_macbook_2.jpg",
-      "assets/img/macbook-air/image_macbook_3.jpg",
-      "assets/img/macbook-air/image_macbook_4.jpg",
-      "assets/img/macbook-air/image_macbook_5.jpg",
-      "assets/img/macbook-air/image_macbook_6.jpg",
-      "assets/img/macbook-air/image_macbook_7.jpg",
-      "assets/img/macbook-air/image_macbook_8.jpg",
-      "assets/img/macbook-air/image_macbook_9.jpg"
-    ],
-    "imageCover": "assets/img/macbook-air/image_macbook_1.jpg",
-    "supplier": "Distributeur EU",
-    "cost": 899.25,
-    "marginPct": -17.09,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.6,
-    "ratingCount": 0,
-    "options": {
-      "Mémoire RAM": [
-        {
-          "value": "16 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "32 Go",
-          "priceDelta": 150.0
-        },
-        {
-          "value": "64 Go",
-          "priceDelta": 350.0
-        }
-      ],
-      "Stockage SSD": [
-        {
-          "value": "512 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 120.0
-        },
-        {
-          "value": "2 To",
-          "priceDelta": 300.0
-        }
-      ],
-      "Clavier": [
-        {
-          "value": "AZERTY (FR)",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "QWERTY (EN)",
-          "priceDelta": 0.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1026",
-    "sku": "GF-MACBOOK-PRO-M4-2025-025",
-    "name": "MacBook Pro (M4, 2025)",
-    "category": "PC Portable",
-    "brand": "MacBook",
-    "model": "MacBook Pro (M4, 2025)",
-    "description": "MacBook Pro (M4, 2025) — PC Portable MacBook haute performance. Points clés : CPU/GPUs récents • écran 120–240 Hz • SSD NVMe • Wi‑Fi 6E • châssis fin et léger. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez MacBook Pro (M4, 2025) au meilleur prix sur GF Store.",
-    "price": 1999.0,
-    "promoPrice": 1279.99,
-    "stock": 16,
-    "images": [
-      "assets/img/macbook-pro-m4-2025/image_macbook_18.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_19.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_20.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_21.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_22.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_23.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_24.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_25.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_26.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_27.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_28.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_29.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_30.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_31.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_32.jpg"
-    ],
-    "imageCover": "assets/img/macbook-pro-m4-2025/image_macbook_18.jpg",
-    "supplier": "Distributeur EU",
-    "cost": 1499.25,
-    "marginPct": -17.13,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.5,
-    "ratingCount": 0,
-    "options": {
-      "Mémoire RAM": [
-        {
-          "value": "16 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "32 Go",
-          "priceDelta": 150.0
-        },
-        {
-          "value": "64 Go",
-          "priceDelta": 350.0
-        }
-      ],
-      "Stockage SSD": [
-        {
-          "value": "512 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 120.0
-        },
-        {
-          "value": "2 To",
-          "priceDelta": 300.0
-        }
-      ],
-      "Clavier": [
-        {
-          "value": "AZERTY (FR)",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "QWERTY (EN)",
-          "priceDelta": 0.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1027",
-    "sku": "GF-META-QUEST-3-512GO-026",
-    "name": "META Quest 3 512Go",
-    "category": "VR",
-    "brand": "META",
-    "model": "META Quest 3 512Go",
-    "description": "META Quest 3 512Go — VR META haute performance. Points clés : réalité mixte • optique améliorée • contrôleurs haptiques • bibliothèque d’apps • autonome. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez META Quest 3 512Go au meilleur prix sur GF Store.",
-    "price": 699.0,
-    "promoPrice": 447.99,
-    "stock": 16,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_o_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_u_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0815820024101_v_0"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 559.2,
-    "marginPct": -24.82,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.7,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 150.0
-        }
-      ],
-      "Sangle": [
-        {
-          "value": "Standard",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Confort (répartie)",
-          "priceDelta": 20.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1028",
-    "sku": "GF-NINTENDO-SWITCH-OLED-64-GO-027",
-    "name": "Nintendo - Switch OLED - 64 Go",
-    "category": "Consoles",
-    "brand": "Nintendo",
-    "model": "Nintendo - Switch OLED - 64 Go",
-    "description": "Nintendo - Switch OLED - 64 Go — Consoles Nintendo haute performance. Points clés : jeu 4K/120 fps • SSD NVMe • catalogue exclusifs • ray tracing • multijoueur en ligne. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Nintendo - Switch OLED - 64 Go au meilleur prix sur GF Store.",
-    "price": 349.99,
-    "promoPrice": 223.99,
-    "stock": 32,
-    "images": [
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_1.webp",
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_10.webp",
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_11.webp",
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_2.webp",
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_3.webp",
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_4.webp",
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_5.webp",
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_6.webp",
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_7.webp",
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_8.webp",
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_9.webp"
-    ],
-    "imageCover": "assets/img/nintendo-switch-oled-64-go/image_nintendo_1.webp",
-    "supplier": "Distributeur EU",
-    "cost": 297.49,
-    "marginPct": -32.81,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.8,
-    "ratingCount": 0,
-    "options": {
-      "Pack": [
-        {
-          "value": "Console seule",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Avec 2e manette",
-          "priceDelta": 60.0
-        },
-        {
-          "value": "Avec 1 To NVMe",
-          "priceDelta": 120.0
-        },
-        {
-          "value": "Pack jeu + manette",
-          "priceDelta": 150.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1029",
-    "sku": "GF-ROG-ZEPHYRUS-G14-2025-GA403-028",
-    "name": "ROG Zephyrus G14 (2025) GA403",
-    "category": "PC Portable",
-    "brand": "Asus",
-    "model": "ROG Zephyrus G14 (2025) GA403",
-    "description": "ROG Zephyrus G14 (2025) GA403 — PC Portable Asus haute performance. Points clés : CPU/GPUs récents • écran 120–240 Hz • SSD NVMe • Wi‑Fi 6E • châssis fin et léger. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez ROG Zephyrus G14 (2025) GA403 au meilleur prix sur GF Store.",
-    "price": 2999.0,
-    "promoPrice": 1919.99,
-    "stock": 15,
-    "images": [
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_1.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_10.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_11.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_12.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_13.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_14.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_2.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_3.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_4.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_5.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_6.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_7.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_8.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_9.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_15.svg"
-    ],
-    "imageCover": "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_1.png",
-    "supplier": "Distributeur EU",
-    "cost": 2249.25,
-    "marginPct": -17.15,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.5,
-    "ratingCount": 0,
-    "options": {
-      "Mémoire RAM": [
-        {
-          "value": "16 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "32 Go",
-          "priceDelta": 150.0
-        },
-        {
-          "value": "64 Go",
-          "priceDelta": 350.0
-        }
-      ],
-      "Stockage SSD": [
-        {
-          "value": "512 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 120.0
-        },
-        {
-          "value": "2 To",
-          "priceDelta": 300.0
-        }
-      ],
-      "Clavier": [
-        {
-          "value": "AZERTY (FR)",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "QWERTY (EN)",
-          "priceDelta": 0.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1030",
-    "sku": "GF-SAMSUNG-GALAXY-BOOK4-15-6-029",
-    "name": "SAMSUNG Galaxy Book4 15.6'",
-    "category": "PC Portable",
-    "brand": "Samsung",
-    "model": "SAMSUNG Galaxy Book4 15.6'",
-    "description": "SAMSUNG Galaxy Book4 15.6' — PC Portable Samsung haute performance. Points clés : CPU/GPUs récents • écran 120–240 Hz • SSD NVMe • Wi‑Fi 6E • châssis fin et léger. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez SAMSUNG Galaxy Book4 15.6' au meilleur prix sur GF Store.",
-    "price": 699.0,
-    "promoPrice": 447.99,
-    "stock": 13,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095627434_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849980/fr-feature-galaxy-book-545035046?$FB_TYPE_A_JPG$",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095627434_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095627434_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095627434_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095627434_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095627434_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095627434_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849979/fr-feature-galaxy-book-545035044?$FB_TYPE_K_JPG$",
-      "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849986/fr-feature-galaxy-book-545035058?$FB_TYPE_A_PNG$",
-      "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849976/fr-feature-galaxy-book-545035038?$1204_n_JPG$",
-      "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849973/fr-feature-galaxy-book-545035030?$FB_TYPE_A_JPG$"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/8806095627434_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 524.25,
-    "marginPct": -17.02,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.5,
-    "ratingCount": 0,
-    "options": {
-      "Mémoire RAM": [
-        {
-          "value": "16 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "32 Go",
-          "priceDelta": 150.0
-        },
-        {
-          "value": "64 Go",
-          "priceDelta": 350.0
-        }
-      ],
-      "Stockage SSD": [
-        {
-          "value": "512 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 120.0
-        },
-        {
-          "value": "2 To",
-          "priceDelta": 300.0
-        }
-      ],
-      "Clavier": [
-        {
-          "value": "AZERTY (FR)",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "QWERTY (EN)",
-          "priceDelta": 0.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1031",
-    "sku": "GF-SAMSUNG-GALAXY-BOOK5-PRO-14-030",
-    "name": "SAMSUNG Galaxy Book5 Pro 14",
-    "category": "PC Portable",
-    "brand": "Samsung",
-    "model": "SAMSUNG Galaxy Book5 Pro 14",
-    "description": "SAMSUNG Galaxy Book5 Pro 14 — PC Portable Samsung haute performance. Points clés : CPU/GPUs récents • écran 120–240 Hz • SSD NVMe • Wi‑Fi 6E • châssis fin et léger. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez SAMSUNG Galaxy Book5 Pro 14 au meilleur prix sur GF Store.",
-    "price": 1499.0,
-    "promoPrice": 959.99,
-    "stock": 13,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/8806097003748_v_0"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 1124.25,
-    "marginPct": -17.11,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.5,
-    "ratingCount": 0,
-    "options": {
-      "Mémoire RAM": [
-        {
-          "value": "16 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "32 Go",
-          "priceDelta": 150.0
-        },
-        {
-          "value": "64 Go",
-          "priceDelta": 350.0
-        }
-      ],
-      "Stockage SSD": [
-        {
-          "value": "512 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 120.0
-        },
-        {
-          "value": "2 To",
-          "priceDelta": 300.0
-        }
-      ],
-      "Clavier": [
-        {
-          "value": "AZERTY (FR)",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "QWERTY (EN)",
-          "priceDelta": 0.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1032",
-    "sku": "GF-SAMSUNG-GALAXY-S24-ULTRA-AMBRE-1TO-031",
-    "name": "SAMSUNG Galaxy S24 Ultra Ambre 1To",
-    "category": "Smartphone",
-    "brand": "Samsung",
-    "model": "SAMSUNG Galaxy S24 Ultra Ambre 1To",
-    "description": "SAMSUNG Galaxy S24 Ultra Ambre 1To — Smartphone Samsung haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez SAMSUNG Galaxy S24 Ultra Ambre 1To au meilleur prix sur GF Store.",
-    "price": 1809.0,
-    "promoPrice": 1158.99,
-    "stock": 25,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 1302.48,
-    "marginPct": -12.38,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.5,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1033",
-    "sku": "GF-SAMSUNG-GALAXY-S24-ULTRA-GRIS-512GO-032",
-    "name": "SAMSUNG Galaxy S24 Ultra Gris 512Go",
-    "category": "Smartphone",
-    "brand": "Samsung",
-    "model": "SAMSUNG Galaxy S24 Ultra Gris 512Go",
-    "description": "SAMSUNG Galaxy S24 Ultra Gris 512Go — Smartphone Samsung haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez SAMSUNG Galaxy S24 Ultra Gris 512Go au meilleur prix sur GF Store.",
-    "price": 1569.0,
-    "promoPrice": 1004.99,
-    "stock": 22,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414478_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414478_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414478_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/8806095414478_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 1129.68,
-    "marginPct": -12.41,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.7,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1034",
-    "sku": "GF-SAMSUNG-GALAXY-S24-ULTRA-VIOLET-1TO-033",
-    "name": "SAMSUNG Galaxy S24 Ultra Violet 1To",
-    "category": "Smartphone",
-    "brand": "Samsung",
-    "model": "SAMSUNG Galaxy S24 Ultra Violet 1To",
-    "description": "SAMSUNG Galaxy S24 Ultra Violet 1To — Smartphone Samsung haute performance. Points clés : écran haute résolution • appareil photo avancé • batterie longue durée • 5G • USB‑C. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez SAMSUNG Galaxy S24 Ultra Violet 1To au meilleur prix sur GF Store.",
-    "price": 1809.0,
-    "promoPrice": 1158.99,
-    "stock": 34,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414379_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414379_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414379_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414379_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/8806095414379_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 1302.48,
-    "marginPct": -12.38,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.3,
-    "ratingCount": 0,
-    "options": {
-      "Stockage": [
-        {
-          "value": "128 Go",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "256 Go",
-          "priceDelta": 100.0
-        },
-        {
-          "value": "512 Go",
-          "priceDelta": 250.0
-        },
-        {
-          "value": "1 To",
-          "priceDelta": 400.0
-        }
-      ],
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Titane",
-          "priceDelta": 200.0
-        }
-      ],
-      "Garantie": [
-        {
-          "value": "24 mois",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "36 mois",
-          "priceDelta": 80.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1035",
-    "sku": "GF-SAMSUNG-GALAXY-WATCH-6-034",
-    "name": "Samsung Galaxy Watch 6",
-    "category": "Montre",
-    "brand": "Samsung",
-    "model": "Samsung Galaxy Watch 6",
-    "description": "Samsung Galaxy Watch 6 — Montre Samsung haute performance. Points clés : GPS/GLONASS • ECG & suivi santé • écran AMOLED/LTPO • paiement sans contact • autonomie optimisée. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Samsung Galaxy Watch 6 au meilleur prix sur GF Store.",
-    "price": 320.0,
-    "promoPrice": 204.99,
-    "stock": 56,
-    "images": [
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095059297_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095059297_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095059297_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095059297_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_b_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
-    ],
-    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/8806095059297_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-    "supplier": "Distributeur EU",
-    "cost": 236.8,
-    "marginPct": -15.52,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.6,
-    "ratingCount": 0,
-    "options": {
-      "Taille boîtier": [
-        {
-          "value": "S",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "M",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "L",
-          "priceDelta": 20.0
-        }
-      ],
-      "Connectivité": [
-        {
-          "value": "GPS",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "GPS + Cellular",
-          "priceDelta": 100.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1036",
-    "sku": "GF-SAMSUNG-ODYSSEY-OLED-G8-27-4K-035",
-    "name": "Samsung Odyssey OLED G8 (27″ 4K)",
-    "category": "Moniteur",
-    "brand": "Samsung",
-    "model": "Samsung Odyssey OLED G8 (27″ 4K)",
-    "description": "Samsung Odyssey OLED G8 (27″ 4K) — Moniteur Samsung haute performance. Points clés : dalle 4K/OLED • HDR • USB‑C 65W • 165–240 Hz • design sans bords. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Samsung Odyssey OLED G8 (27″ 4K) au meilleur prix sur GF Store.",
-    "price": 1003.7,
-    "promoPrice": 642.99,
-    "stock": 11,
-    "images": [
-      "assets/img/samsung-odyssey-oled-g8-27-4k/image_samsung_1.webp",
-      "assets/img/samsung-odyssey-oled-g8-27-4k/image_samsung_10.webp",
-      "assets/img/samsung-odyssey-oled-g8-27-4k/image_samsung_2.webp",
-      "assets/img/samsung-odyssey-oled-g8-27-4k/image_samsung_3.webp",
-      "assets/img/samsung-odyssey-oled-g8-27-4k/image_samsung_4.webp",
-      "assets/img/samsung-odyssey-oled-g8-27-4k/image_samsung_5.webp",
-      "assets/img/samsung-odyssey-oled-g8-27-4k/image_samsung_6.webp",
-      "assets/img/samsung-odyssey-oled-g8-27-4k/image_samsung_7.webp",
-      "assets/img/samsung-odyssey-oled-g8-27-4k/image_samsung_8.webp",
-      "assets/img/samsung-odyssey-oled-g8-27-4k/image_samsung_9.webp"
-    ],
-    "imageCover": "assets/img/samsung-odyssey-oled-g8-27-4k/image_samsung_1.webp",
-    "supplier": "Distributeur EU",
-    "cost": 702.59,
-    "marginPct": -9.27,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.5,
-    "ratingCount": 0,
-    "options": {
-      "Diagonale": [
-        {
-          "value": "27″",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "32″",
-          "priceDelta": 80.0
-        }
-      ],
-      "Rafraîchissement": [
-        {
-          "value": "60 Hz",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "120 Hz",
-          "priceDelta": 30.0
-        },
-        {
-          "value": "240 Hz",
-          "priceDelta": 60.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1037",
-    "sku": "GF-SAMSUNG-SMART-MONITOR-M9-M90SF-036",
-    "name": "Samsung Smart Monitor M9 (M90SF)",
-    "category": "Moniteur",
-    "brand": "Samsung",
-    "model": "Samsung Smart Monitor M9 (M90SF)",
-    "description": "Samsung Smart Monitor M9 (M90SF) — Moniteur Samsung haute performance. Points clés : dalle 4K/OLED • HDR • USB‑C 65W • 165–240 Hz • design sans bords. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Samsung Smart Monitor M9 (M90SF) au meilleur prix sur GF Store.",
-    "price": 1099.0,
-    "promoPrice": 703.99,
-    "stock": 28,
-    "images": [
-      "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_11.webp",
-      "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_12.webp",
-      "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_13.webp",
-      "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_14.webp",
-      "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_15.webp",
-      "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_16.webp",
-      "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_17.webp",
-      "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_18.webp",
-      "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_19.webp"
-    ],
-    "imageCover": "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_11.webp",
-    "supplier": "Distributeur EU",
-    "cost": 769.3,
-    "marginPct": -9.28,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.6,
-    "ratingCount": 0,
-    "options": {
-      "Diagonale": [
-        {
-          "value": "27″",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "32″",
-          "priceDelta": 80.0
-        }
-      ],
-      "Rafraîchissement": [
-        {
-          "value": "60 Hz",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "120 Hz",
-          "priceDelta": 30.0
-        },
-        {
-          "value": "240 Hz",
-          "priceDelta": 60.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1038",
-    "sku": "GF-SONY-WH-1000XM5-037",
-    "name": "Sony WH-1000XM5",
-    "category": "Casque/Ecouteurs",
-    "brand": "Sony",
-    "model": "Sony WH-1000XM5",
-    "description": "Sony WH-1000XM5 — Casque/Ecouteurs Sony haute performance. Points clés : réduction de bruit active • Bluetooth multipoint • autonomie 24–30 h • charge USB‑C • confort longue durée. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez Sony WH-1000XM5 au meilleur prix sur GF Store.",
-    "price": 299.0,
-    "promoPrice": 191.99,
-    "stock": 108,
-    "images": [
-      "https://m.media-amazon.com/images/I/416bPFuzfpL._AC_SX679_.jpg",
-      "https://m.media-amazon.com/images/I/514yU1nScOL._AC_SX679_.jpg",
-      "https://m.media-amazon.com/images/I/719Rl8qzXjL._AC_SX679_.jpg",
-      "https://m.media-amazon.com/images/I/61hT-265ClL._AC_SX679_.jpg",
-      "https://m.media-amazon.com/images/I/71jY8UtNfuL._AC_SX679_.jpg",
-      "https://m.media-amazon.com/images/I/71GoS0HpVVL._AC_SX679_.jpg"
-    ],
-    "imageCover": "https://m.media-amazon.com/images/I/416bPFuzfpL._AC_SX679_.jpg",
-    "supplier": "Distributeur EU",
-    "cost": 209.3,
-    "marginPct": -9.02,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.9,
-    "ratingCount": 0,
-    "options": {
-      "Couleur": [
-        {
-          "value": "Noir",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Blanc",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Bleu",
-          "priceDelta": 0.0
-        }
-      ],
-      "Accessoires": [
-        {
-          "value": "Standard",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Housse rigide",
-          "priceDelta": 20.0
-        },
-        {
-          "value": "Câble audio 1.2 m",
-          "priceDelta": 10.0
-        }
-      ]
-    }
-  },
-  {
-    "id": "1039",
-    "sku": "GF-XBOX-SERIES-X-038",
-    "name": "XBOX SERIES X",
-    "category": "Consoles",
-    "brand": "Microsoft",
-    "model": "XBOX SERIES X",
-    "description": "XBOX SERIES X — Consoles Microsoft haute performance. Points clés : jeu 4K/120 fps • SSD NVMe • catalogue exclusifs • ray tracing • multijoueur en ligne. GF Store : prix inférieur au marché, livraison 24–48h, paiement sécurisé, garantie 24 mois. Achetez XBOX SERIES X au meilleur prix sur GF Store.",
-    "price": 599.99,
-    "promoPrice": 383.99,
-    "stock": 20,
-    "images": [
-      "assets/img/xbox-series-x/image_xbox_1.png",
-      "assets/img/xbox-series-x/image_xbox_2.png",
-      "assets/img/xbox-series-x/image_xbox_3.png",
-      "assets/img/xbox-series-x/image_xbox_4.png",
-      "assets/img/xbox-series-x/image_xbox_5.png",
-      "assets/img/xbox-series-x/image_xbox_6.jpg",
-      "assets/img/xbox-series-x/image_xbox_7.webp"
-    ],
-    "imageCover": "assets/img/xbox-series-x/image_xbox_1.png",
-    "supplier": "Distributeur EU",
-    "cost": 509.99,
-    "marginPct": -32.81,
-    "status": "En stock",
-    "createdAt": "2025-08-16T00:00:00",
-    "warrantyMonths": 24,
-    "rating": 4.8,
-    "ratingCount": 0,
-    "options": {
-      "Pack": [
-        {
-          "value": "Console seule",
-          "priceDelta": 0.0
-        },
-        {
-          "value": "Avec 2e manette",
-          "priceDelta": 60.0
-        },
-        {
-          "value": "Avec 1 To NVMe",
-          "priceDelta": 120.0
-        },
-        {
-          "value": "Pack jeu + manette",
-          "priceDelta": 150.0
-        }
-      ]
-    }
-  }
-]
+
+    /*********************** Divers UI ****************************/
+    function attachRipples(){ $all('.btn, .add, .info, .chip, .fab').forEach(b=>{ b.removeEventListener('click', addRipple); b.addEventListener('click', addRipple, {passive:true}); }); }
+    $('#accountBtn').addEventListener('click', ()=> alert('Espace compte — bientôt disponible.'));
+
+    /*********************** Boot ********************************/
+    (async function(){
+      await loadProducts();
+      renderProducts(PRODUCTS);
+      renderTop();
+      buildCategories();
+      bindControls();
+      applyFilters();
+      initFlash();
+      attachRipples();
+      // scroll to grid
+      document.getElementById('openCatalog').addEventListener('click', ()=> document.getElementById('productsGrid').scrollIntoView({behavior:'smooth'}));
+      document.getElementById('openBundles').addEventListener('click', ()=> document.getElementById('productsGrid').scrollIntoView({behavior:'smooth'}));
+    })();
+  </script>
+</body>
+</html>
