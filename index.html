@@ -17,16 +17,13 @@
       --glass: rgba(255,255,255,0.03);
       --shadow: 0 8px 24px rgba(0,0,0,0.6);
     }
-
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background:linear-gradient(180deg,var(--bg), #e9eef6 120%); color:var(--text); -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+      background:linear-gradient(180deg,var(--bg), #e9eef6 120%); color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
 
-    /* Topbar */
     .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;backdrop-filter: blur(6px);background:var(--glass);box-shadow:var(--shadow);position:sticky;top:0;z-index:50}
     .brand{display:flex;gap:12px;align-items:center}
     .brand .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
@@ -36,21 +33,14 @@
     .btn{padding:8px 12px;border-radius:8px;border:0;background:var(--card);box-shadow:var(--shadow);cursor:pointer}
     .icon-btn{display:inline-flex;align-items:center;gap:8px}
 
-    /* Hero */
     .hero{display:grid;grid-template-columns:1fr 420px;gap:24px;padding:32px}
     .hero-card{background:var(--card);padding:22px;border-radius:14px;box-shadow:var(--shadow)}
 
-    .promo{display:flex;gap:12px;align-items:center}
-    .promo .badge{background:linear-gradient(90deg,#ff7a59,#ffb86b);color:#fff;padding:6px 10px;border-radius:8px;font-weight:700}
-
-    /* Grid */
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;padding:20px}
     .product{background:var(--card);padding:12px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
     .product img{width:100%;height:160px;object-fit:contain;border-radius:8px;background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01))}
     .meta{display:flex;justify-content:space-between;align-items:center}
     .title{font-weight:600}
-    .price{font-size:1.05rem;font-weight:700}
-    .old{color:var(--muted);text-decoration:line-through;font-size:0.9rem;margin-left:8px}
     .badges{display:flex;gap:6px;flex-wrap:wrap}
     .badge-small{background:rgba(14,165,164,0.12);color:var(--accent);padding:6px;border-radius:8px;font-weight:600;font-size:0.8rem}
 
@@ -58,25 +48,16 @@
     .add{flex:1;padding:10px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#06b6d4);color:white;border:0;cursor:pointer}
     .info{padding:8px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:transparent;cursor:pointer}
 
-    /* Mini cart */
     .minicart{position:fixed;right:18px;bottom:18px;background:var(--card);padding:12px;border-radius:12px;box-shadow:var(--shadow);width:320px;max-height:70vh;overflow:auto}
     .minicart h4{margin:0 0 10px 0}
     .cart-item{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed rgba(0,0,0,0.06)}
     .cart-item img{width:48px;height:48px;object-fit:contain}
 
-    /* Modal */
-    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;z-index:60}
-    .modal{width:min(680px,92vw);background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:18px}
-    .modal header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-    .modal .close{background:transparent;border:0;font-size:22px;cursor:pointer;color:var(--muted)}
-
-    .option-row{display:grid;grid-template-columns:140px 1fr;gap:10px;align-items:center;margin:8px 0}
-    .option-row select{padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);background:transparent;color:var(--text)}
-
-    /* Footer */
     footer{padding:18px 28px;color:var(--muted);font-size:0.95rem}
 
-    /* Responsive */
+    details.debug{margin:20px;padding:12px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12}
+    details.debug summary{cursor:pointer;font-weight:700}
+    pre{white-space:pre-wrap}
     @media (max-width:900px){.hero{grid-template-columns:1fr;}.topbar{flex-wrap:wrap}.search{order:3;width:100%;margin:10px 0}}
   </style>
 </head>
@@ -92,12 +73,11 @@
     </div>
 
     <div class="search">
-      <input id="searchInput" placeholder="Rechercher : PC, PlayStation, AirPods..." />
+      <input id="searchInput" placeholder="Rechercher : PS5, MacBook, AirPods..." />
     </div>
 
     <div class="actions">
       <button class="btn icon-btn" id="themeToggle" title="Basculer thème">🌙 / ☀️</button>
-      <button class="btn icon-btn" id="accountBtn">Compte</button>
       <button class="btn icon-btn" id="cartBtn">Panier (<span id="cartCount">0</span>)</button>
     </div>
   </header>
@@ -105,36 +85,14 @@
   <main>
     <section class="hero">
       <div class="hero-card">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <h1 style="margin:0">GF Store — Boutique high-tech</h1>
-            <p style="margin:6px 0;color:var(--muted)">Produits premium. Assistance 24/7. Paiement sécurisé. Garantie 1 an minimum.</p>
-
-            <div class="promo" style="margin-top:12px">
-              <div class="badge">Offre flash -20%</div>
-              <div id="flashTimer" style="font-weight:700;color:var(--danger)">Chargement du timer...</div>
-            </div>
-
-            <div style="margin-top:14px">
-              <button class="btn" id="openCatalog">Voir le catalogue</button>
-              <button class="btn" id="openBundles">Bundles</button>
-            </div>
-          </div>
-
-          <aside style="width:340px">
-            <div style="background:linear-gradient(180deg,#fff,#f1f7fb);padding:14px;border-radius:12px">
-              <h3 style="margin:0">Livraison rapide</h3>
-              <p style="margin:6px 0;color:var(--muted)">Livraison 24-48h sur la majorité des produits.</p>
-              <ul style="margin:0;padding-left:18px;color:var(--muted)">
-                <li>Assistance 24/7</li>
-                <li>Paiement 100% sécurisé</li>
-                <li>Garantie 1 an minimum</li>
-              </ul>
-            </div>
-          </aside>
-        </div>
+        <h1 style="margin:0">Boutique high-tech</h1>
+        <p style="margin:6px 0;color:var(--muted)">Produits réels issus de <code>data/products.js</code> (aucun produit fictif).</p>
+        <ul style="margin:0;color:var(--muted)">
+          <li>Les produits sans champs obligatoires (id/slug/name) sont ignorés <em>(voir bloc debug en bas)</em>.</li>
+          <li>Images : on prend le premier visuel valide (URL http/https ou <code>assets/…</code>). Sinon, image par défaut.</li>
+          <li>Stock 0 → badge « Rupture ». Le produit reste visible (pas masqué).</li>
+        </ul>
       </div>
-
       <div class="hero-card">
         <h3>Top ventes</h3>
         <div id="topList" style="display:grid;gap:10px;margin-top:10px"></div>
@@ -145,6 +103,18 @@
       <h2 style="margin:8px 0">Nos produits</h2>
       <div class="grid" id="productsGrid">Chargement...</div>
     </section>
+
+    <details class="debug" id="debugBox" open>
+      <summary>🛠 Debug — produits ignorés / raisons</summary>
+      <div id="debugList" style="margin-top:10px"></div>
+      <!--
+        Ce bloc te montre clairement pourquoi un produit n’apparaît pas :
+        - Champs manquants (id/slug/name)
+        - Objet non conforme (pas un objet)
+        - etc.
+        Les mêmes infos sont aussi en console.warn().
+      -->
+    </details>
   </main>
 
   <div id="minicart" class="minicart" hidden>
@@ -152,36 +122,7 @@
     <div id="cartItems"></div>
     <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
       <div><strong>Total:</strong> <span id="cartTotal">0 €</span></div>
-      <div>
-        <button class="btn" id="goCheckout">Commander</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Variant modal -->
-  <div class="modal-backdrop" id="variantModal">
-    <div class="modal">
-      <header>
-        <div>
-          <div id="vmTitle" style="font-weight:800;font-size:1.1rem"></div>
-          <div id="vmSubtitle" style="color:var(--muted);font-size:0.92rem"></div>
-        </div>
-        <button class="close" id="vmClose" title="Fermer">✕</button>
-      </header>
-
-      <div style="display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:flex-start">
-        <img id="vmImage" src="" style="width:100%;height:180px;object-fit:contain;border-radius:10px;background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01))" alt="">
-        <div>
-          <div id="vmOptions"></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
-            <div>
-              <div style="font-size:0.92rem;color:var(--muted)" id="vmSku"></div>
-              <div style="font-weight:800;font-size:1.2rem" id="vmPrice">—</div>
-            </div>
-            <button class="add" id="vmAdd">Ajouter au panier</button>
-          </div>
-        </div>
-      </div>
+      <div><button class="btn" id="goCheckout">Commander</button></div>
     </div>
   </div>
 
@@ -189,69 +130,38 @@
     © GF Store — Tous droits réservés • Paiement sécurisé • Assistance 24/7
   </footer>
 
+  <!-- On importe TA base produits réelle -->
   <script type="module">
-    /*********************** Chargement des produits ************************/
-    // 👉 Assure-toi d'avoir un fichier ./data/products.js qui exporte "default" un tableau de produits.
-    // Exemple : export default [{ id:'ps5', name:'PlayStation 5', price:499, image:'assets/img/ps5.webp' }, ... ]
-    let PRODUCTS = [];
-    try {
-      const mod = await import('./data/products.js');
-      PRODUCTS = Array.isArray(mod.default) ? mod.default : (Array.isArray(mod.PRODUCTS) ? mod.PRODUCTS : []);
-    } catch (e) {
-      console.error('Impossible de charger ./data/products.js', e);
-      // Fallback démo minimal si products.js absent
-      PRODUCTS = [
-        {id:'macbook-pro', name:'MacBook Pro 14"', category:'PC & Informatique', price:2499, oldPrice:2799, stock:5, image:'assets/images/macbook.png', badges:['🔥 Offre flash']},
-        {id:'ps5', name:'PlayStation 5', category:'Consoles', price:499, stock:3, image:'assets/images/ps5.png', badges:['Stock limité']},
-        {id:'airpods-pro', name:'AirPods Pro', category:'Audio', price:249, stock:12, image:'assets/images/airpods.png'}
-      ];
-    }
+    import PRODUCTS from './data/products.js';
 
     /*********************** Utilitaires **************************/
-    const $ = (sel)=>document.querySelector(sel);
-    const fmt = (val)=> (typeof val === 'number' ? val.toFixed(2).replace('.', ',') + ' €' : val);
+    const $ = s => document.querySelector(s);
+    const $grid = $('#productsGrid');
+    const $top = $('#topList');
+    const $debugList = $('#debugList');
+    const placeholder = 'assets/img/opengraph-default.jpg'; // présent dans ton repo
 
-    // Prix calculé avec prise en compte des variantes (priceDelta | price)
-    function getComputedPrice(p, variant) {
-      if (!variant) return p.price ?? 0;
-      // Si la variante définit un "price" direct, on le prend, sinon on additionne un éventuel "priceDelta"
-      if (typeof variant.price === 'number') return variant.price;
-      if (typeof variant.priceDelta === 'number') return (p.price ?? 0) + variant.priceDelta;
-      return p.price ?? 0;
-    }
-
-    // Trouver une variante par objet {couleur:'Noir', stockage:'256 Go', ...}
-    function findVariant(p, sel) {
-      if (!p || !Array.isArray(p.variants)) return null;
-      const keys = Object.keys(sel);
-      return p.variants.find(v => keys.every(k => String(v[k]).toLowerCase() === String(sel[k]).toLowerCase()));
-    }
-
-    // Récupérer toutes les options possibles depuis p.options (ou inférées depuis variants)
-    function getOptions(p) {
-      if (p.options && typeof p.options === 'object') return p.options;
-      // Inférence basique depuis variants: on agrège les clés non standards
-      const opts = {};
-      if (Array.isArray(p.variants)) {
-        p.variants.forEach(v => {
-          Object.keys(v).forEach(k => {
-            if (['id','sku','price','priceDelta','image','stock'].includes(k)) return;
-            opts[k] = opts[k] || new Set();
-            opts[k].add(v[k]);
-          });
-        });
+    // Normalise un chemin d’image. Accepte http(s), data/assets, et “répare” les anciens file:///C:/.../gf-store/assets/...
+    function normalizeImage(url){
+      if(!url || typeof url !== 'string') return placeholder;
+      const u = url.trim();
+      if(/^https?:\/\//i.test(u)) return u;                         // URL distante (Boulanger, Amazon, etc.)
+      if(u.includes('/assets/')) return u.slice(u.indexOf('assets/'));  // on garde un chemin relatif /assets/...
+      if(u.includes('\\assets\\')) return u.slice(u.indexOf('\\assets\\')).replaceAll('\\','/'); // windows → web
+      if(/^file:\/\//i.test(u) && u.toLowerCase().includes('/gf-store/')){
+        // Transforme file:///C:/.../gf-store/assets/img/... → assets/img/...
+        const idx = u.toLowerCase().indexOf('/gf-store/');
+        const rest = u.slice(idx + '/gf-store/'.length);
+        return rest.startsWith('assets/') ? rest : placeholder;
       }
-      // Convertit les Set en tableaux
-      Object.keys(opts).forEach(k => opts[k] = Array.from(opts[k]));
-      return opts;
+      return placeholder;
     }
 
-    // Récupérer image d'une variante si dispo
-    function getImage(p, variant){
-      return (variant && variant.image) || p.image || (Array.isArray(p.images) ? p.images[0] : '');
-    }
+    // Petites helpers
+    const truncate = (t, n=120) => (t || '').length > n ? t.slice(0,n-1)+'…' : (t || '');
+    const euro = v => (typeof v === 'number') ? v.toFixed(2).replace('.', ',')+' €' : '—';
 
-    /*********************** Theme ********************************/
+    /*********************** Thème ********************************/
     const themeToggle = document.getElementById('themeToggle');
     const userTheme = localStorage.getItem('gf_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', userTheme === 'dark' ? 'dark' : 'light');
@@ -263,34 +173,37 @@
 
     /*********************** Cart *********************************/
     const CART_KEY = 'gf_cart_v1';
-    function loadCart(){ try{ return JSON.parse(localStorage.getItem(CART_KEY) || '[]') }catch(e){return []} }
-    function saveCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); renderCartCount(); }
-    function addToCart(itemId, payload){
+    const loadCart = ()=>{ try{ return JSON.parse(localStorage.getItem(CART_KEY) || '[]') }catch(e){return []} };
+    const saveCart = (c)=>{ localStorage.setItem(CART_KEY, JSON.stringify(c)); renderCartCount(); };
+    function addToCart(p){
       const cart = loadCart();
-      const item = cart.find(i=>i.id===itemId);
-      if(item){ item.qty++; }
-      else {
-        cart.push({
-          id:itemId,
-          title:payload.title,
-          price:payload.price,
-          image:payload.image || '',
-          qty:1
-        });
-      }
+      const found = cart.find(i=>i.id===p.id);
+      const price = (typeof p.price === 'number') ? p.price : 0; // si pas de prix dans products.js → 0
+      if(found){ found.qty++; } else { cart.push({id:p.id, title:p.name, price, image:(p._image||placeholder), qty:1}); }
       saveCart(cart);
       openMiniCart();
     }
-    function renderCartCount(){ const cart = loadCart(); const total = cart.reduce((s,i)=>s+i.qty,0); document.getElementById('cartCount').textContent = total; }
-    function renderMiniCart(){ const items = loadCart(); const container = document.getElementById('cartItems'); container.innerHTML=''; if(items.length===0){ container.innerHTML='<div style="color:var(--muted)">Votre panier est vide.</div>'; document.getElementById('cartTotal').textContent = '0 €'; return; }
+    function renderCartCount(){
+      const total = loadCart().reduce((s,i)=>s+i.qty,0);
+      document.getElementById('cartCount').textContent = total;
+    }
+    function renderMiniCart(){
+      const items = loadCart();
+      const container = document.getElementById('cartItems');
+      container.innerHTML='';
+      if(items.length===0){
+        container.innerHTML='<div style="color:var(--muted)">Votre panier est vide.</div>';
+        document.getElementById('cartTotal').textContent = '0 €'; return;
+      }
       let total = 0;
       items.forEach(it=>{
         total += it.price * it.qty;
-        const div = document.createElement('div'); div.className='cart-item'; div.innerHTML = `
-          <img src="${it.image || 'https://via.placeholder.com/80?text=GF'}" alt="">
+        const div = document.createElement('div'); div.className='cart-item';
+        div.innerHTML = `
+          <img src="${it.image || '${placeholder}'}" alt="">
           <div style="flex:1">
             <div style="font-weight:700">${it.title}</div>
-            <div style="font-size:0.9rem;color:var(--muted)">${it.qty} x ${fmt(it.price)}</div>
+            <div style="font-size:0.9rem;color:var(--muted)">${it.qty} x ${euro(it.price)}</div>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px">
             <button class="info" data-action="plus" data-id="${it.id}">+</button>
@@ -299,213 +212,141 @@
         `;
         container.appendChild(div);
       });
-      document.getElementById('cartTotal').textContent = fmt(total);
-
-      container.querySelectorAll('button[data-action]').forEach(btn=>{
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const action = btn.getAttribute('data-action');
-          const cart = loadCart();
-          const idx = cart.findIndex(i=>i.id===id);
-          if(idx===-1) return;
-          if(action==='plus') cart[idx].qty++;
-          else cart[idx].qty--;
-          if(cart[idx].qty<=0) cart.splice(idx,1);
-          saveCart(cart);
-          renderMiniCart();
-        });
-      });
+      document.getElementById('cartTotal').textContent = euro(total);
     }
-    function openMiniCart(){ document.getElementById('minicart').hidden=false; renderMiniCart(); }
+    document.getElementById('cartItems').addEventListener('click', (e)=>{
+      const btn = e.target.closest('button[data-action]');
+      if(!btn) return;
+      const id = btn.getAttribute('data-id'); const act = btn.getAttribute('data-action');
+      const cart = loadCart();
+      const idx = cart.findIndex(i=>i.id===id);
+      if(idx===-1) return;
+      if(act==='plus') cart[idx].qty++;
+      if(act==='minus'){ cart[idx].qty--; if(cart[idx].qty<=0) cart.splice(idx,1); }
+      saveCart(cart); renderMiniCart();
+    });
     document.getElementById('cartBtn').addEventListener('click', ()=>{ openMiniCart(); });
-    document.getElementById('goCheckout').addEventListener('click', ()=>{ alert('Page checkout non implémentée dans ce fichier.'); });
+    document.getElementById('goCheckout').addEventListener('click', ()=>{ alert('Checkout non implémenté ici.'); });
+    function openMiniCart(){ document.getElementById('minicart').hidden=false; renderMiniCart(); }
     renderCartCount();
 
-    /*********************** Rendu catalogue ************************/
-    function renderProducts(list){
-      const grid = document.getElementById('productsGrid'); grid.innerHTML='';
-      list.forEach(p=>{
-        const el = document.createElement('article'); el.className='product';
-        const price = fmt(p.price ?? 0);
-        const old = (p.oldPrice ? `<span class="old">${fmt(p.oldPrice)}</span>` : '');
-        const img = p.image || (Array.isArray(p.images) ? p.images[0] : '') || 'https://via.placeholder.com/400x300?text=GF+Store';
+    /*********************** Chargement & validation produits ******/
 
-        el.innerHTML = `
-          <img src="${img}" alt="${p.name || ''}">
-          <div class="meta"><div class="title">${p.name || ''}</div><div class="price">${price}${old}</div></div>
-          <div style="color:var(--muted);font-size:0.9rem">${p.category || ''}</div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="badges">
-              ${ (p.badges||[]).map(b=>`<div class="badge-small">${b}</div>`).join('') }
-              ${ (typeof p.stock === 'number' && p.stock<=5) ? '<div class="badge-small">Stock: '+p.stock+'</div>' : '' }
-            </div>
+    // ⚠️ IMPORTANT : on ne crée PAS de produits fictifs.
+    // On prend exactement ce que fournit data/products.js (export default PRODUCTS).
+    const RAW = Array.isArray(PRODUCTS) ? PRODUCTS : [];
+
+    const filtered = [];
+    const skipped = []; // pour expliquer clairement les raisons
+
+    RAW.forEach((p, idx)=>{
+      const reasons = [];
+
+      if(!p || typeof p !== 'object'){ reasons.push('Entrée non-objet'); }
+      if(!p?.id)   reasons.push('id manquant');
+      if(!p?.slug) reasons.push('slug manquant');
+      if(!p?.name) reasons.push('name manquant');
+
+      // Image principale → on prend le 1er visuel valide s'il existe
+      const imgs = Array.isArray(p?.images) ? p.images : [];
+      const firstImg = imgs.find(x => typeof x === 'string' && x.trim().length>0);
+      const resolved = normalizeImage(firstImg);
+
+      if(reasons.length){
+        skipped.push({ index: idx, candidate: p?.name || '(sans nom)', reasons });
+        console.warn('[GF/skip]', p, reasons);
+        return; // on n’ajoute pas au rendu
+      }
+
+      filtered.push({
+        ...p,
+        _image: resolved // on stocke l’image résolue à part pour l’UI
+      });
+    });
+
+    /*********************** Rendu UI *****************************/
+    function renderProducts(list){
+      $grid.innerHTML='';
+      list.forEach(p=>{
+        const article = document.createElement('article'); article.className='product';
+        const rupture = (typeof p.stock === 'number' && p.stock<=0);
+        const low = (typeof p.stock === 'number' && p.stock>0 && p.stock<=5);
+        article.innerHTML = `
+          <img src="${p._image || placeholder}" alt="${p.name}">
+          <div class="meta">
+            <div class="title">${p.name}</div>
+            <div style="font-size:0.95rem;color:var(--muted)">${p.brand || ''}</div>
           </div>
-          <div style="margin-top:auto;display:flex;gap:10px">
+          <div style="color:var(--muted);font-size:0.9rem">${truncate(p.description, 140)}</div>
+          <div class="badges">
+            ${ rupture ? '<div class="badge-small" style="color:#b91c1c;background:rgba(239,68,68,.12)">Rupture</div>' : '' }
+            ${ low ? '<div class="badge-small">Stock: '+p.stock+'</div>' : '' }
+          </div>
+          <div class="cta" style="margin-top:auto">
             <button class="info" data-view="${p.id}">Voir</button>
-            <button class="add" data-add="${p.id}">Ajouter</button>
+            <button class="add" ${rupture?'disabled':''} data-add="${p.id}">${rupture?'Indispo':'Ajouter'}</button>
           </div>
         `;
-        grid.appendChild(el);
-      });
-
-      // Attache les handlers
-      grid.querySelectorAll('button[data-add]').forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-          const id = btn.getAttribute('data-add');
-          const p = PRODUCTS.find(x=>String(x.id)===String(id));
-          if(!p) return alert('Produit introuvable');
-          if (Array.isArray(p.variants) && p.variants.length>0) {
-            // On ouvre le modal pour choisir une variante
-            openVariantModal(p);
-          } else {
-            if(typeof p.stock === 'number' && p.stock<=0) return alert('Produit en rupture');
-            addToCart(String(p.id), { title:p.name, price:p.price ?? 0, image: p.image || (Array.isArray(p.images)?p.images[0]:'') });
-          }
-        });
-      });
-      grid.querySelectorAll('button[data-view]').forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-          const id = btn.getAttribute('data-view');
-          const p = PRODUCTS.find(x=>String(x.id)===String(id));
-          if(!p) return alert('Produit introuvable');
-          if (Array.isArray(p.variants) && p.variants.length>0) {
-            openVariantModal(p);
-          } else {
-            const desc = p.description || 'Aucune description disponible.';
-            alert(p.name + "\\n\\n" + desc);
-          }
-        });
+        $grid.appendChild(article);
       });
     }
 
-    /*********************** Modal Variantes ************************/
-    const modal = $('#variantModal');
-    $('#vmClose').addEventListener('click', closeVariantModal);
-    modal.addEventListener('click', (e)=>{ if(e.target===modal) closeVariantModal(); });
-
-    let CURRENT_PRODUCT = null;
-    let CURRENT_SELECTION = {}; // {couleur:'Noir', stockage:'256 Go'}
-    let CURRENT_VARIANT = null;
-
-    function openVariantModal(p){
-      CURRENT_PRODUCT = p;
-      CURRENT_SELECTION = {};
-      CURRENT_VARIANT = null;
-
-      $('#vmTitle').textContent = p.name || '';
-      $('#vmSubtitle').textContent = p.category || '';
-      $('#vmImage').src = p.image || (Array.isArray(p.images)?p.images[0]:'') || 'https://via.placeholder.com/400x300?text=GF+Store';
-      $('#vmSku').textContent = p.sku ? ('SKU: '+p.sku) : '';
-
-      const options = getOptions(p);
-      const container = $('#vmOptions');
-      container.innerHTML='';
-
-      const handlers = [];
-      Object.keys(options).forEach(optName => {
-        const row = document.createElement('div');
-        row.className = 'option-row';
-        const label = document.createElement('div');
-        label.textContent = optName.charAt(0).toUpperCase()+optName.slice(1);
-        const select = document.createElement('select');
-        select.dataset.opt = optName;
-        select.innerHTML = `<option value="">Choisir...</option>` + options[optName].map(v=>`<option value="${String(v)}">${String(v)}</option>`).join('');
-        select.addEventListener('change', onOptionChange);
-        row.appendChild(label); row.appendChild(select);
-        container.appendChild(row);
-        handlers.push(select);
-      });
-
-      modal.style.display = 'flex';
-      updateVariantUI();
-      // Add handler to "Ajouter" button
-      const vmAdd = $('#vmAdd');
-      vmAdd.onclick = ()=>{
-        const v = CURRENT_VARIANT;
-        if (Object.keys(options).length>0 && !v){
-          alert('Veuillez choisir une combinaison valide.');
-          return;
-        }
-        const price = getComputedPrice(p, v);
-        const image = getImage(p, v);
-        const id = (v && (v.sku || v.id)) ? String(v.sku || v.id) : String(p.id);
-        const title = p.name + (v ? ' — ' + Object.keys(options).map(k=>`${k}:${v[k]}`).join(', ') : '');
-        addToCart(id, {title, price, image});
-        closeVariantModal();
-      };
-    }
-
-    function closeVariantModal(){
-      modal.style.display = 'none';
-      CURRENT_PRODUCT = null;
-      CURRENT_SELECTION = {};
-      CURRENT_VARIANT = null;
-    }
-
-    function onOptionChange(e){
-      const key = e.target.dataset.opt;
-      const val = e.target.value;
-      if (!val) delete CURRENT_SELECTION[key]; else CURRENT_SELECTION[key] = val;
-      updateVariantUI();
-    }
-
-    function updateVariantUI(){
-      const p = CURRENT_PRODUCT;
-      if(!p){ return; }
-      const v = findVariant(p, CURRENT_SELECTION);
-      CURRENT_VARIANT = v || null;
-      const price = getComputedPrice(p, v);
-      const image = getImage(p, v);
-      $('#vmPrice').textContent = fmt(price);
-      $('#vmImage').src = image || 'https://via.placeholder.com/400x300?text=GF+Store';
-      $('#vmSku').textContent = v && (v.sku || v.id) ? 'SKU: ' + (v.sku || v.id) : (p.sku ? 'SKU: ' + p.sku : '');
-    }
-
-    /*********************** Top ventes et recherche ****************/
     function renderTop(){
-      const top = PRODUCTS.slice(0,4);
-      const container = document.getElementById('topList'); container.innerHTML='';
-      top.forEach(t=>{
-        const d = document.createElement('div'); d.style.display='flex'; d.style.alignItems='center'; d.style.gap='10px'; d.innerHTML = `<img src="${t.image||'https://via.placeholder.com/80'}" style="width:64px;height:64px;object-fit:contain;border-radius:8px"><div><div style="font-weight:700">${t.name||''}</div><div style="color:var(--muted)">${fmt(t.price ?? 0)}</div></div>`;
-        container.appendChild(d);
+      const topCandidates = filtered.slice(0,4);
+      $top.innerHTML='';
+      topCandidates.forEach(t=>{
+        const d = document.createElement('div'); d.style.display='flex'; d.style.alignItems='center'; d.style.gap='10px';
+        d.innerHTML = `<img src="${t._image||placeholder}" style="width:64px;height:64px;object-fit:contain;border-radius:8px"><div><div style="font-weight:700">${t.name}</div><div style="color:var(--muted)">${t.brand||''}</div></div>`;
+        $top.appendChild(d);
       });
     }
 
-    document.getElementById('searchInput').addEventListener('input', (e)=>{
-      const q = e.target.value.trim().toLowerCase(); if(!q){ renderProducts(PRODUCTS); return; }
-      const filtered = PRODUCTS.filter(p=> (p.name||'').toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q));
-      renderProducts(filtered);
+    // Événements « Voir » / « Ajouter »
+    $grid.addEventListener('click', (e)=>{
+      const btnV = e.target.closest('button[data-view]');
+      if(btnV){
+        const id = btnV.getAttribute('data-view');
+        const p = filtered.find(x=>x.id===id);
+        if(!p) return alert('Produit introuvable');
+        alert(`${p.name}\n\n${p.description || 'Aucune description.'}`);
+        return;
+      }
+      const btnA = e.target.closest('button[data-add]');
+      if(btnA){
+        const id = btnA.getAttribute('data-add');
+        const p = filtered.find(x=>x.id===id);
+        if(!p) return alert('Produit introuvable');
+        if(typeof p.stock === 'number' && p.stock<=0) return alert('Produit en rupture.');
+        addToCart(p);
+      }
     });
 
-    /*********************** Flash timer **************************/
-    const FLASH_HOURS = 24;
-    function initFlash(){
-      const key = 'gf_flash_end';
-      let end = localStorage.getItem(key);
-      if(!end){ end = Date.now() + FLASH_HOURS*3600*1000; localStorage.setItem(key, end); }
-      function tick(){
-        const remaining = parseInt(end) - Date.now();
-        if(remaining<=0){ document.getElementById('flashTimer').textContent = 'Offre terminée'; return; }
-        const h = Math.floor(remaining/3600000); const m = Math.floor((remaining%3600000)/60000); const s = Math.floor((remaining%60000)/1000);
-        document.getElementById('flashTimer').textContent = `-${20}% • ${h}h ${m}m ${s}s`;
-      }
-      tick(); setInterval(tick,1000);
-    }
+    // Recherche simple par nom, marque, slug, description
+    document.getElementById('searchInput').addEventListener('input', (e)=>{
+      const q = e.target.value.trim().toLowerCase();
+      if(!q){ renderProducts(filtered); return; }
+      const f = filtered.filter(p=>{
+        const hay = [p.name, p.brand, p.slug, p.description].map(x=>(x||'').toLowerCase()).join(' ');
+        return hay.includes(q) || hay.indexOf(q) >= 0 || hay.match(q);
+      });
+      renderProducts(f);
+    });
 
-    /*********************** Boot ********************************/
-    (function init(){
-      renderProducts(PRODUCTS);
-      renderTop();
-      initFlash();
+    // Remplit le bloc debug avec les raisons des produits ignorés
+    (function renderDebug(){
+      if(skipped.length===0){ $debugList.innerHTML = '<em>Aucun produit ignoré 🎉</em>'; return; }
+      const ul = document.createElement('ul'); ul.style.margin='0'; ul.style.paddingLeft='18px';
+      skipped.forEach(s=>{
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${s.candidate}</strong> — ${s.reasons.join(', ')} <span style="color:#9ca3af">(index ${s.index})</span>`;
+        ul.appendChild(li);
+      });
+      $debugList.replaceChildren(ul);
     })();
 
-    /*********************** Liens UI divers **********************/
-    document.getElementById('openCatalog').addEventListener('click', ()=>{
-      window.scrollTo({ top: document.getElementById('productsGrid').offsetTop - 80, behavior: 'smooth' });
-    });
-    document.getElementById('openBundles').addEventListener('click', ()=>{
-      alert('La page Bundles arrive bientôt 😉');
-    });
+    // Boot
+    renderProducts(filtered);
+    renderTop();
   </script>
 </body>
 </html>
