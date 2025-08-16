@@ -215,11 +215,11 @@
     /*********************** Configuration ************************/
     // IMPORTANT : ce loader est volontairement robuste. Il reprend l'idée du script "qui marche".
     const CANDIDATES = [
-      // racine
+      // priorité : ton chemin déclaré
+      '/GFSTORE/data/Products.json',
+      // autres variantes usuelles
       './produits.json','./Produits.json','./products.json','./Products.json','./products.cleaned.json','./Products.cleaned.json',
-      // dossier data (racine)
       './data/produits.json','./data/Produits.json','./data/products.json','./data/Products.json','./data/products.cleaned.json','./data/Products.cleaned.json',
-      // sous-dossier GitHub Pages /GFSTORE
       '/GFSTORE/produits.json','/GFSTORE/Produits.json','/GFSTORE/products.json','/GFSTORE/Products.json',
       '/GFSTORE/data/produits.json','/GFSTORE/data/Produits.json','/GFSTORE/data/products.json','/GFSTORE/data/Products.json','/GFSTORE/data/products.cleaned.json','/GFSTORE/data/Products.cleaned.json'
     ];
@@ -270,8 +270,36 @@
     }
 
     async function loadProducts(){
-      let used = null; let data = null;
-      for(const u of CANDIDATES){ data = await tryFetch(u); if(data){ used = u; break; } }
+      let used = null; let data = null; const tried = [];
+      for(const u of CANDIDATES){ const d = await tryFetch(u); tried.push(u); if(d){ used = u; data = d; break; } }
+      if(!data){
+        console.warn('GF Store: aucun JSON trouvé parmi', tried);
+        const msg = '❌ Impossible de charger les produits. Assure-toi que /GFSTORE/data/Products.json existe (casse respectée).';
+        $('#sourceNote').textContent = msg;
+        const grid = $('#productsGrid'); grid.innerHTML = `<article class="product" style="grid-column:1/-1;text-align:center;padding:20px">${msg}</article>`;
+        PRODUCTS = []; return;
+      }
+      try{
+        PRODUCTS = data.map((p,idx)=>({
+          id: p.id || p.slug || 'p-'+idx,
+          name: p.name || p.title || 'Produit',
+          price: p.price ?? p.prix ?? 0,
+          oldPrice: p.oldPrice || p.compareAtPrice || null,
+          category: p.category || p.categorie || '',
+          imageCover: p.imageCover || undefined,
+          images: Array.isArray(p.images) ? p.images : (p.image ? [p.image] : []),
+          description: p.description || '' ,
+          rating: p.rating || p.note || null,
+          stock: p.stock ?? p.quantity ?? null,
+          _raw:p
+        }));
+      }catch(e){
+        console.error('GF Store: parse error', e);
+        $('#sourceNote').textContent = '⚠️ Erreur de parsing du JSON: ' + (e.message||e);
+        PRODUCTS = [];
+      }
+      $('#sourceNote').textContent = 'Chargé depuis : ' + used + ' — ' + PRODUCTS.length + ' produit' + (PRODUCTS.length>1?'s':'');
+    } }
       if(!data){
         console.warn('Aucun produits.json trouvé — fallback démo.');
         PRODUCTS = [
