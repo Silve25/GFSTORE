@@ -2718,3 +2718,6 @@ const PRODUCTS = [
 ];
 
 export default PRODUCTS;
+// Rendez les produits accessibles en <script src="data/products.js">
+if (typeof window !== 'undefined') { window.PRODUCTS = PRODUCTS; }
+
