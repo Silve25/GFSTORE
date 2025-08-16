@@ -2,18 +2,17 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>GF Store — Liste produits (simple)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:0;padding:20px;background:#fafafa;color:#111}
-    h1{margin:0 0 10px}
-    #status{margin:8px 0 16px;color:#b91c1c}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-    .card{background:#fff;border:1px solid #eee;border-radius:10px;padding:12px}
-    .card img{width:100%;height:160px;object-fit:contain;background:#f4f4f5;border-radius:8px}
-    .name{font-weight:700;margin:8px 0 6px}
-    .price{font-weight:800}
-    .old{color:#6b7280;text-decoration:line-through;margin-left:8px}
+    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:0;padding:20px;background:#f6f7fb}
+    h1{margin:0 0 16px}
+    #status{margin:8px 0 16px;color:#444}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px}
+    .card img{width:100%;height:150px;object-fit:contain;background:#fafafa;border-radius:8px}
+    .title{font-weight:600;margin:8px 0 4px}
+    .price{font-weight:700}
     .muted{color:#6b7280;font-size:.9rem}
   </style>
 </head>
@@ -22,71 +21,97 @@
   <div id="status">Chargement…</div>
   <div id="grid" class="grid"></div>
 
-  <!-- 1) Charge tes produits en “global” (voir snippet à ajouter dans products.js) -->
-  <script src="data/products.js"></script>
-
   <script>
-  (function () {
-    const statusEl = document.getElementById('status');
-    const grid = document.getElementById('grid');
+    // 1) Essaie JSON à la racine de ton repo
+    const CANDIDATES = [
+      'data/products.json',       // <-- mets ton fichier ici
+      './data/products.json',
+      'produits.json',
+      './produits.json'
+    ];
 
-    // Petit helper format prix
-    const priceFmt = (v) => {
-      const n = Number(v);
-      if (Number.isFinite(n)) return n.toFixed(2).replace('.', ',') + ' €';
-      return v || '';
+    // Helpers pour récupérer les champs même si les noms varient
+    const g = (o, keys) => {
+      for (const k of keys) { if (o && o[k] != null) return o[k]; }
+      return undefined;
     };
 
-    // 2) Vérifs de base
-    if (!Array.isArray(window.PRODUCTS)) {
-      statusEl.textContent = "⚠️ Impossible de charger data/products.js. Ouvre la console (F12 > Network) : si tu vois une page HTML/404 à la place du JS, c’est un mauvais chemin ou GitHub Pages pas actif.";
-      console.warn("DEBUG: window.PRODUCTS n'existe pas. Causes possibles :");
-      console.warn("- Mauvais chemin: data/products.js (la casse compte sur le web)");
-      console.warn("- GitHub Pages pas activé (Settings → Pages)");
-      console.warn("- Erreur de syntaxe dans products.js");
-      return;
-    }
-    if (window.PRODUCTS.length === 0) {
-      statusEl.textContent = "Aucun produit dans PRODUCTS.";
-      console.warn("DEBUG: PRODUCTS est vide.");
-      return;
-    }
-    statusEl.remove();
+    async function loadProducts() {
+      const status = document.getElementById('status');
 
-    // 3) Rendu minimal
-    window.PRODUCTS.forEach((p, idx) => {
-      // essais d'images : images[0] -> image -> placeholder
-      const imgSrc = (Array.isArray(p.images) && p.images[0]) || p.image || 'assets/img/opengraph-default.jpg';
-
-      // si img manquante, log utile
-      if (!imgSrc || typeof imgSrc !== 'string') {
-        console.warn(`Produit #${idx} (${p.name || p['Nom du Produit'] || p.id}) sans image valide`, p);
+      // 1) Tenter JSON
+      for (const url of CANDIDATES) {
+        try {
+          const res = await fetch(url, { cache: 'no-store' });
+          if (!res.ok) continue;
+          const data = await res.json();
+          const products = Array.isArray(data) ? data : (Array.isArray(data.products) ? data.products : null);
+          if (products) {
+            console.log('Produits chargés depuis', url);
+            status.textContent = `OK: chargés depuis ${url}`;
+            return products;
+          }
+        } catch(e) {/* essaie suivant */}
       }
 
-      // prix promo ou normal (essaie plusieurs clés au cas où)
-      const price = Number(p.promoPrice ?? p['Prix Promo (€)'] ?? p.price ?? p['Prix (€)']);
-      const old   = Number.isFinite(Number(p.price)) && Number.isFinite(Number(p.oldPrice)) ? Number(p.oldPrice) : null;
+      // 2) Fallback (optionnel) : si tu tiens à rester en .js qui pose problème,
+      //    tu peux créer un fichier data/products-global.js qui définit window.PRODUCTS,
+      //    puis décommenter le bloc ci-dessous pour l’injecter dynamiquement.
+      /*
+      try {
+        await new Promise((resolve, reject)=>{
+          const s=document.createElement('script');
+          s.src='data/products-global.js'; // ce fichier DOIT faire: window.PRODUCTS = [ ... ];
+          s.onload=()=>resolve();
+          s.onerror=()=>reject(new Error('Echec chargement products-global.js'));
+          document.head.appendChild(s);
+        });
+        if (Array.isArray(window.PRODUCTS)) {
+          status.textContent = 'OK: chargés depuis data/products-global.js';
+          return window.PRODUCTS;
+        }
+      } catch(e) {}
+      */
 
-      const card = document.createElement('article');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${imgSrc}" alt="${(p.name || p['Nom du Produit'] || '').replace(/"/g,'&quot;')}" loading="lazy"
-             onerror="this.src='assets/img/opengraph-default.jpg'; this.closest('.card').dataset.imgError='1'">
-        <div class="name">${p.name || p['Nom du Produit'] || '(Sans nom)'}</div>
-        <div class="muted">${p.category || p['Catégorie'] || ''}</div>
-        <div class="price">${priceFmt(price)}${old?`<span class="old">${priceFmt(old)}</span>`:''}</div>
-      `;
-      grid.appendChild(card);
-    });
-
-    // 4) Petit récap en console pour t’aider
-    const total = window.PRODUCTS.length;
-    const imgErrors = Array.from(document.querySelectorAll('.card[data-img-error="1"]')).length;
-    console.info(`Produits affichés: ${total}. Images en erreur: ${imgErrors}.`);
-    if (imgErrors > 0) {
-      console.info("Astuce: vérifie que les chemins d'images sont RELATIFS, ex: assets/img/... (pas de C:/..., pas de file:///...)");
+      status.textContent = 'Échec du chargement des produits (aucun JSON valide trouvé).';
+      throw new Error('Aucun fichier JSON valide trouvé');
     }
-  })();
+
+    function render(products){
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+
+      products.forEach(p=>{
+        const name = g(p, ['Nom du Produit','name','title']) || 'Sans nom';
+        const price = g(p, ['Prix (€)','price','prix']);
+        const category = g(p, ['Catégorie','category']);
+        const images = g(p, ['Images','images']) || [];
+        const imageUrl = g(p, ['Image URL','image','image_url']) || images[0] || 'assets/img/opengraph-default.jpg';
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${imageUrl}" alt="">
+          <div class="title">${name}</div>
+          <div class="muted">${category || ''}</div>
+          <div class="price">${(typeof price === 'number') ? price.toFixed(2).replace('.',',')+' €' : (price || '')}</div>
+        `;
+        grid.appendChild(card);
+      });
+
+      if (products.length === 0) {
+        document.getElementById('status').textContent = 'Aucun produit à afficher.';
+      }
+    }
+
+    (async function(){
+      try {
+        const products = await loadProducts();
+        render(products);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
   </script>
 </body>
 </html>
