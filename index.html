@@ -1,130 +1,67 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GF Store — Liste produits (simple)</title>
+  <meta charset="utf-8">
+  <title>GF Store — Produits</title>
   <style>
-    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:0;padding:16px;background:#f6f7fb;color:#0f172a}
-    h1{font-size:20px;margin:0 0 12px}
-    #status{padding:10px;border-radius:8px;background:#fff8e1;border:1px solid #facc15;color:#92400e;margin-bottom:12px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-    .card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:10px;display:flex;flex-direction:column}
-    .thumb{width:100%;height:160px;object-fit:contain;border:1px solid #eee;border-radius:8px;background:#fafafa}
-    .title{font-weight:700;margin-top:8px}
-    .muted{color:#6b7280;font-size:13px}
-    .bad{color:#b91c1c}
-    .ok{color:#065f46}
-    .footer{margin-top:8px;display:flex;justify-content:space-between;align-items:center}
-    .link{font-size:13px}
-    .pill{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid #e5e7eb}
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
+    h1 { text-align: center; }
+    #productsGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 20px; }
+    .card { background: #fff; border: 1px solid #ddd; padding: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .card img { width: 100%; height: 160px; object-fit: contain; border-radius: 6px; margin-bottom: 8px; }
+    .card h3 { margin: 6px 0; font-size: 1rem; }
+    .price { font-weight: bold; color: #0a7; }
+    .oldPrice { text-decoration: line-through; color: #888; margin-left: 6px; font-size: 0.9rem; }
   </style>
 </head>
 <body>
+
   <h1>GF Store — Produits</h1>
-  <div id="status">Chargement…</div>
-  <div id="grid" class="grid"></div>
+  <div id="productsGrid">Chargement des produits...</div>
 
-  <!-- IMPORTANT : on charge le module JS de données -->
-  <script type="module">
-    // Petite aide visuelle
-    const status = (msg, cls='')=>{
-      const el=document.getElementById('status');
-      el.textContent = msg;
-      el.className = cls;
-    };
+  <script>
+    async function loadProducts() {
+      try {
+        // 🔗 Le JSON doit être dans /data/products.json
+        const res = await fetch("./data/products.json");
+        if (!res.ok) throw new Error("Fichier introuvable: ./data/products.json");
 
-    // Récupérer i) image locale si disponible, ii) sinon 1ère http(s), iii) sinon placeholder
-    function pickImage(p){
-      const list = Array.isArray(p.images)? p.images.filter(Boolean): [];
-      // normaliser éventuels antislashs Windows
-      const norm = u => (u||'').replaceAll('\\\\','/').replaceAll('\\','/');
-      // 1) image locale dans assets/
-      const local = list.map(norm).find(u => u.startsWith('assets/'));
-      if(local) return local;
-      // 2) première URL http(s)
-      const web = list.map(norm).find(u => /^https?:\/\//i.test(u));
-      if(web) return web;
-      // 3) placeholder
-      return 'assets/img/opengraph-default.jpg';
+        const products = await res.json();
+        renderProducts(products);
+      } catch (err) {
+        document.getElementById("productsGrid").textContent =
+          "Erreur de chargement des produits : " + err.message;
+        console.error("DEBUG:", err);
+      }
     }
 
-    // Produit → URL de page produit (existe dans ton repo: produits/<slug>-<id>.html)
-    function productUrl(p){
-      return `produits/${p.slug}-${p.id}.html`;
-    }
+    function renderProducts(products) {
+      const grid = document.getElementById("productsGrid");
+      grid.innerHTML = "";
 
-    // Rendu ultra simple des cartes
-    function render(products){
-      const grid = document.getElementById('grid');
-      grid.innerHTML = '';
-
-      if(!Array.isArray(products) || products.length===0){
-        status('Aucun produit à afficher.', 'bad');
+      if (!products || products.length === 0) {
+        grid.textContent = "Aucun produit disponible.";
         return;
       }
 
-      let hiddenCount = 0;
-
-      products.forEach(p=>{
-        // Sélection d’image
-        const imgSrc = pickImage(p);
-
-        // Détection d’images impossibles (anciens chemins Windows / file://)
-        const invalids = (p.images||[]).filter(u => /^([a-zA-Z]:\\|file:\/\/\/|C:)/.test(u||''));
-        if(invalids.length){
-          console.warn(`[IMAGES INVALIDE] ${p.name} →`, invalids);
-        }
-
-        const card = document.createElement('article');
-        card.className = 'card';
+      products.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "card";
         card.innerHTML = `
-          <img class="thumb" src="${imgSrc}" alt="${p.name}" onerror="this.src='assets/img/opengraph-default.jpg'">
-          <div class="title">${p.name || '(Sans nom)'}</div>
-          <div class="muted">${p.brand ? `Marque: ${p.brand}` : ''} ${p.stock!=null ? `• Stock: ${p.stock}` : ''}</div>
-          <div class="muted">${p.slug || ''}</div>
-          <div class="footer">
-            <a class="link" href="${productUrl(p)}">Voir la fiche</a>
-            <span class="pill">${p.id}</span>
+          <img src="${p.image || 'https://via.placeholder.com/200x160?text=Image'}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <div>${p.category || ''}</div>
+          <div class="price">
+            ${p.price} €
+            ${p.oldPrice ? `<span class="oldPrice">${p.oldPrice} €</span>` : ""}
           </div>
         `;
         grid.appendChild(card);
       });
-
-      status(`OK • ${products.length} produit(s) chargé(s)`, 'ok');
     }
 
-    // Chargement dynamique du module (chemin sensible à la casse !)
-    (async ()=>{
-      try{
-        // ⚠️ Chemin EXACT : ton fichier est à data/products.js
-        const mod = await import('./data/products.js');
-        const products = (mod && (mod.default || mod.PRODUCTS)) || [];
-        if(!Array.isArray(products)) {
-          console.error('Le module data/products.js n’exporte pas un tableau.');
-          status('Erreur : data/products.js n’exporte pas un tableau.', 'bad');
-          return;
-        }
-        // Info debug
-        console.debug('Produits chargés :', products.length);
-        // Affichage
-        render(products);
-      }catch(e){
-        console.error('Échec import ./data/products.js', e);
-        status('Échec du chargement des produits.\n' +
-               '• Vérifie que GitHub Pages est activé\n' +
-               '• Vérifie que le fichier existe: data/products.js (casse exacte)\n' +
-               '• Vérifie qu’il commence par: const PRODUCTS = [...] ; export default PRODUCTS;', 'bad');
-      }
-    })();
+    loadProducts();
   </script>
 
-  <!-- Notes / Debug visibles pour toi :
-    - Si tu vois des WARNING [IMAGES INVALIDE] dans la console : ce sont d’anciens chemins (C:\... ou file:///...) qui ne peuvent PAS marcher sur GitHub Pages.
-      => Pas grave : on prend automatiquement une autre image si possible, sinon un placeholder.
-    - La page de détail est devinée par: produits/<slug>-<id>.html (structure déjà présente dans ton repo).
-    - Pas de produits fictifs : on utilise uniquement ce que contient data/products.js (id, slug, name, description, images, brand, stock).
-    - Si rien ne s’affiche, contrôle la casse du chemin "data/products.js" et que GitHub Pages est bien activé (Settings → Pages → Deploy from branch → main / root).
-  -->
 </body>
 </html>
