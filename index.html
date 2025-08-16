@@ -11,10 +11,7 @@
       --bg:#f6f7fb; --card:#fff; --muted:#6b7280; --text:#0f172a; --accent:#0ea5a4; --danger:#ef4444;
       --glass: rgba(255,255,255,0.6); --shadow: 0 10px 30px rgba(15,23,42,0.10);
     }
-    [data-theme="dark"]{
-      --bg:#071026; --card:#071827; --muted:#9aa4b2; --text:#e6eef7; --accent:#34d399; --danger:#f87171;
-      --glass: rgba(255,255,255,0.03); --shadow: 0 14px 40px rgba(0,0,0,0.6);
-    }
+    
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -77,6 +74,15 @@
 
     /* Responsive */
     @media (max-width:900px){.hero{grid-template-columns:1fr;}.topbar{flex-wrap:wrap}.search{order:3;width:100%;margin:10px 0}.modal-body{grid-template-columns:1fr}}
+    /* Filters toolbar & search clear */
+    .filters{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:8px 0 4px}
+    .filters .group{display:flex;gap:8px;align-items:center}
+    .filters select, .filters input[type="number"]{padding:10px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:var(--card)}
+    .filters label{display:inline-flex;align-items:center;gap:8px;color:var(--muted)}
+    .muted{color:var(--muted)}
+    .search{position:relative}
+    #clearSearch{position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:6px 10px;opacity:.7}
+    #clearSearch:hover{opacity:1}
   </style>
 </head>
 <body>
@@ -91,10 +97,10 @@
 
     <div class="search">
       <input id="searchInput" placeholder="Rechercher : iPhone, AirPods, PC…" />
+      <button class="btn" id="clearSearch" title="Effacer">✕</button>
     </div>
 
     <div class="actions">
-      <button class="btn icon-btn" id="themeToggle" title="Basculer thème">🌙 / ☀️</button>
       <button class="btn icon-btn" id="accountBtn">Compte</button>
       <button class="btn icon-btn" id="cartBtn">Panier (<span id="cartCount">0</span>)</button>
     </div>
@@ -141,6 +147,20 @@
 
     <section style="padding:12px 20px">
       <h2 style="margin:8px 0">Nos produits</h2>
+      <div class="filters" id="filtersBar">
+        <div class="group">
+          <label for="catFilter" class="muted">Catégorie</label>
+          <select id="catFilter"><option value="">Toutes</option></select>
+        </div>
+        <div class="group">
+          <label class="muted">Prix</label>
+          <input type="number" id="priceMin" placeholder="min" min="0" style="width:110px">
+          <span class="muted">—</span>
+          <input type="number" id="priceMax" placeholder="max" min="0" style="width:110px">
+        </div>
+        <label class="check"><input type="checkbox" id="stockFilter"> En stock</label>
+        <div style="margin-left:auto" class="muted" id="resultsCount"></div>
+      </div>
       <div class="grid" id="productsGrid">
         <!-- skeletons -->
         <article class="product skeleton" style="height:270px"></article>
@@ -210,27 +230,14 @@
     const $ = sel => document.querySelector(sel);
     const $all = sel => Array.from(document.querySelectorAll(sel));
     const fmt = val => (typeof val === 'number' ? val.toFixed(2).replace('.',',') + ' €' : (val||''));
+    const normalize = s => (s||'').toString().normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+    const debounce = (fn,ms=180)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; };
 
     const PLACEHOLDER = 'https://via.placeholder.com/600x400?text=GF+Store';
     const firstImage = (p) => p?.imageCover || (Array.isArray(p?.images) && p.images[0]) || p?.image || PLACEHOLDER;
+    function safeImg(img){ img.loading='lazy'; img.decoding='async'; img.referrerPolicy='no-referrer'; img.onerror=()=>{ img.onerror=null; img.src=PLACEHOLDER; }; }
 
-    function safeImg(img){
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      img.referrerPolicy = 'no-referrer';
-      img.onerror = () => { img.onerror = null; img.src = PLACEHOLDER; };
-    }
-
-    /*********************** Thème ********************************/
-    const themeToggle = document.getElementById('themeToggle');
-    const userTheme = localStorage.getItem('gf_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', userTheme === 'dark' ? 'dark' : 'light');
-    themeToggle.addEventListener('click', ()=>{
-      const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', cur);
-      localStorage.setItem('gf_theme', cur);
-    });
-
+    /* Thème : mode clair forcé (aucune bascule) */
     /*********************** Panier ********************************/
     const CART_KEY = 'gf_cart_v1';
     const loadCart = ()=>{ try{ return JSON.parse(localStorage.getItem(CART_KEY) || '[]') }catch(e){return []} };
@@ -295,9 +302,11 @@
     function productCard(p){
       const el = document.createElement('article'); el.className='product';
       const imgSrc = firstImage(p);
+      const q = document.getElementById('searchInput').value.trim();
+      const highlight = (txt)=>{ if(!q) return txt; try{ const re = new RegExp('('+q.replace(/[.*+?^${}()|[\]\]/g,'\$&')+')','i'); return (txt||'').toString().replace(re,'<mark>$1</mark>'); }catch(e){ return txt; } };
       el.innerHTML = `
         <img src="${imgSrc}" alt="${p.name}" />
-        <div class="meta"><div class="title">${p.name}</div><div class="price">${fmt(p.price)}${p.oldPrice?'<span class="old">'+fmt(p.oldPrice)+'</span>':''}</div></div>
+        <div class="meta"><div class="title">${highlight(p.name)}</div><div class="price">${fmt(p.price)}${p.oldPrice?'<span class="old">'+fmt(p.oldPrice)+'</span>':''}</div></div>
         <div style="color:var(--muted);font-size:.9rem">${p.category||''}</div>
         <div class="badges">${ p.stock!=null && p.stock<=5 ? '<div class="badge-small">Stock: '+p.stock+'</div>' : '' }</div>
         <div class="cta" style="margin-top:auto">
@@ -319,7 +328,35 @@
     }); }
 
     // Recherche
-    $('#searchInput').addEventListener('input', (e)=>{ const q = e.target.value.trim().toLowerCase(); if(!q){ renderProducts(PRODUCTS); return; } const filtered = PRODUCTS.filter(p=> (p.name||'').toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q)); renderProducts(filtered); });
+    /*********************** Filtres & Recherche *******************/
+    let PRICE_MIN = 0, PRICE_MAX = 0;
+    function initFilters(){
+      const cats = [...new Set(PRODUCTS.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+      const sel = $('#catFilter'); sel.innerHTML = '<option value="">Toutes</option>' + cats.map(c=>`<option>${c}</option>`).join('');
+      const prices = PRODUCTS.map(p=>Number(p.price)).filter(n=>Number.isFinite(n));
+      PRICE_MIN = prices.length? Math.floor(Math.min(...prices)) : 0; PRICE_MAX = prices.length? Math.ceil(Math.max(...prices)) : 0;
+      if($('#priceMin')) $('#priceMin').placeholder = PRICE_MIN; if($('#priceMax')) $('#priceMax').placeholder = PRICE_MAX;
+      ['catFilter','priceMin','priceMax','stockFilter'].forEach(id=>{ const el = document.getElementById(id); if(el) el.addEventListener('input', applyFiltersAndSearch); });
+      document.getElementById('searchInput').addEventListener('input', debounce(applyFiltersAndSearch, 180));
+      document.getElementById('clearSearch').addEventListener('click', ()=>{ document.getElementById('searchInput').value=''; applyFiltersAndSearch(); document.getElementById('searchInput').focus(); });
+    }
+
+    function applyFiltersAndSearch(){
+      const q = normalize(document.getElementById('searchInput').value);
+      const cat = document.getElementById('catFilter').value;
+      const min = parseFloat(document.getElementById('priceMin').value) || 0;
+      const max = parseFloat(document.getElementById('priceMax').value) || Infinity;
+      const stock = document.getElementById('stockFilter').checked;
+      let list = PRODUCTS.filter(p=>{
+        const okQ = !q || normalize(p.name).includes(q) || normalize(p.category).includes(q) || normalize(p.description).includes(q);
+        const okC = !cat || (p.category===cat);
+        const price = Number(p.price)||0; const okP = price>=min && price<=max;
+        const okS = !stock || (p.stock==null || p.stock>0);
+        return okQ && okC && okP && okS;
+      });
+      document.getElementById('resultsCount').textContent = list.length + ' produit' + (list.length>1?'s':'');
+      renderProducts(list);
+    } if(!q){ renderProducts(PRODUCTS); return; } const filtered = PRODUCTS.filter(p=> (p.name||'').toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q)); renderProducts(filtered); });
 
     /*********************** Quick View ***************************/
     function openQuickView(p){
@@ -346,11 +383,14 @@
     /*********************** Boot ********************************/
     (async function(){
       await loadProducts();
-      renderProducts(PRODUCTS);
+      initFilters();
+      applyFiltersAndSearch();
       renderTop();
       initFlash();
       // scroll to grid
       document.getElementById('openCatalog').addEventListener('click', ()=> document.getElementById('productsGrid').scrollIntoView({behavior:'smooth'}));
+      document.getElementById('openBundles').addEventListener('click', ()=> alert('Bundles à venir.'));
+      document.getElementById('accountBtn').addEventListener('click', ()=> alert('Espace compte à venir.'));
     })();
   </script>
 </body>
