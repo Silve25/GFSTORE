@@ -2,102 +2,112 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
+  <title>GF Store — Test Produits (simple)</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>GF Store — Produits (simple)</title>
   <style>
-    body{font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial; margin:16px;}
-    h1{margin:0 0 10px}
-    #status{margin:0 0 12px; color:#555}
-    .grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:12px}
-    .card{border:1px solid #ddd; border-radius:8px; padding:10px}
-    .card img{width:100%; height:150px; object-fit:contain; background:#f5f5f5; border-radius:6px}
-    .name{font-weight:600; margin:8px 0 4px}
-    .muted{color:#666; font-size:0.9rem; margin-bottom:6px}
-    .price{font-weight:700}
+    body{font-family:system-ui,Segoe UI,Arial,sans-serif;margin:0;padding:20px;background:#f6f7fb}
+    h1{margin:0 0 12px 0}
+    #status{margin:8px 0 16px 0;color:#555}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px}
+    .card img{width:100%;height:160px;object-fit:contain;background:#fafafa;border:1px solid #eee;border-radius:8px}
+    .title{font-weight:700;margin-top:8px}
+    .muted{color:#6b7280;font-size:0.9rem}
+    .note{color:#b45309;font-size:0.85rem;margin-top:6px}
+    .error{white-space:pre-wrap;background:#fee2e2;border:1px solid #ef4444;color:#991b1b;padding:10px;border-radius:8px}
   </style>
 </head>
 <body>
-  <h1>Produits</h1>
+  <h1>GF Store — Liste produits (simple)</h1>
   <div id="status">Chargement…</div>
+  <div id="errors"></div>
   <div id="grid" class="grid"></div>
 
   <script type="module">
-    // ⚠️ Nécessite data/products.js avec: export default PRODUCTS;
-    import PRODUCTS from './data/products.js';
+    const $ = s => document.querySelector(s);
+    const statusEl = $("#status");
+    const errorsEl = $("#errors");
+    const grid = $("#grid");
 
-    const grid = document.getElementById('grid');
-    const status = document.getElementById('status');
+    function showError(msg){
+      const div = document.createElement('div');
+      div.className = 'error';
+      div.textContent = msg;
+      errorsEl.appendChild(div);
+      console.error(msg);
+    }
 
-    // Image de secours déjà présente dans ton repo
-    const FALLBACK = 'assets/img/opengraph-default.jpg';
-
-    // Renvoie une image "propre" à partir des champs possibles
-    function pickImage(p){
-      // priorité à p.image, sinon 1ère de p.images, sinon colonnes Excel, sinon fallback
-      const candidates = [];
-      if (typeof p.image === 'string') candidates.push(p.image);
-      if (Array.isArray(p.images)) candidates.push(...p.images);
-      if (typeof p.imageUrl === 'string') candidates.push(p.imageUrl);
-      if (typeof p['Image URL'] === 'string') candidates.push(p['Image URL']);
-
-      for (const raw of candidates){
-        if (!raw || typeof raw !== 'string') continue;
-        const u = raw.trim();
-        // http(s) direct
-        if (/^https?:\/\//i.test(u)) return u;
-        // chemins locaux → garder la partie "assets/..."
-        if (u.includes('assets/')) return u.slice(u.indexOf('assets/'));
-        if (u.includes('\\assets\\')) return u.slice(u.indexOf('\\assets\\')).replaceAll('\\','/');
-        // anciens file:///C:/.../gf-store/assets/... → "assets/..."
-        if (/^file:\/\//i.test(u) && u.toLowerCase().includes('/gf-store/')){
-          const rest = u.slice(u.toLowerCase().indexOf('/gf-store/') + '/gf-store/'.length);
-          if (rest.startsWith('assets/')) return rest;
-        }
+    // Aide: messages utiles si ça ne s'affiche pas
+    function environmentHints(){
+      // Si la page n'est pas servie en http(s), c'est quasi sûr que ça casse
+      if(location.protocol !== 'http:' && location.protocol !== 'https:'){
+        showError("⚠️ Cette page n'est pas servie via HTTP. Les modules ES (import) ne fonctionnent pas en file://.\n" +
+                  "Solution : dans le dossier gf-store, lancez `py -m http.server 8080` puis ouvrez http://localhost:8080/");
       }
-      return FALLBACK;
     }
 
-    function euro(v){
-      if (typeof v === 'number' && Number.isFinite(v)) return v.toFixed(2).replace('.', ',') + ' €';
-      if (typeof v === 'string' && v.trim() !== '') return v;
-      return '—';
+    async function main(){
+      environmentHints();
+
+      // On essaye d'importer le module produits
+      let mod;
+      try{
+        mod = await import('./data/products.js');  // chemin attendu: gf-store/data/products.js
+      }catch(e){
+        showError("Impossible de charger ./data/products.js\n" + (e?.message || e));
+        statusEl.textContent = "Échec du chargement des produits.";
+        return;
+      }
+
+      // On supporte deux styles: export default ou export nommé { PRODUCTS }
+      const arr = Array.isArray(mod?.default) ? mod.default :
+                  (Array.isArray(mod?.PRODUCTS) ? mod.PRODUCTS : []);
+
+      if(!Array.isArray(arr) || arr.length === 0){
+        showError("Aucun produit trouvé dans products.js\n" +
+                  "Vérifiez que le fichier exporte un tableau (ex: `export const PRODUCTS = [...]` et `export default PRODUCTS;`).");
+        statusEl.textContent = "0 produit.";
+        return;
+      }
+
+      statusEl.textContent = `${arr.length} produit(s) chargé(s).`;
+
+      // Rendu des cartes
+      grid.innerHTML = '';
+      arr.forEach((p, i) => {
+        const card = document.createElement('article');
+        card.className = 'card';
+
+        const name  = p?.name || p?.Nom || p?.title || p?.id || `Produit #${i+1}`;
+        const brand = p?.brand || p?.Marque || '';
+        const imgs  = Array.isArray(p?.images) ? p.images : [];
+        // On prend la 1ère image existante
+        const imgSrc = imgs.find(u => typeof u === 'string' && u.trim().length) || '';
+
+        // Notes d’aide : on explique pourquoi une image ne s’affiche pas
+        let notes = [];
+        if(!imgSrc) notes.push("⚠️ Aucune image fournie.");
+        if(typeof imgSrc === 'string' && (imgSrc.startsWith('C:\\\\') || imgSrc.startsWith('file:///') || imgSrc.startsWith('/C:/'))){
+          notes.push("⚠️ Chemin d'image local détecté. Utilisez un chemin relatif du repo (ex: assets/img/...) pour que ça marche en ligne.");
+        }
+
+        card.innerHTML = `
+          ${ imgSrc ? `<img src="${imgSrc}" alt="">` : `<div class="muted" style="height:160px;display:flex;align-items:center;justify-content:center;border:1px dashed #ddd;border-radius:8px">Pas d'image</div>` }
+          <div class="title">${name}</div>
+          <div class="muted">${brand}</div>
+          ${ notes.length ? `<div class="note">${notes.join('<br>')}</div>` : '' }
+        `;
+        // On log aussi en console pour debug
+        if(notes.length){ console.warn(name, notes); }
+
+        grid.appendChild(card);
+      });
     }
 
-    // Récupère le tableau depuis products.js (sans injecter de faux produits)
-    const data = Array.isArray(PRODUCTS) ? PRODUCTS
-                : (Array.isArray(PRODUCTS?.products) ? PRODUCTS.products : []);
+    // Attrape toutes les erreurs runtime pour qu'on les voie à l'écran
+    window.addEventListener('error', (e)=> showError("Erreur JS: " + (e?.message || e)));
 
-    let shown = 0;
-    let skipped = 0;
-
-    data.forEach(p=>{
-      if (!p || typeof p !== 'object'){ skipped++; return; }
-      const name = p.name || p['Nom du Produit'] || p.title || p.slug || '';
-      if (!name){ skipped++; return; }
-
-      const price = (p.price ?? p['Prix (€)'] ?? p.promoPrice ?? p['Prix Promo (€)']);
-      const img = pickImage(p);
-      const brand = p.brand || p['Marque'] || '';
-      const model = p.model || p['Modèle'] || '';
-      const category = p.category || p['Catégorie'] || '';
-
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${img}" alt="">
-        <div class="name">${name}</div>
-        <div class="muted">${brand} ${model}</div>
-        <div class="muted">${category}</div>
-        <div class="price">${euro(Number(price))}</div>
-      `;
-      grid.appendChild(card);
-      shown++;
-    });
-
-    status.textContent = `Affichés: ${shown} • Ignorés: ${skipped}`;
-    if (skipped > 0) {
-      console.warn('Certains items ont été ignorés (ex: nom manquant ou entrée non-objet). Compteur ignorés =', skipped);
-    }
+    main();
   </script>
 </body>
 </html>
