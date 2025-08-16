@@ -2,67 +2,70 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>GF Store — Produits</title>
+  <title>GF Store — Produits (simple)</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h1 { text-align: center; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
-      text-align: center;
-      background: #fafafa;
-    }
-    .card img {
-      max-width: 100%;
-      max-height: 180px;
-      object-fit: contain;
-    }
-    .card h3 { font-size: 1em; margin: 10px 0; }
-    .card p { margin: 5px 0; }
+    body { font-family: Arial, sans-serif; margin:20px; }
+    h1 { text-align:center; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; }
+    .card { border:1px solid #ddd; border-radius:8px; padding:10px; background:#fafafa; text-align:center; }
+    .card img { max-width:100%; max-height:160px; object-fit:contain; }
+    .price{ font-weight:700; }
   </style>
 </head>
 <body>
   <h1>GF Store — Liste des Produits</h1>
-  <div id="product-list" class="grid"></div>
+  <div id="products" class="grid">Chargement…</div>
 
   <script>
-    async function loadProducts() {
-      try {
-        const response = await fetch('./produits.json'); // ⚡ fichier à la racine
-        if (!response.ok) throw new Error("Impossible de charger produits.json");
-        const products = await response.json();
+    const CANDIDATES = [
+      './produits.json',
+      './data/produits.json',
+      './data/products.json',
+      '/GFSTORE/produits.json',
+      '/GFSTORE/data/produits.json',
+      '/GFSTORE/data/products.json'
+    ];
 
-        const container = document.getElementById('product-list');
-        container.innerHTML = '';
-
-        products.forEach(prod => {
-          const card = document.createElement('div');
-          card.className = 'card';
-
-          // Utilise imageCover si dispo, sinon première image
-          const imgSrc = prod.imageCover || (prod.images && prod.images[0]) || 'assets/img/opengraph-default.jpg';
-
-          card.innerHTML = `
-            <img src="${imgSrc}" alt="${prod.name}">
-            <h3>${prod.name}</h3>
-            <p><strong>${prod.price} €</strong></p>
-          `;
-
-          container.appendChild(card);
-        });
-      } catch (err) {
-        console.error(err);
-        document.getElementById('product-list').innerText = "Erreur de chargement des produits.";
-      }
+    function makeCard(p){
+      const img = p.imageCover || (Array.isArray(p.images) && p.images[0]) || 'assets/img/opengraph-default.jpg';
+      const art = document.createElement('article');
+      art.className = 'card';
+      art.innerHTML = `
+        <img src="${img}" alt="${p.name}">
+        <h3>${p.name || p.title || 'Produit'}</h3>
+        <div class="price">${(p.price!=null)? (p.price+' €') : ''}</div>
+      `;
+      return art;
     }
 
-    loadProducts();
+    async function tryFetch(url){
+      try{
+        const r = await fetch(url, {cache:'no-store'});
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        return await r.json();
+      }catch(e){ return null }
+    }
+
+    (async ()=>{
+      const root = document.getElementById('products');
+      let data = null, used = null;
+      for(const u of CANDIDATES){
+        data = await tryFetch(u);
+        if(data){ used = u; break; }
+      }
+      if(!data){ root.textContent = 'Erreur de chargement des produits.'; return; }
+
+      root.innerHTML = '';
+      data.forEach(p => root.appendChild(makeCard(p)));
+
+      // Commentaire utile à l’écran
+      const note = document.createElement('div');
+      note.style.marginTop = '14px';
+      note.style.color = '#666';
+      note.style.fontSize = '12px';
+      note.textContent = 'Chargé depuis: ' + used + ' — Images: imageCover ou première image, sinon opengraph-default.';
+      document.body.appendChild(note);
+    })();
   </script>
 </body>
 </html>
