@@ -195,9 +195,13 @@
     /*********************** Configuration ************************/
     // IMPORTANT : ce loader est volontairement robuste. Il reprend l'idée du script "qui marche".
     const CANDIDATES = [
-      './produits.json', './products.json', './products.cleaned.json',
-      './data/produits.json', './data/products.json', './data/products.cleaned.json',
-      '/GFSTORE/produits.json', '/GFSTORE/data/produits.json', '/GFSTORE/data/products.json'
+      // racine
+      './produits.json','./Produits.json','./products.json','./Products.json','./products.cleaned.json','./Products.cleaned.json',
+      // dossier data (racine)
+      './data/produits.json','./data/Produits.json','./data/products.json','./data/Products.json','./data/products.cleaned.json','./data/Products.cleaned.json',
+      // sous-dossier GitHub Pages /GFSTORE
+      '/GFSTORE/produits.json','/GFSTORE/Produits.json','/GFSTORE/products.json','/GFSTORE/Products.json',
+      '/GFSTORE/data/produits.json','/GFSTORE/data/Produits.json','/GFSTORE/data/products.json','/GFSTORE/data/Products.json','/GFSTORE/data/products.cleaned.json','/GFSTORE/data/Products.cleaned.json'
     ];
 
     const FLASH_HOURS = 24;
