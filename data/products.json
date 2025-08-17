@@ -11,14 +11,14 @@
     "promoPrice": 179.99,
     "stock": 56,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 195.3,
     "marginPct": -8.51,
@@ -70,12 +70,12 @@
     "promoPrice": 95.99,
     "stock": 104,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949688591_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949688591_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949688591_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949688591_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949688591_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949688591_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949688591_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 104.3,
     "marginPct": -8.66,
@@ -127,6 +127,7 @@
     "promoPrice": 780.99,
     "stock": 25,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -134,10 +135,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949222740_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 914.25,
     "marginPct": -17.06,
@@ -185,6 +185,7 @@
     "promoPrice": 998.99,
     "stock": 31,
     "images": [
+      "https://boulanger.scene7.com/is/content/Boulanger/0195949020919_v_0",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -192,10 +193,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_l_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_o_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0195949020919_v_0"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949020919_h_o_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/content/Boulanger/0195949020919_v_0",
     "supplier": "Distributeur EU",
     "cost": 1122.48,
     "marginPct": -12.36,
@@ -265,6 +265,7 @@
     "promoPrice": 998.99,
     "stock": 31,
     "images": [
+      "https://boulanger.scene7.com/is/content/Boulanger/0195949021091_v_0",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -272,10 +273,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_l_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_o_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0195949021091_v_0"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949021091_h_o_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/content/Boulanger/0195949021091_v_0",
     "supplier": "Distributeur EU",
     "cost": 1122.48,
     "marginPct": -12.36,
@@ -345,6 +345,7 @@
     "promoPrice": 620.99,
     "stock": 42,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -353,10 +354,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_b_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_b_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949822148_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 697.68,
     "marginPct": -12.35,
@@ -426,6 +426,7 @@
     "promoPrice": 620.99,
     "stock": 22,
     "images": [
+      "https://boulanger.scene7.com/is/content/Boulanger/0195949822506_v_0",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -434,10 +435,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0195949822506_v_0"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949822506_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/content/Boulanger/0195949822506_v_0",
     "supplier": "Distributeur EU",
     "cost": 697.68,
     "marginPct": -12.35,
@@ -507,6 +507,7 @@
     "promoPrice": 940.99,
     "stock": 38,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -514,10 +515,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949806384_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 1057.68,
     "marginPct": -12.4,
@@ -587,6 +587,7 @@
     "promoPrice": 940.99,
     "stock": 25,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -595,10 +596,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949805813_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 1057.68,
     "marginPct": -12.4,
@@ -668,6 +668,7 @@
     "promoPrice": 940.99,
     "stock": 22,
     "images": [
+      "https://boulanger.scene7.com/is/content/Boulanger/0195949806193_v_0",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -677,10 +678,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0195949806193_v_0"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949806193_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/content/Boulanger/0195949806193_v_0",
     "supplier": "Distributeur EU",
     "cost": 1057.68,
     "marginPct": -12.4,
@@ -750,6 +750,7 @@
     "promoPrice": 620.99,
     "stock": 33,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -757,10 +758,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949822322_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 697.68,
     "marginPct": -12.35,
@@ -830,6 +830,7 @@
     "promoPrice": 620.99,
     "stock": 45,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -837,10 +838,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_b_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_b_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949822681_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 697.68,
     "marginPct": -12.35,
@@ -910,6 +910,7 @@
     "promoPrice": 531.99,
     "stock": 39,
     "images": [
+      "https://boulanger.scene7.com/is/content/Boulanger/0195950376906_v_0",
       "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -918,10 +919,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0195950376906_v_0"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195950376906_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/content/Boulanger/0195950376906_v_0",
     "supplier": "Distributeur EU",
     "cost": 596.88,
     "marginPct": -12.2,
@@ -991,6 +991,7 @@
     "promoPrice": 287.99,
     "stock": 52,
     "images": [
+      "https://boulanger.scene7.com/is/content/Boulanger/0195949563768_v_0",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -1000,10 +1001,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0195949563768_v_0"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949563768_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/content/Boulanger/0195949563768_v_0",
     "supplier": "Distributeur EU",
     "cost": 332.26,
     "marginPct": -15.37,
@@ -1051,6 +1051,7 @@
     "promoPrice": 575.99,
     "stock": 50,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -1058,10 +1059,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0195949589188_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 665.26,
     "marginPct": -15.5,
@@ -1109,6 +1109,7 @@
     "promoPrice": 2559.99,
     "stock": 18,
     "images": [
+      "assets/img/asus-rog-strix-g16-2025/image_asus_9.png",
       "https://boulanger.scene7.com/is/image/Boulanger/4711387879719_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/4711387879719_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/4711387879719_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -1119,10 +1120,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/4711387879719_h_b_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/4711387879719_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "assets/img/asus-rog-strix-g16-2025/image_asus_7.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_8.png",
-      "assets/img/asus-rog-strix-g16-2025/image_asus_9.png"
+      "assets/img/asus-rog-strix-g16-2025/image_asus_8.png"
     ],
-    "imageCover": "Oui",
+    "imageCover": "assets/img/asus-rog-strix-g16-2025/image_asus_9.png",
     "supplier": "Distributeur EU",
     "cost": 2999.25,
     "marginPct": -17.16,
@@ -1184,15 +1184,15 @@
     "promoPrice": 319.99,
     "stock": 30,
     "images": [
+      "https://assets.bose.com/content/dam/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/images/QC45_PDP_inthebox_1x1.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg",
       "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/images/QC45_TrinityRodman_pdp_1920x1440.jpg/jcr:content/renditions/cq5dam.web.1920.1920.jpeg",
       "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/CREA-1003_QC45_TrinityRodman_GetLoud_01145_1200x1022.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg",
       "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-W02.png/jcr:content/renditions/cq5dam.web.1000.1000.png",
       "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-W03.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg",
       "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-W05-AUX.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg",
-      "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-W04.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg",
-      "https://assets.bose.com/content/dam/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/images/QC45_PDP_inthebox_1x1.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg"
+      "https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-W04.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg"
     ],
-    "imageCover": "Non",
+    "imageCover": "https://assets.bose.com/content/dam/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/images/QC45_PDP_inthebox_1x1.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg",
     "supplier": "Distributeur EU",
     "cost": 349.3,
     "marginPct": -9.16,
@@ -1244,6 +1244,7 @@
     "promoPrice": 319.99,
     "stock": 22,
     "images": [
+      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_9.webp",
       "https://boulanger.scene7.com/is/image/Boulanger/0711719577294_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0711719577294_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0711719577294_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -1251,10 +1252,9 @@
       "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_5.webp",
       "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_6.webp",
       "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_7.webp",
-      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_8.webp",
-      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_9.webp"
+      "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_8.webp"
     ],
-    "imageCover": "Oui",
+    "imageCover": "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_9.webp",
     "supplier": "Distributeur EU",
     "cost": 349.3,
     "marginPct": -9.16,
@@ -1296,16 +1296,16 @@
     "promoPrice": 319.99,
     "stock": 37,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0711719595472_h_a_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0711719595472_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0711719595472_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0711719595472_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0711719595472_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0711719595472_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0711719595472_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0711719595472_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0711719595472_h_a_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/0711719595472_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0711719595472_h_a_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 349.3,
     "marginPct": -9.16,
@@ -1347,13 +1347,13 @@
     "promoPrice": 319.99,
     "stock": 29,
     "images": [
+      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-10.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=613&qlt=100,1&resMode=sharp2&size=613,402&chrss=full",
       "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-1.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=699&qlt=100,1&resMode=sharp2&size=699,402&chrss=full",
       "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-4.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=679&qlt=100,1&resMode=sharp2&size=679,402&chrss=full",
       "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-5.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=681&qlt=100,1&resMode=sharp2&size=681,402&chrss=full",
-      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-3.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=547&qlt=100,1&resMode=sharp2&size=547,402&chrss=full",
-      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-10.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=613&qlt=100,1&resMode=sharp2&size=613,402&chrss=full"
+      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-3.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=547&qlt=100,1&resMode=sharp2&size=547,402&chrss=full"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-10.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=613&qlt=100,1&resMode=sharp2&size=613,402&chrss=full",
     "supplier": "Distributeur EU",
     "cost": 349.3,
     "marginPct": -9.16,
@@ -1415,13 +1415,13 @@
     "promoPrice": 319.99,
     "stock": 30,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 349.3,
     "marginPct": -9.16,
@@ -1469,16 +1469,16 @@
     "promoPrice": 319.99,
     "stock": 27,
     "images": [
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c07967215.png?imdensity=1&impolicy=Png_Res",
       "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c07966690.png?imdensity=1&impolicy=Png_Res",
       "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c07967390.png?imdensity=1&impolicy=Png_Res",
       "assets/img/hp-spectre-x360/image_hp_3.jpg",
       "assets/img/hp-spectre-x360/image_hp_4.jpg",
       "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c07991714.png?imdensity=1&impolicy=Png_Res",
       "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c06910566.png?imdensity=1&impolicy=Png_Res",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c07966923.png?imdensity=1&impolicy=Png_Res",
-      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c07967215.png?imdensity=1&impolicy=Png_Res"
+      "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c07966923.png?imdensity=1&impolicy=Png_Res"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c07967215.png?imdensity=1&impolicy=Png_Res",
     "supplier": "Distributeur EU",
     "cost": 349.3,
     "marginPct": -9.16,
@@ -1540,16 +1540,16 @@
     "promoPrice": 319.99,
     "stock": 23,
     "images": [
+      "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw7dee5062/pdp/JBL_Charge_5_Lifestyle1_904x560px.png?sw=2034&sh=1260",
       "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw5bf3296f/JBL_CHARGE5_HERO_BLACK_0046_x1.png?sw=680&sh=680",
       "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dwcaeecfe9/JBL_CHARGE5_FRONT_BLACK_0072_x1.png?sw=1605&sh=1605",
       "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dwf55cb9a3/JBL_CHARGE5_BACK_CLOSED_BLACK_0127_x1.png?sw=1605&sh=1605",
       "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw3e4f77a6/JBL_CHARGE5_LEFT_RIGHT_BLACK_0119_x1.png?sw=1605&sh=1605",
       "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw69b06eff/JBL_CHARGE5_TOP_BLACK_0182_x1.png?sw=680&sh=680",
       "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw674291a2/JBL_CHARGE5_BOTTOM_BLACK_0191_x1.png?sw=680&sh=680",
-      "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dwe4a6282b/JBL_CHARGE5_BACK_OPEN_BLACK_0127_x1.png?sw=680&sh=680",
-      "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw7dee5062/pdp/JBL_Charge_5_Lifestyle1_904x560px.png?sw=2034&sh=1260"
+      "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dwe4a6282b/JBL_CHARGE5_BACK_OPEN_BLACK_0127_x1.png?sw=680&sh=680"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://fr.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw7dee5062/pdp/JBL_Charge_5_Lifestyle1_904x560px.png?sw=2034&sh=1260",
     "supplier": "Distributeur EU",
     "cost": 349.3,
     "marginPct": -9.16,
@@ -1601,6 +1601,7 @@
     "promoPrice": 486.99,
     "stock": 29,
     "images": [
+      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_9.jpg",
       "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_1.jpg",
       "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_10.jpg",
       "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_2.jpg",
@@ -1609,10 +1610,9 @@
       "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_5.jpg",
       "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_6.jpg",
       "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_7.jpg",
-      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_8.jpg",
-      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_9.jpg"
+      "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_8.jpg"
     ],
-    "imageCover": "Non",
+    "imageCover": "assets/img/lg-31-5-uhd-4k-hdr-32uq750-w/image_lg_9.jpg",
     "supplier": "Distributeur EU",
     "cost": 531.3,
     "marginPct": -9.1,
@@ -1660,6 +1660,7 @@
     "promoPrice": 767.99,
     "stock": 18,
     "images": [
+      "assets/img/macbook-air/image_macbook_9.jpg",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949838026_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949838026_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949838026_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -1675,10 +1676,9 @@
       "assets/img/macbook-air/image_macbook_5.jpg",
       "assets/img/macbook-air/image_macbook_6.jpg",
       "assets/img/macbook-air/image_macbook_7.jpg",
-      "assets/img/macbook-air/image_macbook_8.jpg",
-      "assets/img/macbook-air/image_macbook_9.jpg"
+      "assets/img/macbook-air/image_macbook_8.jpg"
     ],
-    "imageCover": "Oui",
+    "imageCover": "assets/img/macbook-air/image_macbook_9.jpg",
     "supplier": "Distributeur EU",
     "cost": 899.25,
     "marginPct": -17.09,
@@ -1740,6 +1740,7 @@
     "promoPrice": 1279.99,
     "stock": 16,
     "images": [
+      "assets/img/macbook-pro-m4-2025/image_macbook_32.jpg",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949704802_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949704802_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0195949704802_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -1753,10 +1754,9 @@
       "assets/img/macbook-pro-m4-2025/image_macbook_28.jpg",
       "assets/img/macbook-pro-m4-2025/image_macbook_29.jpg",
       "assets/img/macbook-pro-m4-2025/image_macbook_30.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_31.jpg",
-      "assets/img/macbook-pro-m4-2025/image_macbook_32.jpg"
+      "assets/img/macbook-pro-m4-2025/image_macbook_31.jpg"
     ],
-    "imageCover": "Oui",
+    "imageCover": "assets/img/macbook-pro-m4-2025/image_macbook_32.jpg",
     "supplier": "Distributeur EU",
     "cost": 1499.25,
     "marginPct": -17.13,
@@ -1818,6 +1818,7 @@
     "promoPrice": 447.99,
     "stock": 16,
     "images": [
+      "https://boulanger.scene7.com/is/content/Boulanger/0815820024101_v_0",
       "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -1826,10 +1827,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_o_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_u_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/0815820024101_v_0"
+      "https://boulanger.scene7.com/is/image/Boulanger/0815820024101_h_u_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/content/Boulanger/0815820024101_v_0",
     "supplier": "Distributeur EU",
     "cost": 559.2,
     "marginPct": -24.82,
@@ -1873,6 +1873,7 @@
     "promoPrice": 223.99,
     "stock": 32,
     "images": [
+      "assets/img/nintendo-switch-oled-64-go/image_nintendo_9.webp",
       "https://boulanger.scene7.com/is/image/Boulanger/0045496453435_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0045496453435_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0045496453435_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -1882,10 +1883,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/0045496453435_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0045496453435_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0045496453435_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_8.webp",
-      "assets/img/nintendo-switch-oled-64-go/image_nintendo_9.webp"
+      "assets/img/nintendo-switch-oled-64-go/image_nintendo_8.webp"
     ],
-    "imageCover": "Oui",
+    "imageCover": "assets/img/nintendo-switch-oled-64-go/image_nintendo_9.webp",
     "supplier": "Distributeur EU",
     "cost": 297.49,
     "marginPct": -32.81,
@@ -1927,6 +1927,7 @@
     "promoPrice": 1919.99,
     "stock": 15,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/4711387879856_h_o_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_1.png",
       "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_10.png",
       "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_11.png",
@@ -1940,10 +1941,9 @@
       "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_6.png",
       "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_7.png",
       "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_8.png",
-      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_9.png",
-      "https://boulanger.scene7.com/is/image/Boulanger/4711387879856_h_o_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "assets/img/rog-zephyrus-g14-2025-ga403/image_rog_9.png"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/4711387879856_h_o_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 2249.25,
     "marginPct": -17.15,
@@ -2005,6 +2005,7 @@
     "promoPrice": 447.99,
     "stock": 13,
     "images": [
+      "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849973/fr-feature-galaxy-book-545035030?$FB_TYPE_A_JPG$",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095627434_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849980/fr-feature-galaxy-book-545035046?$FB_TYPE_A_JPG$",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095627434_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -2015,10 +2016,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/8806095627434_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849979/fr-feature-galaxy-book-545035044?$FB_TYPE_K_JPG$",
       "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849986/fr-feature-galaxy-book-545035058?$FB_TYPE_A_PNG$",
-      "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849976/fr-feature-galaxy-book-545035038?$1204_n_JPG$",
-      "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849973/fr-feature-galaxy-book-545035030?$FB_TYPE_A_JPG$"
+      "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849976/fr-feature-galaxy-book-545035038?$1204_n_JPG$"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://images.samsung.com/is/image/samsung/p6pim/fr/feature/165849973/fr-feature-galaxy-book-545035030?$FB_TYPE_A_JPG$",
     "supplier": "Distributeur EU",
     "cost": 524.25,
     "marginPct": -17.02,
@@ -2080,16 +2080,16 @@
     "promoPrice": 959.99,
     "stock": 13,
     "images": [
+      "https://boulanger.scene7.com/is/content/Boulanger/8806097003748_v_0",
       "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/content/Boulanger/8806097003748_v_0"
+      "https://boulanger.scene7.com/is/image/Boulanger/8806097003748_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/content/Boulanger/8806097003748_v_0",
     "supplier": "Distributeur EU",
     "cost": 1124.25,
     "marginPct": -17.11,
@@ -2151,15 +2151,15 @@
     "promoPrice": 1158.99,
     "stock": 25,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/8806095414317_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 1302.48,
     "marginPct": -12.38,
@@ -2229,11 +2229,11 @@
     "promoPrice": 1004.99,
     "stock": 22,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/8806095414478_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095414478_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414478_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414478_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/8806095414478_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/8806095414478_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 1129.68,
     "marginPct": -12.41,
@@ -2303,12 +2303,12 @@
     "promoPrice": 1158.99,
     "stock": 34,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/8806095414379_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095414379_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095414379_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414379_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095414379_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/8806095414379_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/8806095414379_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 1302.48,
     "marginPct": -12.38,
@@ -2378,6 +2378,7 @@
     "promoPrice": 204.99,
     "stock": 56,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095059297_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095059297_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -2385,10 +2386,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/8806095059297_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_b_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_b_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/8806095039480_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 236.8,
     "marginPct": -15.52,
@@ -2436,6 +2436,7 @@
     "promoPrice": 642.99,
     "stock": 11,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/8806095494142_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095494142_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095494142_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095494142_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
@@ -2444,10 +2445,9 @@
       "https://boulanger.scene7.com/is/image/Boulanger/8806095494142_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095494142_h_r_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/8806095494142_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095494142_h_b_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/8806095494142_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/8806095494142_h_b_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/8806095494142_h_l_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 702.59,
     "marginPct": -9.27,
@@ -2495,6 +2495,7 @@
     "promoPrice": 703.99,
     "stock": 28,
     "images": [
+      "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_19.webp",
       "https://images.samsung.com/is/image/samsung/p6pim/us/ls32fm902snxza/gallery/us-smart-m9-32m90sf-ls32fm902snxza-547845238?$product-details-jpg$",
       "https://images.samsung.com/is/image/samsung/p6pim/us/ls32fm902snxza/gallery/us-smart-m9-32m90sf-ls32fm902snxza-547845193?$product-details-jpg$",
       "https://images.samsung.com/is/image/samsung/p6pim/us/ls32fm902snxza/gallery/us-smart-m9-32m90sf-ls32fm902snxza-547845167?$product-details-jpg$",
@@ -2502,10 +2503,9 @@
       "https://images.samsung.com/is/image/samsung/p6pim/us/ls32fm902snxza/gallery/us-smart-m9-32m90sf-ls32fm902snxza-547834414?$product-details-jpg$",
       "https://images.samsung.com/is/image/samsung/p6pim/us/ls32fm902snxza/gallery/us-smart-m9-32m90sf-ls32fm902snxza-547834385?$product-details-jpg$",
       "https://images.samsung.com/is/image/samsung/p6pim/us/ls32fm902snxza/gallery/us-smart-m9-32m90sf-ls32fm902snxza-547834386?$product-details-jpg$",
-      "https://images.samsung.com/is/image/samsung/p6pim/us/ls32fm902snxza/gallery/us-smart-m9-32m90sf-ls32fm902snxza-547834396?$product-details-jpg$",
-      "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_19.webp"
+      "https://images.samsung.com/is/image/samsung/p6pim/us/ls32fm902snxza/gallery/us-smart-m9-32m90sf-ls32fm902snxza-547834396?$product-details-jpg$"
     ],
-    "imageCover": "Oui",
+    "imageCover": "assets/img/samsung-smart-monitor-m9-m90sf/image_samsung_19.webp",
     "supplier": "Distributeur EU",
     "cost": 769.3,
     "marginPct": -9.28,
@@ -2553,14 +2553,14 @@
     "promoPrice": 191.99,
     "stock": 108,
     "images": [
+      "https://m.media-amazon.com/images/I/71GoS0HpVVL._AC_SX679_.jpg",
       "https://boulanger.scene7.com/is/image/Boulanger/4548736132580_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/4548736132580_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://m.media-amazon.com/images/I/719Rl8qzXjL._AC_SX679_.jpg",
       "https://m.media-amazon.com/images/I/61hT-265ClL._AC_SX679_.jpg",
-      "https://m.media-amazon.com/images/I/71jY8UtNfuL._AC_SX679_.jpg",
-      "https://m.media-amazon.com/images/I/71GoS0HpVVL._AC_SX679_.jpg"
+      "https://m.media-amazon.com/images/I/71jY8UtNfuL._AC_SX679_.jpg"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://m.media-amazon.com/images/I/71GoS0HpVVL._AC_SX679_.jpg",
     "supplier": "Distributeur EU",
     "cost": 209.3,
     "marginPct": -9.02,
@@ -2612,15 +2612,15 @@
     "promoPrice": 383.99,
     "stock": 20,
     "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0889842640809_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0889842640809_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0889842640809_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0889842640809_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0889842640809_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
       "https://boulanger.scene7.com/is/image/Boulanger/0889842640809_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0889842640809_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
-      "https://boulanger.scene7.com/is/image/Boulanger/0889842640809_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+      "https://boulanger.scene7.com/is/image/Boulanger/0889842640809_h_r_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
     ],
-    "imageCover": "Oui",
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0889842640809_h_b_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
     "supplier": "Distributeur EU",
     "cost": 509.99,
     "marginPct": -32.81,
