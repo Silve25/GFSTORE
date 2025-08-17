@@ -348,7 +348,7 @@
   };
 
   // Utilitaires
-  const € = n => new Intl.NumberFormat('fr-FR', {style:'currency', currency:'EUR'}).format(n);
+  const money = n => new Intl.NumberFormat('fr-FR', {style:'currency', currency:'EUR'}).format(n);
   const pct = (a,b) => Math.max(0, 100 - Math.round((a/b)*100));
   const by = sel => document.querySelector(sel);
   const el = (tag, attrs={}, children=[]) => {
@@ -438,6 +438,8 @@
     console.groupEnd();
 
     grid.innerHTML = '';
+    const details = attempts.map(a=>`${a.url} → ${a.ok? 'OK' : a.error}`).join('
+');
     grid.append(el('div',{class:'card'},[
       el('div',{class:'content'},[
         el('h3',{html:'Impossible de charger les produits 😿'}),
@@ -447,10 +449,12 @@
           : `Vérifiez l'emplacement/orthographe (ex: <code>products.json</code> vs <code>produits.json</code>) et le <code>Content-Type: application/json</code>.`}),
         el('div',{html:`
           <details style="margin-top:.5rem"><summary>Voir le détail des erreurs</summary>
-          <pre style="white-space:pre-wrap">${attempts.map(a=>`${a.url} → ${a.ok? 'OK' : a.error}`).join('\n')}</pre>
+          <pre style="white-space:pre-wrap">${details}</pre>
           </details>
           <details style="margin-top:.5rem"><summary>Astuce serveur local</summary>
-          <pre>Python 3 :  python -m http.server 8000\nNode :      npx serve\nDossier :   / (avec data/products.json)</pre>
+          <pre>Python 3 :  python -m http.server 8000
+Node :      npx serve
+Dossier :   / (avec data/products.json)</pre>
           </details>
         `})
       ])
@@ -553,8 +557,8 @@
     rating.append(el('span',{html:(p.rating||0).toFixed(1)}));
 
     const priceRow = el('div',{class:'price'});
-    priceRow.append(el('div',{class:'now', html:€(price)}));
-    if(hasPromo) priceRow.append(el('div',{class:'old', html:€(p.price)}));
+    priceRow.append(el('div',{class:'now', html:money(price)}));
+    if(hasPromo) priceRow.append(el('div',{class:'old', html:money(p.price)}));
 
     const actions = el('div',{class:'actions'});
     const btn = el('button',{class:'btn primary', onClick:()=>openModal(p)},[document.createTextNode('Voir & ajouter')]);
@@ -628,7 +632,7 @@
           state.selected._opts = state.selected._opts || {};
           state.selected._opts[name] = c;
           updateModalPrice();
-        }},[document.createTextNode(c.value + (c.priceDelta? ` (${c.priceDelta>0?'+':''}${€(c.priceDelta)})` : '') )]);
+        }},[document.createTextNode(c.value + (c.priceDelta? ` (${c.priceDelta>0?'+':''}${money(c.priceDelta)})` : '') )]);
         if(idx===0){
           state.selected._opts = state.selected._opts || {};
           state.selected._opts[name] = c;
@@ -650,8 +654,8 @@
     const now = base + delta;
     const hasPromo = p.promoPrice && p.promoPrice < p.price;
     const row = by('#modalPrice'); row.innerHTML='';
-    row.append(el('div',{class:'now', html:€(now)}));
-    if(hasPromo && delta===0) row.append(el('div',{class:'old', html:€(p.price)}));
+    row.append(el('div',{class:'now', html:money(now)}));
+    if(hasPromo && delta===0) row.append(el('div',{class:'old', html:money(p.price)}));
   }
 
   // Souhaits (localStorage minimal)
@@ -693,7 +697,7 @@
         meta.append(el('div',{class:'brand', html:small}));
       }
       const controls = el('div',{style:'display:flex;flex-direction:column;gap:6px;align-items:end'});
-      controls.append(el('div',{class:'now', html:€(it.price)}));
+      controls.append(el('div',{class:'now', html:money(it.price)}));
       const qty = el('label',{class:'qty'});
       const minus = el('button',{onClick:()=>changeQty(it.id, it.qty-1)},[document.createTextNode('−')]);
       const num = el('input',{type:'number', value:it.qty, min:'1', onChange:(e)=>changeQty(it.id, Number(e.target.value||1))});
@@ -704,10 +708,10 @@
       row.append(meta,controls);
       zone.append(row);
     }
-    by('#subTotal').textContent = €(sub);
-    by('#savings').textContent = €(savings);
+    by('#subTotal').textContent = money(sub);
+    by('#savings').textContent = money(savings);
     by('#cartCount').textContent = count;
-    by('#miniCartCount').textContent = count; by('#miniCartTotal').textContent = €(sub);
+    by('#miniCartCount').textContent = count; by('#miniCartTotal').textContent = money(sub);
     by('#miniCart').style.display = count? 'flex' : 'none';
   }
 
