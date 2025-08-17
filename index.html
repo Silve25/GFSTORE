@@ -16,9 +16,11 @@
     }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial; color:var(--ink); background:#f8fafc}
+    html{scroll-behavior:smooth}
     img{max-width:100%;display:block}
     a{text-decoration:none;color:inherit}
     button{cursor:pointer;border:0;background:transparent}
+    .sr-only{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
 
     .topbar{background:linear-gradient(90deg,var(--bg),#111827);color:#fff;font-size:14px}
     .topbar .wrap{max-width:var(--container);margin:auto;padding:.6rem 1rem;display:flex;gap:10px;align-items:center;justify-content:center;text-align:center;flex-wrap:wrap}
@@ -32,8 +34,9 @@
     .brand span{font-size:1.05rem}
     .search{display:flex;align-items:center;gap:8px;background:#f1f5f9;border:1px solid #e5e7eb;border-radius:999px;padding:.55rem .8rem}
     .search input{flex:1;border:0;background:transparent;outline:0;font-size:.95rem;min-width:120px}
-    .nav-actions{display:flex;gap:8px;align-items:center}
-    .icon-btn{position:relative;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#f1f5f9}
+    .nav-actions{position:relative;display:flex;gap:8px;align-items:center}
+    .icon-btn{position:relative;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#f1f5f9;transition:transform .15s ease}
+    .icon-btn:active{transform:scale(.96)}
     .icon-btn .badge{position:absolute;top:-6px;right:-6px;background:var(--brand);color:#fff;border-radius:999px;font-size:.7rem;padding:.15rem .4rem;box-shadow:var(--shadow)}
 
     .hero{background:linear-gradient(180deg,#ffffff 0%,#f6fafe 100%)}
@@ -43,7 +46,8 @@
     .cta{display:flex;gap:10px;flex-wrap:wrap}
     .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.7rem 1rem;border-radius:12px;font-weight:700;box-shadow:var(--shadow)}
     .btn.primary{background:var(--ink);color:#fff}
-    .btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--ui)}
+    .btn.secondary{background:#fff;color:var(--ink);border:1px solid #e5e7eb}
+    .btn .ico{display:inline-grid;place-items:center}
     .hero-card{background:#fff;border:1px solid var(--ui);padding:1rem;border-radius:var(--radius);box-shadow:var(--shadow)}
 
     .usps{max-width:var(--container);margin:0 auto;padding:1rem 1rem 1.25rem;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
@@ -54,16 +58,20 @@
 
     .toolbar{position:sticky;top:65px;background:#fff;border-top:1px solid var(--ui);border-bottom:1px solid var(--ui);z-index:35}
     .toolbar .wrap{max-width:var(--container);margin:auto;padding:.7rem 1rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .75rem;border-radius:999px;border:1px solid var(--ui);background:#fff}
+    .chip{display:inline-flex;align-items:center;gap:.45rem;padding:.5rem .75rem;border-radius:999px;border:1px solid var(--ui);background:#fff;transition:background .2s,border-color .2s}
+    .chip:hover{background:#f8fafc}
     .chip[aria-pressed="true"]{background:#eef2ff;border-color:#c7d2fe}
     .select{display:flex;align-items:center;gap:.6rem;border:1px solid var(--ui);padding:.55rem .75rem;border-radius:12px;background:#fff}
     .price-range{display:flex;align-items:center;gap:.6rem;margin-left:auto}
     .price-range input{width:140px}
+    .count{margin-left:auto;color:#334155;font-size:.9rem}
+    .clear-filters{margin-left:0}
 
     .grid{max-width:var(--container);margin:1rem auto 2rem;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:0 1rem}
-    .card{background:#fff;border:1px solid var(--ui);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:transform .2s ease, box-shadow .2s ease}
+    /* SUBTILE: très fine bordure et séparateur image */
+    .card{background:#fff;border:1px solid #e9eef5;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:transform .2s ease, box-shadow .2s ease}
     .card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
-    .media{aspect-ratio:1/1;background:#f8fafc;display:grid;place-items:center}
+    .media{aspect-ratio:1/1;background:#f8fafc;display:grid;place-items:center;border-bottom:1px solid #eef2f7}
     .media img{width:100%;height:100%;object-fit:cover}
     .content{padding:.9rem}
     .badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.5rem}
@@ -112,6 +120,11 @@
     .opt .chip{border-radius:10px}
     .secure{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:.9rem;margin-top:.6rem}
 
+    .popover{position:absolute;right:0;top:48px;background:#fff;border:1px solid var(--ui);border-radius:12px;box-shadow:var(--shadow-lg);padding:.5rem;display:none;min-width:220px}
+    .popover.open{display:block}
+    .popover a{display:flex;align-items:center;gap:8px;padding:.5rem;border-radius:10px}
+    .popover a:hover{background:#f8fafc}
+
     footer{background:#0b0f1a;color:#cbd5e1;margin-top:2rem}
     footer .wrap{max-width:var(--container);margin:auto;padding:2rem 1rem;display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px}
     footer h4{margin:.4rem 0 1rem;color:#fff}
@@ -144,8 +157,13 @@
       </label>
       <div class="nav-actions">
         <button class="icon-btn" id="supportBtn" aria-label="Contacter le support 24/7">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a9 9 0 00-9 9v3a3 3 0 003 3h1v-6H6a6 6 0 1112 0h-1v6h1a3 3 0 003-3v-3a9 9 0 00-9-9z" stroke="#111827" stroke-width="2"/></svg>
+          <img alt="Support" width="22" height="22" src="https://img.icons8.com/?size=22&id=iILxB7rKMg7u&format=png"/>
         </button>
+        <div id="supportPopover" class="popover" role="menu" aria-label="Liens support">
+          <a href="tel:+22900000000"><img width="18" height="18" alt="Téléphone" src="https://img.icons8.com/?size=18&id=59740&format=png"/> Appeler : +229 00 00 00 00</a>
+          <a href="mailto:support@gfstore.example"><img width="18" height="18" alt="Mail" src="https://img.icons8.com/?size=18&id=86838&format=png"/> Email : support@gfstore.example</a>
+          <a href="#" id="openChat"><img width="18" height="18" alt="Chat" src="https://img.icons8.com/?size=18&id=86788&format=png"/> Ouvrir le chat 24/7</a>
+        </div>
         <button class="icon-btn" id="openCart" aria-label="Ouvrir le panier">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 3h2l.4 2M7 13h9l3-7H6.4" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="19" r="2" stroke="#111827" stroke-width="2"/><circle cx="17" cy="19" r="2" stroke="#111827" stroke-width="2"/></svg>
           <span class="badge" id="cartCount">0</span>
@@ -160,8 +178,8 @@
         <h1>La tech <span style="color:var(--brand)">premium</span>, livrée vite. 🎯</h1>
         <p>PC, consoles, montres connectées, écouteurs et accessoires. Des prix justes, la <strong>livraison gratuite</strong> &lt; 7 jours, une <strong>assistance 24/7</strong> et un <strong>paiement sécurisé</strong>.</p>
         <div class="cta">
-          <a href="#produits" class="btn primary">Explorer les nouveautés</a>
-          <a href="#promos" class="btn secondary">Voir les promos</a>
+          <a href="#produits" class="btn primary" id="ctaNew"><span class="ico"><img width="18" height="18" alt="Nouveautés" src="https://img.icons8.com/?size=18&id=59813&format=png"/></span>Explorer les nouveautés</a>
+          <a href="#promos" class="btn secondary" id="ctaPromo"><span class="ico"><img width="18" height="18" alt="Promos" src="https://img.icons8.com/?size=18&id=59058&format=png"/></span>Voir les promos</a>
         </div>
       </div>
       <div class="hero-card" aria-hidden="true">
@@ -184,6 +202,7 @@
   <div class="toolbar" role="region" aria-label="Filtres et tri">
     <div class="wrap">
       <button class="chip" id="filterAll" aria-pressed="true">Tous</button>
+      <button class="chip" id="filterPromo" aria-pressed="false">Promos</button>
       <div id="categoryChips" style="display:flex;gap:8px;flex-wrap:wrap"></div>
       <div class="select" title="Tri">
         <label for="sort">Trier</label>
@@ -204,6 +223,8 @@
         <input type="range" id="price" min="0" max="3000" step="10" value="3000" />
         <span id="priceValue">3000€</span>
       </div>
+      <button class="chip clear-filters" id="clearFilters" title="Réinitialiser">Réinitialiser</button>
+      <div class="count" id="resultCount" aria-live="polite"></div>
     </div>
   </div>
 
@@ -226,7 +247,7 @@
       <div class="row"><span>Économies</span><strong id="savings">0€</strong></div>
     </div>
     <div class="checkout">
-      <button class="btn primary" id="checkoutBtn">Payer en toute sécurité</button>
+      <button class="btn primary" id="checkoutBtn"><img class="ico" width="18" height="18" alt="Payer" src="https://img.icons8.com/?size=18&id=0DBkCUANmgoQ&format=png"/> Payer en toute sécurité</button>
       <div class="secure">🔐 Paiement 3‑D Secure, Visa/Mastercard/PayPal. Données chiffrées TLS.</div>
     </div>
   </aside>
@@ -255,7 +276,7 @@
           <button id="plusQty" aria-label="Augmenter la quantité">+</button>
         </label>
         <div class="actions">
-          <button class="btn primary" id="modalAdd">Ajouter au panier</button>
+          <button class="btn primary" id="modalAdd"><img class="ico" width="18" height="18" alt="Ajouter" src="https://img.icons8.com/?size=18&id=RZVvpEvg0RO9&format=png"/> Ajouter au panier</button>
           <button class="btn secondary" id="modalClose">Fermer</button>
         </div>
         <div class="secure">✅ Garantie <span id="modalWarranty">12</span> mois • 🚚 Livraison &lt; 7 jours • 🔐 Paiement sécurisé</div>
@@ -272,17 +293,17 @@
       <div>
         <h4>Service client</h4>
         <ul style="list-style:none;padding:0;margin:0;display:grid;gap:8px">
-          <li>📞 +229 00 00 00 00</li>
-          <li>💬 Chat 24/7</li>
-          <li>✉️ support@gfstore.example</li>
+          <li>📞 <a href="tel:+22900000000">+229 00 00 00 00</a></li>
+          <li>💬 <a href="#" data-future>Chat 24/7</a></li>
+          <li>✉️ <a href="mailto:support@gfstore.example">support@gfstore.example</a></li>
         </ul>
       </div>
       <div>
         <h4>Informations</h4>
         <ul style="list-style:none;padding:0;margin:0;display:grid;gap:8px">
-          <li>CGV & retours</li>
-          <li>Livraison</li>
-          <li>Garanties</li>
+          <li><a href="#" data-future>CGV & retours</a></li>
+          <li><a href="#" data-future>Livraison</a></li>
+          <li><a href="#" data-future>Garanties</a></li>
         </ul>
       </div>
     </div>
@@ -292,7 +313,7 @@
   <script>
   const state = {
     all: [], view: [],
-    filters: { q:"", cat:"", brand:"", priceMax: 3000 },
+    filters: { q:"", cat:"", brand:"", priceMax: 3000, promo:false },
     sort: "featured",
     cart: JSON.parse(localStorage.getItem("gf_cart_v1") || "[]"),
     selected: null,
@@ -315,31 +336,78 @@
     if(found){ state.all = found.data; document.body.setAttribute('data-products-source', found.url); hydrateFilters(); applyFilters(); grid.setAttribute('aria-busy','false'); return; }
     const details = attempts.map(a=>`${a.url} → ${a.ok? 'OK' : a.error}`).join('\n');
     grid.innerHTML='';
-    grid.append(el('div',{class:'card'},[ el('div',{class:'content'},[ el('h3',{html:'Impossible de charger les produits 😿'}), el('p',{class:'brand', html:`On a tenté : <code>${CANDIDATES.join('</code>, <code>')}</code>`}), el('p',{class:'brand', html: (location.protocol==='file:') ? `⚠️ Vous avez ouvert <code>index.html</code> en <code>file://</code>. Lancez un serveur (ex: <code>python -m http.server</code>) et placez le JSON dans <code>/data/products.json</code>.` : `Vérifiez l'emplacement/orthographe (ex: <code>products.json</code> vs <code>produits.json</code>) et le <code>Content-Type: application/json</code>.`}), el('div',{html:`<details style="margin-top:.5rem"><summary>Voir le détail des erreurs</summary><pre style="white-space:pre-wrap">${details}</pre></details>`}) ]) ]));
+    grid.append(el('div',{class:'card'},[ el('div',{class:'content'},[ el('h3',{html:'Impossible de charger les produits 😿'}), el('p',{class:'brand', html:`On a tenté : <code>${CANDIDATES.join('</code>, <code>')}</code>`}), el('p',{class:'brand', html: (location.protocol==='file:') ? `⚠️ Vous avez ouvert <code>index.html</code> en <code>file://</code>. Lancez un serveur (ex: <code>python -m http.server</code>) et placez le JSON dans <code>/data/products.json</code>.` : `Vérifiez l\'emplacement/orthographe (ex: <code>products.json</code> vs <code>produits.json</code>) et le <code>Content-Type: application/json</code>.`}), el('div',{html:`<details style="margin-top:.5rem"><summary>Voir le détail des erreurs</summary><pre style="white-space:pre-wrap">${details}</pre></details>`}) ]) ]));
   }
 
   function hydrateFilters(){
     const cats = [...new Set(state.all.map(p=>p.category).filter(Boolean))].sort();
-    const brands = [...new Set(state.all.map(p=>p.brand).filter(Boolean))].sort();
+    const brandsAll = [...new Set(state.all.map(p=>p.brand).filter(Boolean))].sort();
+
     const zone = by('#categoryChips'); zone.innerHTML='';
-    cats.forEach(c=>{ const b=el('button',{class:'chip', role:'button', 'aria-pressed':'false', onClick:()=>{ document.querySelectorAll('#categoryChips .chip').forEach(x=>x.setAttribute('aria-pressed','false')); by('#filterAll').setAttribute('aria-pressed','false'); b.setAttribute('aria-pressed','true'); state.filters.cat=c; applyFilters(); }},[document.createTextNode(c)]); zone.append(b); });
-    by('#filterAll').onclick=()=>{ state.filters.cat=''; document.querySelectorAll('#categoryChips .chip').forEach(x=>x.setAttribute('aria-pressed','false')); by('#filterAll').setAttribute('aria-pressed','true'); applyFilters(); }
-    const sel = by('#brand'); sel.innerHTML = '<option value="">Toutes</option>' + brands.map(b=>`<option>${b}</option>`).join('');
+    cats.forEach(c=>{
+      const count = state.all.filter(p=>p.category===c).length;
+      const b=el('button',{class:'chip', role:'button', 'aria-pressed':'false', onClick:()=>{ document.querySelectorAll('#categoryChips .chip').forEach(x=>x.setAttribute('aria-pressed','false')); by('#filterAll').setAttribute('aria-pressed','false'); by('#filterPromo').setAttribute('aria-pressed','false'); b.setAttribute('aria-pressed','true'); state.filters.cat=c; state.filters.promo=false; applyFilters(); }},[document.createTextNode(`${c} (${count})`)]);
+      zone.append(b);
+    });
+
+    by('#filterAll').onclick=()=>{ state.filters.cat=''; state.filters.promo=false; document.querySelectorAll('#categoryChips .chip').forEach(x=>x.setAttribute('aria-pressed','false')); by('#filterAll').setAttribute('aria-pressed','true'); by('#filterPromo').setAttribute('aria-pressed','false'); applyFilters(); }
+    by('#filterPromo').onclick=()=>{ state.filters.cat=''; state.filters.promo=true; document.querySelectorAll('#categoryChips .chip').forEach(x=>x.setAttribute('aria-pressed','false')); by('#filterAll').setAttribute('aria-pressed','false'); by('#filterPromo').setAttribute('aria-pressed','true'); applyFilters(); }
+
+    const sel = by('#brand'); sel.innerHTML = '<option value="">Toutes</option>' + brandsAll.map(b=>`<option>${b}</option>`).join('');
   }
 
   function applyFilters(){
     const q = state.filters.q.trim().toLowerCase();
-    const {cat, brand, priceMax} = state.filters;
+    const {cat, brand, priceMax, promo} = state.filters;
     let items = state.all.filter(p=>{
       const inQ = !q || ((`${p.name||''} ${p.description||''} ${p.brand||''} ${p.model||''}`).toLowerCase().includes(q));
       const inCat = !cat || p.category === cat;
       const inBrand = !brand || p.brand === brand;
       const price = Number(p.promoPrice ?? p.price ?? 0);
       const inPrice = price <= priceMax;
-      return inQ && inCat && inBrand && inPrice;
+      const inPromo = !promo || (p.promoPrice && Number(p.promoPrice) < Number(p.price||0));
+      return inQ && inCat && inBrand && inPrice && inPromo;
     });
-    items.sort((a,b)=>{ const pa=Number(a.promoPrice??a.price??0); const pb=Number(b.promoPrice??b.price??0); switch(state.sort){ case 'priceAsc': return pa-pb; case 'priceDesc': return pb-pa; case 'rating': return (b.rating||0)-(a.rating||0); case 'new': return new Date(b.createdAt||0)-new Date(a.createdAt||0); default: return 0; } });
-    state.view = items; renderGrid();
+
+    // Tri
+    items.sort((a,b)=>{
+      const pa=Number(a.promoPrice??a.price??0); const pb=Number(b.promoPrice??b.price??0);
+      switch(state.sort){
+        case 'priceAsc': return pa-pb;
+        case 'priceDesc': return pb-pa;
+        case 'rating': return (b.rating||0)-(a.rating||0);
+        case 'new': return new Date(b.createdAt||0)-new Date(a.createdAt||0);
+        default: return featuredScore(b) - featuredScore(a); // Recommandés
+      }
+    });
+
+    state.view = items;
+    renderBrandCounts();
+    renderGrid();
+    by('#resultCount').textContent = `${items.length} produit${items.length>1?'s':''}`;
+  }
+
+  function featuredScore(p){
+    const now = Date.now();
+    const price = Number(p.promoPrice??p.price??0);
+    const base = 0
+      + (p.promoPrice && Number(p.promoPrice) < Number(p.price||0) ? 40 : 0)
+      + (Number(p.rating||0) * 6)
+      + (p.stock>0 ? 8 : -50)
+      + Math.max(0, 20 - Math.min(20, (now - new Date(p.createdAt||0)) / 864e5)); // récence max 20
+    return base - price/1000; // petit bonus aux articles moins chers
+  }
+
+  function renderBrandCounts(){
+    const {cat, promo} = state.filters;
+    const brands = [...new Set(state.all.map(p=>p.brand).filter(Boolean))].sort();
+    const sel = by('#brand');
+    const options = ['<option value="">Toutes</option>'];
+    brands.forEach(b=>{
+      const count = state.all.filter(p=>(!cat||p.category===cat) && (!promo || (p.promoPrice && Number(p.promoPrice) < Number(p.price||0))) && p.brand===b).length;
+      options.push(`<option ${state.filters.brand===b?'selected':''}>${b} (${count})</option>`);
+    });
+    sel.innerHTML = options.join('');
   }
 
   function renderGrid(){ const grid=by('#produits'); grid.innerHTML=''; if(!state.view.length){ grid.append(el('div',{class:'card'},[el('div',{class:'content'},[el('h3',{html:'Aucun produit trouvé'}), el('p',{class:'brand',html:"Essayez d'élargir les filtres ou de supprimer la recherche."})]) ])); return; } for(const p of state.view){ grid.append(renderCard(p)); } }
@@ -371,7 +439,7 @@
     if(hasPromo) priceRow.append(el('div',{class:'old', html:money(Number(p.price||0))}));
 
     const actions = el('div',{class:'actions'});
-    const btn = el('button',{class:'btn primary', onClick:()=>openModal(p)},[document.createTextNode('Voir & ajouter')]);
+    const btn = el('button',{class:'btn primary', onClick:()=>openModal(p)},[el('img',{class:'ico',width:18,height:18,alt:'Ajouter',src:'https://img.icons8.com/?size=18&id=RZVvpEvg0RO9&format=png'}), document.createTextNode('Voir & ajouter')]);
     const like = el('button',{class:'btn secondary', onClick:()=>saveWish(p)},[document.createTextNode('♡')]);
     actions.append(btn, like);
 
@@ -402,16 +470,42 @@
   function renderCart(){ const zone=by('#cartItems'); zone.innerHTML=''; let sub=0, savings=0, count=0; const placeholder='https://images.unsplash.com/photo-1510557880182-3f8c5f7b4a49?q=80&w=800&auto=format&fit=crop'; for(const it of state.cart){ sub += (Number(it.price)||0) * (Number(it.qty)||1); count += Number(it.qty)||0; const row=el('div',{class:'cart-item'}); row.append(el('img',{src:it.image||placeholder, alt:it.name||'Produit', loading:'lazy', onError:(e)=>{e.target.src=placeholder}})); const meta=el('div'); meta.append(el('div',{class:'title', html:it.name||'Produit'})); if(it.opts && Object.keys(it.opts).length){ const small=Object.entries(it.opts).map(([k,v])=>`${k}: ${v.value}`).join(' • '); meta.append(el('div',{class:'brand', html:small})); } const controls=el('div',{style:'display:flex;flex-direction:column;gap:6px;align-items:end'}); controls.append(el('div',{class:'now', html:money(Number(it.price)||0)})); const qty=el('label',{class:'qty'}); const minus=el('button',{onClick:()=>changeQty(it.id, (Number(it.qty)||1)-1)},[document.createTextNode('−')]); const num=el('input',{type:'number', value:it.qty, min:'1', onChange:(e)=>changeQty(it.id, Number(e.target.value||1))}); const plus=el('button',{onClick:()=>changeQty(it.id, (Number(it.qty)||1)+1)},[document.createTextNode('+')]); qty.append(minus,num,plus); const rm=el('button',{class:'chip', onClick:()=>removeFromCart(it.id)},[document.createTextNode('Retirer')]); controls.append(qty, rm); row.append(meta,controls); zone.append(row); }
     by('#subTotal').textContent = money(sub); by('#savings').textContent = money(savings); by('#cartCount').textContent = count; by('#miniCartCount').textContent = count; by('#miniCartTotal').textContent = money(sub); by('#miniCart').style.display = count? 'flex':'none'; }
 
-  let toastTimer; function toast(msg){ clearTimeout(toastTimer); let t=document.getElementById('toast'); if(!t){ t=el('div',{id:'toast', style:'position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:.6rem 1rem;border-radius:999px;box-shadow:var(--shadow-lg);z-index:80'}); document.body.append(t);} t.textContent=msg; t.style.opacity='1'; toastTimer=setTimeout(()=>{t.style.opacity='0'},1500); }
+  let toastTimer; function toast(msg){ clearTimeout(toastTimer); let t=document.getElementById('toast'); if(!t){ t=el('div',{id:'toast', style:'position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:.6rem 1rem;border-radius:999px;box-shadow:var(--shadow-lg);z-index:80'}); document.body.append(t);} t.textContent=msg; t.style.opacity='1'; toastTimer=setTimeout(()=>{t.style.opacity='0'},1700); }
 
+  // Interactions barre d'outils
   by('#q').addEventListener('input', debounce((e)=>{ state.filters.q=e.target.value; applyFilters(); },160));
-  by('#brand').addEventListener('change', (e)=>{ state.filters.brand=e.target.value; applyFilters(); });
+  by('#brand').addEventListener('change', (e)=>{ state.filters.brand=e.target.value.replace(/ \(.*\)$/,''); applyFilters(); });
   by('#sort').addEventListener('change', (e)=>{ state.sort=e.target.value; applyFilters(); });
   by('#price').addEventListener('input', (e)=>{ state.filters.priceMax=Number(e.target.value); by('#priceValue').textContent = state.filters.priceMax + '€'; applyFilters(); });
+  by('#clearFilters').onclick=()=>{ state.filters={ q:"", cat:"", brand:"", priceMax:3000, promo:false }; by('#q').value=''; by('#price').value=3000; by('#priceValue').textContent='3000€'; document.querySelectorAll('#categoryChips .chip').forEach(x=>x.setAttribute('aria-pressed','false')); by('#filterAll').setAttribute('aria-pressed','true'); by('#filterPromo').setAttribute('aria-pressed','false'); applyFilters(); }
+
+  // Navigation/CTA
   by('#openCart').onclick=()=>{ openDrawer(true) };
   by('#closeCart').onclick=()=>{ openDrawer(false) };
   by('#miniCart').onclick=()=>{ openDrawer(true) };
   by('#modalAdd').onclick=()=>{ const p=state.selected; const qty=Number(by('#qtyInput').value||1); addToCart(p, qty); closeModal(); };
+  by('#ctaNew').addEventListener('click',()=>{ state.sort='new'; by('#sort').value='new'; applyFilters(); });
+  by('#ctaPromo').addEventListener('click',(e)=>{ e.preventDefault(); state.filters.promo=true; by('#filterAll').setAttribute('aria-pressed','false'); by('#filterPromo').setAttribute('aria-pressed','true'); applyFilters(); document.getElementById('produits').scrollIntoView({behavior:'smooth'}); });
+
+  // Support popover + liens
+  const supportBtn=by('#supportBtn'); const pop=by('#supportPopover');
+  supportBtn.addEventListener('click',()=>{ pop.classList.toggle('open'); });
+  document.addEventListener('click',(e)=>{ if(!pop.contains(e.target) && !supportBtn.contains(e.target)) pop.classList.remove('open'); });
+  by('#openChat').addEventListener('click',(e)=>{ e.preventDefault(); toast('Chat 24/7 bientôt disponible ✨'); pop.classList.remove('open'); });
+
+  // Liens placeholders cliquables
+  document.querySelectorAll('a[data-future], a[href="#"]').forEach(a=>{
+    a.addEventListener('click',(e)=>{ e.preventDefault(); toast('Cette page arrive bientôt 🚧'); });
+  });
+
+  // Paiement fictif
+  by('#checkoutBtn').addEventListener('click',()=>{
+    if(!state.cart.length){ toast('Votre panier est vide 😿'); return; }
+    const order={ id:'GF-'+Math.random().toString(36).slice(2,8).toUpperCase(), ts:Date.now(), items:state.cart, amount: by('#miniCartTotal').textContent };
+    localStorage.setItem('gf_last_order', JSON.stringify(order));
+    state.cart=[]; persistCart(); renderCart(); openDrawer(false);
+    toast('✅ Commande '+order.id+' confirmée ! (démo)');
+  });
 
   function openDrawer(v){ const d=by('#cartDrawer'); if(v){ d.classList.add('open'); d.setAttribute('aria-hidden','false'); } else { d.classList.remove('open'); d.setAttribute('aria-hidden','true'); } }
   function debounce(fn,ms){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms) } }
