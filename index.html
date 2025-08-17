@@ -2,295 +2,124 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>GF Store — Boutique high-tech</title>
-  <meta name="description" content="GF Store — Électronique premium : PC, consoles, montres connectées, écouteurs et accessoires. Livraison gratuite, assistance 24/7, paiement sécurisé." />
-  <meta name="theme-color" content="#0ea5a4" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GF Store — Test chargement produits</title>
   <style>
-    :root{ --bg:#f6f7fb; --card:#ffffff; --ink:#0f172a; --muted:#667085; --line:#e5e7eb;
-      --brand:#0ea5a4; --accent:#06b6d4; --shadow:0 10px 30px rgba(15,23,42,.08);
-      --shadow-lg:0 30px 60px rgba(15,23,42,.14); --r:16px; --container:1200px; }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-      background:linear-gradient(180deg,var(--bg),#e9eef6 160%);color:var(--ink)}
-    a{color:inherit;text-decoration:none} img{max-width:100%;display:block}
-
-    .top{position:sticky;top:0;z-index:60;background:linear-gradient(90deg,#0b1220,#0d1b2a);color:#fff}
-    .top .wrap{max-width:var(--container);margin:auto;padding:10px 14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-    .pill{background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border-radius:999px;padding:6px 10px;font-weight:700}
-
-    header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:38px;z-index:50}
-    .bar{max-width:var(--container);margin:auto;padding:12px 14px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
-    .brand{display:flex;gap:10px;align-items:center;font-weight:800}
-    .logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--accent));display:grid;place-items:center;color:#fff}
-    .search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#f8fafc;border-radius:999px;padding:8px 10px}
-    .search input{flex:1;border:0;background:transparent;outline:none}
-    .actions{display:flex;gap:8px;align-items:center}
-    .btn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;box-shadow:var(--shadow);cursor:pointer}
-
-    .tools{position:sticky;top:98px;background:rgba(255,255,255,.7);backdrop-filter:blur(6px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-    .tools .wrap{max-width:var(--container);margin:auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 14px}
-    .chip{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;cursor:pointer}
-    .chip[aria-pressed="true"]{background:linear-gradient(90deg,var(--brand),var(--accent));color:#fff;border-color:transparent}
-    .field{display:flex;gap:8px;align-items:center}
-    .input,.select{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}
-
-    .grid{max-width:var(--container);margin:16px auto;display:grid;grid-template-columns:repeat(12,1fr);gap:16px;padding:0 14px}
-    .card{grid-column:span 3;background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:12px;display:flex;flex-direction:column;gap:10px}
-    .card img{width:100%;aspect-ratio:4/3;object-fit:contain;border-radius:12px;background:linear-gradient(180deg,#f7fafc,#fff)}
-    .meta{display:flex;justify-content:space-between;align-items:center}
-    .title{font-weight:800}.price{font-weight:900}.old{color:var(--muted);text-decoration:line-through;margin-left:6px}
-    .tags{display:flex;gap:6px;flex-wrap:wrap}.tag{background:#f0f9f9;color:#0b938f;padding:6px 8px;border-radius:8px;font-size:.82rem;font-weight:700}
-    .row{display:flex;gap:8px;margin-top:auto}
-
-    .drawer{position:fixed;inset:0 0 0 auto;width:min(420px,100%);background:#fff;border-left:1px solid var(--line);box-shadow:var(--shadow-lg);transform:translateX(100%);transition:transform .25s ease;z-index:70;display:flex;flex-direction:column}
-    .drawer.open{transform:translateX(0)}
-    .drawer .head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:12px}
-    .drawer .items{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
-    .cart-item{display:flex;gap:10px;align-items:center;border:1px dashed var(--line);border-radius:10px;padding:8px}
-    .qty{display:inline-flex;border:1px solid var(--line);border-radius:8px}
-    .qty button{width:28px;height:28px}.qty input{width:40px;border:0;text-align:center}
-
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:80}
-    .modal.open{display:flex}
-    .dialog{background:#fff;max-width:920px;width:100%;border-radius:16px;box-shadow:var(--shadow-lg);padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
-
-    @media (max-width:1100px){ .card{grid-column:span 4} }
-    @media (max-width:900px){ .card{grid-column:span 6} .dialog{grid-template-columns:1fr} .tools{top:86px} }
-    @media (max-width:640px){ .card{grid-column:span 12} header{top:32px} .tools{top:120px} }
+    body{font-family:system-ui,Arial;margin:20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+    .card{border:1px solid #ddd;border-radius:10px;padding:10px;background:#fafafa}
+    .card img{max-width:100%;height:140px;object-fit:contain;background:#fff;border-radius:8px}
+    #status{padding:10px;border-radius:8px;margin:10px 0;background:#f1f5f9}
+    code{background:#eef;padding:2px 6px;border-radius:6px}
   </style>
 </head>
 <body>
-  <div class="top"><div class="wrap">
-    <span class="pill">🚚 Livraison gratuite &lt; 7 jours</span>
-    <span class="pill">💬 Assistance 24/7</span>
-    <span class="pill">🛡️ Garantie min. 12 mois</span>
-    <span class="pill">🔐 Paiement sécurisé</span>
-  </div></div>
+  <h1>GF Store — Chargement des produits</h1>
 
-  <header role="banner">
-    <div class="bar">
-      <div class="brand"><div class="logo">GF</div><div>GF Store</div></div>
-      <label class="search" role="search"><span>🔎</span><input id="q" placeholder="Rechercher : iPhone, AirPods, PC…" /></label>
-      <div class="actions"><button class="btn" id="cartBtn">Panier (<span id="cartCount">0</span>)</button></div>
-    </div>
-  </header>
+  <!-- Zone d'état : succès / erreurs -->
+  <div id="status">Chargement…</div>
 
-  <section class="tools" role="region" aria-label="Filtres">
-    <div class="wrap">
-      <div id="catBar" style="display:flex;gap:8px;flex-wrap:wrap"></div>
-      <div class="field"><label for="brand">Marque</label><select id="brand" class="select"><option value="">Toutes</option></select></div>
-      <div class="field"><label for="order">Tri</label>
-        <select id="order" class="select">
-          <option value="best">Pertinence</option>
-          <option value="asc">Prix ↑</option>
-          <option value="desc">Prix ↓</option>
-          <option value="az">Nom A→Z</option>
-          <option value="rate">Note ⭐</option>
-        </select>
-      </div>
-      <div class="field"><label for="pmax">Prix max</label><input id="pmax" class="input" type="number" min="0" value="3000" style="width:120px"></div>
-      <button id="reset" class="btn">Réinitialiser</button>
-    </div>
-  </section>
-
-  <main>
-    <div id="res" style="max-width:var(--container);margin:10px auto;color:var(--muted);padding:0 14px">Chargement…</div>
-    <section id="grid" class="grid" aria-live="polite"></section>
-  </main>
-
-  <aside id="drawer" class="drawer" aria-hidden="true" role="dialog" aria-label="Panier">
-    <div class="head"><strong>Votre panier</strong><button class="btn" id="closeCart">Fermer</button></div>
-    <div class="items" id="citems"></div>
-    <div style="padding:12px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center">
-      <div><strong>Total:</strong> <span id="ctotal">0 €</span></div>
-      <button class="btn" id="checkout">Payer</button>
-    </div>
-  </aside>
-
-  <div id="preview" class="modal" aria-hidden="true">
-    <div class="dialog">
-      <div><img id="pimg" alt="" style="width:100%;height:320px;object-fit:contain;border-radius:12px"/></div>
-      <div>
-        <h3 id="ptitle" style="margin:0"></h3>
-        <div id="pbrand" style="color:var(--muted)"></div>
-        <div id="pprice" style="font-weight:900;margin:6px 0"></div>
-        <p id="pdesc" style="color:var(--muted)"></p>
-        <div class="row"><button class="btn" id="padd">Ajouter au panier</button><button class="btn" id="pclose">Fermer</button></div>
-      </div>
-    </div>
-  </div>
-
-  <footer style="max-width:var(--container);margin:20px auto 40px;color:var(--muted);padding:0 14px">© GF Store — Conditions & confidentialité</footer>
+  <!-- Conteneur des produits -->
+  <div id="list" class="grid"></div>
 
   <script>
-  const $ = s => document.querySelector(s);
-  const $$ = s => Array.from(document.querySelectorAll(s));
-  const EUR = new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'});
-  const money = v => typeof v==='number'? EUR.format(v) : (v||'');
-  const PLACEHOLDER = 'https://via.placeholder.com/800x600?text=GF+Store';
-  const firstImage = p => p && (p.imageCover || (Array.isArray(p.images)&&p.images[0]) || p.image) || PLACEHOLDER;
-  const norm = s => (s || '').toString().toLowerCase(); // simple (pas d'accents)
+  // ——————————————————————————————————————————————————————————
+  //  Page test MINIMALE pour charger un JSON de produits
+  //  1) Placez votre fichier ici :  data/products.json
+  //  2) Ou passez une URL en paramètre : ?data=/GFSTORE/data/products.json
+  //  3) N'ouvrez PAS le fichier en file:// (Chrome bloque fetch). Servez en http(s).
+  // ——————————————————————————————————————————————————————————
 
-  const state = { items:[], view:[], q:'', cat:null, brand:'', pmax:3000, order:'best', cart: JSON.parse(localStorage.getItem('gf_cart_v1')||'[]') };
+  const $ = sel => document.querySelector(sel);
+  const fmt = n => typeof n === "number"
+    ? new Intl.NumberFormat("fr-FR",{style:"currency",currency:"EUR"}).format(n)
+    : (n ?? "");
 
-  const CART = {
-    count(){ return state.cart.reduce((s,i)=>s+i.qty,0); },
-    total(){ return state.cart.reduce((s,i)=>s+i.qty*i.price,0); },
-    save(){ localStorage.setItem('gf_cart_v1', JSON.stringify(state.cart)); $('#cartCount').textContent=this.count(); $('#ctotal').textContent=money(this.total()); },
-    add(p){ const id=p.id||p.sku||p.name; const it=state.cart.find(x=>x.id===id); if(it) it.qty++; else state.cart.push({id, title:p.name, price:Number(p.promoPrice??p.price)||0, image:firstImage(p), qty:1}); this.save(); renderCart(); }
-  };
+  // Permet de forcer une URL via ?data=...
+  const override = new URLSearchParams(location.search).get("data");
 
-  async function loadProducts(){
-    const override = new URLSearchParams(location.search).get('data');
-    const CANDIDATES = [override,'data/products.json','./data/products.json','products.json','./products.json','data/produits.json','./data/produits.json','/GFSTORE/data/products.json','/GFSTORE/products.json','/GFSTORE/data/produits.json'].filter(Boolean);
-    const normalize = j => Array.isArray(j)? j : (Array.isArray(j && j.products)? j.products : (Array.isArray(j && j.items)? j.items : (Array.isArray(j && j.data)? j.data : null)));
+  // Chemins testés (compatibles GitHub Pages)
+  const CANDIDATES = [
+    override,
+    "data/products.json","./data/products.json",
+    "data/produits.json","./data/produits.json",
+    "products.json","./products.json",
+    "/GFSTORE/data/products.json","/GFSTORE/products.json","/GFSTORE/data/produits.json"
+  ].filter(Boolean);
 
-    const attempts=[]; let found=null;
-    for(const u of CANDIDATES){
-      try{ const r=await fetch(u,{cache:'no-store'}); if(!r.ok) throw new Error('HTTP '+r.status);
-        const raw=await r.json(); const arr=normalize(raw); if(!arr) throw new Error('JSON non conforme'); found={url:u,data:arr}; break; }
-      catch(e){ attempts.push(u+' → '+(e.message||e)); }
+  // Accepte : [] ou {products:[]}/{items:[]}/{data:[]}
+  const normalize = (j)=> Array.isArray(j) ? j
+    : (Array.isArray(j?.products) ? j.products
+    : (Array.isArray(j?.items) ? j.items
+    : (Array.isArray(j?.data) ? j.data : null)));
+
+  async function tryFetch(url){
+    try{
+      const r = await fetch(url, {cache:"no-store"});
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      // ⚠️ Si votre JSON contient des virgules décimales (ex: 179,99),
+      // c'est invalide en JSON → JSON.parse échouera ici.
+      const raw = await r.json();
+      const arr = normalize(raw);
+      if(!arr) throw new Error("JSON non conforme (attendu: tableau ou {products|items|data}[])");
+      return {ok:true, data:arr, url};
+    }catch(e){
+      return {ok:false, url, error: e?.message || String(e)};
     }
-
-    if(!found){
-      $('#grid').innerHTML=''; const box=document.createElement('div'); box.className='card';
-      const pre=document.createElement('pre'); pre.style.whiteSpace='pre-wrap'; pre.textContent=attempts.join('\n');
-      box.innerHTML='<strong>Impossible de charger les produits</strong><p style="color:var(--muted)">Placez le fichier dans <code>data/products.json</code> ou passez <code>?data=/GFSTORE/data/products.json</code>.</p>';
-      box.append(pre); $('#grid').append(box); $('#res').textContent='Erreur de chargement'; return;
-    }
-
-    state.items = found.data.map((p,i)=>({
-      id:p.id||p.sku||'p-'+i,
-      name:p.name||p.nom||'Produit',
-      brand:p.brand||p.marque||'',
-      category:p.category||p.categorie||'',
-      price:Number(p.price??p.prix??0),
-      promoPrice:p.promoPrice??p.promoPrix??null,
-      rating:Number(p.rating??p.note??0),
-      stock:p.stock??null,
-      description:p.description||'',
-      images:Array.isArray(p.images)?p.images:(p.image?[p.image]:[]),
-      imageCover:p.imageCover||undefined,
-      createdAt:p.createdAt||null,
-      _raw:p
-    }));
-
-    $('#res').textContent='Chargé depuis: '+found.url+' • '+state.items.length+' produit(s)';
-    buildFilters(); apply(); CART.save();
   }
 
-  function buildFilters(){
-    const cats = Array.from(new Set(state.items.map(p=>p.category).filter(Boolean))).sort();
-    const bar=$('#catBar'); bar.innerHTML='';
-    const mk=(label,val)=>{ const b=document.createElement('button'); b.className='chip'; b.textContent=label; b.setAttribute('aria-pressed', String(state.cat===val));
-      b.onclick=()=>{ state.cat = (state.cat===val)? null : val; update(); apply(); }; return b; };
-    bar.appendChild(mk('Toutes', null)); cats.forEach(c=> bar.appendChild(mk(c,c)));
-    function update(){ $$('#catBar .chip').forEach(btn=>{ const val = btn.textContent==='Toutes'? null : btn.textContent; btn.setAttribute('aria-pressed', String(state.cat===val)); }); }
-
-    const brands = Array.from(new Set(state.items.map(p=>p.brand).filter(Boolean))).sort();
-    const sel=$('#brand'); sel.innerHTML='<option value="">Toutes</option>'+brands.map(b=>'\n<option>'+b+'</option>').join('');
-  }
-
-  function apply(){
-    let list = state.items.slice();
-    const nq = norm(state.q);
-    if(nq){ const tokens=nq.split(/\s+/).filter(Boolean);
-      list=list.filter(p=>{ const hay=norm((p.name||'')+' '+(p.brand||'')+' '+(p.category||'')+' '+(p.description||'')); return tokens.every(t=>hay.indexOf(t)>-1); }); }
-    if(state.cat) list=list.filter(p=> (p.category||'')===state.cat);
-    if(state.brand) list=list.filter(p=> (p.brand||'')===state.brand);
-    if(state.pmax!=null && state.pmax!=='') list=list.filter(p=> Number(p.promoPrice??p.price||0) <= Number(state.pmax));
-
-    if(state.order==='asc') list.sort((a,b)=>(a.promoPrice??a.price)-(b.promoPrice??b.price));
-    else if(state.order==='desc') list.sort((a,b)=>(b.promoPrice??b.price)-(a.promoPrice??a.price));
-    else if(state.order==='az') list.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
-    else if(state.order==='rate') list.sort((a,b)=>(b.rating||0)-(a.rating||0));
-
-    state.view=list; render();
-    $('#res').textContent = list.length? (list.length+' article(s) trouvés') : 'Aucun résultat';
-  }
-
-  function card(p){
-    const el=document.createElement('article'); el.className='card';
-    const box=document.createElement('div'); box.className='media';
-    const im=document.createElement('img'); im.src=firstImage(p); im.alt=p.name; im.loading='lazy'; im.decoding='async'; im.referrerPolicy='no-referrer'; im.onerror=()=>{ im.src=PLACEHOLDER; }; box.appendChild(im);
-
-    const meta=document.createElement('div'); meta.className='meta';
-    const t=document.createElement('div'); t.className='title'; t.textContent=p.name; meta.appendChild(t);
-    const pr=document.createElement('div'); pr.className='price'; const now=Number(p.promoPrice??p.price); pr.textContent=money(now);
-    if(p.promoPrice && p.promoPrice<p.price){ const was=document.createElement('span'); was.className='old'; was.textContent=money(p.price); pr.appendChild(was); }
-    meta.appendChild(pr);
-
-    const sub=document.createElement('div'); sub.style.color='var(--muted)'; sub.textContent=(p.brand||'')+(p.brand&&p.category?' • ':'')+(p.category||'');
-
-    const tags=document.createElement('div'); tags.className='tags';
-    tags.appendChild(tag('Livraison gratuite'));
-    if(p.stock!=null && p.stock<=5) tags.appendChild(tag('Peu de stock'));
-    if((p.rating||0)>0) tags.appendChild(tag('⭐ '+(p.rating||0).toFixed(1)));
-
-    const row=document.createElement('div'); row.className='row';
-    const more=mkBtn('Aperçu',()=>preview(p));
-    const add=mkBtn('Ajouter',()=>CART.add(p));
-    row.append(more,add);
-
-    const content=document.createElement('div'); content.className='content';
-    content.append(meta,sub,tags,row);
-    el.append(box,content);
-    return el;
-  }
-  function tag(txt){ const s=document.createElement('span'); s.className='tag'; s.textContent=txt; return s; }
-  function mkBtn(txt,fn){ const b=document.createElement('button'); b.className='btn'; b.textContent=txt; b.onclick=fn; return b; }
-
-  function render(){ const g=$('#grid'); g.innerHTML=''; const f=document.createDocumentFragment(); state.view.forEach(p=> f.appendChild(card(p))); g.appendChild(f); }
-
-  function preview(p){
-    $('#ptitle').textContent=p.name;
-    $('#pbrand').textContent=(p.brand||'')+(p.brand&&p.category?' • ':'')+(p.category||'');
-    $('#pdesc').textContent=p.description||'';
-    $('#pprice').textContent = money(p.promoPrice??p.price) + (p.promoPrice? ' ('+money(p.price)+')' : '');
-    const main=$('#pimg'); main.src=firstImage(p); main.alt=p.name;
-    $('#padd').onclick=()=>{ CART.add(p); closePreview(); };
-    document.getElementById('preview').classList.add('open');
-    document.getElementById('preview').setAttribute('aria-hidden','false');
-  }
-  function closePreview(){
-    document.getElementById('preview').classList.remove('open');
-    document.getElementById('preview').setAttribute('aria-hidden','true');
-  }
-  document.getElementById('pclose').onclick=closePreview;
-  document.getElementById('preview').addEventListener('click',e=>{ if(e.target.id==='preview') closePreview(); });
-
-  function renderCart(){
-    const c=state.cart; const box=document.getElementById('citems'); box.innerHTML='';
-    if(!c.length){ box.innerHTML='<div style="color:var(--muted)">Panier vide.</div>'; CART.save(); return; }
-    let tot=0;
-    c.forEach(it=>{
-      tot+=it.price*it.qty;
-      const row=document.createElement('div'); row.className='cart-item';
-      row.innerHTML='<img src="'+it.image+'" alt=""/><div style="flex:1"><div style="font-weight:700">'+it.title+'</div><div style="color:var(--muted);font-size:.92rem">'+it.qty+' × '+money(it.price)+'</div></div>';
-      const ctr=document.createElement('div'); ctr.style.display='flex'; ctr.style.flexDirection='column'; ctr.style.gap='6px';
-      const up=mkBtn('+',()=>chg(it.id, it.qty+1));
-      const dn=mkBtn('−',()=>chg(it.id, it.qty-1));
-      const rm=mkBtn('Retirer',()=>del(it.id));
-      ctr.append(up,dn,rm); row.appendChild(ctr); box.appendChild(row);
+  function render(list){
+    const box = $("#list"); box.innerHTML = "";
+    list.forEach(p=>{
+      const img = p.imageCover || (Array.isArray(p.images) && p.images[0]) || p.image || "https://via.placeholder.com/400x300?text=GF+Store";
+      const price = Number(p.promoPrice ?? p.price ?? 0);
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <img src="${img}" alt="">
+        <h3 style="font-size:1rem;margin:.6rem 0">${p.name || p.nom || p.title || "Produit"}</h3>
+        <div style="color:#555">${p.brand || p.marque || ""} ${p.category ? "• "+p.category : ""}</div>
+        <p style="font-weight:800;margin:.4rem 0">${price ? fmt(price) : ""}</p>
+      `;
+      box.appendChild(card);
     });
-    document.getElementById('ctotal').textContent=money(tot);
-    document.getElementById('cartCount').textContent=CART.count();
   }
-  const chg=(id,q)=>{ const it=state.cart.find(i=>i.id===id); if(!it) return; it.qty=Math.max(1,q); CART.save(); renderCart(); };
-  const del=(id)=>{ state.cart=state.cart.filter(i=>i.id!==id); CART.save(); renderCart(); };
-  document.getElementById('cartBtn').onclick=()=>{ document.getElementById('drawer').classList.add('open'); document.getElementById('drawer').setAttribute('aria-hidden','false'); renderCart(); };
-  document.getElementById('closeCart').onclick=()=>{ document.getElementById('drawer').classList.remove('open'); document.getElementById('drawer').setAttribute('aria-hidden','true'); };
-  document.getElementById('checkout').onclick=()=> alert('Checkout non implémenté dans ce fichier.');
 
-  document.getElementById('q').addEventListener('input', e=>{ state.q=e.target.value; apply(); });
-  document.getElementById('brand').addEventListener('change', e=>{ state.brand=e.target.value; apply(); });
-  document.getElementById('order').addEventListener('change', e=>{ state.order=e.target.value; apply(); });
-  document.getElementById('pmax').addEventListener('input', e=>{ state.pmax=Number(e.target.value||3000); apply(); });
-  document.getElementById('reset').addEventListener('click', ()=>{ state.q=''; state.cat=null; state.brand=''; state.pmax=3000; state.order='best'; document.getElementById('q').value=''; document.getElementById('brand').value=''; document.getElementById('order').value='best'; document.getElementById('pmax').value=3000; apply(); });
+  (async function(){
+    const status = $("#status");
+    const attempts = [];
+    let found = null;
 
-  (async function(){ await loadProducts(); })();
+    // Information utile si ouvert en file://
+    if(location.protocol === "file:"){
+      status.innerHTML = "⚠️ Cette page est ouverte en <code>file://</code>. Les navigateurs bloquent <code>fetch</code> sur fichiers locaux. Lancez un petit serveur (ex. <code>python -m http.server</code>) puis rechargez.";
+    }
+
+    // Essaie chaque chemin, s'arrête au premier succès
+    for(const u of CANDIDATES){
+      const res = await tryFetch(u);
+      attempts.push(res);
+      if(res.ok){ found = res; break; }
+    }
+
+    if(found){
+      // ✅ Succès : on indique la source utilisée
+      status.innerHTML = "✅ Produits chargés depuis : <code>"+found.url+"</code> ("+found.data.length+" éléments)";
+      render(found.data);
+    }else{
+      // ❌ Échec : on affiche un résumé lisible + le détail des erreurs
+      const lines = attempts.map(a => `${a.url} → ${a.ok ? "OK" : a.error}`).join("\n");
+      status.innerHTML = `
+        ❌ Impossible de charger les produits.<br>
+        Essayés : <code>${CANDIDATES.join("</code>, <code>")}</code><br>
+        <details style="margin-top:.5rem"><summary>Voir le détail des erreurs</summary>
+          <pre style="white-space:pre-wrap">${lines}</pre>
+        </details>
+        <small>Vérifiez le chemin, le nom du fichier et le <code>Content-Type: application/json</code> sur GitHub Pages.</small>
+      `;
+      $("#list").innerHTML = "";
+    }
+  })();
   </script>
 </body>
 </html>
