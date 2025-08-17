@@ -383,24 +383,30 @@
     // Permettre un override manuel: /index.html?data=/chemin/vers/products.json
     const override = new URLSearchParams(location.search).get('data');
 
-    // Chemins testés automatiquement (robuste selon où tu déploies)
+    // Chemins testés automatiquement (GitHub Pages friendly)
     const CANDIDATES = [
       override,
       'data/products.json',
       './data/products.json',
-      '/data/products.json',
       'products.json',
       './products.json',
-      '/GFSTORE/data/products.json',
-      '/GFSTORE/products.json'
+      // chemins absolus évités sur GH Pages car le site est servi sous /<repo>/
     ].filter(Boolean);
+
+    // Normalise le JSON quel que soit le shape: [] ou {products:[]}/{items:[]}/{data:[]}
+    const normalize = (j)=> Array.isArray(j) ? j
+      : (Array.isArray(j?.products) ? j.products
+      : (Array.isArray(j?.items) ? j.items
+      : (Array.isArray(j?.data) ? j.data : null)));
 
     async function tryFetch(url){
       try{
         const r = await fetch(url, {cache:'no-store'});
         if(!r.ok) throw new Error('HTTP '+r.status);
-        const json = await r.json();
-        return {ok:true, data:json, url};
+        const raw = await r.json();
+        const arr = normalize(raw);
+        if(!arr) throw new Error('JSON non conforme (attendu: tableau ou {products|items|data}[])');
+        return {ok:true, data:arr, url};
       }catch(e){ return {ok:false, error:e?.message||String(e), url}; }
     }
 
@@ -412,21 +418,21 @@
       if(res.ok){ found = res; break; }
     }
 
-    if(found && Array.isArray(found.data)){
+    if(found){
       // Succès
       state.all = found.data;
       document.body.setAttribute('data-products-source', found.url);
       console.info('%cGF Store','background:#111827;color:#fff;padding:2px 6px;border-radius:6px', 'Produits chargés depuis →', found.url);
       hydrateFilters();
       applyFilters();
-      document.getElementById('produits').setAttribute('aria-busy','false');
+      grid.setAttribute('aria-busy','false');
       return;
     }
 
     // Échec → message UX clair + debug
     console.group('%cGF Store – DEBUG produits','background:#fde68a;color:#111;padding:2px 6px;border-radius:6px');
     if(isFile){
-      console.warn('Vous ouvrez le site en file:// → fetch de fichiers locaux est bloqué par le navigateur.');
+      console.warn('Ouverture en file:// → fetch de fichiers locaux bloqué par le navigateur.');
     }
     attempts.forEach(a=>console.warn('Tentative', a.url, '→', a.ok? 'OK' : a.error));
     console.groupEnd();
@@ -435,19 +441,16 @@
     grid.append(el('div',{class:'card'},[
       el('div',{class:'content'},[
         el('h3',{html:'Impossible de charger les produits 😿'}),
-        el('p',{class:'brand',html:`On a tenté&nbsp;: <code>${CANDIDATES.join('</code>, <code>')}</code>`}),
+        el('p',{class:'brand',html:`On a tenté : <code>${CANDIDATES.join('</code>, <code>')}</code>`}),
         el('p',{class:'brand',html: isFile
-          ? `⚠️ Vous avez ouvert <code>index.html</code> en <code>file://</code>. Les navigateurs bloquent <code>fetch</code> sur fichiers locaux. Lancez un petit serveur puis placez le JSON dans <code>/data/products.json</code>.`
-          : `Vérifiez l'emplacement et l'orthographe (ex: <code>products.json</code> vs <code>produits.json</code>) et que le serveur retourne <code>Content-Type: application/json</code>.`}),
+          ? `⚠️ Vous avez ouvert <code>index.html</code> en <code>file://</code>. Lancez un serveur (ex: <code>python -m http.server</code>) et placez le JSON dans <code>/data/products.json</code>.`
+          : `Vérifiez l'emplacement/orthographe (ex: <code>products.json</code> vs <code>produits.json</code>) et le <code>Content-Type: application/json</code>.`}),
         el('div',{html:`
           <details style="margin-top:.5rem"><summary>Voir le détail des erreurs</summary>
-          <pre style="white-space:pre-wrap">${attempts.map(a=>`${a.url} → ${a.ok? 'OK' : a.error}`).join('
-')}</pre>
+          <pre style="white-space:pre-wrap">${attempts.map(a=>`${a.url} → ${a.ok? 'OK' : a.error}`).join('\n')}</pre>
           </details>
           <details style="margin-top:.5rem"><summary>Astuce serveur local</summary>
-          <pre>Python 3 :  python -m http.server 8000
-Node :      npx serve
-Dossier :   / (avec data/products.json)</pre>
+          <pre>Python 3 :  python -m http.server 8000\nNode :      npx serve\nDossier :   / (avec data/products.json)</pre>
           </details>
         `})
       ])
@@ -655,17 +658,19 @@ Dossier :   / (avec data/products.json)</pre>
   function saveWish(p){
     const key = 'gf_wishlist_v1';
     const set = new Set(JSON.parse(localStorage.getItem(key)||'[]'));
-    set.add(p.sku);
+    const id = p.sku || p.id || p.name || Math.random().toString(36).slice(2);
+    set.add(id);
     localStorage.setItem(key, JSON.stringify([...set]));
     toast('Ajouté aux favoris ❤');
   }
 
   // Panier
   function addToCart(p, qty=1){
-    const id = p.sku + '|' + JSON.stringify(p._opts||{});
+    const baseId = p.sku || p.id || p.name || 'itm';
+    const id = baseId + '|' + JSON.stringify(p._opts||{});
     const price = (p.promoPrice ?? p.price) + computeOptionDelta(p);
     const item = state.cart.find(i=>i.id===id);
-    if(item) item.qty += qty; else state.cart.push({id, sku:p.sku, name:p.name, image:p.imageCover || (p.images && p.images[0]) || '', price, qty, opts: p._opts||{}});
+    if(item) item.qty += qty; else state.cart.push({id, sku:baseId, name:p.name, image:p.imageCover || (p.images && p.images[0]) || '', price, qty, opts: p._opts||{}});
     persistCart();
     renderCart();
     toast('Produit ajouté au panier 🛒');
