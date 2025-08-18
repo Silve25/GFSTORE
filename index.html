@@ -12,7 +12,7 @@
     .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
     .brand{display:flex;align-items:center;gap:10px;font-weight:700}
     .brand b{font-size:20px}
-    .brand .logo{height:120px;width:auto;display:block} 
+    .brand .logo{height:140px;width:auto;display:block} 
     .nav{display:flex;gap:10px;align-items:center}
     .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;color:inherit;box-shadow:0 1px 0 rgba(0,0,0,.02)}
     .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
@@ -63,7 +63,7 @@
     .ci{display:grid;grid-template-columns:72px 1fr auto;gap:8px;border:1px solid #e5e7eb;border-radius:12px;padding:8px}
     .ci img{width:72px;height:72px;object-fit:cover;border-radius:8px;background:#f1f5f9}
     .qty{display:flex;align-items:center;gap:6px}
-    .qty button{border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:4px 8px;cursor:pointer}
+    .qty button{border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:2px 6px;cursor:pointer;font-size:12px}
     .sum{margin-top:auto;border-top:1px solid #e5e7eb;padding:12px;display:flex;justify-content:space-between;align-items:center}
     .checkout{display:inline-flex;align-items:center;gap:8px;background:var(--a);color:#fff;text-decoration:none;padding:10px 14px;border-radius:12px}
     .x{cursor:pointer;border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:6px}
@@ -91,6 +91,11 @@
     .chip{display:inline-block;line-height:1;padding:2px 6px;border-radius:999px;background:#f0f9ff;color:#0ea5e9;font-size:11px;border:1px solid #bae6fd}
     .ic-sm{width:14px;height:14px}
     select{border-radius:14px}
+    #icSSL{width:22px;height:22px}
+    .pay-carousel{max-width:var(--w);margin:0 auto 8px;padding:0 12px}
+    .pay-carousel .track{display:flex;gap:12px;overflow:auto;padding:8px 0;scroll-snap-type:x mandatory}
+    .pay-carousel .track a{scroll-snap-align:start;display:flex;align-items:center;justify-content:center;min-width:120px;height:56px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .pay-carousel img{height:22px}
   </style>
 </head>
 <body>
@@ -116,21 +121,28 @@
   </header>
 
   <section class="policies">
-    <div class="policy"><img class="ic" id="icTruck" alt=""> Livraison en 1 semaine</div>
-    <div class="policy"><img class="ic" id="icReturn" alt=""> Retours sous 14 jours max</div>
-    <div class="policy"><img class="ic" id="icRefund" alt=""> Remboursement garanti sous 14 jours</div>
-    <div class="policy"><img class="ic" id="ic4x" alt=""> Paiement en 4x possible</div>
+    <div class="policy two">
+      <div><img class="ic" id="icTruck" alt=""> Livraison en 1 semaine</div>
+      <div><img class="ic" id="icReturn" alt=""> Retours sous 14 jours max</div>
+    </div>
+    <div class="policy two">
+      <div><img class="ic" id="icRefund" alt=""> Remboursement garanti sous 14 jours</div>
+      <div><img class="ic" id="ic4x" alt=""> Paiement en 4x possible</div>
+    </div>
     <div class="policy">
-      <img class="ic" id="icSecure" alt=""> Paiement sécurisé • Crypto acceptés
-      <img class="ic" id="icSSL" alt="Certificat SSL" title="Certificat SSL">
-      <span class="payicons" aria-label="Moyens de paiement">
-        <a href="https://www.visa.com/" target="_blank" rel="noopener" title="Visa"><img alt="Visa" src="https://cdn.simpleicons.org/visa" height="16"></a>
-        <a href="https://www.mastercard.com/" target="_blank" rel="noopener" title="Mastercard"><img alt="Mastercard" src="https://cdn.simpleicons.org/mastercard" height="16"></a>
-        <a href="https://www.paypal.com/" target="_blank" rel="noopener" title="PayPal"><img alt="PayPal" src="https://cdn.simpleicons.org/paypal" height="16"></a>
-        <a href="https://bitcoin.org/" target="_blank" rel="noopener" title="Bitcoin"><img alt="Bitcoin" src="https://cdn.simpleicons.org/bitcoin" height="16"></a>
-        <a href="https://ethereum.org/" target="_blank" rel="noopener" title="Ethereum"><img alt="Ethereum" src="https://cdn.simpleicons.org/ethereum" height="16"></a>
-        <a href="https://www.europeanpaymentscouncil.eu/what-we-do/sepa-instant-credit-transfer" target="_blank" rel="noopener" title="SEPA Instant"><span class="chip">SEPA Instant</span></a>
-      </span>
+      <img class="ic" id="icSSL" alt="Certificat SSL" title="Certificat SSL"> 
+      <strong style="margin-left:6px">Paiement sécurisé • Crypto acceptés</strong>
+    </div>
+  </section>
+
+  <section class="pay-carousel" aria-label="Moyens de paiement">
+    <div class="track">
+      <a href="https://www.visa.com/" target="_blank" rel="noopener" title="Visa"><img alt="Visa" src="https://cdn.simpleicons.org/visa"></a>
+      <a href="https://www.mastercard.com/" target="_blank" rel="noopener" title="Mastercard"><img alt="Mastercard" src="https://cdn.simpleicons.org/mastercard"></a>
+      <a href="https://www.paypal.com/" target="_blank" rel="noopener" title="PayPal"><img alt="PayPal" src="https://cdn.simpleicons.org/paypal"></a>
+      <a href="https://bitcoin.org/" target="_blank" rel="noopener" title="Bitcoin"><img alt="Bitcoin" src="https://cdn.simpleicons.org/bitcoin"></a>
+      <a href="https://ethereum.org/" target="_blank" rel="noopener" title="Ethereum"><img alt="Ethereum" src="https://cdn.simpleicons.org/ethereum"></a>
+      <a href="https://www.europeanpaymentscouncil.eu/what-we-do/sepa-instant-credit-transfer" target="_blank" rel="noopener" title="SEPA Instant"><img alt="SEPA Instant" src="https://img.icons8.com/?size=100&id=7IJfqNBSaJ0N&format=png&color=000000"></a>
     </div>
   </section>
 
@@ -210,7 +222,6 @@
     setSrc('icTruck', ICONS.truck);
     setSrc('icReturn', ICONS.logout);
     setSrc('icRefund', ICONS.refund);
-    setSrc('icSecure', ICONS.checkout);
     setSrc('icCheckout', ICONS.checkout); setSrc('icSearch', ICONS.search); setSrc('icFabCart', ICONS.cart);
     setSrc('icMenu', ICONS.menu);
     setSrc('ic4x', ICONS.fourx);
@@ -340,4 +351,3 @@
   </script>
 </body>
 </html>
-
