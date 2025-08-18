@@ -64,6 +64,7 @@
     .cta{display:grid;gap:10px}
     .cta .btn{position:relative;z-index:2;display:inline-flex;align-items:center;gap:8px;justify-content:center;width:100%;text-align:center;padding:12px;border:0;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer;box-shadow:0 6px 14px rgba(30,64,175,.25)}
     .cta .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(30,64,175,.28)}
+    .btn.paynow{font-size:16px;padding:14px 16px;border:1px solid #0f766e;background:linear-gradient(180deg,#10b981,#047857)}
     .trust{display:grid;gap:6px;font-size:12px}
     .trust .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .trust .row span{display:inline-flex;align-items:center;gap:6px;border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;background:#fff}
@@ -91,6 +92,10 @@
     .img img{width:100%;height:100%;object-fit:cover;border-radius:12px;border:1px solid #e5e7eb;background:#fff}
     .box{padding:12px}
 
+    .fab{position:fixed;right:16px;bottom:16px;z-index:10000;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border:0;border-radius:999px;display:inline-flex;align-items:center;gap:8px;padding:12px 14px;box-shadow:0 12px 28px rgba(30,64,175,.35);cursor:pointer;text-decoration:none}
+    .fab .badge{min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px}
+    .fab img.ic{filter:invert(1)}
+
     footer{background:#fff;border-top:1px solid #e5e7eb}
     .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
 
@@ -113,7 +118,7 @@
   <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
   <header>
     <div class="hwrap">
-      <a href="index.html" class="brand"><img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async"></a>
+      <a href="index.html" class="brand"><img src="https://silve25.github.io/GFSTORE/assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async"></a>
       <nav class="nav">
         <a href="compte.html"><img class="ic" id="icUser" alt=""> Compte</a>
         <a class="iconbtn" href="checkout.html"><img id="cartIcon" class="ic" alt=""> Panier</a>
@@ -168,14 +173,8 @@
             <span><img class="ic" id="icRefund" alt=""> Remboursement garanti</span>
             <span><img class="ic" id="ic4x" alt=""> Paiement en 4x</span>
           </div>
-          <div class="row">
-            <strong>Paiement sécurisé</strong>
-            <img alt="Visa" style="height:22px" src="https://cdn.simpleicons.org/visa">
-            <img alt="Mastercard" style="height:22px" src="https://cdn.simpleicons.org/mastercard">
-            <img alt="PayPal" style="height:22px" src="https://cdn.simpleicons.org/paypal">
-            <img alt="Bitcoin" style="height:22px" src="https://cdn.simpleicons.org/bitcoin">
-            <img alt="Ethereum" style="height:22px" src="https://cdn.simpleicons.org/ethereum">
-          </div>
+          $1
+            <a id="payNowBtn" href="checkout.html" class="btn paynow"><img class="ic" id="icPayNow" alt=""> Payer maintenant</a>
         </div>
       </div>
     </aside>
@@ -200,6 +199,8 @@
     <h3>Produits similaires</h3>
     <div class="grid" id="relGrid"></div>
   </section>
+
+  <a id="fabCart" class="fab" href="checkout.html" aria-label="Aller au paiement"><img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span></a>
 
   <footer>
     <div class="fwrap">
@@ -242,6 +243,7 @@
     const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
     setSrc('icUser', ICONS.user); setSrc('icMenu', ICONS.menu); setSrc('icBuy', ICONS.buy);
     setSrc('icTruck', ICONS.truck); setSrc('icReturn', ICONS.logout); setSrc('icRefund', ICONS.refund); setSrc('ic4x', ICONS.fourx);
+    setSrc('icPayNow', ICONS.checkout); setSrc('icFabCart', ICONS.cart);
 
     // --- Menu déroulant ---
     const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop'); if(menuBtn&&menuDrop){ menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')}); document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); }); }
@@ -251,7 +253,7 @@
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
     const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount();};
     const cartCount=()=>getCart().reduce((s,x)=>s+x.qty,0);
-    const updateCartCount=()=>{ const count=cartCount(); const icon=document.getElementById('cartIcon'); if(icon) icon.src=count>0?ICONS.cartFull:ICONS.cart; };
+    const updateCartCount=()=>{ const count=cartCount(); const icon=document.getElementById('cartIcon'); if(icon) icon.src=count>0?ICONS.cartFull:ICONS.cart; const fbc=document.getElementById('fabCount'); if(fbc) fbc.textContent=count; const fbi=document.getElementById('icFabCart'); if(fbi) fbi.src=count>0?ICONS.cartFull:ICONS.cart; };
 
     // --- Charger le produit (depuis products.json selon ?id=, sinon fallback) ---
     const urlId=new URLSearchParams(location.search).get('id');
@@ -307,11 +309,13 @@
     const stars=document.getElementById('pStars'); const rTxt=document.getElementById('pRatingText');
     // Avis fictifs réalistes
     const reviews=[
-      {name:'Yann S. — Paris',stars:5,date:'2025-08-12',text:"Son top, isolation bluffante. Payé en Bitcoin sur GF Store : transaction validée en quelques minutes, super simple."},
-      {name:'Fatou D. — Lyon',stars:4,date:'2025-08-09',text:"Confortables toute la journée, appels très clairs. J'aurais aimé une appli un peu plus complète, mais pour le prix promo c'est parfait."},
-      {name:'Michel R. — Bruxelles',stars:5,date:'2025-08-05',text:"Acheté pour le télétravail et les trajets. Mode transparence très naturel. Paiement en ETH accepté, nickel !"},
-      {name:'Nadia K. — Marseille',stars:5,date:'2025-08-03',text:"Basses propres, tenue impeccable. Livraison rapide comme promis."},
-      {name:'Kevin A. — Abidjan',stars:4,date:'2025-08-01',text:"Excellente réduction de bruit. Payé en carte, RAS. Service client réactif."}
+      {name:'Camille L. — Paris, FR',stars:5,date:'2025-08-14',text:"Audio précis, basses nettes. Achat en BTC sur GF Store : hyper rapide, confirmé en quelques minutes."},
+      {name:'Jonas K. — Berlin, DE',stars:4,date:'2025-08-12',text:"Très bon confort, ANC efficace dans le métro. Livraison en 5 jours, rien à dire."},
+      {name:'Marta G. — Madrid, ES',stars:5,date:'2025-08-10',text:"Mode transparence très naturel. Payé en ETH, expérience fluide et rassurante."},
+      {name:'Luca P. — Milano, IT',stars:5,date:'2025-08-08',text:"Idéal pour les appels visio. Étui compact, charge rapide pratique."},
+      {name:'Sophie V. — Bruxelles, BE',stars:4,date:'2025-08-07',text:"Bon maintien, aucun décrochage Bluetooth. Prix promo imbattable."},
+      {name:'Tiago R. — Lisboa, PT',stars:5,date:'2025-08-05',text:"Acheté avec crypto : discret et simple. Son immersif, je recommande."},
+      {name:'Emma W. — Amsterdam, NL',stars:5,date:'2025-08-03',text:"Basses propres, appels clairs. Service client réactif chez GF Store."}
     ];
     const avg=reviews.reduce((s,r)=>s+r.stars,0)/reviews.length;
     const full=Math.round(avg);
