@@ -97,7 +97,7 @@
       for(const p of paths){try{const r=await fetch(p); if(r.ok) return r.json();}catch{}}
       throw new Error('Impossible de charger products.json');
     }
-    const €=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    const formatEUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
     const slug=s=>encodeURIComponent(String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''));
 
     // --- Panier (localStorage) ---
@@ -128,7 +128,7 @@
           <div>
             <div style="font-weight:600">${x.name}</div>
             <div style="opacity:.7;font-size:12px">${x.brand||''} • ${x.category||''}</div>
-            <div style="margin-top:6px">${€(x.price)}</div>
+            <div style="margin-top:6px">${formatEUR(x.price)}</div>
           </div>
           <div class="qty">
             <button data-act="dec">–</button>
@@ -137,7 +137,7 @@
             <button data-act="del" title="Retirer" style="margin-left:6px">🗑️</button>
           </div>
         </div>`).join('') : '<div style="opacity:.7">Votre panier est vide.</div>';
-      document.getElementById('cartTotal').textContent=€(cartTotal());
+      document.getElementById('cartTotal').textContent=formatEUR(cartTotal());
     }
 
     // --- DOM réfs ---
@@ -167,7 +167,7 @@
           <div class="box">
             <h3>${p.name}</h3>
             <div class="meta">${p.brand||''} • ${p.category||''}</div>
-            <div class="price">${€(newP)} ${hasPromo?`<s>${€(p.price)}</s> <span class="badge">-${disc}%</span>`:''}</div>
+            <div class="price">${formatEUR(newP)} ${hasPromo?`<s>${formatEUR(p.price)}</s> <span class="badge">-${disc}%</span>`:''}</div>
             <button class="btn add" data-id="${id}" aria-label="Ajouter ${p.name} au panier">Ajouter au panier</button>
           </div>
         </article>`;
