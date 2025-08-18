@@ -53,28 +53,43 @@
 
   <script>
   (async()=>{
-    let res; try{res=await fetch('products.json'); if(!res.ok) throw 0;}catch{res=await fetch('products_pricing_net30.json');}
-    const items=await res.json(), $=s=>document.querySelector(s);
+    // 1) Charger le JSON (priorité au chemin /data/products.json comme dans ton dépôt)
+    async function loadProducts(){
+      const paths=['data/products.json','/data/products.json','products.json'];
+      for(const p of paths){
+        try{const r=await fetch(p); if(r.ok) return r.json();}catch(e){}
+      }
+      throw new Error('Impossible de charger products.json');
+    }
+
+    const items=await loadProducts();
+    const $=s=>document.querySelector(s);
     const q=$('#q'), c=$('#cat'), g=$('#grid'), n=$('#count');
-    const cats=['Toutes catégories', ...Array.from(new Set(items.map(p=>p.category))).sort()];
+
+    // Catégories
+    const cats=['Toutes catégories', ...Array.from(new Set(items.map(p=>p.category))).sort((a,b)=>(''+a).localeCompare(b))];
     c.innerHTML=cats.map(x=>`<option>${x}</option>`).join('');
-    const €=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+
+    // Format prix (éviter un identifiant non ASCII)
+    const formatEUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
     const pickImg=p=>p.imageCover||(p.images&&p.images[0])||'';
 
     function render(){
-      const term=(q.value||'').toLowerCase(), cat=c.value;
+      const term=(q.value||'').toLowerCase().trim();
+      const cat=c.value;
       const list=items.filter(p=> (cat==='Toutes catégories'||p.category===cat) && (`${p.name} ${p.brand||''} ${p.model||''}`.toLowerCase().includes(term)) );
       n.textContent=list.length;
       g.innerHTML=list.map(p=>{
-        const hasPromo=!!p.promoPrice, newP=hasPromo?p.promoPrice:p.price;
-        const disc=Math.round((1-(newP/p.price))*100);
+        const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price;
+        const newP=hasPromo?p.promoPrice:p.price;
+        const disc=hasPromo?Math.round((1-(newP/p.price))*100):0;
         return `
         <article class="card">
           <div class="img"><img loading="lazy" src="${pickImg(p)}" alt="${p.name}"></div>
           <div class="box">
             <h3>${p.name}</h3>
-            <div class="meta">${p.brand||''} • ${p.category}</div>
-            <div class="price">${€(newP)} ${hasPromo?`<s>${€(p.price)}</s> <span class="badge">-${disc}%</span>`:''}</div>
+            <div class="meta">${p.brand||''} • ${p.category||''}</div>
+            <div class="price">${formatEUR(newP)} ${hasPromo?`<s>${formatEUR(p.price)}</s> <span class="badge">-${disc}%</span>`:''}</div>
             <button class="btn" aria-label="Ajouter ${p.name} au panier">Ajouter au panier</button>
           </div>
         </article>`;
