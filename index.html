@@ -12,7 +12,7 @@
     .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
     .brand{display:flex;align-items:center;gap:10px;font-weight:700}
     .brand b{font-size:20px}
-    .brand .logo{height:28px;width:auto;display:block} 
+    .brand .logo{height:56px;width:auto;display:block} 
     .nav{display:flex;gap:10px;align-items:center}
     .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;color:inherit;box-shadow:0 1px 0 rgba(0,0,0,.02)}
     .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
@@ -103,7 +103,7 @@
     <div><img class="ic" id="icTruck" alt=""> Livraison ≤ 1 semaine</div>
     <div><img class="ic" id="icReturn" alt=""> Retours sous 14 jours</div>
     <div><img class="ic" id="icRefund" alt=""> Remboursement garanti</div>
-    <div><img class="ic" id="icSecure" alt=""> Paiement sécurisé • Crypto‑friendly • <strong>Paiement en 4x</strong>
+    <div><img class="ic" id="icSecure" alt=""> Paiement sécurisé Crypto acceptés
       <span class="payicons" aria-label="Moyens de paiement">
         <a href="https://www.wise.com/" target="_blank" rel="noopener" title="Virement bancaire (Wise)"><img alt="Virement" src="https://cdn.simpleicons.org/wise/0f172a" height="16"></a>
         <a href="https://www.visa.com/" target="_blank" rel="noopener" title="Visa"><img alt="Visa" src="https://cdn.simpleicons.org/visa/0f172a" height="16"></a>
@@ -113,6 +113,7 @@
         <a href="https://ethereum.org/" target="_blank" rel="noopener" title="Ethereum"><img alt="Ethereum" src="https://cdn.simpleicons.org/ethereum/0f172a" height="16"></a>
       </span>
     </div>
+    <div><img class="ic" id="ic4x" alt=""> Paiement en 4x</div>
   </section>
 
   <section class="controls">
@@ -161,7 +162,8 @@
       truck: 'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
       logout: 'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
       user: 'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
-      menu: 'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000'
+      menu: 'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
+      trash: 'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000'
     };
 
     // --- Utilitaires ---
@@ -232,7 +234,7 @@
             <button data-act="dec">–</button>
             <span>${x.qty}</span>
             <button data-act="inc">+</button>
-            <button data-act="del" title="Retirer" style="margin-left:6px">🗑️</button>
+            <button data-act="del" title="Retirer" style="margin-left:6px"><img class="ic" src="${ICONS.trash}" alt="Supprimer"></button>
           </div>
         </div>`).join('') : '<div style="opacity:.7">Votre panier est vide.</div>';
       document.getElementById('cartTotal').textContent=formatEUR(cartTotal());
