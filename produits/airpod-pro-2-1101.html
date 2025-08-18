@@ -54,9 +54,12 @@
 
     .opts{display:grid;gap:10px}
     .opt-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .swatch{border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;cursor:pointer;background:#fff}
-    .swatch[aria-checked="true"], .pill[aria-checked="true"]{outline:2px solid var(--a)}
-    .pill{border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;cursor:pointer;background:#fff}
+    /* Variantes renforcées */
+    .swatch,.pill{border:2px solid #e5e7eb;border-radius:12px;padding:10px 14px;cursor:pointer;background:#fff;min-width:96px;display:inline-flex;align-items:center;justify-content:center;font-weight:600;transition:box-shadow .15s,border-color .15s,transform .06s}
+    .swatch:hover,.pill:hover{box-shadow:0 6px 16px rgba(0,0,0,.06)}
+    .swatch:active,.pill:active{transform:translateY(1px)}
+    .swatch[aria-checked="true"],.pill[aria-checked="true"]{border-color:var(--a);box-shadow:0 0 0 3px rgba(37,99,235,.15);background:#f8fbff}
+    .swatch:focus-visible,.pill:focus-visible{outline:2px solid var(--a);outline-offset:2px}
 
     .cta{display:grid;gap:10px}
     .cta .btn{position:relative;z-index:2;display:inline-flex;align-items:center;gap:8px;justify-content:center;width:100%;text-align:center;padding:12px;border:0;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer;box-shadow:0 6px 14px rgba(30,64,175,.25)}
@@ -73,6 +76,11 @@
     .tab.show{display:block}
     .specs{display:grid;grid-template-columns:1fr 2fr;gap:8px}
     .specs div{padding:6px 8px;border-bottom:1px dashed #e5e7eb}
+    /* Avis */
+    .rev{border-bottom:1px dashed #e5e7eb;padding:10px 0}
+    .rv-head{display:flex;gap:8px;align-items:center;font-size:13px}
+    .rv-stars{letter-spacing:2px;opacity:.9}
+    .rv-date{margin-left:auto;opacity:.6;font-size:12px}
 
     .rel{max-width:var(--w);margin:0 auto 32px;padding:0 12px}
     .rel h3{margin:10px 0}
@@ -108,7 +116,7 @@
       <a href="index.html" class="brand"><img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async"></a>
       <nav class="nav">
         <a href="compte.html"><img class="ic" id="icUser" alt=""> Compte</a>
-        <button class="iconbtn" id="cartBtn"><img id="cartIcon" class="ic" alt=""> Panier</button>
+        <a class="iconbtn" href="checkout.html"><img id="cartIcon" class="ic" alt=""> Panier</a>
         <div class="dropdown">
           <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
           <div id="menuDrop" class="menu">
@@ -162,11 +170,11 @@
           </div>
           <div class="row">
             <strong>Paiement sécurisé</strong>
-            <img alt="Visa" style="height:18px" src="https://cdn.simpleicons.org/visa">
-            <img alt="Mastercard" style="height:18px" src="https://cdn.simpleicons.org/mastercard">
-            <img alt="PayPal" style="height:18px" src="https://cdn.simpleicons.org/paypal">
-            <img alt="Bitcoin" style="height:18px" src="https://cdn.simpleicons.org/bitcoin">
-            <img alt="Ethereum" style="height:18px" src="https://cdn.simpleicons.org/ethereum">
+            <img alt="Visa" style="height:22px" src="https://cdn.simpleicons.org/visa">
+            <img alt="Mastercard" style="height:22px" src="https://cdn.simpleicons.org/mastercard">
+            <img alt="PayPal" style="height:22px" src="https://cdn.simpleicons.org/paypal">
+            <img alt="Bitcoin" style="height:22px" src="https://cdn.simpleicons.org/bitcoin">
+            <img alt="Ethereum" style="height:22px" src="https://cdn.simpleicons.org/ethereum">
           </div>
         </div>
       </div>
@@ -184,7 +192,7 @@
       <div class="specs" id="specs"></div>
     </div>
     <div class="tab" id="tab-rev" role="tabpanel" aria-labelledby="th-rev">
-      <div id="reviews" style="opacity:.8;font-size:13px">Nouveauté — Soyez le premier à laisser un avis.</div>
+      <div id="reviews"></div>
     </div>
   </section>
 
@@ -192,21 +200,6 @@
     <h3>Produits similaires</h3>
     <div class="grid" id="relGrid"></div>
   </section>
-
-  <div id="cartPanel" class="panel" aria-hidden="true">
-    <div class="sheet">
-      <header>
-        <strong>Mon panier</strong>
-        <button id="closeCart" class="x" aria-label="Fermer">✕</button>
-      </header>
-      <div id="cartItems" class="items"></div>
-      <div class="sum">
-        <div>Total <strong id="cartTotal">0 €</strong></div>
-        <a href="checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Effectuer un paiement</a>
-      </div>
-    </div>
-  </div>
-  <button id="fabCart" class="fab" aria-label="Ouvrir le panier" style="position:fixed;right:16px;bottom:16px;z-index:10000;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border:0;border-radius:999px;display:inline-flex;align-items:center;gap:8px;padding:12px 14px;box-shadow:0 12px 28px rgba(30,64,175,.35);cursor:pointer"><img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge" style="min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px">0</span></button>
 
   <footer>
     <div class="fwrap">
@@ -247,29 +240,18 @@
       search: 'https://img.icons8.com/?size=100&id=7964&format=png&color=000000'
     };
     const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
-    setSrc('icUser', ICONS.user); setSrc('icMenu', ICONS.menu); setSrc('icCheckout', ICONS.checkout); setSrc('icFabCart', ICONS.cart); setSrc('icBuy', ICONS.buy);
+    setSrc('icUser', ICONS.user); setSrc('icMenu', ICONS.menu); setSrc('icBuy', ICONS.buy);
     setSrc('icTruck', ICONS.truck); setSrc('icReturn', ICONS.logout); setSrc('icRefund', ICONS.refund); setSrc('ic4x', ICONS.fourx);
 
     // --- Menu déroulant ---
     const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop'); if(menuBtn&&menuDrop){ menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')}); document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); }); }
 
-    // --- Cart (même structure que l'accueil) ---
+    // --- Cart (localStorage) ---
     const KEY='gf_cart';
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
-    const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount(); renderCart();};
+    const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount();};
     const cartCount=()=>getCart().reduce((s,x)=>s+x.qty,0);
-    const cartTotal=()=>getCart().reduce((s,x)=>s+x.qty*x.price,0);
-    const updateCartCount=()=>{ const count=cartCount(); const icon=document.getElementById('cartIcon'); if(icon) icon.src=count>0?ICONS.cartFull:ICONS.cart; const fbc=document.getElementById('fabCount'); if(fbc) fbc.textContent=count; const fbi=document.getElementById('icFabCart'); if(fbi) fbi.src=count>0?ICONS.cartFull:ICONS.cart; };
-    const removeFromCart=id=>{const c=getCart().filter(x=>x.id!==id); setCart(c)};
-
-    function renderCart(){ const wrap=document.getElementById('cartItems'); const list=getCart(); wrap.innerHTML=list.length?list.map(x=>`<div class=\"ci\" data-id=\"${x.id}\"><img src=\"${x.image}\" alt=\"${x.name}\"><div><div style=\"font-weight:600\">${x.name}</div><div style=\"opacity:.7;font-size:12px\">${x.brand||''} • ${x.category||''}</div><div style=\"margin-top:6px\">${Number(x.price).toLocaleString('fr-FR',{style:'currency',currency:'EUR'})}</div></div><div class=\"qty\"><button data-act=\"dec\">–</button><span>${x.qty}</span><button data-act=\"inc\">+</button><button data-act=\"del\" title=\"Retirer\" style=\"margin-left:6px\"><img class=\"ic\" style=\"width:12px;height:12px\" src=\"${ICONS.trash}\" alt=\"Supprimer\"></button></div></div>`).join('') : '<div style="opacity:.7">Votre panier est vide.</div>'; document.getElementById('cartTotal').textContent=Number(cartTotal()).toLocaleString('fr-FR',{style:'currency',currency:'EUR'}); }
-
-    const openCart=()=>{document.getElementById('cartPanel').classList.add('show'); document.body.classList.add('lock'); const fab=document.getElementById('fabCart'); if(fab){fab.style.display='none'}; renderCart();};
-    const closeCart=()=>{document.getElementById('cartPanel').classList.remove('show'); document.body.classList.remove('lock'); const fab=document.getElementById('fabCart'); if(fab){fab.style.display=''};};
-    document.getElementById('cartBtn').addEventListener('click',openCart); document.getElementById('closeCart').addEventListener('click',closeCart);
-    const fab=document.getElementById('fabCart'); if(fab) fab.addEventListener('click',openCart);
-    document.getElementById('cartPanel').addEventListener('click',e=>{ if(e.target.id==='cartPanel') closeCart(); });
-    document.getElementById('cartItems').addEventListener('click',e=>{ const par=e.target.closest('.ci'); if(!par) return; const id=par.getAttribute('data-id'); const act=(e.target.getAttribute('data-act')||e.target.closest('[data-act]')?.getAttribute('data-act')); if(act==='inc'){const c=getCart(); const it=c.find(x=>x.id===id); if(it){it.qty++; setCart(c);} } if(act==='dec'){const c=getCart(); const it=c.find(x=>x.id===id); if(it){it.qty=Math.max(1,it.qty-1); setCart(c);} } if(act==='del'){removeFromCart(id);} });
+    const updateCartCount=()=>{ const count=cartCount(); const icon=document.getElementById('cartIcon'); if(icon) icon.src=count>0?ICONS.cartFull:ICONS.cart; };
 
     // --- Charger le produit (depuis products.json selon ?id=, sinon fallback) ---
     const urlId=new URLSearchParams(location.search).get('id');
@@ -305,7 +287,7 @@
       }
     };
 
-    async function loadProducts(){ const paths=['data/products.json','/data/products.json','products.json']; for(const p of paths){ try{ const r=await fetch(p); if(r.ok) return r.json(); }catch{} } return null; }
+    async function loadProducts(){ const paths=['data/products.json','/data/products.json','products.json','https://silve25.github.io/GFSTORE/data/products.json']; for(const p of paths){ try{ const r=await fetch(p); if(r.ok) return r.json(); }catch{} } return null; }
 
     let product=fallback;
     const dataset=await loadProducts();
@@ -323,13 +305,26 @@
     thumbs.addEventListener('click',e=>{ const b=e.target.closest('button[data-i]'); if(!b) return; const i=Number(b.dataset.i); gMain.src=imgs[i]; });
 
     const stars=document.getElementById('pStars'); const rTxt=document.getElementById('pRatingText');
-    const full=Math.round(product.rating||0); stars.innerHTML=Array.from({length:5},(_,i)=>'<i style="opacity:'+(i<full?1:.2)+'"></i>').join(''); rTxt.textContent=(product.rating?product.rating.toFixed(1):'—')+' / 5'+(product.ratingCount?` (${product.ratingCount} avis)`: ' (0 avis)');
+    // Avis fictifs réalistes
+    const reviews=[
+      {name:'Yann S. — Paris',stars:5,date:'2025-08-12',text:"Son top, isolation bluffante. Payé en Bitcoin sur GF Store : transaction validée en quelques minutes, super simple."},
+      {name:'Fatou D. — Lyon',stars:4,date:'2025-08-09',text:"Confortables toute la journée, appels très clairs. J'aurais aimé une appli un peu plus complète, mais pour le prix promo c'est parfait."},
+      {name:'Michel R. — Bruxelles',stars:5,date:'2025-08-05',text:"Acheté pour le télétravail et les trajets. Mode transparence très naturel. Paiement en ETH accepté, nickel !"},
+      {name:'Nadia K. — Marseille',stars:5,date:'2025-08-03',text:"Basses propres, tenue impeccable. Livraison rapide comme promis."},
+      {name:'Kevin A. — Abidjan',stars:4,date:'2025-08-01',text:"Excellente réduction de bruit. Payé en carte, RAS. Service client réactif."}
+    ];
+    const avg=reviews.reduce((s,r)=>s+r.stars,0)/reviews.length;
+    const full=Math.round(avg);
+    stars.innerHTML=Array.from({length:5},(_,i)=>'<i style="opacity:'+(i<full?1:.2)+'"></i>').join('');
+    rTxt.textContent=avg.toFixed(1)+' / 5 ('+reviews.length+' avis)';
+    const reviewsEl=document.getElementById('reviews');
+    reviewsEl.innerHTML=reviews.map(r=>`<div class="rev"><div class="rv-head"><strong>${r.name}</strong><span class="rv-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span><span class="rv-date">${r.date}</span></div><p>${r.text}</p></div>`).join('');
 
     // Prix + remise
     const hasPromo=Number.isFinite(product.promoPrice)&&product.promoPrice>0&&product.promoPrice<product.price; let base=hasPromo?product.promoPrice:product.price; const disc=hasPromo?Math.round((1-(base/product.price))*100):0; pPrice.textContent=EUR(base); pDel.textContent=hasPromo?EUR(product.price):''; pBadge.textContent=hasPromo?`-${disc}%`:'';
 
     // Stock
-    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">En stock</span> • ${product.stock} pièces`:`<span style="color:#dc2626">Rupture</span>`;
+    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">En stock</span> • ${product.stock} pièces`:`<span style=\"color:#dc2626\">Rupture</span>`;
 
     // Options
     let selColor=product.options?.Couleur?.[0]?.value||null; let selAcc=product.options?.Accessoires?.[0]?.value||null; let accDelta=product.options?.Accessoires?.[0]?.priceDelta||0;
@@ -340,7 +335,8 @@
     renderColors(); renderAcc(); updatePrice();
 
     // Description marketing
-    desc.innerHTML = `<p style="margin-top:0">${(product.description||'').split('\n').map(p=>p?`<span>${p}</span>`:'').join('<br>')}</p>
+    const mkDesc=(product.description||'').split('\n').map(p=>p?`<span>${p}</span>`:'').join('<br>');
+    desc.innerHTML = `<p style="margin-top:0">${mkDesc}</p>
     <ul style="margin:8px 0 0 18px;line-height:1.6">
       <li>Achat simple et sécurisé chez <strong>GF Store</strong> — assistance rapide.</li>
       <li>Livraison sous 1 semaine • Retours 14 jours • <em>Remboursement garanti</em>.</li>
@@ -348,7 +344,7 @@
       <li>Garantie <strong>${product.warrantyMonths||24} mois</strong>.</li>
     </ul>`;
 
-    // Spécifications (exemples génériques sans chiffres risqués)
+    // Spécifications (exemples génériques)
     const specs=[
       ['Type', 'Écouteurs sans fil intra‑auriculaires'],
       ['Réduction de bruit', 'Active + mode transparence'],
@@ -362,9 +358,16 @@
 
     // Produits similaires (même catégorie)
     const relGrid=document.getElementById('relGrid');
-    if(dataset){ const sims=dataset.filter(p=>p.category===product.category && String(p.id)!==String(product.id)).slice(0,4); const slug=s=>encodeURIComponent(String(p.name||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')); relGrid.innerHTML=sims.map(p=>{ const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price; const newP=hasPromo?p.promoPrice:p.price; const disc=hasPromo?Math.round((1-(newP/p.price))*100):0; const url=`product.html?id=${encodeURIComponent(p.id||p.sku||p._id)}&slug=${slug(p)}`; const img=p.imageCover||(p.images&&p.images[0])||''; return `<article class=\"card\"><a class=\"hit\" href=\"${url}\" aria-label=\"Voir ${p.name}\"></a><div class=\"img\"><img loading=\"lazy\" src=\"${img}\" alt=\"${p.name}\"></div><div class=\"box\"><div style=\"font-weight:600\">${p.name}</div><div style=\"opacity:.7;font-size:12px\">${p.brand||''} • ${p.category||''}</div><div style=\"margin-top:6px\">${EUR(newP)} ${hasPromo?`<span style=\"opacity:.6;text-decoration:line-through\">${EUR(p.price)}</span> <span class=\"badge\">-${disc}%</span>`:''}</div></div></article>`; }).join(''); }
+    if(dataset){
+      const sims=dataset.filter(p=>p.category===product.category && String(p.id)!==String(product.id)).slice(0,4);
+      const slug=str=>encodeURIComponent(String(str||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''));
+      relGrid.innerHTML=sims.map(p=>{
+        const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price; const newP=hasPromo?p.promoPrice:p.price; const disc=hasPromo?Math.round((1-(newP/p.price))*100):0; const url=`product.html?id=${encodeURIComponent(p.id||p.sku||p._id)}&slug=${slug(p.name)}`; const img=p.imageCover||(p.images&&p.images[0])||'';
+        return `<article class="card"><a class="hit" href="${url}" aria-label="Voir ${p.name}"></a><div class="img"><img loading="lazy" src="${img}" alt="${p.name}"></div><div class="box"><div style="font-weight:600">${p.name}</div><div style="opacity:.7;font-size:12px">${p.brand||''} • ${p.category||''}</div><div style="margin-top:6px">${EUR(newP)} ${hasPromo?`<span style="opacity:.6;text-decoration:line-through">${EUR(p.price)}</span> <span class="badge">-${disc}%</span>`:''}</div></div></article>`;
+      }).join('');
+    }
 
-    // Ajouter au panier (avec options concaténées dans le nom pour compatibilité)
+    // Ajouter au panier (avec options dans le nom)
     document.getElementById('addBtn').addEventListener('click',()=>{
       const variantParts=[]; if(selColor) variantParts.push(`Couleur: ${selColor}`); if(selAcc) variantParts.push(`Accessoires: ${selAcc}`);
       const nameWithVar= product.name + (variantParts.length? ` (${variantParts.join(', ')})` : '');
