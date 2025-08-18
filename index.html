@@ -5,64 +5,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GF Store — Électronique & Multimédia</title>
   <style>
-    :root{--w:1100px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f6f7fb}
-    *{box-sizing:border-box} body{margin:0;font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
-    header{max-width:var(--w);margin:10px auto;padding:0 12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-    header h1{margin:0;font-size:22px}
+    :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
+    *{box-sizing:border-box} body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
+    a{color:inherit}
+    header{position:sticky;top:0;z-index:50;background:#fff;backdrop-filter:saturate(140%) blur(4px);border-bottom:1px solid #e5e7eb}
+    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .brand b{font-size:20px}
     .nav{display:flex;gap:10px;align-items:center}
-    .nav a, .iconbtn{padding:8px 10px;border:1px solid #e5e7eb;background:#fff;border-radius:10px;text-decoration:none;color:inherit}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;color:inherit;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
     .iconbtn{cursor:pointer}
-    .banner{background:#111;color:#fff;text-align:center;padding:10px 14px}
-    .policies{max-width:var(--w);margin:10px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
-    .policies div{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:8px 10px}
+    .ic{width:16px;height:16px;display:inline-block}
+    .banner{background:linear-gradient(90deg,#111,#1f2937);color:#fff;text-align:center;padding:10px 14px}
+    .policies{max-width:var(--w);margin:12px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+    .policies div{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:10px 12px}
     .controls{max-width:var(--w);margin:8px auto;padding:0 12px;display:flex;gap:8px;align-items:center}
-    input[type=search],select{flex:1;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}
-    .grid{max-width:var(--w);margin:10px auto 24px;padding:0 12px;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
-    .card{position:relative;background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+    input[type=search],select{flex:1;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+    .grid{max-width:var(--w);margin:12px auto 28px;padding:0 12px;display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+    .card{position:relative;background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .card:hover{box-shadow:0 10px 24px rgba(0,0,0,.08);transform:translateY(-1px)}
     .hit{position:absolute;inset:0}
     .img{aspect-ratio:1/1;background:#f1f5f9;display:grid;place-items:center}
     .img img{width:100%;height:100%;object-fit:cover;display:block}
-    .card .box{padding:10px}
-    h3{font-size:14px;margin:6px 0 6px;min-height:38px}
+    .card .box{padding:12px}
+    h3{font-size:15px;margin:6px 0 6px;min-height:38px}
     .meta{font-size:12px;opacity:.7}
     .price{margin:6px 0 8px;font-weight:700}
-    .price s{font-weight:400;opacity:.6;margin-left:6px}
+    .price s{font-weight:400;opacity:.55;margin-left:6px}
     .badge{background:var(--g);color:#fff;border-radius:999px;padding:2px 8px;margin-left:6px;font-size:12px}
-    .btn{position:relative;z-index:2;margin-top:auto;display:inline-block;width:100%;text-align:center;padding:10px;border:0;border-top:1px solid #e5e7eb;background:var(--a);color:#fff;border-radius:0 0 14px 14px;cursor:pointer}
+    .btn{position:relative;z-index:2;margin-top:auto;display:inline-flex;align-items:center;gap:8px;justify-content:center;width:100%;text-align:center;padding:11px 12px;border:0;border-top:1px solid #e5e7eb;background:var(--a);color:#fff;border-radius:0 0 16px 16px;cursor:pointer}
+    .btn .ic{filter:invert(1)}
     footer{max-width:var(--w);margin:12px auto 40px;padding:0 12px;opacity:.7;font-size:12px}
     /* Cart panel */
-    .panel{position:fixed;inset:0;display:none;background:rgba(0,0,0,.35)}
+    .panel{position:fixed;inset:0;display:none;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:9999}
     .panel.show{display:block}
-    .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid #e5e7eb;display:flex;flex-direction:column}
-    .sheet header{margin:0;padding:12px;border-bottom:1px solid #e5e7eb}
+    .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid #e5e7eb;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
+    .panel.show .sheet{transform:translateX(0)}
+    .sheet header{margin:0;padding:12px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center}
     .sheet .items{padding:12px;overflow:auto;display:flex;flex-direction:column;gap:10px}
     .ci{display:grid;grid-template-columns:72px 1fr auto;gap:8px;border:1px solid #e5e7eb;border-radius:12px;padding:8px}
     .ci img{width:72px;height:72px;object-fit:cover;border-radius:8px;background:#f1f5f9}
     .qty{display:flex;align-items:center;gap:6px}
     .qty button{border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:4px 8px;cursor:pointer}
     .sum{margin-top:auto;border-top:1px solid #e5e7eb;padding:12px;display:flex;justify-content:space-between;align-items:center}
-    .checkout{background:var(--a);color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px}
+    .checkout{display:inline-flex;align-items:center;gap:8px;background:var(--a);color:#fff;text-decoration:none;padding:10px 14px;border-radius:12px}
     .x{cursor:pointer;border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:6px}
     .countbadge{min-width:18px;display:inline-grid;place-items:center;font-size:12px;padding:0 6px;margin-left:4px;border-radius:999px;background:#111;color:#fff}
+    body.lock{overflow:hidden}
   </style>
 </head>
 <body>
   <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles</div>
   <header>
-    <h1>GF Store</h1>
-    <nav class="nav">
-      <a href="index.html">Accueil</a>
-      <a href="compte.html">Compte</a>
-      <a href="checkout.html">Paiement</a>
-      <button class="iconbtn" id="cartBtn">Panier <span id="cartCount" class="countbadge">0</span></button>
-    </nav>
+    <div class="hwrap">
+      <div class="brand"><img id="logoCart" class="ic" alt=""> <b>GF Store</b></div>
+      <nav class="nav">
+        <a href="index.html"><img class="ic" id="icHome" alt=""> Accueil</a>
+        <a href="compte.html"><img class="ic" id="icUser" alt=""> Compte</a>
+        <a href="checkout.html"><img class="ic" id="icPay" alt=""> Paiement</a>
+        <button class="iconbtn" id="cartBtn"><img id="cartIcon" class="ic" alt=""> Panier <span id="cartCount" class="countbadge">0</span></button>
+      </nav>
+    </div>
   </header>
 
   <section class="policies">
-    <div>🚚 Livraison ≤ 1 semaine</div>
-    <div>🔁 Retours sous 14 jours</div>
-    <div>💸 Remboursement garanti (neuf)</div>
-    <div>🔐 Paiement sécurisé + ₿ crypto acceptées</div>
+    <div><img class="ic" id="icTruck" alt=""> Livraison ≤ 1 semaine</div>
+    <div><img class="ic" id="icReturn" alt=""> Retours sous 14 jours</div>
+    <div><img class="ic" id="icRefund" alt=""> Remboursement garanti (neuf)</div>
+    <div><img class="ic" id="icSecure" alt=""> Paiement sécurisé + ₿ crypto</div>
   </section>
 
   <section class="controls">
@@ -75,14 +86,14 @@
 
   <div id="cartPanel" class="panel" aria-hidden="true">
     <div class="sheet">
-      <header style="display:flex;justify-content:space-between;align-items:center">
+      <header>
         <strong>Mon panier</strong>
         <button id="closeCart" class="x" aria-label="Fermer">✕</button>
       </header>
       <div id="cartItems" class="items"></div>
       <div class="sum">
         <div>Total <strong id="cartTotal">0 €</strong></div>
-        <a href="checkout.html" class="checkout">Payer (carte • crypto)</a>
+        <a href="checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Payer (carte • crypto)</a>
       </div>
     </div>
   </div>
@@ -91,6 +102,17 @@
 
   <script>
   (async()=>{
+    // --- Icônes ---
+    const ICONS = {
+      buy: 'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
+      cart: 'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
+      cartFull: 'https://img.icons8.com/?size=100&id=K5Jv3BfpxPYa&format=png&color=000000',
+      checkout: 'https://img.icons8.com/?size=100&id=qVsd2YOgeizO&format=png&color=000000',
+      truck: 'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
+      logout: 'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
+      user: 'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000'
+    };
+
     // --- Utilitaires ---
     async function loadProducts(){
       const paths=['data/products.json','/data/products.json','products.json'];
@@ -99,6 +121,18 @@
     }
     const formatEUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
     const slug=s=>encodeURIComponent(String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''));
+
+    // Peupler les icônes UI
+    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
+    setSrc('logoCart', ICONS.cart);
+    setSrc('icHome', ICONS.buy);
+    setSrc('icUser', ICONS.user);
+    setSrc('icPay', ICONS.checkout);
+    setSrc('icTruck', ICONS.truck);
+    setSrc('icReturn', ICONS.logout);
+    setSrc('icRefund', ICONS.cart);
+    setSrc('icSecure', ICONS.checkout);
+    setSrc('icCheckout', ICONS.checkout);
 
     // --- Panier (localStorage) ---
     const KEY='gf_cart';
@@ -116,7 +150,11 @@
     const setQty=(id,q)=>{const c=getCart(); const it=c.find(x=>x.id===id); if(it){it.qty=Math.max(1,Number(q)||1); setCart(c)}};
     const cartCount=()=>getCart().reduce((s,x)=>s+x.qty,0);
     const cartTotal=()=>getCart().reduce((s,x)=>s+x.qty*x.price,0);
-    const updateCartCount=()=>{document.getElementById('cartCount').textContent=cartCount();};
+    const updateCartCount=()=>{
+      const count=cartCount();
+      document.getElementById('cartCount').textContent=count;
+      const icon=document.getElementById('cartIcon'); if(icon) icon.src=count>0?ICONS.cartFull:ICONS.cart;
+    };
 
     // --- Rendu Panier ---
     function renderCart(){
@@ -168,7 +206,7 @@
             <h3>${p.name}</h3>
             <div class="meta">${p.brand||''} • ${p.category||''}</div>
             <div class="price">${formatEUR(newP)} ${hasPromo?`<s>${formatEUR(p.price)}</s> <span class="badge">-${disc}%</span>`:''}</div>
-            <button class="btn add" data-id="${id}" aria-label="Ajouter ${p.name} au panier">Ajouter au panier</button>
+            <button class="btn add" data-id="${id}" aria-label="Ajouter ${p.name} au panier"><img class="ic" src="${ICONS.buy}" alt=""> Ajouter au panier</button>
           </div>
         </article>`;
       }).join('');
@@ -186,13 +224,12 @@
       }
     });
 
-    document.getElementById('cartBtn').addEventListener('click',()=>{
-      document.getElementById('cartPanel').classList.add('show');
-      renderCart();
-    });
-    document.getElementById('closeCart').addEventListener('click',()=>{
-      document.getElementById('cartPanel').classList.remove('show');
-    });
+    const openCart=()=>{document.getElementById('cartPanel').classList.add('show'); document.body.classList.add('lock'); renderCart();};
+    const closeCart=()=>{document.getElementById('cartPanel').classList.remove('show'); document.body.classList.remove('lock');};
+
+    document.getElementById('cartBtn').addEventListener('click',openCart);
+    document.getElementById('closeCart').addEventListener('click',closeCart);
+    document.getElementById('cartPanel').addEventListener('click',e=>{ if(e.target.id==='cartPanel') closeCart(); });
 
     document.getElementById('cartItems').addEventListener('click',e=>{
       const par=e.target.closest('.ci'); if(!par) return; const id=par.getAttribute('data-id');
