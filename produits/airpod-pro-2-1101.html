@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AirPod Pro 2 — GF Store</title>
+  <style>
+    :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
+    *{box-sizing:border-box} body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
+    a{color:inherit}
+    header{position:sticky;top:0;z-index:50;background:#fff;backdrop-filter:saturate(140%) blur(4px);border-bottom:1px solid #e5e7eb}
+    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .brand .logo{height:40px;width:auto;display:block}
+    .nav{display:flex;gap:10px;align-items:center}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;color:inherit;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
+    .iconbtn{cursor:pointer}
+    .ic{width:16px;height:16px;display:inline-block}
+    .dropdown{position:relative}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
+    .menu.show{display:block}
+    .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
+    .menu a:hover{background:#f3f4f6}
+
+    .banner{background:linear-gradient(90deg,#1e3a8a,#2563eb,#0ea5e9);color:#fff;text-align:center;padding:10px 14px}
+    .banner .timer{font-weight:700;border-radius:999px;padding:2px 8px;background:rgba(255,255,255,.15);display:inline-block}
+    .banner .sep{opacity:.6;padding:0 6px}
+
+    .crumbs{max-width:var(--w);margin:10px auto 0;padding:0 12px;font-size:12px;opacity:.8}
+    .crumbs a{text-decoration:none;color:inherit}
+    .crumbs a:hover{text-decoration:underline}
+
+    .pwrap{max-width:var(--w);margin:10px auto 24px;padding:0 12px;display:grid;gap:16px;grid-template-columns:1.1fr 1fr}
+    .gallery{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:10px;display:grid;gap:10px}
+    .gmain{border:1px solid #e5e7eb;border-radius:14px;display:grid;place-items:center;padding:10px;background:#fff}
+    .gmain img{max-width:100%;max-height:520px;width:auto;height:auto;display:block;border-radius:10px}
+    .thumbs{display:flex;gap:10px;overflow:auto}
+    .thumbs button{border:1px solid #e5e7eb;background:#fff;border-radius:10px;padding:4px;cursor:pointer;min-width:70px}
+    .thumbs img{width:64px;height:64px;object-fit:cover;border-radius:8px;display:block}
+
+    .pinfo{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px}
+    .title{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    h1{font-size:20px;margin:0}
+    .rating{display:inline-flex;align-items:center;gap:6px;font-size:12px}
+    .stars{--s:16px;display:inline-grid;grid-auto-flow:column;gap:2px}
+    .stars i{width:var(--s);height:var(--s);background:linear-gradient(180deg,#fbbf24,#f59e0b);mask:url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z\"/></svg>') no-repeat center/contain;display:block;opacity:.9}
+    .brandchip{font-size:11px;padding:2px 6px;border-radius:999px;background:#f1f5f9;border:1px solid #e5e7eb}
+
+    .pricebox{display:flex;align-items:baseline;gap:10px}
+    .price{font-size:22px;font-weight:800}
+    .del{opacity:.55;text-decoration:line-through}
+    .badge{background:var(--g);color:#fff;border-radius:999px;padding:2px 8px;font-size:12px}
+
+    .opts{display:grid;gap:10px}
+    .opt-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .swatch{border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;cursor:pointer;background:#fff}
+    .swatch[aria-checked="true"], .pill[aria-checked="true"]{outline:2px solid var(--a)}
+    .pill{border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;cursor:pointer;background:#fff}
+
+    .cta{display:grid;gap:10px}
+    .cta .btn{position:relative;z-index:2;display:inline-flex;align-items:center;gap:8px;justify-content:center;width:100%;text-align:center;padding:12px;border:0;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer;box-shadow:0 6px 14px rgba(30,64,175,.25)}
+    .cta .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(30,64,175,.28)}
+    .trust{display:grid;gap:6px;font-size:12px}
+    .trust .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .trust .row span{display:inline-flex;align-items:center;gap:6px;border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;background:#fff}
+
+    .tabs{max-width:var(--w);margin:0 auto 18px;padding:0 12px}
+    .tabheads{display:flex;gap:8px;border-bottom:1px solid #e5e7eb}
+    .tabheads button{border:1px solid #e5e7eb;border-bottom:none;background:#fff;border-radius:12px 12px 0 0;padding:8px 12px;cursor:pointer}
+    .tabheads button[aria-selected="true"]{background:#f8fbff}
+    .tab{display:none;background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px;padding:12px}
+    .tab.show{display:block}
+    .specs{display:grid;grid-template-columns:1fr 2fr;gap:8px}
+    .specs div{padding:6px 8px;border-bottom:1px dashed #e5e7eb}
+
+    .rel{max-width:var(--w);margin:0 auto 32px;padding:0 12px}
+    .rel h3{margin:10px 0}
+    .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+    .card{position:relative;background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .card .hit{position:absolute;inset:0}
+    .img{aspect-ratio:1/1;background:#fff;display:grid;place-items:center;padding:10px;border:1px solid #e5e7eb;border-radius:14px;margin:10px}
+    .img img{width:100%;height:100%;object-fit:cover;border-radius:12px;border:1px solid #e5e7eb;background:#fff}
+    .box{padding:12px}
+
+    footer{background:#fff;border-top:1px solid #e5e7eb}
+    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
+
+    /* Helpers viewport */
+    .mobile-only{display:none}
+    .desktop-only{display:initial}
+
+  @media (max-width:860px){
+    .pwrap{grid-template-columns:1fr}
+    .brand .logo{height:30px}
+    .thumbs{gap:8px}
+    .thumbs img{width:56px;height:56px}
+    .gmain img{max-height:380px}
+    .desktop-only{display:none!important}
+    .mobile-only{display:block}
+  }
+  </style>
+</head>
+<body>
+  <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+  <header>
+    <div class="hwrap">
+      <a href="index.html" class="brand"><img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async"></a>
+      <nav class="nav">
+        <a href="compte.html"><img class="ic" id="icUser" alt=""> Compte</a>
+        <button class="iconbtn" id="cartBtn"><img id="cartIcon" class="ic" alt=""> Panier</button>
+        <div class="dropdown">
+          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
+          <div id="menuDrop" class="menu">
+            <a href="a-propos.html">À propos</a>
+            <a href="cgv.html">CGV</a>
+            <a href="mentions-legales.html">Mentions légales</a>
+            <a href="confidentialite.html">Politique de confidentialité</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="crumbs" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a> › <a href="index.html#Cat=Casque/Ecouteurs">Casque/Ecouteurs</a> › <span id="crumbName">AirPod Pro 2</span>
+  </nav>
+
+  <section class="pwrap" id="pwrap" aria-live="polite">
+    <div class="gallery">
+      <div class="gmain"><img id="gMain" alt="AirPod Pro 2" loading="eager" fetchpriority="high"></div>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+    <aside class="pinfo">
+      <div class="title">
+        <h1 id="pName">AirPod Pro 2</h1>
+        <span class="brandchip" id="pBrand">AirPod</span>
+        <span class="rating"><span class="stars" id="pStars"></span><span id="pRatingText"></span></span>
+      </div>
+
+      <div class="pricebox">
+        <div class="price" id="pPrice">0 €</div>
+        <div class="del" id="pDel"></div>
+        <span class="badge" id="pBadge"></span>
+      </div>
+      <div id="stockInfo" style="font-size:12px"></div>
+
+      <div class="opts">
+        <div class="opt-row" id="colorRow"><strong style="min-width:80px">Couleur</strong><div id="colorWrap"></div></div>
+        <div class="opt-row" id="accRow"><strong style="min-width:80px">Accessoires</strong><div id="accWrap"></div></div>
+      </div>
+
+      <div class="cta">
+        <button id="addBtn" class="btn"><img class="ic" id="icBuy" alt=""> Ajouter au panier</button>
+        <div class="trust">
+          <div class="row">
+            <span><img class="ic" id="icTruck" alt=""> Livraison en 1 semaine</span>
+            <span><img class="ic" id="icReturn" alt=""> Retours 14 jours</span>
+            <span><img class="ic" id="icRefund" alt=""> Remboursement garanti</span>
+            <span><img class="ic" id="ic4x" alt=""> Paiement en 4x</span>
+          </div>
+          <div class="row">
+            <strong>Paiement sécurisé</strong>
+            <img alt="Visa" style="height:18px" src="https://cdn.simpleicons.org/visa">
+            <img alt="Mastercard" style="height:18px" src="https://cdn.simpleicons.org/mastercard">
+            <img alt="PayPal" style="height:18px" src="https://cdn.simpleicons.org/paypal">
+            <img alt="Bitcoin" style="height:18px" src="https://cdn.simpleicons.org/bitcoin">
+            <img alt="Ethereum" style="height:18px" src="https://cdn.simpleicons.org/ethereum">
+          </div>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="tabs" id="tabs">
+    <div class="tabheads" role="tablist">
+      <button role="tab" aria-selected="true" aria-controls="tab-desc" id="th-desc">Description</button>
+      <button role="tab" aria-selected="false" aria-controls="tab-spec" id="th-spec">Spécifications</button>
+      <button role="tab" aria-selected="false" aria-controls="tab-rev" id="th-rev">Avis</button>
+    </div>
+    <div class="tab show" id="tab-desc" role="tabpanel" aria-labelledby="th-desc"></div>
+    <div class="tab" id="tab-spec" role="tabpanel" aria-labelledby="th-spec">
+      <div class="specs" id="specs"></div>
+    </div>
+    <div class="tab" id="tab-rev" role="tabpanel" aria-labelledby="th-rev">
+      <div id="reviews" style="opacity:.8;font-size:13px">Nouveauté — Soyez le premier à laisser un avis.</div>
+    </div>
+  </section>
+
+  <section class="rel" id="rel">
+    <h3>Produits similaires</h3>
+    <div class="grid" id="relGrid"></div>
+  </section>
+
+  <div id="cartPanel" class="panel" aria-hidden="true">
+    <div class="sheet">
+      <header>
+        <strong>Mon panier</strong>
+        <button id="closeCart" class="x" aria-label="Fermer">✕</button>
+      </header>
+      <div id="cartItems" class="items"></div>
+      <div class="sum">
+        <div>Total <strong id="cartTotal">0 €</strong></div>
+        <a href="checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Effectuer un paiement</a>
+      </div>
+    </div>
+  </div>
+  <button id="fabCart" class="fab" aria-label="Ouvrir le panier" style="position:fixed;right:16px;bottom:16px;z-index:10000;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border:0;border-radius:999px;display:inline-flex;align-items:center;gap:8px;padding:12px 14px;box-shadow:0 12px 28px rgba(30,64,175,.35);cursor:pointer"><img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge" style="min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px">0</span></button>
+
+  <footer>
+    <div class="fwrap">
+      <div>© GF Store 2025 — Simplicité, sécurité, crypto‑friendly.</div>
+      <nav>
+        <a href="a-propos.html">À propos</a> · 
+        <a href="cgv.html">CGV</a> · 
+        <a href="mentions-legales.html">Mentions légales</a> · 
+        <a href="confidentialite.html">Confidentialité</a> · 
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+  (async()=>{
+    // --- Compte à rebours promo (48h) ---
+    const countdownEl=document.getElementById('countdown');
+    const SALE_END=new Date(Date.now()+48*60*60*1000);
+    const two=n=>String(n).padStart(2,'0');
+    function tick(){ if(!countdownEl) return; const now=new Date(); let diff=SALE_END-now; if(diff<=0){countdownEl.textContent='Dernières heures !';return} const d=Math.floor(diff/86400000); diff%=86400000; const h=Math.floor(diff/3600000); diff%=3600000; const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000); countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`; }
+    tick(); setInterval(tick,1000);
+
+    // --- Icônes ---
+    const ICONS = {
+      buy: 'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
+      cart: 'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
+      cartFull: 'https://img.icons8.com/?size=100&id=K5Jv3BfpxPYa&format=png&color=000000',
+      checkout: 'https://img.icons8.com/?size=100&id=qVsd2YOgeizO&format=png&color=000000',
+      truck: 'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
+      logout: 'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
+      user: 'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
+      menu: 'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
+      trash: 'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000',
+      fourx: 'https://img.icons8.com/?size=100&id=3c0Tk1f266bf&format=png&color=000000',
+      ssl: 'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
+      refund: 'https://img.icons8.com/?size=100&id=lRNQ5N7CjFht&format=png&color=000000',
+      search: 'https://img.icons8.com/?size=100&id=7964&format=png&color=000000'
+    };
+    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
+    setSrc('icUser', ICONS.user); setSrc('icMenu', ICONS.menu); setSrc('icCheckout', ICONS.checkout); setSrc('icFabCart', ICONS.cart); setSrc('icBuy', ICONS.buy);
+    setSrc('icTruck', ICONS.truck); setSrc('icReturn', ICONS.logout); setSrc('icRefund', ICONS.refund); setSrc('ic4x', ICONS.fourx);
+
+    // --- Menu déroulant ---
+    const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop'); if(menuBtn&&menuDrop){ menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')}); document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); }); }
+
+    // --- Cart (même structure que l'accueil) ---
+    const KEY='gf_cart';
+    const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
+    const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount(); renderCart();};
+    const cartCount=()=>getCart().reduce((s,x)=>s+x.qty,0);
+    const cartTotal=()=>getCart().reduce((s,x)=>s+x.qty*x.price,0);
+    const updateCartCount=()=>{ const count=cartCount(); const icon=document.getElementById('cartIcon'); if(icon) icon.src=count>0?ICONS.cartFull:ICONS.cart; const fbc=document.getElementById('fabCount'); if(fbc) fbc.textContent=count; const fbi=document.getElementById('icFabCart'); if(fbi) fbi.src=count>0?ICONS.cartFull:ICONS.cart; };
+    const removeFromCart=id=>{const c=getCart().filter(x=>x.id!==id); setCart(c)};
+
+    function renderCart(){ const wrap=document.getElementById('cartItems'); const list=getCart(); wrap.innerHTML=list.length?list.map(x=>`<div class=\"ci\" data-id=\"${x.id}\"><img src=\"${x.image}\" alt=\"${x.name}\"><div><div style=\"font-weight:600\">${x.name}</div><div style=\"opacity:.7;font-size:12px\">${x.brand||''} • ${x.category||''}</div><div style=\"margin-top:6px\">${Number(x.price).toLocaleString('fr-FR',{style:'currency',currency:'EUR'})}</div></div><div class=\"qty\"><button data-act=\"dec\">–</button><span>${x.qty}</span><button data-act=\"inc\">+</button><button data-act=\"del\" title=\"Retirer\" style=\"margin-left:6px\"><img class=\"ic\" style=\"width:12px;height:12px\" src=\"${ICONS.trash}\" alt=\"Supprimer\"></button></div></div>`).join('') : '<div style="opacity:.7">Votre panier est vide.</div>'; document.getElementById('cartTotal').textContent=Number(cartTotal()).toLocaleString('fr-FR',{style:'currency',currency:'EUR'}); }
+
+    const openCart=()=>{document.getElementById('cartPanel').classList.add('show'); document.body.classList.add('lock'); const fab=document.getElementById('fabCart'); if(fab){fab.style.display='none'}; renderCart();};
+    const closeCart=()=>{document.getElementById('cartPanel').classList.remove('show'); document.body.classList.remove('lock'); const fab=document.getElementById('fabCart'); if(fab){fab.style.display=''};};
+    document.getElementById('cartBtn').addEventListener('click',openCart); document.getElementById('closeCart').addEventListener('click',closeCart);
+    const fab=document.getElementById('fabCart'); if(fab) fab.addEventListener('click',openCart);
+    document.getElementById('cartPanel').addEventListener('click',e=>{ if(e.target.id==='cartPanel') closeCart(); });
+    document.getElementById('cartItems').addEventListener('click',e=>{ const par=e.target.closest('.ci'); if(!par) return; const id=par.getAttribute('data-id'); const act=(e.target.getAttribute('data-act')||e.target.closest('[data-act]')?.getAttribute('data-act')); if(act==='inc'){const c=getCart(); const it=c.find(x=>x.id===id); if(it){it.qty++; setCart(c);} } if(act==='dec'){const c=getCart(); const it=c.find(x=>x.id===id); if(it){it.qty=Math.max(1,it.qty-1); setCart(c);} } if(act==='del'){removeFromCart(id);} });
+
+    // --- Charger le produit (depuis products.json selon ?id=, sinon fallback) ---
+    const urlId=new URLSearchParams(location.search).get('id');
+    const fallback={
+      id:"1001",
+      sku:"GF-AIRPOD-PRO-000",
+      name:"AirPod Pro 2",
+      category:"Casque/Ecouteurs",
+      brand:"AirPod",
+      model:"AirPod Pro",
+      description:`Les AirPod Pro 2 redéfinissent l'écoute sans fil chez GF Store : réduction active du bruit pour s'isoler du monde, mode transparence pour rester attentif quand il le faut, et un son immersif optimisé pour la musique, les appels et le gaming. Leur design ergonomique tient parfaitement, même dans les journées intenses.\n\nPourquoi vous allez les adorer :\n• Son puissant et équilibré avec basses précises.\n• Réduction de bruit intelligente et mode transparence instantané.\n• Appels ultra clairs grâce aux micros anti‑bruit.\n• Autonomie confortable avec l'étui de charge (charge rapide incluse).\n• Connexion stable et rapide — simple à appairer.\n\nChez GF Store, profitez de notre politique commerciale avantageuse : livraison sous 1 semaine, retours 14 jours, remboursement garanti sur produits neufs, paiement sécurisé classique et crypto acceptées (rapide, pratique, quasi anonyme).\nEt en ce moment : 🎉 Promo spéciale rentrée avec des tarifs ultra compétitifs.`,
+      price:279.0,
+      promoPrice:195.3,
+      stock:56,
+      images:[
+        "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
+        "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
+        "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
+        "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
+        "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
+        "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75"
+      ],
+      imageCover:"https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
+      supplier:"Distributeur EU",
+      cost:195.3,
+      status:"En stock",
+      warrantyMonths:24,
+      rating:4.6,
+      ratingCount:0,
+      options:{
+        "Couleur":[{value:"Noir",priceDelta:0.0},{value:"Blanc",priceDelta:0.0},{value:"Bleu",priceDelta:0.0}],
+        "Accessoires":[{value:"Standard",priceDelta:0.0},{value:"Housse rigide",priceDelta:20.0},{value:"Câble audio 1.2 m",priceDelta:10.0}]
+      }
+    };
+
+    async function loadProducts(){ const paths=['data/products.json','/data/products.json','products.json']; for(const p of paths){ try{ const r=await fetch(p); if(r.ok) return r.json(); }catch{} } return null; }
+
+    let product=fallback;
+    const dataset=await loadProducts();
+    if(dataset){ const byId=dataset.find(p=>String(p.id||p.sku||p._id)===String(urlId||fallback.id)); if(byId) product={...fallback,...byId}; }
+
+    // --- Rendu produit ---
+    const EUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    const gMain=document.getElementById('gMain'); const thumbs=document.getElementById('thumbs'); const pName=document.getElementById('pName'); const pBrand=document.getElementById('pBrand'); const pPrice=document.getElementById('pPrice'); const pDel=document.getElementById('pDel'); const pBadge=document.getElementById('pBadge'); const stockInfo=document.getElementById('stockInfo'); const desc=document.getElementById('tab-desc'); const specsEl=document.getElementById('specs'); const crumbName=document.getElementById('crumbName');
+
+    crumbName.textContent=product.name;
+    pName.textContent=product.name; pBrand.textContent=product.brand||'';
+    const imgs=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean);
+    gMain.src=imgs[0]; gMain.alt=product.name;
+    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Voir image ${i+1}"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
+    thumbs.addEventListener('click',e=>{ const b=e.target.closest('button[data-i]'); if(!b) return; const i=Number(b.dataset.i); gMain.src=imgs[i]; });
+
+    const stars=document.getElementById('pStars'); const rTxt=document.getElementById('pRatingText');
+    const full=Math.round(product.rating||0); stars.innerHTML=Array.from({length:5},(_,i)=>'<i style="opacity:'+(i<full?1:.2)+'"></i>').join(''); rTxt.textContent=(product.rating?product.rating.toFixed(1):'—')+' / 5'+(product.ratingCount?` (${product.ratingCount} avis)`: ' (0 avis)');
+
+    // Prix + remise
+    const hasPromo=Number.isFinite(product.promoPrice)&&product.promoPrice>0&&product.promoPrice<product.price; let base=hasPromo?product.promoPrice:product.price; const disc=hasPromo?Math.round((1-(base/product.price))*100):0; pPrice.textContent=EUR(base); pDel.textContent=hasPromo?EUR(product.price):''; pBadge.textContent=hasPromo?`-${disc}%`:'';
+
+    // Stock
+    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">En stock</span> • ${product.stock} pièces`:`<span style="color:#dc2626">Rupture</span>`;
+
+    // Options
+    let selColor=product.options?.Couleur?.[0]?.value||null; let selAcc=product.options?.Accessoires?.[0]?.value||null; let accDelta=product.options?.Accessoires?.[0]?.priceDelta||0;
+
+    function renderColors(){ const wrap=document.getElementById('colorWrap'); if(!product.options?.Couleur){document.getElementById('colorRow').style.display='none'; return;} wrap.innerHTML=product.options.Couleur.map(o=>`<button class="swatch" role="radio" aria-checked="${o.value===selColor}" data-v="${o.value}">${o.value}</button>`).join(''); wrap.onclick=e=>{const b=e.target.closest('.swatch'); if(!b) return; selColor=b.dataset.v; renderColors();}; }
+    function renderAcc(){ const wrap=document.getElementById('accWrap'); if(!product.options?.Accessoires){document.getElementById('accRow').style.display='none'; return;} wrap.innerHTML=product.options.Accessoires.map(o=>`<button class="pill" role="radio" aria-checked="${o.value===selAcc}" data-v="${o.value}" data-d="${o.priceDelta}">${o.value}${o.priceDelta?` (+${EUR(o.priceDelta)})`:''}</button>`).join(''); wrap.onclick=e=>{const b=e.target.closest('.pill'); if(!b) return; selAcc=b.dataset.v; accDelta=Number(b.dataset.d||0); updatePrice(); renderAcc();}; }
+    function updatePrice(){ const final=base+Number(accDelta||0); pPrice.textContent=EUR(final); }
+    renderColors(); renderAcc(); updatePrice();
+
+    // Description marketing
+    desc.innerHTML = `<p style="margin-top:0">${(product.description||'').split('\n').map(p=>p?`<span>${p}</span>`:'').join('<br>')}</p>
+    <ul style="margin:8px 0 0 18px;line-height:1.6">
+      <li>Achat simple et sécurisé chez <strong>GF Store</strong> — assistance rapide.</li>
+      <li>Livraison sous 1 semaine • Retours 14 jours • <em>Remboursement garanti</em>.</li>
+      <li>Paiement classique ou <strong>crypto</strong> (rapide, pratique, quasi anonyme).</li>
+      <li>Garantie <strong>${product.warrantyMonths||24} mois</strong>.</li>
+    </ul>`;
+
+    // Spécifications (exemples génériques sans chiffres risqués)
+    const specs=[
+      ['Type', 'Écouteurs sans fil intra‑auriculaires'],
+      ['Réduction de bruit', 'Active + mode transparence'],
+      ['Audio', 'Son immersif optimisé pour musique, appels, jeux'],
+      ['Connectivité', 'Bluetooth – appairage rapide et stable'],
+      ['Charge', 'Rapide via étui de charge (USB‑C)'],
+      ['Compatibilité', 'iOS / Android / Windows / macOS'],
+      ['Garantie', `${product.warrantyMonths||24} mois chez GF Store`]
+    ];
+    specsEl.innerHTML=specs.map(([k,v])=>`<div style="opacity:.7">${k}</div><div>${v}</div>`).join('');
+
+    // Produits similaires (même catégorie)
+    const relGrid=document.getElementById('relGrid');
+    if(dataset){ const sims=dataset.filter(p=>p.category===product.category && String(p.id)!==String(product.id)).slice(0,4); const slug=s=>encodeURIComponent(String(p.name||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')); relGrid.innerHTML=sims.map(p=>{ const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price; const newP=hasPromo?p.promoPrice:p.price; const disc=hasPromo?Math.round((1-(newP/p.price))*100):0; const url=`product.html?id=${encodeURIComponent(p.id||p.sku||p._id)}&slug=${slug(p)}`; const img=p.imageCover||(p.images&&p.images[0])||''; return `<article class=\"card\"><a class=\"hit\" href=\"${url}\" aria-label=\"Voir ${p.name}\"></a><div class=\"img\"><img loading=\"lazy\" src=\"${img}\" alt=\"${p.name}\"></div><div class=\"box\"><div style=\"font-weight:600\">${p.name}</div><div style=\"opacity:.7;font-size:12px\">${p.brand||''} • ${p.category||''}</div><div style=\"margin-top:6px\">${EUR(newP)} ${hasPromo?`<span style=\"opacity:.6;text-decoration:line-through\">${EUR(p.price)}</span> <span class=\"badge\">-${disc}%</span>`:''}</div></div></article>`; }).join(''); }
+
+    // Ajouter au panier (avec options concaténées dans le nom pour compatibilité)
+    document.getElementById('addBtn').addEventListener('click',()=>{
+      const variantParts=[]; if(selColor) variantParts.push(`Couleur: ${selColor}`); if(selAcc) variantParts.push(`Accessoires: ${selAcc}`);
+      const nameWithVar= product.name + (variantParts.length? ` (${variantParts.join(', ')})` : '');
+      const finalPrice=(hasPromo?product.promoPrice:product.price) + Number(accDelta||0);
+      const cart=getCart();
+      const id=String(product.id||product.sku||'');
+      const idx=cart.findIndex(x=>x.id===id && x.name===nameWithVar);
+      const image=(product.imageCover||(product.images&&product.images[0])||'');
+      if(idx>-1){ cart[idx].qty+=1; } else { cart.push({id,name:nameWithVar,price:finalPrice,qty:1,image,brand:product.brand||'',category:product.category||''}); }
+      setCart(cart);
+    });
+
+    updateCartCount();
+
+    // Tabs
+    const tabs={desc:document.getElementById('tab-desc'), spec:document.getElementById('tab-spec'), rev:document.getElementById('tab-rev')};
+    const heads={desc:document.getElementById('th-desc'), spec:document.getElementById('th-spec'), rev:document.getElementById('th-rev')};
+    Object.values(heads).forEach(h=>h.addEventListener('click',()=>{ Object.values(heads).forEach(x=>x.setAttribute('aria-selected','false')); h.setAttribute('aria-selected','true'); Object.values(tabs).forEach(t=>t.classList.remove('show')); const id=h.id.split('-')[1]; document.getElementById('tab-'+id).classList.add('show'); }));
+
+    // JSON-LD SEO
+    const ld={"@context":"https://schema.org","@type":"Product","name":product.name,"image":imgs,"sku":product.sku||product.id,"brand":{"@type":"Brand","name":product.brand||'GF Store'},"description":product.description?.slice(0,500)||'',"offers":{"@type":"Offer","priceCurrency":"EUR","price":(hasPromo?product.promoPrice:product.price),"availability":"https://schema.org/InStock","url":location.href}}; const s=document.createElement('script'); s.type='application/ld+json'; s.textContent=JSON.stringify(ld); document.head.appendChild(s);
+  })();
+  </script>
+</body>
+</html>
