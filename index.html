@@ -12,7 +12,7 @@
     .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
     .brand{display:flex;align-items:center;gap:10px;font-weight:700}
     .brand b{font-size:20px}
-    .brand .logo{height:80px;width:auto;display:block} 
+    .brand .logo{height:96px;width:auto;display:block} 
     .nav{display:flex;gap:10px;align-items:center}
     .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;color:inherit;box-shadow:0 1px 0 rgba(0,0,0,.02)}
     .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
@@ -24,9 +24,9 @@
     .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
     .menu a:hover{background:#f3f4f6}
 
-    .banner{background:linear-gradient(90deg,#111,#1f2937);color:#fff;text-align:center;padding:10px 14px}
+    .banner{background:linear-gradient(90deg,#1e3a8a,#2563eb,#0ea5e9);color:#fff;text-align:center;padding:10px 14px}
     .policies{max-width:var(--w);margin:12px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
-    .policies div{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:10px 12px}
+    .policies div{display:flex;align-items:center;gap:8px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid #e5e7eb;border-radius:14px;padding:10px 12px}
     .policies .two{flex-direction:column;align-items:flex-start}
     .payicons{margin-left:8px;display:inline-flex;gap:8px;align-items:center}
     .payicons img{height:16px;filter:grayscale(1);opacity:.9;transition:transform .15s ease, opacity .15s ease}
@@ -74,6 +74,13 @@
     .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
     .fwrap a{text-decoration:none;color:inherit;opacity:.9}
     .fwrap a:hover{text-decoration:underline}
+    /* extra color & ui tweaks */
+    .controls .searchwrap{position:relative;flex:2}
+    .controls .searchwrap input{padding-left:36px}
+    .controls .searchwrap .ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.55}
+    .fab{position:fixed;right:16px;bottom:16px;z-index:10000;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border:0;border-radius:999px;display:inline-flex;align-items:center;gap:8px;padding:12px 14px;box-shadow:0 12px 28px rgba(30,64,175,.35);cursor:pointer}
+    .fab .badge{min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px}
+    .fab img.ic{filter:invert(1)}
   </style>
 </head>
 <body>
@@ -83,7 +90,6 @@
       <a href="index.html" class="brand"><img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store"></a>
       <nav class="nav">
         <a href="compte.html"><img class="ic" id="icUser" alt=""> Compte</a>
-        <a href="checkout.html"><img class="ic" id="icPay" alt=""> Paiement</a>
         <button class="iconbtn" id="cartBtn"><img id="cartIcon" class="ic" alt=""> Panier <span id="cartCount" class="countbadge">0</span></button>
         <div class="dropdown">
           <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
@@ -123,7 +129,10 @@
   </section>
 
   <section class="controls">
-    <input id="q" type="search" placeholder="Rechercher un produit (nom, marque, modèle)…" />
+    <div class="searchwrap">
+      <img class="ic" id="icSearch" alt="">
+      <input id="q" type="search" placeholder="Rechercher un produit (nom, marque, modèle)…" />
+    </div>
     <select id="cat"></select>
     <div id="count" title="Produits visibles">0</div>
   </section>
@@ -139,10 +148,12 @@
       <div id="cartItems" class="items"></div>
       <div class="sum">
         <div>Total <strong id="cartTotal">0 €</strong></div>
-        <a href="checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Payer (carte • crypto)</a>
+        <a href="checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Effectuer un paiement</a>
       </div>
     </div>
   </div>
+
+  <button id="fabCart" class="fab" aria-label="Ouvrir le panier"><img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span></button>
 
   <footer>
     <div class="fwrap">
@@ -172,7 +183,8 @@
       trash: 'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000',
       fourx: 'https://img.icons8.com/?size=100&id=3c0Tk1f266bf&format=png&color=000000',
       ssl: 'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
-      refund: 'https://img.icons8.com/?size=100&id=lRNQ5N7CjFht&format=png&color=000000'
+      refund: 'https://img.icons8.com/?size=100&id=lRNQ5N7CjFht&format=png&color=000000',
+      search: 'https://img.icons8.com/?size=100&id=7964&format=png&color=000000'
     };
 
     // --- Utilitaires ---
@@ -189,12 +201,11 @@
     setSrc('logoCart', ICONS.cart);
     setSrc('icHome', ICONS.buy);
     setSrc('icUser', ICONS.user);
-    setSrc('icPay', ICONS.checkout);
     setSrc('icTruck', ICONS.truck);
     setSrc('icReturn', ICONS.logout);
     setSrc('icRefund', ICONS.refund);
     setSrc('icSecure', ICONS.checkout);
-    setSrc('icCheckout', ICONS.checkout);
+    setSrc('icCheckout', ICONS.checkout); setSrc('icSearch', ICONS.search); setSrc('icFabCart', ICONS.cart);
     setSrc('icMenu', ICONS.menu);
     setSrc('ic4x', ICONS.fourx);
     setSrc('icSSL', ICONS.ssl);
@@ -225,8 +236,10 @@
     const cartTotal=()=>getCart().reduce((s,x)=>s+x.qty*x.price,0);
     const updateCartCount=()=>{
       const count=cartCount();
-      document.getElementById('cartCount').textContent=count;
+      const cc=document.getElementById('cartCount'); if(cc) cc.textContent=count;
       const icon=document.getElementById('cartIcon'); if(icon) icon.src=count>0?ICONS.cartFull:ICONS.cart;
+      const fbc=document.getElementById('fabCount'); if(fbc) fbc.textContent=count;
+      const fbi=document.getElementById('icFabCart'); if(fbi) fbi.src=count>0?ICONS.cartFull:ICONS.cart;
     };
 
     // --- Rendu Panier ---
@@ -302,6 +315,7 @@
 
     document.getElementById('cartBtn').addEventListener('click',openCart);
     document.getElementById('closeCart').addEventListener('click',closeCart);
+    const fab=document.getElementById('fabCart'); if(fab) fab.addEventListener('click',openCart);
     document.getElementById('cartPanel').addEventListener('click',e=>{ if(e.target.id==='cartPanel') closeCart(); });
 
     document.getElementById('cartItems').addEventListener('click',e=>{
