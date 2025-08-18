@@ -7,15 +7,19 @@
   <style>
     :root{--w:1100px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f6f7fb}
     *{box-sizing:border-box} body{margin:0;font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
-    header{max-width:var(--w);margin:24px auto 10px;padding:0 12px;display:flex;justify-content:space-between;align-items:center}
-    header h1{margin:0;font-size:22px} header small{opacity:.7}
+    header{max-width:var(--w);margin:10px auto;padding:0 12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+    header h1{margin:0;font-size:22px}
+    .nav{display:flex;gap:10px;align-items:center}
+    .nav a, .iconbtn{padding:8px 10px;border:1px solid #e5e7eb;background:#fff;border-radius:10px;text-decoration:none;color:inherit}
+    .iconbtn{cursor:pointer}
     .banner{background:#111;color:#fff;text-align:center;padding:10px 14px}
     .policies{max-width:var(--w);margin:10px auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
     .policies div{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:8px 10px}
     .controls{max-width:var(--w);margin:8px auto;padding:0 12px;display:flex;gap:8px;align-items:center}
     input[type=search],select{flex:1;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}
     .grid{max-width:var(--w);margin:10px auto 24px;padding:0 12px;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
-    .card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+    .card{position:relative;background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+    .hit{position:absolute;inset:0}
     .img{aspect-ratio:1/1;background:#f1f5f9;display:grid;place-items:center}
     .img img{width:100%;height:100%;object-fit:cover;display:block}
     .card .box{padding:10px}
@@ -24,16 +28,36 @@
     .price{margin:6px 0 8px;font-weight:700}
     .price s{font-weight:400;opacity:.6;margin-left:6px}
     .badge{background:var(--g);color:#fff;border-radius:999px;padding:2px 8px;margin-left:6px;font-size:12px}
-    .btn{margin-top:auto;display:inline-block;width:100%;text-align:center;padding:10px;border:0;border-top:1px solid #e5e7eb;background:var(--a);color:#fff;border-radius:0 0 14px 14px;cursor:pointer}
+    .btn{position:relative;z-index:2;margin-top:auto;display:inline-block;width:100%;text-align:center;padding:10px;border:0;border-top:1px solid #e5e7eb;background:var(--a);color:#fff;border-radius:0 0 14px 14px;cursor:pointer}
     footer{max-width:var(--w);margin:12px auto 40px;padding:0 12px;opacity:.7;font-size:12px}
+    /* Cart panel */
+    .panel{position:fixed;inset:0;display:none;background:rgba(0,0,0,.35)}
+    .panel.show{display:block}
+    .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid #e5e7eb;display:flex;flex-direction:column}
+    .sheet header{margin:0;padding:12px;border-bottom:1px solid #e5e7eb}
+    .sheet .items{padding:12px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+    .ci{display:grid;grid-template-columns:72px 1fr auto;gap:8px;border:1px solid #e5e7eb;border-radius:12px;padding:8px}
+    .ci img{width:72px;height:72px;object-fit:cover;border-radius:8px;background:#f1f5f9}
+    .qty{display:flex;align-items:center;gap:6px}
+    .qty button{border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:4px 8px;cursor:pointer}
+    .sum{margin-top:auto;border-top:1px solid #e5e7eb;padding:12px;display:flex;justify-content:space-between;align-items:center}
+    .checkout{background:var(--a);color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px}
+    .x{cursor:pointer;border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:6px}
+    .countbadge{min-width:18px;display:inline-grid;place-items:center;font-size:12px;padding:0 6px;margin-left:4px;border-radius:999px;background:#111;color:#fff}
   </style>
 </head>
 <body>
   <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles</div>
   <header>
     <h1>GF Store</h1>
-    <small>Électronique & Multimédia — simplicité • sécurité • flexibilité</small>
+    <nav class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="compte.html">Compte</a>
+      <a href="checkout.html">Paiement</a>
+      <button class="iconbtn" id="cartBtn">Panier <span id="cartCount" class="countbadge">0</span></button>
+    </nav>
   </header>
+
   <section class="policies">
     <div>🚚 Livraison ≤ 1 semaine</div>
     <div>🔁 Retours sous 14 jours</div>
@@ -49,54 +73,139 @@
 
   <main id="grid" class="grid" aria-live="polite"></main>
 
+  <div id="cartPanel" class="panel" aria-hidden="true">
+    <div class="sheet">
+      <header style="display:flex;justify-content:space-between;align-items:center">
+        <strong>Mon panier</strong>
+        <button id="closeCart" class="x" aria-label="Fermer">✕</button>
+      </header>
+      <div id="cartItems" class="items"></div>
+      <div class="sum">
+        <div>Total <strong id="cartTotal">0 €</strong></div>
+        <a href="checkout.html" class="checkout">Payer (carte • crypto)</a>
+      </div>
+    </div>
+  </div>
+
   <footer>© GF Store — Prix compétitifs, paiement classique & crypto. Service client réactif.</footer>
 
   <script>
   (async()=>{
-    // 1) Charger le JSON (priorité au chemin /data/products.json comme dans ton dépôt)
+    // --- Utilitaires ---
     async function loadProducts(){
       const paths=['data/products.json','/data/products.json','products.json'];
-      for(const p of paths){
-        try{const r=await fetch(p); if(r.ok) return r.json();}catch(e){}
-      }
+      for(const p of paths){try{const r=await fetch(p); if(r.ok) return r.json();}catch{}}
       throw new Error('Impossible de charger products.json');
     }
+    const €=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    const slug=s=>encodeURIComponent(String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''));
 
-    const items=await loadProducts();
+    // --- Panier (localStorage) ---
+    const KEY='gf_cart';
+    const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
+    const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount(); renderCart();};
+    const findId=(p,i)=>p.id||p.sku||p._id||String(i);
+    const addToCart=(p,i)=>{
+      const id=findId(p,i); const cart=getCart();
+      const idx=cart.findIndex(x=>x.id===id);
+      const price = Number(p.promoPrice&&p.promoPrice<p.price ? p.promoPrice : p.price);
+      if(idx>-1) cart[idx].qty+=1; else cart.push({id,name:p.name,price,qty:1,image:p.imageCover||(p.images&&p.images[0])||'',brand:p.brand||'',category:p.category||''});
+      setCart(cart);
+    };
+    const removeFromCart=id=>{const c=getCart().filter(x=>x.id!==id); setCart(c)};
+    const setQty=(id,q)=>{const c=getCart(); const it=c.find(x=>x.id===id); if(it){it.qty=Math.max(1,Number(q)||1); setCart(c)}};
+    const cartCount=()=>getCart().reduce((s,x)=>s+x.qty,0);
+    const cartTotal=()=>getCart().reduce((s,x)=>s+x.qty*x.price,0);
+    const updateCartCount=()=>{document.getElementById('cartCount').textContent=cartCount();};
+
+    // --- Rendu Panier ---
+    function renderCart(){
+      const wrap=document.getElementById('cartItems');
+      const list=getCart();
+      wrap.innerHTML=list.length?list.map(x=>`
+        <div class="ci" data-id="${x.id}">
+          <img src="${x.image}" alt="${x.name}">
+          <div>
+            <div style="font-weight:600">${x.name}</div>
+            <div style="opacity:.7;font-size:12px">${x.brand||''} • ${x.category||''}</div>
+            <div style="margin-top:6px">${€(x.price)}</div>
+          </div>
+          <div class="qty">
+            <button data-act="dec">–</button>
+            <span>${x.qty}</span>
+            <button data-act="inc">+</button>
+            <button data-act="del" title="Retirer" style="margin-left:6px">🗑️</button>
+          </div>
+        </div>`).join('') : '<div style="opacity:.7">Votre panier est vide.</div>';
+      document.getElementById('cartTotal').textContent=€(cartTotal());
+    }
+
+    // --- DOM réfs ---
     const $=s=>document.querySelector(s);
     const q=$('#q'), c=$('#cat'), g=$('#grid'), n=$('#count');
 
-    // Catégories
+    // --- Données Produits ---
+    const items=await loadProducts();
     const cats=['Toutes catégories', ...Array.from(new Set(items.map(p=>p.category))).sort((a,b)=>(''+a).localeCompare(b))];
     c.innerHTML=cats.map(x=>`<option>${x}</option>`).join('');
-
-    // Format prix (éviter un identifiant non ASCII)
-    const formatEUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-    const pickImg=p=>p.imageCover||(p.images&&p.images[0])||'';
+    const img=p=>p.imageCover||(p.images&&p.images[0])||'';
 
     function render(){
       const term=(q.value||'').toLowerCase().trim();
       const cat=c.value;
       const list=items.filter(p=> (cat==='Toutes catégories'||p.category===cat) && (`${p.name} ${p.brand||''} ${p.model||''}`.toLowerCase().includes(term)) );
       n.textContent=list.length;
-      g.innerHTML=list.map(p=>{
+      g.innerHTML=list.map((p,i)=>{
+        const id=findId(p,i), url=`product.html?id=${encodeURIComponent(id)}&slug=${slug(p.name)}`;
         const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price;
         const newP=hasPromo?p.promoPrice:p.price;
         const disc=hasPromo?Math.round((1-(newP/p.price))*100):0;
         return `
-        <article class="card">
-          <div class="img"><img loading="lazy" src="${pickImg(p)}" alt="${p.name}"></div>
+        <article class="card" data-id="${id}">
+          <a class="hit" href="${url}" aria-label="Voir ${p.name}"></a>
+          <div class="img"><img loading="lazy" src="${img(p)}" alt="${p.name}"></div>
           <div class="box">
             <h3>${p.name}</h3>
             <div class="meta">${p.brand||''} • ${p.category||''}</div>
-            <div class="price">${formatEUR(newP)} ${hasPromo?`<s>${formatEUR(p.price)}</s> <span class="badge">-${disc}%</span>`:''}</div>
-            <button class="btn" aria-label="Ajouter ${p.name} au panier">Ajouter au panier</button>
+            <div class="price">${€(newP)} ${hasPromo?`<s>${€(p.price)}</s> <span class="badge">-${disc}%</span>`:''}</div>
+            <button class="btn add" data-id="${id}" aria-label="Ajouter ${p.name} au panier">Ajouter au panier</button>
           </div>
         </article>`;
       }).join('');
     }
 
-    q.addEventListener('input',render); c.addEventListener('change',render); render();
+    // --- Events ---
+    g.addEventListener('click',e=>{
+      const btn=e.target.closest('.add');
+      if(btn){
+        e.preventDefault(); e.stopPropagation();
+        const card=btn.closest('.card');
+        const id=card.getAttribute('data-id');
+        const index=items.findIndex((p,i)=> (p.id||p.sku||p._id||String(i))===id );
+        if(index>-1) addToCart(items[index], index);
+      }
+    });
+
+    document.getElementById('cartBtn').addEventListener('click',()=>{
+      document.getElementById('cartPanel').classList.add('show');
+      renderCart();
+    });
+    document.getElementById('closeCart').addEventListener('click',()=>{
+      document.getElementById('cartPanel').classList.remove('show');
+    });
+
+    document.getElementById('cartItems').addEventListener('click',e=>{
+      const par=e.target.closest('.ci'); if(!par) return; const id=par.getAttribute('data-id');
+      const act=e.target.getAttribute('data-act');
+      if(act==='inc'){const c=getCart(); const it=c.find(x=>x.id===id); if(it){it.qty++; setCart(c);} }
+      if(act==='dec'){const c=getCart(); const it=c.find(x=>x.id===id); if(it){it.qty=Math.max(1,it.qty-1); setCart(c);} }
+      if(act==='del'){removeFromCart(id);}    
+    });
+
+    q.addEventListener('input',render); c.addEventListener('change',render);
+
+    // Init
+    updateCartCount(); render();
   })();
   </script>
 </body>
