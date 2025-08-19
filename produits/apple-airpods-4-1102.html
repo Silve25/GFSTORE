@@ -299,7 +299,7 @@
     };
 
     // ---- GitHub Pages root
-    const GH_ROOT = (()=>{ const parts=location.pathname.split('/').filter(Boolean); return (location.host.endsWith('github.io')&&parts.length)?`/${parts[0]}/`:'/'; })();
+    const GH_ROOT = (()=>{ const parts = location.pathname.split('/').filter(Boolean); return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/'; })();
 
     // ---- ID & slug produit depuis l'URL
     function getProductId(){
@@ -336,7 +336,7 @@
 
     // ---- Fallback (AirPods 4)
     const fallback={
-      id:"1102", // on met 1102 pour matcher le nom de fichier
+      id:"1102", // pour coller au nom de fichier si besoin
       sku:"GF-APPLE-AIRPODS-4-001",
       name:"Apple AirPods 4",
       category:"Casque/Ecouteurs",
@@ -384,12 +384,12 @@
     if(Array.isArray(dataset)){
       // 1) par id/sku/_id
       let found = dataset.find(p=>String(p.id||p.sku||p._id)===String(pid));
-      // 2) sinon via le slug du nom/modèle (robuste si l'id diffère dans le JSON)
+      // 2) sinon via le slug du nom/modèle
       if(!found){
         const target = normalize(fileSlug);
         found = dataset.find(p=> normalize(p.name)===target || normalize(p.model)===target );
       }
-      // 3) petit filet de sécurité : même SKU que notre fallback
+      // 3) filet de sécurité : même SKU que le fallback
       if(!found){
         found = dataset.find(p=> String(p.sku||'').toLowerCase()===fallback.sku.toLowerCase());
       }
@@ -432,7 +432,7 @@
     rTxt.textContent=avg.toFixed(1)+' / 5 ('+reviews.length+' avis)';
     document.getElementById('reviews').innerHTML=reviews.map(r=>`<div class="rev"><div class="rv-head"><strong>${r.name}</strong><span class="rv-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span><span class="rv-date">${r.date}</span></div><p>${r.text}</p></div>`).join('');
 
-    // Prix + remise
+    // Prix + remise (Déclaration UNIQUE de hasPromo)
     const hasPromo=Number.isFinite(product.promoPrice)&&product.promoPrice>0&&product.promoPrice<product.price;
     let base=hasPromo?product.promoPrice:product.price;
     const disc=hasPromo?Math.round((1-(base/product.price))*100):0;
@@ -465,7 +465,7 @@
 
     // Description
     const mkDesc=(product.description||'').split('\n').map(p=>p?`<span>${p}</span>`:'').join('<br>');
-    document.getElementById('tab-desc').innerHTML = `<p style="margin-top:0">${mkDesc}</p>
+    desc.innerHTML = `<p style="margin-top:0">${mkDesc}</p>
     <ul style="margin:8px 0 0 18px;line-height:1.6">
       <li>Achat simple et sécurisé chez <strong>GF Store</strong> — assistance rapide.</li>
       <li>Livraison sous 1 semaine • Retours 14 jours • <em>Remboursement garanti</em>.</li>
@@ -484,7 +484,7 @@
       ['Compatibilité','iOS / Android / Windows / macOS'],
       ['Garantie',`${product.warrantyMonths||24} mois chez GF Store`]
     ];
-    document.getElementById('specs').innerHTML=specs.map(([k,v])=>`<div style="opacity:.7">${k}</div><div>${v}</div>`).join('');
+    specsEl.innerHTML=specs.map(([k,v])=>`<div style="opacity:.7">${k}</div><div>${v}</div>`).join('');
 
     // Produits similaires
     const relGrid=document.getElementById('relGrid');
@@ -492,9 +492,9 @@
       const sims=dataset.filter(p=>p.category===product.category && String(p.id)!==String(product.id)).slice(0,4);
       const slugify=str=>String(str||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
       relGrid.innerHTML=sims.map(p=>{
-        const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price;
-        const newP=hasPromo?p.promoPrice:p.price;
-        const disc=hasPromo?Math.round((1-(newP/p.price))*100):0;
+        const promo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price;
+        const newP=promo?p.promoPrice:p.price;
+        const discS=promo?Math.round((1-(newP/p.price))*100):0;
         const url=`./${slugify(p.name)}-${encodeURIComponent(p.id||p.sku||p._id)}.html`;
         const img=p.imageCover||(p.images&&p.images[0])||'';
         return `<article class="card">
@@ -503,7 +503,7 @@
           <div class="box">
             <div style="font-weight:600">${p.name}</div>
             <div style="opacity:.7;font-size:12px">${p.brand||''} • ${p.category||''}</div>
-            <div style="margin-top:6px">${EUR(newP)} ${hasPromo?`<span style="opacity:.6;text-decoration:line-through">${EUR(p.price)}</span> <span class="badge">-${disc}%</span>`:''}</div>
+            <div style="margin-top:6px">${EUR(newP)} ${promo?`<span style="opacity:.6;text-decoration:line-through">${EUR(p.price)}</span> <span class="badge">-${discS}%</span>`:''}</div>
           </div>
         </article>`;
       }).join('');
@@ -520,14 +520,13 @@
       const image=(product.imageCover||(product.images&&product.images[0])||'');
       if(idx>-1){ cart[idx].qty+=1; } else { cart.push({id,name:nameWithVar,price:finalPrice,qty:1,image,brand:product.brand||'',category:product.category||''}); }
       setCart(cart);
-      // openCart(); // décommente si tu veux ouvrir le panier après ajout
+      // openCart(); // décommente pour ouvrir le panier après ajout
     });
 
     updateCartCount();
 
     // ---- Mini-panneau panier
     function cartTotal(){ return getCart().reduce((s,x)=>s + (x.qty * Number(x.price||0)), 0); }
-
     function renderCart(){
       const wrap=document.getElementById('cartItems');
       if(!wrap) return;
@@ -611,9 +610,8 @@
       const id=h.id.split('-')[1]; document.getElementById('tab-'+id).classList.add('show');
     }));
 
-    // JSON-LD SEO
+    // JSON-LD SEO (réutilise hasPromo sans le redéclarer)
     const imgsForLd=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean);
-    const hasPromo=Number.isFinite(product.promoPrice)&&product.promoPrice>0&&product.promoPrice<product.price;
     const ld={"@context":"https://schema.org","@type":"Product","name":product.name,"image":imgsForLd,"sku":product.sku||product.id,"brand":{"@type":"Brand","name":product.brand||'GF Store'},"description":(product.description||'').slice(0,500),"offers":{"@type":"Offer","priceCurrency":"EUR","price":(hasPromo?product.promoPrice:product.price),"availability":"https://schema.org/InStock","url":location.href}};
     const s=document.createElement('script'); s.type='application/ld+json'; s.textContent=JSON.stringify(ld); document.head.appendChild(s);
 
