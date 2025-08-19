@@ -116,7 +116,7 @@
     .desktop-only{display:initial}
     @media (max-width:860px){
       .pwrap{grid-template-columns:1fr}
-      .brand .logo{height:30px}
+      .brand .logo{height:22px} /* ← réduit sur mobile (uniquement ce changement) */
       .thumbs{gap:8px}
       .thumbs img{width:56px;height:56px}
       .gmain img{max-height:380px}
@@ -378,7 +378,7 @@
     // ---- Récupération produit
     const dataset = await loadProducts();
     const pid = getProductId() || fallback.id;
-    const fileSlug = getFileBaseSlug(); // "apple-ipad-pro-11-m4-256go-silver"
+    const fileSlug = getFileBaseSlug();
     let product = fallback;
 
     if(Array.isArray(dataset)){
@@ -440,12 +440,11 @@
     // Stock
     stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">En stock</span> • ${product.stock} pièces`:`<span style="color:#dc2626">Rupture</span>`;
 
-    // Options dynamiques (Stockage, Connectivité, etc.)
+    // Options dynamiques
     const optsWrap = document.getElementById('opts');
     const selOpts = {};
     function buildOptions(){
       if(!product.options || typeof product.options!=='object'){ optsWrap.innerHTML=''; return; }
-      // valeurs par défaut
       for(const [k,arr] of Object.entries(product.options)){
         if(!selOpts[k] && Array.isArray(arr) && arr.length){ selOpts[k] = {value: arr[0].value, priceDelta: Number(arr[0].priceDelta||0)}; }
       }
@@ -522,7 +521,6 @@
 
     // Ajouter au panier
     document.getElementById('addBtn').addEventListener('click',()=>{
-      // label variantes
       const parts=[]; for(const [k,v] of Object.entries(selOpts)){ if(v?.value) parts.push(`${k}: ${v.value}`); }
       const nameWithVar = product.name + (parts.length? ` (${parts.join(', ')})` : '');
       const finalPrice  = (hasPromo?product.promoPrice:product.price) + totalDelta();
@@ -603,7 +601,7 @@
       const id=h.id.split('-')[1]; document.getElementById('tab-'+id).classList.add('show');
     }));
 
-    // JSON-LD SEO (réutilise hasPromo, pas de redéclaration)
+    // JSON-LD SEO
     const imgsForLd=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean);
     const ld={"@context":"https://schema.org","@type":"Product","name":product.name,"image":imgsForLd,"sku":product.sku||product.id,"brand":{"@type":"Brand","name":product.brand||'GF Store'},"description":(product.description||'').slice(0,500),"offers":{"@type":"Offer","priceCurrency":"EUR","price":(hasPromo?product.promoPrice:product.price),"availability":"https://schema.org/InStock","url":location.href}};
     const s=document.createElement('script'); s.type='application/ld+json'; s.textContent=JSON.stringify(ld); document.head.appendChild(s);
@@ -613,4 +611,3 @@
   </script>
 </body>
 </html>
-
