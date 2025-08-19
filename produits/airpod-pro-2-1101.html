@@ -27,10 +27,6 @@
     .banner .timer{font-weight:700;border-radius:999px;padding:2px 8px;background:rgba(255,255,255,.15);display:inline-block}
     .banner .sep{opacity:.6;padding:0 6px}
 
-    .crumbs{max-width:var(--w);margin:10px auto 0;padding:0 12px;font-size:12px;opacity:.8}
-    .crumbs a{text-decoration:none;color:inherit}
-    .crumbs a:hover{text-decoration:underline}
-
     .pwrap{max-width:var(--w);margin:10px auto 24px;padding:0 12px;display:grid;gap:16px;grid-template-columns:1.1fr 1fr}
     .gallery{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:10px;display:grid;gap:10px}
     .gmain{border:1px solid #e5e7eb;border-radius:14px;display:grid;place-items:center;padding:10px;background:#fff}
@@ -54,7 +50,6 @@
 
     .opts{display:grid;gap:10px}
     .opt-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    /* Variantes renforcées */
     .swatch,.pill{border:2px solid #e5e7eb;border-radius:12px;padding:10px 14px;cursor:pointer;background:#fff;min-width:96px;display:inline-flex;align-items:center;justify-content:center;font-weight:600;transition:box-shadow .15s,border-color .15s,transform .06s}
     .swatch:hover,.pill:hover{box-shadow:0 6px 16px rgba(0,0,0,.06)}
     .swatch:active,.pill:active{transform:translateY(1px)}
@@ -78,7 +73,6 @@
     .tab.show{display:block}
     .specs{display:grid;grid-template-columns:1fr 2fr;gap:8px}
     .specs div{padding:6px 8px;border-bottom:1px dashed #e5e7eb}
-    /* Avis */
     .rev{border-bottom:1px dashed #e5e7eb;padding:10px 0}
     .rv-head{display:flex;gap:8px;align-items:center;font-size:13px}
     .rv-stars{letter-spacing:2px;opacity:.9}
@@ -100,47 +94,46 @@
     footer{background:#fff;border-top:1px solid #e5e7eb}
     .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
 
-    /* Helpers viewport */
     .mobile-only{display:none}
     .desktop-only{display:initial}
-
-  @media (max-width:860px){
-    .pwrap{grid-template-columns:1fr}
-    .brand .logo{height:30px}
-    .thumbs{gap:8px}
-    .thumbs img{width:56px;height:56px}
-    .gmain img{max-height:380px}
-    .desktop-only{display:none!important}
-    .mobile-only{display:block}
-  }
+    @media (max-width:860px){
+      .pwrap{grid-template-columns:1fr}
+      .brand .logo{height:30px}
+      .thumbs{gap:8px}
+      .thumbs img{width:56px;height:56px}
+      .gmain img{max-height:380px}
+      .desktop-only{display:none!important}
+      .mobile-only{display:block}
+    }
   </style>
 </head>
 <body>
   <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+
   <header>
     <div class="hwrap">
       <!-- Lien logo vers la racine du site -->
-      <a href="https://silve25.github.io/GFSTORE/" class="brand"><img src="https://silve25.github.io/GFSTORE/assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async"></a>
+      <a href="https://silve25.github.io/GFSTORE/" class="brand">
+        <img src="https://silve25.github.io/GFSTORE/assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
+      </a>
       <nav class="nav">
-        <a href="compte.html"><img class="ic" id="icUser" alt=""> Compte</a>
-        <a class="iconbtn" href="checkout.html"><img id="cartIcon" class="ic" alt=""> Panier</a>
+        <a href="../compte/index.html"><img class="ic" id="icUser" alt=""> Compte</a>
+        <a class="iconbtn" href="../checkout.html"><img id="cartIcon" class="ic" alt=""> Panier</a>
         <div class="dropdown">
           <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
           <div id="menuDrop" class="menu">
-            <a href="a-propos.html">À propos</a>
-            <a href="cgv.html">CGV</a>
-            <a href="mentions-legales.html">Mentions légales</a>
-            <a href="confidentialite.html">Politique de confidentialité</a>
-            <a href="contact.html">Contact</a>
+            <a href="../pages/a-propos.html">À propos</a>
+            <a href="../pages/cgv.html">CGV</a>
+            <a href="../pages/mentions-legales.html">Mentions légales</a>
+            <a href="../pages/confidentialite.html">Politique de confidentialité</a>
+            <a href="../pages/contact.html">Contact</a>
           </div>
         </div>
       </nav>
     </div>
   </header>
 
-  <nav class="crumbs" aria-label="Fil d'Ariane">
-    <a href="index.html">Accueil</a> › <a href="index.html#Cat=Casque/Ecouteurs">Casque/Ecouteurs</a> › <span id="crumbName">AirPod Pro 2</span>
-  </nav>
+  <!-- (Fil d’Ariane supprimé comme demandé) -->
 
   <section class="pwrap" id="pwrap" aria-live="polite">
     <div class="gallery">
@@ -175,7 +168,7 @@
             <span><img class="ic" id="icRefund" alt=""> Remboursement garanti</span>
             <span><img class="ic" id="ic4x" alt=""> Paiement en 4x</span>
           </div>
-          <a id="payNowBtn" href="checkout.html" class="btn paynow"><img class="ic" id="icPayNow" alt=""> Payer maintenant</a>
+          <a id="payNowBtn" href="../checkout.html" class="btn paynow"><img class="ic" id="icPayNow" alt=""> Payer maintenant</a>
         </div>
       </div>
     </aside>
@@ -201,65 +194,114 @@
     <div class="grid" id="relGrid"></div>
   </section>
 
-  <a id="fabCart" class="fab" href="checkout.html" aria-label="Aller au paiement"><img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span></a>
+  <a id="fabCart" class="fab" href="../checkout.html" aria-label="Aller au paiement"><img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span></a>
 
   <footer>
     <div class="fwrap">
       <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
       <nav>
-        <a href="a-propos.html">À propos</a> · 
-        <a href="cgv.html">CGV</a> · 
-        <a href="mentions-legales.html">Mentions légales</a> · 
-        <a href="confidentialite.html">Confidentialité</a> · 
-        <a href="contact.html">Contact</a>
+        <a href="../pages/a-propos.html">À propos</a> · 
+        <a href="../pages/cgv.html">CGV</a> · 
+        <a href="../pages/mentions-legales.html">Mentions légales</a> · 
+        <a href="../pages/confidentialite.html">Confidentialité</a> · 
+        <a href="../pages/contact.html">Contact</a>
       </nav>
     </div>
   </footer>
 
   <script>
   (async()=>{
-    // --- Compte à rebours promo (48h) ---
+    // ---- Compte à rebours (48h)
     const countdownEl=document.getElementById('countdown');
     const SALE_END=new Date(Date.now()+48*60*60*1000);
     const two=n=>String(n).padStart(2,'0');
-    function tick(){ if(!countdownEl) return; const now=new Date(); let diff=SALE_END-now; if(diff<=0){countdownEl.textContent='Dernières heures !';return} const d=Math.floor(diff/86400000); diff%=86400000; const h=Math.floor(diff/3600000); diff%=3600000; const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000); countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`; }
+    function tick(){
+      if(!countdownEl) return;
+      const now=new Date(); let diff=SALE_END-now;
+      if(diff<=0){countdownEl.textContent='Dernières heures !';return}
+      const d=Math.floor(diff/86400000); diff%=86400000;
+      const h=Math.floor(diff/3600000); diff%=3600000;
+      const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
+      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+    }
     tick(); setInterval(tick,1000);
 
-    // --- Icônes ---
+    // ---- Icônes
     const ICONS = {
-      buy: 'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
-      cart: 'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
-      cartFull: 'https://img.icons8.com/?size=100&id=K5Jv3BfpxPYa&format=png&color=000000',
-      checkout: 'https://img.icons8.com/?size=100&id=qVsd2YOgeizO&format=png&color=000000',
-      truck: 'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
-      logout: 'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
-      user: 'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
-      menu: 'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
-      trash: 'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000',
-      fourx: 'https://img.icons8.com/?size=100&id=3c0Tk1f266bf&format=png&color=000000',
-      ssl: 'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
-      refund: 'https://img.icons8.com/?size=100&id=lRNQ5N7CjFht&format=png&color=000000',
-      search: 'https://img.icons8.com/?size=100&id=7964&format=png&color=000000'
+      buy:'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
+      cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
+      cartFull:'https://img.icons8.com/?size=100&id=K5Jv3BfpxPYa&format=png&color=000000',
+      checkout:'https://img.icons8.com/?size=100&id=qVsd2YOgeizO&format=png&color=000000',
+      truck:'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
+      logout:'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
+      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
+      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
+      trash:'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000',
+      fourx:'https://img.icons8.com/?size=100&id=3c0Tk1f266bf&format=png&color=000000',
+      ssl:'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
+      refund:'https://img.icons8.com/?size=100&id=lRNQ5N7CjFht&format=png&color=000000',
+      search:'https://img.icons8.com/?size=100&id=7964&format=png&color=000000'
     };
     const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
-    setSrc('icUser', ICONS.user); setSrc('icMenu', ICONS.menu); setSrc('icBuy', ICONS.buy);
-    setSrc('icTruck', ICONS.truck); setSrc('icReturn', ICONS.logout); setSrc('icRefund', ICONS.refund); setSrc('ic4x', ICONS.fourx);
-    setSrc('icPayNow', ICONS.checkout); setSrc('icFabCart', ICONS.cart);
+    setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('icBuy',ICONS.buy);
+    setSrc('icTruck',ICONS.truck); setSrc('icReturn',ICONS.logout); setSrc('icRefund',ICONS.refund); setSrc('ic4x',ICONS.fourx);
+    setSrc('icPayNow',ICONS.checkout); setSrc('icFabCart',ICONS.cart);
 
-    // --- Menu déroulant ---
-    const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop'); if(menuBtn&&menuDrop){ menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')}); document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); }); }
+    // ---- Menu
+    const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop');
+    if(menuBtn&&menuDrop){
+      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
+      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+    }
 
-    // --- Cart (localStorage) ---
+    // ---- Cart
     const KEY='gf_cart';
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
     const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount();};
     const cartCount=()=>getCart().reduce((s,x)=>s+x.qty,0);
-    const updateCartCount=()=>{ const count=cartCount(); const icon=document.getElementById('cartIcon'); if(icon) icon.src=count>0?ICONS.cartFull:ICONS.cart; const fbc=document.getElementById('fabCount'); if(fbc) fbc.textContent=count; const fbi=document.getElementById('icFabCart'); if(fbi) fbi.src=count>0?ICONS.cartFull:ICONS.cart; };
+    const updateCartCount=()=>{
+      const count=cartCount();
+      const icon=document.getElementById('cartIcon'); if(icon) icon.src=count>0?ICONS.cartFull:ICONS.cart;
+      const fbc=document.getElementById('fabCount'); if(fbc) fbc.textContent=count;
+      const fbi=document.getElementById('icFabCart'); if(fbi) fbi.src=count>0?ICONS.cartFull:ICONS.cart;
+    };
 
-    // --- Charger le produit (depuis products.json selon ?id=, sinon fallback) ---
-    const urlId=new URLSearchParams(location.search).get('id');
+    // ---- Utils chemin GitHub Pages (root /GFSTORE/)
+    const GH_ROOT = (()=>{
+      const parts = location.pathname.split('/').filter(Boolean);
+      // Sur project pages: /GFSTORE/... → root = /GFSTORE/
+      return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/';
+    })();
+
+    // ---- Détection ID produit: ?id=... OU ...-1234.html
+    function getProductId(){
+      const q=new URLSearchParams(location.search);
+      if(q.get('id')) return String(q.get('id'));
+      const fname=(location.pathname.split('/').pop()||'').toLowerCase();
+      const m=fname.match(/-(\d+)\.html?$/); // prend les chiffres avant .html
+      return m?m[1]:null;
+    }
+
+    // ---- Chargement du catalogue (chemins robustes pour /produits/)
+    async function loadProducts(){
+      const urls=[
+        '../data/products.json',            // depuis /produits/ → /data/products.json
+        GH_ROOT+'data/products.json',       // /GFSTORE/data/products.json (gh-pages)
+        GH_ROOT+'products.json',            // fallback si à la racine
+        'https://silve25.github.io/GFSTORE/data/products.json' // absolu en dernier recours
+      ];
+      for(const u of urls){
+        try{
+          const r=await fetch(u,{cache:'no-store'});
+          if(r.ok){ return await r.json(); }
+        }catch(e){}
+      }
+      return null;
+    }
+
+    // ---- Fallback marketing
     const fallback={
-      id:"1001",
+      id:"1101",
       sku:"GF-AIRPOD-PRO-000",
       name:"AirPod Pro 2",
       category:"Casque/Ecouteurs",
@@ -268,82 +310,73 @@
       description:`🎧 **Conçus pour vos journées intenses, taillés pour la performance.**
 AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et un confort qui se fait oublier.
 
-**Ce que vous allez adorer :**
-• Réduction de bruit avancée pour rester focus, où que vous soyez.  
-• Mode Transparence intelligent pour entendre ce qui compte, instantanément.  
+**Vous allez adorer :**
+• ANC avancée pour rester focus, où que vous soyez.  
+• Mode Transparence intelligent pour entendre ce qui compte.  
 • Appels clairs grâce aux micros anti-bruit.  
-• Autonomie longue durée avec l’étui USB-C (charge rapide).  
-• Connexion Bluetooth stable et appairage en quelques secondes.
+• Autonomie longue avec étui USB-C (charge rapide).  
+• Bluetooth stable, appairage en quelques secondes.
 
-**Pourquoi acheter chez GF Store ?**
+**GF Store, c’est mieux :**
 • Prix de rentrée agressifs.  
-• Livraison en 1 semaine, retours 14 jours, remboursement garanti.  
-• Paiement sécurisé : carte, mobile et crypto acceptées.  
-• Support client réactif et conseils personnalisés.`,
+• Livraison 1 semaine, retours 14 jours, remboursement garanti.  
+• Paiement sécurisé (carte, mobile) et crypto acceptée.  
+• Support client réactif.`,
       price:279.0,
       promoPrice:195.3,
       stock:56,
       images:[
         "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
         "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
-        "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
-        "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
-        "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
-        "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75"
+        "https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75"
       ],
       imageCover:"https://boulanger.scene7.com/is/image/Boulanger/0195949052637_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
-      supplier:"Distributeur EU",
-      cost:195.3,
-      status:"En stock",
       warrantyMonths:24,
       rating:4.6,
-      ratingCount:0,
       options:{
-        "Couleur":[{value:"Noir",priceDelta:0.0},{value:"Blanc",priceDelta:0.0},{value:"Bleu",priceDelta:0.0}],
-        "Accessoires":[{value:"Standard",priceDelta:0.0},{value:"Housse rigide",priceDelta:20.0},{value:"Câble audio 1.2 m",priceDelta:10.0}]
+        "Couleur":[{value:"Noir",priceDelta:0},{value:"Blanc",priceDelta:0},{value:"Bleu",priceDelta:0}],
+        "Accessoires":[{value:"Standard",priceDelta:0},{value:"Housse rigide",priceDelta:20},{value:"Câble audio 1.2 m",priceDelta:10}]
       }
     };
 
-    async function loadProducts(){
-      const paths=[
-        'data/products.json',
-        '/data/products.json',
-        'products.json',
-        'https://silve25.github.io/GFSTORE/data/products.json'
-      ];
-      for(const p of paths){
-        try{ const r=await fetch(p); if(r.ok) return r.json(); }catch{}
-      }
-      return null;
+    // ---- Récupération produit
+    const dataset = await loadProducts();
+    const pid = getProductId() || fallback.id;
+    let product = fallback;
+    if(Array.isArray(dataset)){
+      const found = dataset.find(p=>String(p.id||p.sku||p._id)===String(pid));
+      if(found) product={...fallback,...found};
     }
 
-    let product=fallback;
-    const dataset=await loadProducts();
-    if(dataset){
-      const byId=dataset.find(p=>String(p.id||p.sku||p._id)===String(urlId||fallback.id));
-      if(byId) product={...fallback,...byId};
-    }
-
-    // --- Rendu produit ---
+    // ---- Rendu produit
     const EUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-    const gMain=document.getElementById('gMain'); const thumbs=document.getElementById('thumbs'); const pName=document.getElementById('pName'); const pBrand=document.getElementById('pBrand'); const pPrice=document.getElementById('pPrice'); const pDel=document.getElementById('pDel'); const pBadge=document.getElementById('pBadge'); const stockInfo=document.getElementById('stockInfo'); const desc=document.getElementById('tab-desc'); const specsEl=document.getElementById('specs'); const crumbName=document.getElementById('crumbName');
+    const gMain=document.getElementById('gMain');
+    const thumbs=document.getElementById('thumbs');
+    const pName=document.getElementById('pName');
+    const pBrand=document.getElementById('pBrand');
+    const pPrice=document.getElementById('pPrice');
+    const pDel=document.getElementById('pDel');
+    const pBadge=document.getElementById('pBadge');
+    const stockInfo=document.getElementById('stockInfo');
+    const desc=document.getElementById('tab-desc');
+    const specsEl=document.getElementById('specs');
 
-    crumbName.textContent=product.name;
-    pName.textContent=product.name; pBrand.textContent=product.brand||'';
+    pName.textContent=product.name;
+    pBrand.textContent=product.brand||'';
     const imgs=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean);
     gMain.src=imgs[0]; gMain.alt=product.name;
     thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Voir image ${i+1}"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
-    thumbs.addEventListener('click',e=>{ const b=e.target.closest('button[data-i]'); if(!b) return; const i=Number(b.dataset.i); gMain.src=imgs[i]; });
+    thumbs.addEventListener('click',e=>{
+      const b=e.target.closest('button[data-i]'); if(!b) return;
+      const i=Number(b.dataset.i); gMain.src=imgs[i];
+    });
 
+    // Avis (fictifs)
     const stars=document.getElementById('pStars'); const rTxt=document.getElementById('pRatingText');
     const reviews=[
-      {name:'Camille L. — Paris, FR',stars:5,date:'2025-08-14',text:"Audio précis, basses nettes. Achat en BTC sur GF Store : hyper rapide, confirmé en quelques minutes."},
-      {name:'Jonas K. — Berlin, DE',stars:4,date:'2025-08-12',text:"Très bon confort, ANC efficace dans le métro. Livraison en 5 jours, rien à dire."},
-      {name:'Marta G. — Madrid, ES',stars:5,date:'2025-08-10',text:"Mode transparence très naturel. Payé en ETH, expérience fluide et rassurante."},
-      {name:'Luca P. — Milano, IT',stars:5,date:'2025-08-08',text:"Idéal pour les appels visio. Étui compact, charge rapide pratique."},
-      {name:'Sophie V. — Bruxelles, BE',stars:4,date:'2025-08-07',text:"Bon maintien, aucun décrochage Bluetooth. Prix promo imbattable."},
-      {name:'Tiago R. — Lisboa, PT',stars:5,date:'2025-08-05',text:"Acheté avec crypto : discret et simple. Son immersif, je recommande."},
-      {name:'Emma W. — Amsterdam, NL',stars:5,date:'2025-08-03',text:"Basses propres, appels clairs. Service client réactif chez GF Store."}
+      {name:'Camille L. — Paris, FR',stars:5,date:'2025-08-14',text:"Audio précis, basses nettes. Achat en BTC sur GF Store : hyper rapide."},
+      {name:'Jonas K. — Berlin, DE',stars:4,date:'2025-08-12',text:"Très bon confort, ANC efficace. Livraison en 5 jours."},
+      {name:'Marta G. — Madrid, ES',stars:5,date:'2025-08-10',text:"Transparence très naturelle. Payé en ETH, super simple."}
     ];
     const avg=reviews.reduce((s,r)=>s+r.stars,0)/reviews.length;
     const full=Math.round(avg);
@@ -353,16 +386,33 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
     reviewsEl.innerHTML=reviews.map(r=>`<div class="rev"><div class="rv-head"><strong>${r.name}</strong><span class="rv-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span><span class="rv-date">${r.date}</span></div><p>${r.text}</p></div>`).join('');
 
     // Prix + remise
-    const hasPromo=Number.isFinite(product.promoPrice)&&product.promoPrice>0&&product.promoPrice<product.price; let base=hasPromo?product.promoPrice:product.price; const disc=hasPromo?Math.round((1-(base/product.price))*100):0; pPrice.textContent=EUR(base); pDel.textContent=hasPromo?EUR(product.price):''; pBadge.textContent=hasPromo?`-${disc}%`:'';
+    const hasPromo=Number.isFinite(product.promoPrice)&&product.promoPrice>0&&product.promoPrice<product.price;
+    let base=hasPromo?product.promoPrice:product.price;
+    const disc=hasPromo?Math.round((1-(base/product.price))*100):0;
+    pPrice.textContent=EUR(base);
+    pDel.textContent=hasPromo?EUR(product.price):'';
+    pBadge.textContent=hasPromo?`-${disc}%`:'';
 
     // Stock
     stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">En stock</span> • ${product.stock} pièces`:`<span style="color:#dc2626">Rupture</span>`;
 
     // Options
-    let selColor=product.options?.Couleur?.[0]?.value||null; let selAcc=product.options?.Accessoires?.[0]?.value||null; let accDelta=product.options?.Accessoires?.[0]?.priceDelta||0;
+    let selColor=product.options?.Couleur?.[0]?.value||null;
+    let selAcc=product.options?.Accessoires?.[0]?.value||null;
+    let accDelta=product.options?.Accessoires?.[0]?.priceDelta||0;
 
-    function renderColors(){ const wrap=document.getElementById('colorWrap'); if(!product.options?.Couleur){document.getElementById('colorRow').style.display='none'; return;} wrap.innerHTML=product.options.Couleur.map(o=>`<button class="swatch" role="radio" aria-checked="${o.value===selColor}" data-v="${o.value}">${o.value}</button>`).join(''); wrap.onclick=e=>{const b=e.target.closest('.swatch'); if(!b) return; selColor=b.dataset.v; renderColors();}; }
-    function renderAcc(){ const wrap=document.getElementById('accWrap'); if(!product.options?.Accessoires){document.getElementById('accRow').style.display='none'; return;} wrap.innerHTML=product.options.Accessoires.map(o=>`<button class="pill" role="radio" aria-checked="${o.value===selAcc}" data-v="${o.value}" data-d="${o.priceDelta}">${o.value}${o.priceDelta?` (+${EUR(o.priceDelta)})`:''}</button>`).join(''); wrap.onclick=e=>{const b=e.target.closest('.pill'); if(!b) return; selAcc=b.dataset.v; accDelta=Number(b.dataset.d||0); updatePrice(); renderAcc();}; }
+    function renderColors(){
+      const wrap=document.getElementById('colorWrap');
+      if(!product.options?.Couleur){document.getElementById('colorRow').style.display='none'; return;}
+      wrap.innerHTML=product.options.Couleur.map(o=>`<button class="swatch" role="radio" aria-checked="${o.value===selColor}" data-v="${o.value}">${o.value}</button>`).join('');
+      wrap.onclick=e=>{const b=e.target.closest('.swatch'); if(!b) return; selColor=b.dataset.v; renderColors();};
+    }
+    function renderAcc(){
+      const wrap=document.getElementById('accWrap');
+      if(!product.options?.Accessoires){document.getElementById('accRow').style.display='none'; return;}
+      wrap.innerHTML=product.options.Accessoires.map(o=>`<button class="pill" role="radio" aria-checked="${o.value===selAcc}" data-v="${o.value}" data-d="${o.priceDelta}">${o.value}${o.priceDelta?` (+${EUR(o.priceDelta)})`:''}</button>`).join('');
+      wrap.onclick=e=>{const b=e.target.closest('.pill'); if(!b) return; selAcc=b.dataset.v; accDelta=Number(b.dataset.d||0); updatePrice(); renderAcc();};
+    }
     function updatePrice(){ const final=base+Number(accDelta||0); pPrice.textContent=EUR(final); }
     renderColors(); renderAcc(); updatePrice();
 
@@ -376,31 +426,42 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
       <li>Garantie <strong>${product.warrantyMonths||24} mois</strong>.</li>
     </ul>`;
 
-    // Spécifications (exemples génériques)
+    // Spécifications
     const specs=[
-      ['Type', 'Écouteurs sans fil intra-auriculaires'],
-      ['Réduction de bruit', 'Active + mode transparence'],
-      ['Audio', 'Son immersif optimisé pour musique, appels, jeux'],
-      ['Connectivité', 'Bluetooth – appairage rapide et stable'],
-      ['Charge', 'Rapide via étui de charge (USB-C)'],
-      ['Compatibilité', 'iOS / Android / Windows / macOS'],
-      ['Garantie', `${product.warrantyMonths||24} mois chez GF Store`]
+      ['Type','Écouteurs sans fil intra-auriculaires'],
+      ['Réduction de bruit','Active + mode transparence'],
+      ['Audio','Son immersif pour musique, appels, jeux'],
+      ['Connectivité','Bluetooth • appairage rapide et stable'],
+      ['Charge','Rapide via étui USB-C'],
+      ['Compatibilité','iOS / Android / Windows / macOS'],
+      ['Garantie',`${product.warrantyMonths||24} mois chez GF Store`]
     ];
-    const specsEl=document.getElementById('specs');
     specsEl.innerHTML=specs.map(([k,v])=>`<div style="opacity:.7">${k}</div><div>${v}</div>`).join('');
 
     // Produits similaires (même catégorie)
     const relGrid=document.getElementById('relGrid');
-    if(dataset){
+    if(Array.isArray(dataset)){
       const sims=dataset.filter(p=>p.category===product.category && String(p.id)!==String(product.id)).slice(0,4);
-      const slug=str=>encodeURIComponent(String(str||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''));
+      const slug=str=>String(str||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
       relGrid.innerHTML=sims.map(p=>{
-        const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price; const newP=hasPromo?p.promoPrice:p.price; const disc=hasPromo?Math.round((1-(newP/p.price))*100):0; const url=`product.html?id=${encodeURIComponent(p.id||p.sku||p._id)}&slug=${slug(p.name)}`; const img=p.imageCover||(p.images&&p.images[0])||'';
-        return `<article class="card"><a class="hit" href="${url}" aria-label="Voir ${p.name}"></a><div class="img"><img loading="lazy" src="${img}" alt="${p.name}"></div><div class="box"><div style="font-weight:600">${p.name}</div><div style="opacity:.7;font-size:12px">${p.brand||''} • ${p.category||''}</div><div style="margin-top:6px">${EUR(newP)} ${hasPromo?`<span style="opacity:.6;text-decoration:line-through">${EUR(p.price)}</span> <span class="badge">-${disc}%</span>`:''}</div></div></article>`;
+        const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price;
+        const newP=hasPromo?p.promoPrice:p.price;
+        const disc=hasPromo?Math.round((1-(newP/p.price))*100):0;
+        const url=`./${slug(p.name)}-${encodeURIComponent(p.id||p.sku||p._id)}.html`;
+        const img=p.imageCover||(p.images&&p.images[0])||'';
+        return `<article class="card">
+          <a class="hit" href="${url}" aria-label="Voir ${p.name}"></a>
+          <div class="img"><img loading="lazy" src="${img}" alt="${p.name}"></div>
+          <div class="box">
+            <div style="font-weight:600">${p.name}</div>
+            <div style="opacity:.7;font-size:12px">${p.brand||''} • ${p.category||''}</div>
+            <div style="margin-top:6px">${EUR(newP)} ${hasPromo?`<span style="opacity:.6;text-decoration:line-through">${EUR(p.price)}</span> <span class="badge">-${disc}%</span>`:''}</div>
+          </div>
+        </article>`;
       }).join('');
     }
 
-    // Ajouter au panier (avec options dans le nom)
+    // Ajouter au panier
     document.getElementById('addBtn').addEventListener('click',()=>{
       const variantParts=[]; if(selColor) variantParts.push(`Couleur: ${selColor}`); if(selAcc) variantParts.push(`Accessoires: ${selAcc}`);
       const nameWithVar= product.name + (variantParts.length? ` (${variantParts.join(', ')})` : '');
@@ -418,10 +479,17 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
     // Tabs
     const tabs={desc:document.getElementById('tab-desc'), spec:document.getElementById('tab-spec'), rev:document.getElementById('tab-rev')};
     const heads={desc:document.getElementById('th-desc'), spec:document.getElementById('th-spec'), rev:document.getElementById('th-rev')};
-    Object.values(heads).forEach(h=>h.addEventListener('click',()=>{ Object.values(heads).forEach(x=>x.setAttribute('aria-selected','false')); h.setAttribute('aria-selected','true'); Object.values(tabs).forEach(t=>t.classList.remove('show')); const id=h.id.split('-')[1]; document.getElementById('tab-'+id).classList.add('show'); }));
+    Object.values(heads).forEach(h=>h.addEventListener('click',()=>{
+      Object.values(heads).forEach(x=>x.setAttribute('aria-selected','false'));
+      h.setAttribute('aria-selected','true');
+      Object.values(tabs).forEach(t=>t.classList.remove('show'));
+      const id=h.id.split('-')[1]; document.getElementById('tab-'+id).classList.add('show');
+    }));
 
     // JSON-LD SEO
-    const ld={"@context":"https://schema.org","@type":"Product","name":product.name,"image":imgs,"sku":product.sku||product.id,"brand":{"@type":"Brand","name":product.brand||'GF Store'},"description":product.description?.slice(0,500)||'',"offers":{"@type":"Offer","priceCurrency":"EUR","price":(hasPromo?product.promoPrice:product.price),"availability":"https://schema.org/InStock","url":location.href}}; const s=document.createElement('script'); s.type='application/ld+json'; s.textContent=JSON.stringify(ld); document.head.appendChild(s);
+    const imgsForLd=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean);
+    const ld={"@context":"https://schema.org","@type":"Product","name":product.name,"image":imgsForLd,"sku":product.sku||product.id,"brand":{"@type":"Brand","name":product.brand||'GF Store'},"description":(product.description||'').slice(0,500),"offers":{"@type":"Offer","priceCurrency":"EUR","price":(hasPromo?product.promoPrice:product.price),"availability":"https://schema.org/InStock","url":location.href}};
+    const s=document.createElement('script'); s.type='application/ld+json'; s.textContent=JSON.stringify(ld); document.head.appendChild(s);
   })();
   </script>
 </body>
