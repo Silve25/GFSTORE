@@ -91,6 +91,23 @@
     .fab .badge{min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px}
     .fab img.ic{filter:invert(1)}
 
+    /* === Mini panneau panier === */
+    .panel{position:fixed;inset:0;display:none;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:10010}
+    .panel.show{display:block}
+    .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid #e5e7eb;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
+    .panel.show .sheet{transform:translateX(0)}
+    .sheet header{margin:0;padding:12px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center}
+    .sheet .items{padding:12px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+    .ci{display:grid;grid-template-columns:72px 1fr auto;gap:8px;border:1px solid #e5e7eb;border-radius:12px;padding:8px}
+    .ci img{width:72px;height:72px;object-fit:cover;border-radius:8px;background:#f1f5f9}
+    .qty{display:flex;align-items:center;gap:6px}
+    .qty button{border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:2px 6px;cursor:pointer;font-size:12px}
+    .sum{margin-top:auto;border-top:1px solid #e5e7eb;padding:12px;display:flex;justify-content:space-between;align-items:center}
+    .checkout{display:inline-flex;align-items:center;gap:8px;background:var(--a);color:#fff;text-decoration:none;padding:10px 14px;border-radius:12px}
+    .x{cursor:pointer;border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:6px}
+    .ic-sm{width:12px;height:12px}
+    body.lock{overflow:hidden}
+
     footer{background:#fff;border-top:1px solid #e5e7eb}
     .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
 
@@ -118,7 +135,8 @@
       </a>
       <nav class="nav">
         <a href="../compte/index.html"><img class="ic" id="icUser" alt=""> Compte</a>
-        <a class="iconbtn" href="../checkout.html"><img id="cartIcon" class="ic" alt=""> Panier</a>
+        <!-- Ajout d'un id pour intercepter le clic sans redirection -->
+        <a id="cartBtn" class="iconbtn" href="../checkout.html"><img id="cartIcon" class="ic" alt=""> Panier</a>
         <div class="dropdown">
           <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
           <div id="menuDrop" class="menu">
@@ -194,7 +212,25 @@
     <div class="grid" id="relGrid"></div>
   </section>
 
-  <a id="fabCart" class="fab" href="../checkout.html" aria-label="Aller au paiement"><img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span></a>
+  <!-- === Mini fenêtre panier === -->
+  <div id="cartPanel" class="panel" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="Mon panier">
+      <header>
+        <strong>Mon panier</strong>
+        <button id="closeCart" class="x" aria-label="Fermer">✕</button>
+      </header>
+      <div id="cartItems" class="items"></div>
+      <div class="sum">
+        <div>Total <strong id="cartTotal">0 €</strong></div>
+        <a href="../checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Effectuer un paiement</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bulle panier => bouton (plus de lien direct) -->
+  <button id="fabCart" class="fab" type="button" aria-label="Ouvrir le panier">
+    <img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span>
+  </button>
 
   <footer>
     <div class="fwrap">
@@ -245,7 +281,7 @@
     const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
     setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('icBuy',ICONS.buy);
     setSrc('icTruck',ICONS.truck); setSrc('icReturn',ICONS.logout); setSrc('icRefund',ICONS.refund); setSrc('ic4x',ICONS.fourx);
-    setSrc('icPayNow',ICONS.checkout); setSrc('icFabCart',ICONS.cart);
+    setSrc('icPayNow',ICONS.checkout); setSrc('icFabCart',ICONS.cart); setSrc('icCheckout', ICONS.checkout);
 
     // ---- Menu
     const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop');
@@ -254,10 +290,10 @@
       document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
     }
 
-    // ---- Cart
+    // ---- Cart (localStorage)
     const KEY='gf_cart';
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
-    const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount();};
+    const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount(); if(typeof renderCart==='function'){renderCart();}};
     const cartCount=()=>getCart().reduce((s,x)=>s+x.qty,0);
     const updateCartCount=()=>{
       const count=cartCount();
@@ -267,28 +303,24 @@
     };
 
     // ---- Utils chemin GitHub Pages (root /GFSTORE/)
-    const GH_ROOT = (()=>{
-      const parts = location.pathname.split('/').filter(Boolean);
-      // Sur project pages: /GFSTORE/... → root = /GFSTORE/
-      return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/';
-    })();
+    const GH_ROOT = (()=>{ const parts = location.pathname.split('/').filter(Boolean); return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/'; })();
 
-    // ---- Détection ID produit: ?id=... OU ...-1234.html
+    // ---- Détection ID produit
     function getProductId(){
       const q=new URLSearchParams(location.search);
       if(q.get('id')) return String(q.get('id'));
       const fname=(location.pathname.split('/').pop()||'').toLowerCase();
-      const m=fname.match(/-(\d+)\.html?$/); // prend les chiffres avant .html
+      const m=fname.match(/-(\d+)\.html?$/);
       return m?m[1]:null;
     }
 
-    // ---- Chargement du catalogue (chemins robustes pour /produits/)
+    // ---- Chargement du catalogue
     async function loadProducts(){
       const urls=[
-        '../data/products.json',            // depuis /produits/ → /data/products.json
-        GH_ROOT+'data/products.json',       // /GFSTORE/data/products.json (gh-pages)
-        GH_ROOT+'products.json',            // fallback si à la racine
-        'https://silve25.github.io/GFSTORE/data/products.json' // absolu en dernier recours
+        '../data/products.json',
+        GH_ROOT+'data/products.json',
+        GH_ROOT+'products.json',
+        'https://silve25.github.io/GFSTORE/data/products.json'
       ];
       for(const u of urls){
         try{
@@ -472,9 +504,96 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
       const image=(product.imageCover||(product.images&&product.images[0])||'');
       if(idx>-1){ cart[idx].qty+=1; } else { cart.push({id,name:nameWithVar,price:finalPrice,qty:1,image,brand:product.brand||'',category:product.category||''}); }
       setCart(cart);
+      // Si tu veux ouvrir automatiquement le mini-panier après ajout :
+      // openCart();
     });
 
     updateCartCount();
+
+    // ---- Mini panneau panier (logique)
+    function cartTotal(){ return getCart().reduce((s,x)=>s + (x.qty * Number(x.price||0)), 0); }
+
+    function renderCart(){
+      const wrap=document.getElementById('cartItems');
+      if(!wrap) return;
+      const list=getCart();
+      wrap.innerHTML=list.length ? list.map(x=>`
+        <div class="ci" data-id="${x.id}">
+          <img src="${x.image||''}" alt="${x.name}">
+          <div>
+            <div style="font-weight:600">${x.name}</div>
+            <div style="opacity:.7;font-size:12px">${x.brand||''}${x.category?` • ${x.category}`:''}</div>
+            <div style="margin-top:6px">${EUR(x.price||0)}</div>
+          </div>
+          <div class="qty">
+            <button data-act="dec" aria-label="Diminuer">–</button>
+            <span>${x.qty}</span>
+            <button data-act="inc" aria-label="Augmenter">+</button>
+            <button data-act="del" title="Retirer" style="margin-left:6px">
+              <img class="ic-sm" src="${ICONS.trash}" alt="Supprimer">
+            </button>
+          </div>
+        </div>`).join('')
+      : '<div style="opacity:.7">Votre panier est vide.</div>';
+
+      const totalEl=document.getElementById('cartTotal');
+      if(totalEl) totalEl.textContent=EUR(cartTotal());
+    }
+
+    function openCart(){
+      const p=document.getElementById('cartPanel');
+      if(!p) return;
+      renderCart();
+      p.classList.add('show');
+      p.setAttribute('aria-hidden','false');
+      document.body.classList.add('lock');
+      const fab=document.getElementById('fabCart'); if(fab){fab.style.display='none'}
+    }
+
+    function closeCart(){
+      const p=document.getElementById('cartPanel');
+      if(!p) return;
+      p.classList.remove('show');
+      p.setAttribute('aria-hidden','true');
+      document.body.classList.remove('lock');
+      const fab=document.getElementById('fabCart'); if(fab){fab.style.display=''}
+    }
+
+    // Clics d'ouverture
+    const fabBtn=document.getElementById('fabCart');
+    if(fabBtn){ fabBtn.addEventListener('click',(e)=>{ e.preventDefault(); openCart(); }); }
+    const hdrCart=document.getElementById('cartBtn');
+    if(hdrCart){ hdrCart.addEventListener('click',(e)=>{ e.preventDefault(); openCart(); }); }
+
+    // Fermer (fond et bouton ✕)
+    const panel=document.getElementById('cartPanel');
+    if(panel){ panel.addEventListener('click',(e)=>{ if(e.target.id==='cartPanel') closeCart(); }); }
+    const closeX=document.getElementById('closeCart');
+    if(closeX){ closeX.addEventListener('click', closeCart); }
+
+    // Actions dans le panier
+    const itemsBox=document.getElementById('cartItems');
+    if(itemsBox){
+      itemsBox.addEventListener('click',(e)=>{
+        const row=e.target.closest('.ci'); if(!row) return;
+        const id=row.getAttribute('data-id');
+        const act=e.target.getAttribute('data-act') || e.target.closest('[data-act]')?.getAttribute('data-act');
+        if(!act) return;
+
+        if(act==='inc' || act==='dec'){
+          const c=getCart();
+          const it=c.find(x=>x.id===id);
+          if(it){
+            it.qty=Math.max( act==='inc' ? it.qty+1 : it.qty-1 , 1);
+            setCart(c);
+          }
+        }
+        if(act==='del'){
+          const c=getCart().filter(x=>x.id!==id);
+          setCart(c);
+        }
+      });
+    }
 
     // Tabs
     const tabs={desc:document.getElementById('tab-desc'), spec:document.getElementById('tab-spec'), rev:document.getElementById('tab-rev')};
@@ -490,6 +609,9 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
     const imgsForLd=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean);
     const ld={"@context":"https://schema.org","@type":"Product","name":product.name,"image":imgsForLd,"sku":product.sku||product.id,"brand":{"@type":"Brand","name":product.brand||'GF Store'},"description":(product.description||'').slice(0,500),"offers":{"@type":"Offer","priceCurrency":"EUR","price":(hasPromo?product.promoPrice:product.price),"availability":"https://schema.org/InStock","url":location.href}};
     const s=document.createElement('script'); s.type='application/ld+json'; s.textContent=JSON.stringify(ld); document.head.appendChild(s);
+
+    // Init rendu mini-panier
+    renderCart();
   })();
   </script>
 </body>
