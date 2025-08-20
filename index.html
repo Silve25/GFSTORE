@@ -12,7 +12,6 @@
     .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
     .brand{display:flex;align-items:center;gap:10px;font-weight:700}
     .brand b{font-size:20px}
-    /* Logo plus léger visuellement */
     .brand .logo{height:40px;width:auto;display:block}
     .nav{display:flex;gap:10px;align-items:center}
     .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;color:inherit;box-shadow:0 1px 0 rgba(0,0,0,.02)}
@@ -49,7 +48,6 @@
     .card{position:relative;background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 0 rgba(0,0,0,.02)}
     .card:hover{box-shadow:0 10px 24px rgba(0,0,0,.08);transform:translateY(-1px)}
     .hit{position:absolute;inset:0}
-    /* marge et fine bordure sur les images produits */
     .img{aspect-ratio:1/1;background:#fff;display:grid;place-items:center;padding:10px;border:1px solid #e5e7eb;border-radius:14px}
     .img img{width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;border:1px solid #e5e7eb;background:#fff}
     .card .box{padding:12px}
@@ -62,9 +60,7 @@
     .btn{position:relative;z-index:2;margin-top:auto;display:inline-flex;align-items:center;gap:8px;justify-content:center;width:100%;text-align:center;padding:11px 12px;border:0;border-top:1px solid #e5e7eb;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:0 0 16px 16px;cursor:pointer;box-shadow:0 6px 14px rgba(30,64,175,.25)}
     .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(30,64,175,.28)}
     .btn .ic{filter:invert(1)}
-    .btn .ic{filter:invert(1)}
 
-    /* Cart panel */
     .panel{position:fixed;inset:0;display:none;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:9999}
     .panel.show{display:block}
     .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid #e5e7eb;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
@@ -85,14 +81,7 @@
     .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
     .fwrap a{text-decoration:none;color:inherit;opacity:.9}
     .fwrap a:hover{text-decoration:underline}
-    /* extra color & ui tweaks */
-    .controls .searchwrap{position:relative;flex:2}
-    .controls .searchwrap input{padding-left:36px}
-    .controls .searchwrap .ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.55}
-    .fab{position:fixed;right:16px;bottom:16px;z-index:10000;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border:0;border-radius:999px;display:inline-flex;align-items:center;gap:8px;padding:12px 14px;box-shadow:0 12px 28px rgba(30,64,175,.35);cursor:pointer}
-    .fab .badge{min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px}
-    .fab img.ic{filter:invert(1)}
-    /* extra color & ui tweaks */
+
     .controls .searchwrap{position:relative;flex:2}
     .controls .searchwrap input{padding-left:36px}
     .controls .searchwrap .ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.55}
@@ -100,7 +89,7 @@
     .fab .badge{min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px}
     .fab img.ic{filter:invert(1)}
     .chip{display:inline-block;line-height:1;padding:2px 6px;border-radius:999px;background:#f0f9ff;color:#0ea5e9;font-size:11px;border:1px solid #bae6fd}
-    .ic-sm{width:12px;height:12px} /* poubelle plus petite */
+    .ic-sm{width:12px;height:12px}
     select{border-radius:14px}
     #icSSL{width:28px;height:28px}
     .paylogos{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:6px}
@@ -111,7 +100,6 @@
     .pay-carousel img{height:22px}
     .section-title{max-width:var(--w);margin:6px auto 0;padding:0 12px;font-weight:700;font-size:16px;letter-spacing:.04em;opacity:.85}
 
-    /* Helpers pour afficher/masquer selon viewport */
     .mobile-only{display:none}
     .desktop-only{display:initial}
 
@@ -121,10 +109,9 @@
     .brand .logo{height:30px}
     .nav{order:2;justify-content:center;flex-wrap:wrap}
     .policies{grid-template-columns:1fr;grid-template-areas:"a" "b" "c"}
-    .policy.p3{padding:6px 8px} /* box de paiement réduite */
+    .policy.p3{padding:6px 8px}
     .paylogos{flex-wrap:nowrap;overflow-x:auto;gap:10px}
     .paylogos img{height:16px}
-    /* Sur mobile, on cache tout ce qui est SSL + texte long, on garde un petit libellé Paiement sécurisé et les logos */
     .desktop-only{display:none!important}
     .mobile-only{display:block}
   }
@@ -136,16 +123,18 @@
     <div class="hwrap">
       <a href="index.html" class="brand"><img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async"></a>
       <nav class="nav">
-        <a href="compte.html"><img class="ic" id="icUser" alt=""> Compte</a>
+        <!-- Lien compte mis à jour -->
+        <a href="compte/index.html"><img class="ic" id="icUser" alt=""> Compte</a>
         <button class="iconbtn" id="cartBtn"><img id="cartIcon" class="ic" alt=""> Panier</button>
         <div class="dropdown">
           <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
           <div id="menuDrop" class="menu">
-            <a href="a-propos.html">À propos</a>
-            <a href="cgv.html">CGV</a>
-            <a href="mentions-legales.html">Mentions légales</a>
-            <a href="confidentialite.html">Politique de confidentialité</a>
-            <a href="contact.html">Contact</a>
+            <!-- Liens pages déplacés dans /pages/ -->
+            <a href="pages/a-propos.html">À propos</a>
+            <a href="pages/cgv.html">CGV</a>
+            <a href="pages/mentions-legales.html">Mentions légales</a>
+            <a href="pages/confidentialite.html">Politique de confidentialité</a>
+            <a href="pages/contact.html">Contact</a>
           </div>
         </div>
       </nav>
@@ -210,13 +199,14 @@
 
   <footer>
     <div class="fwrap">
-      <div>© GF Store 2025 — Simplicité, sécurité, crypto‑friendly.</div>
+      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
       <nav>
-        <a href="a-propos.html">À propos</a> · 
-        <a href="cgv.html">CGV</a> · 
-        <a href="mentions-legales.html">Mentions légales</a> · 
-        <a href="confidentialite.html">Confidentialité</a> · 
-        <a href="contact.html">Contact</a>
+        <!-- Liens footer mis à jour vers /pages/ -->
+        <a href="pages/a-propos.html">À propos</a> · 
+        <a href="pages/cgv.html">CGV</a> · 
+        <a href="pages/mentions-legales.html">Mentions légales</a> · 
+        <a href="pages/confidentialite.html">Confidentialité</a> · 
+        <a href="pages/contact.html">Contact</a>
       </nav>
     </div>
   </footer>
@@ -252,7 +242,6 @@
       trash: 'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000',
       fourx: 'https://img.icons8.com/?size=100&id=3c0Tk1f266bf&format=png&color=000000',
       ssl: 'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
-      refund: 'https://img.icons8.com/?size=100&id=lRNQ5N7CjFht&format=png&color=000000',
       search: 'https://img.icons8.com/?size=100&id=7964&format=png&color=000000'
     };
 
@@ -263,7 +252,8 @@
       throw new Error('Impossible de charger products.json');
     }
     const formatEUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-    const slug=s=>encodeURIComponent(String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''));
+    // Slug aligné avec les pages produit /produits/slug-id.html (suppression des accents)
+    const slug=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 
     // Peupler les icônes UI
     const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
@@ -304,7 +294,6 @@
     const cartTotal=()=>getCart().reduce((s,x)=>s+x.qty*x.price,0);
     const updateCartCount=()=>{
       const count=cartCount();
-      const cc=document.getElementById('cartCount'); if(cc) cc.textContent=count;
       const icon=document.getElementById('cartIcon'); if(icon) icon.src=count>0?ICONS.cartFull:ICONS.cart;
       const fbc=document.getElementById('fabCount'); if(fbc) fbc.textContent=count;
       const fbi=document.getElementById('icFabCart'); if(fbi) fbi.src=count>0?ICONS.cartFull:ICONS.cart;
@@ -348,7 +337,9 @@
       const list=items.filter(p=> (cat==='Toutes catégories'||p.category===cat) && (`${p.name} ${p.brand||''} ${p.model||''}`.toLowerCase().includes(term)) );
       n.textContent=list.length;
       g.innerHTML=list.map((p,i)=>{
-        const id=findId(p,i), url=`product.html?id=${encodeURIComponent(id)}&slug=${slug(p.name)}`;
+        const id=findId(p,i);
+        // LIEN PRODUIT MIS À JOUR -> /produits/<slug>-<id>.html
+        const url=`produits/${slug(p.name)}-${encodeURIComponent(id)}.html`;
         const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price;
         const newP=hasPromo?p.promoPrice:p.price;
         const disc=hasPromo?Math.round((1-(newP/p.price))*100):0;
