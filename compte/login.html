@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Connexion — GF Store</title>
+  <style>
+    :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
+    *{box-sizing:border-box} body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
+    a{color:inherit}
+    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb;backdrop-filter:saturate(140%) blur(4px)}
+    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .brand .logo{height:40px;width:auto;display:block}
+    .nav{display:flex;gap:10px;align-items:center}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
+    .iconbtn{cursor:pointer}
+    .ic{width:16px;height:16px;display:inline-block}
+    .dropdown{position:relative}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
+    .menu.show{display:block}
+    .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
+    .menu a:hover{background:#f3f4f6}
+
+    .banner{background:linear-gradient(90deg,#1e3a8a,#2563eb,#0ea5e9);color:#fff;text-align:center;padding:10px 14px}
+    .banner .timer{font-weight:700;border-radius:999px;padding:2px 8px;background:rgba(255,255,255,.15);display:inline-block}
+    .banner .sep{opacity:.6;padding:0 6px}
+
+    .wrap{max-width:420px;margin:18px auto 40px;padding:0 12px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    h1{font-size:18px;margin:0 0 10px}
+    .muted{opacity:.75;font-size:12px}
+    label{display:block;font-weight:600;margin:10px 0 6px}
+    input{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+    .pw{position:relative}
+    .pw button{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:6px;cursor:pointer}
+    .row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}
+    .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;width:100%;padding:12px;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer;box-shadow:0 6px 14px rgba(30,64,175,.25)}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .alt{display:flex;gap:10px;margin-top:10px}
+    .alt a{flex:1;text-align:center;border:1px solid #e5e7eb;border-radius:12px;padding:10px;text-decoration:none;background:#fff}
+    .err{margin-top:10px;padding:10px;border-radius:12px;background:#fef2f2;border:1px solid #fee2e2;color:#991b1b;display:none}
+    .ok{margin-top:10px;padding:10px;border-radius:12px;background:#ecfdf5;border:1px solid #d1fae5;color:#065f46;display:none}
+    .hint{font-size:12px;opacity:.8;margin-top:10px}
+  </style>
+</head>
+<body>
+  <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+
+  <header>
+    <div class="hwrap">
+      <a id="homeLink" class="brand">
+        <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
+      </a>
+      <nav class="nav">
+        <a id="accountLink"><img class="ic" id="icUser" alt=""> Compte</a>
+        <a id="cartBtn" class="iconbtn"><img id="cartIcon" class="ic" alt=""> Panier</a>
+        <div class="dropdown">
+          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
+          <div id="menuDrop" class="menu">
+            <a id="aboutLink">À propos</a>
+            <a id="cgvLink">CGV</a>
+            <a id="legalLink">Mentions légales</a>
+            <a id="privacyLink">Politique de confidentialité</a>
+            <a id="contactLink">Contact</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="card">
+      <h1>Connexion</h1>
+      <div class="muted">Connecte-toi à ton espace GF Store.</div>
+
+      <form id="form" autocomplete="on" style="margin-top:10px">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required placeholder="vous@exemple.com" inputmode="email" />
+
+        <label for="password">Mot de passe</label>
+        <div class="pw">
+          <input id="password" name="password" type="password" required placeholder="Mot de passe" />
+          <button type="button" id="togglePw" aria-label="Afficher le mot de passe"><img class="ic" id="icEye" alt=""></button>
+        </div>
+
+        <div class="row">
+          <a id="registerLink">Créer un compte</a>
+          <a id="resetLink">Mot de passe oublié ?</a>
+        </div>
+
+        <button id="submitBtn" class="btn" type="submit"><img class="ic" id="icLogin" alt=""> Se connecter</button>
+        <div class="alt">
+          <a id="fillDemo">Remplir démo</a>
+          <a id="goShop">Retour boutique</a>
+        </div>
+
+        <div id="err" class="err"></div>
+        <div id="ok" class="ok"></div>
+        <div class="hint">Démo 100% front (localStorage). Pour de la vraie prod : serveur + hash salé côté backend.</div>
+      </form>
+    </div>
+  </main>
+
+  <footer style="background:#fff;border-top:1px solid #e5e7eb">
+    <div class="hwrap" style="justify-content:space-between;font-size:12px">
+      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <nav style="display:flex;gap:10px;flex-wrap:wrap">
+        <a id="aboutLink2">À propos</a> · 
+        <a id="cgvLink2">CGV</a> · 
+        <a id="legalLink2">Mentions légales</a> · 
+        <a id="privacyLink2">Confidentialité</a> · 
+        <a id="contactLink2">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+  (async()=>{
+
+    // --- Compte à rebours (48h)
+    const countdownEl=document.getElementById('countdown');
+    const SALE_END=new Date(Date.now()+48*60*60*1000);
+    const two=n=>String(n).padStart(2,'0');
+    function tick(){
+      if(!countdownEl) return;
+      const now=new Date(); let diff=SALE_END-now;
+      if(diff<=0){countdownEl.textContent='Dernières heures !';return}
+      const d=Math.floor(diff/86400000); diff%=86400000;
+      const h=Math.floor(diff/3600000); diff%=3600000;
+      const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
+      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+    }
+    tick(); setInterval(tick,1000);
+
+    // --- GH_ROOT (GitHub Pages friendly)
+    const GH_ROOT = (()=>{ 
+      const parts = location.pathname.split('/').filter(Boolean);
+      return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/';
+    })();
+
+    // --- Icônes
+    const ICONS = {
+      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
+      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
+      cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
+      login:'https://img.icons8.com/?size=100&id=8115&format=png&color=000000',
+      eye:'https://img.icons8.com/?size=100&id=12580&format=png&color=000000',
+      eyeOff:'https://img.icons8.com/?size=100&id=123000&format=png&color=000000'
+    };
+    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
+    setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('cartIcon',ICONS.cart);
+    setSrc('icLogin',ICONS.login); setSrc('icEye',ICONS.eye);
+
+    // --- Liens nav
+    const link=(id,path)=>{const el=document.getElementById(id); if(el) el.href=GH_ROOT+path;};
+    document.getElementById('homeLink').href = GH_ROOT;
+    link('accountLink','compte/login.html'); // on est déjà ici
+    link('cartBtn','checkout.html');
+    ['about','cgv','legal','privacy','contact'].forEach(k=>{
+      link(k+'Link','pages/'+(k==='about'?'a-propos':k)+'.html');
+      link(k+'Link2','pages/'+(k==='about'?'a-propos':k)+'.html');
+    });
+    link('registerLink','compte/register.html');
+    link('resetLink','compte/password-reset.html');
+    link('goShop','index.html');
+
+    // --- Menu
+    const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
+    if(menuBtn&&menuDrop){
+      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
+      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+    }
+
+    // --- Déjà connecté ? -> redirige
+    const KEY_USER='gf_user';
+    try{
+      const cur=JSON.parse(localStorage.getItem(KEY_USER)||'null');
+      if(cur && cur.email){ location.replace(GH_ROOT+'compte/index.html'); return; }
+    }catch{ /* ignore */ }
+
+    // --- Utils crypto
+    const te = new TextEncoder();
+    const toHex = buf => Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    async function sha256(input){ return toHex(await crypto.subtle.digest('SHA-256', te.encode(input))); }
+
+    // --- “Base utilisateurs” locale (démo)
+    const KEY_USERS='gf_users';
+    function loadUsers(){ try{ return JSON.parse(localStorage.getItem(KEY_USERS)||'[]'); }catch{return []} }
+    function saveUsers(arr){ localStorage.setItem(KEY_USERS, JSON.stringify(arr)); }
+
+    // Crée un compte démo si vide
+    async function ensureDemoUser(){
+      const list = loadUsers();
+      if(list.length) return;
+      const email='demo@gfstore.test', name='Démo GF Store', salt=crypto.getRandomValues(new Uint8Array(8)).join('');
+      const passHash = await sha256(salt+':demo123');
+      list.push({ id:'u_demo', email, name, salt, passHash, createdAt:new Date().toISOString(), lastLogin:null, addresses:[] });
+      saveUsers(list);
+    }
+    await ensureDemoUser();
+
+    // --- Formulaire
+    const form=document.getElementById('form');
+    const email=document.getElementById('email');
+    const password=document.getElementById('password');
+    const submitBtn=document.getElementById('submitBtn');
+    const err=document.getElementById('err');
+    const ok=document.getElementById('ok');
+
+    const togglePw=document.getElementById('togglePw');
+    let pwShown=false;
+    togglePw.addEventListener('click',()=>{
+      pwShown=!pwShown;
+      password.type = pwShown ? 'text' : 'password';
+      document.getElementById('icEye').src = pwShown ? ICONS.eyeOff : ICONS.eye;
+    });
+
+    // Remplir compte démo
+    document.getElementById('fillDemo').addEventListener('click',e=>{
+      e.preventDefault();
+      email.value='demo@gfstore.test';
+      password.value='demo123';
+      password.focus();
+    });
+
+    function showError(msg){ err.textContent=msg; err.style.display='block'; ok.style.display='none'; }
+    function showOk(msg){ ok.textContent=msg; ok.style.display='block'; err.style.display='none'; }
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      err.style.display='none'; ok.style.display='none';
+
+      const mail=(email.value||'').trim().toLowerCase();
+      const pw=(password.value||'');
+      if(!mail || !pw){ showError('Merci de remplir email et mot de passe.'); return; }
+
+      submitBtn.disabled=true;
+
+      try{
+        const users=loadUsers();
+        const u = users.find(x=>x.email?.toLowerCase()===mail);
+        if(!u){ showError('Compte introuvable. Créez un compte.'); submitBtn.disabled=false; return; }
+
+        const digest = await sha256((u.salt||'')+':'+pw);
+        if(digest !== u.passHash){ showError('Email ou mot de passe incorrect.'); submitBtn.disabled=false; return; }
+
+        // OK : session “gf_user” (sans secrets)
+        const session = {
+          id: u.id, email: u.email, name: u.name||u.email.split('@')[0],
+          addresses: u.addresses||[], lastLogin: new Date().toISOString()
+        };
+        localStorage.setItem(KEY_USER, JSON.stringify(session));
+        // maj lastLogin dans “base”
+        u.lastLogin = session.lastLogin; saveUsers(users);
+
+        showOk('Connexion réussie. Redirection…');
+        setTimeout(()=>location.replace(GH_ROOT+'compte/index.html'), 400);
+      }catch(ex){
+        console.error(ex);
+        showError('Une erreur est survenue. Réessayez.');
+      }finally{
+        // on ne réactive pas si succès (redirection)
+        if(ok.style.display!=='block') submitBtn.disabled=false;
+      }
+    });
+
+  })();
+  </script>
+</body>
+</html>
