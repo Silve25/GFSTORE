@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mon compte — GF Store</title>
+  <style>
+    :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
+    *{box-sizing:border-box} body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
+    a{color:inherit}
+    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb;backdrop-filter:saturate(140%) blur(4px)}
+    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .brand .logo{height:40px;width:auto;display:block}
+    .nav{display:flex;gap:10px;align-items:center}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
+    .iconbtn{cursor:pointer}
+    .ic{width:16px;height:16px;display:inline-block}
+    .dropdown{position:relative}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
+    .menu.show{display:block}
+    .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
+    .menu a:hover{background:#f3f4f6}
+
+    .banner{background:linear-gradient(90deg,#1e3a8a,#2563eb,#0ea5e9);color:#fff;text-align:center;padding:10px 14px}
+    .banner .timer{font-weight:700;border-radius:999px;padding:2px 8px;background:rgba(255,255,255,.15);display:inline-block}
+    .banner .sep{opacity:.6;padding:0 6px}
+
+    .wrap{max-width:var(--w);margin:12px auto 28px;padding:0 12px;display:grid;gap:14px;grid-template-columns:1.1fr 1fr}
+    @media (max-width:900px){ .wrap{grid-template-columns:1fr} }
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .hdr{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+    .avatar{width:56px;height:56px;border-radius:999px;display:grid;place-items:center;font-weight:800;background:#eff6ff;border:1px solid #dbeafe;color:#1d4ed8}
+    h1{font-size:18px;margin:0}
+    .muted{opacity:.7;font-size:12px}
+    .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff;cursor:pointer;text-decoration:none}
+    .btn.primary{border-color:#1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;box-shadow:0 6px 14px rgba(30,64,175,.25)}
+    .btn.danger{border-color:#be123c;background:linear-gradient(180deg,#ef4444,#b91c1c);color:#fff;box-shadow:0 6px 14px rgba(185,28,28,.25)}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    @media (max-width:640px){ .kpis{grid-template-columns:1fr 1fr} }
+    .kpi{background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid #e5e7eb;border-radius:12px;padding:10px}
+    .kpi .n{font-weight:800;font-size:18px}
+    .list{display:grid;gap:10px}
+    .order{border:1px solid #e5e7eb;border-radius:12px;padding:10px;display:grid;gap:6px}
+    .order .top{display:flex;gap:8px;align-items:center;font-size:13px}
+    .pill{display:inline-grid;place-items:center;border:1px solid #e5e7eb;padding:2px 8px;border-radius:999px;font-size:12px;background:#fff}
+    .addr{border:1px dashed #e5e7eb;border-radius:12px;padding:10px;background:#fcfcfe}
+    .empty{opacity:.7}
+    .hint{font-size:12px;opacity:.8;margin-top:6px}
+    .dangerzone{border:1px solid #fee2e2;background:#fff1f2}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width:740px){ .grid2{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+
+  <header>
+    <div class="hwrap">
+      <a id="homeLink" class="brand">
+        <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
+      </a>
+      <nav class="nav">
+        <a id="accountLink"><img class="ic" id="icUser" alt=""> Compte</a>
+        <a id="cartBtn" class="iconbtn"><img id="cartIcon" class="ic" alt=""> Panier</a>
+        <div class="dropdown">
+          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
+          <div id="menuDrop" class="menu">
+            <a id="aboutLink">À propos</a>
+            <a id="cgvLink">CGV</a>
+            <a id="legalLink">Mentions légales</a>
+            <a id="privacyLink">Politique de confidentialité</a>
+            <a id="contactLink">Contact</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" aria-live="polite">
+    <!-- Colonne principale -->
+    <section class="card">
+      <div class="hdr">
+        <div class="avatar" id="avatar">?</div>
+        <div>
+          <h1>Bonjour <span id="userName">—</span></h1>
+          <div class="muted" id="userEmail">—</div>
+          <div class="muted" id="lastLogin" style="margin-top:2px"></div>
+        </div>
+      </div>
+
+      <div class="row" style="gap:8px;margin-bottom:10px">
+        <a id="btnProfile" class="btn"><img class="ic" id="icProfile" alt=""> Modifier mon profil</a>
+        <a id="btnPwd" class="btn"><img class="ic" id="icKey" alt=""> Changer mon mot de passe</a>
+        <button id="btnLogout" class="btn"><img class="ic" id="icLogout" alt=""> Se déconnecter</button>
+      </div>
+
+      <div class="kpis" id="kpis">
+        <div class="kpi"><div class="n" id="kpiOrders">0</div><div class="muted">Commandes</div></div>
+        <div class="kpi"><div class="n" id="kpiAddresses">0</div><div class="muted">Adresses</div></div>
+        <div class="kpi"><div class="n" id="kpiCart">0</div><div class="muted">Articles dans le panier</div></div>
+      </div>
+    </section>
+
+    <!-- Colonne latérale -->
+    <aside class="grid2">
+      <section class="card">
+        <div class="hdr"><img class="ic" id="icBox" alt=""><strong>Mes dernières commandes</strong></div>
+        <div id="ordersWrap" class="list empty">Aucune commande pour le moment.</div>
+        <div class="hint">Astuce : passe une commande depuis la boutique, elle s’affichera ici (démo : stockage local).</div>
+      </section>
+
+      <section class="card">
+        <div class="hdr"><img class="ic" id="icHome" alt=""><strong>Mon adresse principale</strong></div>
+        <div id="addrBox" class="addr empty">Aucune adresse enregistrée.</div>
+        <div class="row" style="margin-top:8px">
+          <a id="btnEditAddress" class="btn"><img class="ic" id="icEdit" alt=""> Ajouter / Modifier</a>
+        </div>
+        <div class="hint">Les infos sont stockées côté navigateur pour la démo. Prévois un backend pour du vrai.</div>
+      </section>
+
+      <section class="card dangerzone">
+        <div class="hdr"><img class="ic" id="icWarning" alt=""><strong>Zone sensible</strong></div>
+        <div class="muted">Supprimer mon compte local (démo) efface seulement les données du navigateur.</div>
+        <button id="btnDelete" class="btn danger" style="margin-top:8px"><img class="ic" id="icTrash" alt=""> Supprimer mon compte (local)</button>
+      </section>
+    </aside>
+  </main>
+
+  <footer style="background:#fff;border-top:1px solid #e5e7eb">
+    <div class="hwrap" style="justify-content:space-between;font-size:12px">
+      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <nav style="display:flex;gap:10px;flex-wrap:wrap">
+        <a id="aboutLink2">À propos</a> · 
+        <a id="cgvLink2">CGV</a> · 
+        <a id="legalLink2">Mentions légales</a> · 
+        <a id="privacyLink2">Confidentialité</a> · 
+        <a id="contactLink2">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+  (async()=>{
+
+    // --- Compte à rebours (48h)
+    const countdownEl=document.getElementById('countdown');
+    const SALE_END=new Date(Date.now()+48*60*60*1000);
+    const two=n=>String(n).padStart(2,'0');
+    function tick(){
+      if(!countdownEl) return;
+      const now=new Date(); let diff=SALE_END-now;
+      if(diff<=0){countdownEl.textContent='Dernières heures !';return}
+      const d=Math.floor(diff/86400000); diff%=86400000;
+      const h=Math.floor(diff/3600000); diff%=3600000;
+      const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
+      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+    }
+    tick(); setInterval(tick,1000);
+
+    // --- Détection racine (GitHub Pages friendly)
+    const GH_ROOT = (()=>{ 
+      const parts = location.pathname.split('/').filter(Boolean);
+      return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/';
+    })();
+
+    // --- Icônes
+    const ICONS = {
+      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
+      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
+      cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
+      cartFull:'https://img.icons8.com/?size=100&id=K5Jv3BfpxPYa&format=png&color=000000',
+      profile:'https://img.icons8.com/?size=100&id=59853&format=png&color=000000',
+      key:'https://img.icons8.com/?size=100&id=12217&format=png&color=000000',
+      logout:'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
+      box:'https://img.icons8.com/?size=100&id=59812&format=png&color=000000',
+      home:'https://img.icons8.com/?size=100&id=15869&format=png&color=000000',
+      edit:'https://img.icons8.com/?size=100&id=67884&format=png&color=000000',
+      warning:'https://img.icons8.com/?size=100&id=12259&format=png&color=000000',
+      trash:'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000'
+    };
+    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
+    setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('cartIcon',ICONS.cart);
+    setSrc('icProfile',ICONS.profile); setSrc('icKey',ICONS.key); setSrc('icLogout',ICONS.logout);
+    setSrc('icBox',ICONS.box); setSrc('icHome',ICONS.home); setSrc('icEdit',ICONS.edit);
+    setSrc('icWarning',ICONS.warning); setSrc('icTrash',ICONS.trash);
+
+    // --- Lien nav (GH_ROOT)
+    const link = (id, path)=>{const el=document.getElementById(id); if(el) el.href = GH_ROOT + path;};
+    document.getElementById('homeLink').href = GH_ROOT;
+    link('accountLink','compte/index.html');
+    link('cartBtn','checkout.html');
+    link('aboutLink','pages/a-propos.html'); link('aboutLink2','pages/a-propos.html');
+    link('cgvLink','pages/cgv.html');        link('cgvLink2','pages/cgv.html');
+    link('legalLink','pages/mentions-legales.html'); link('legalLink2','pages/mentions-legales.html');
+    link('privacyLink','pages/confidentialite.html'); link('privacyLink2','pages/confidentialite.html');
+    link('contactLink','pages/contact.html'); link('contactLink2','pages/contact.html');
+
+    // --- Menu déroulant
+    const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop');
+    if(menuBtn&&menuDrop){
+      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
+      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+    }
+
+    // --- Helpers storage
+    const KEY_USER='gf_user';
+    const KEY_CART='gf_cart';
+    const KEY_ORDERS='gf_orders';
+    const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY_CART)||'[]')}catch{return[]}};
+    const cartCount=()=>getCart().reduce((s,x)=>s+x.qty,0);
+    const getOrders=()=>{try{return JSON.parse(localStorage.getItem(KEY_ORDERS)||'[]')}catch{return[]}};
+    const saveOrders=(arr)=>localStorage.setItem(KEY_ORDERS,JSON.stringify(arr));
+
+    // --- Auth (démo)
+    const user = (()=>{ try{return JSON.parse(localStorage.getItem(KEY_USER)||'null')}catch{return null} })();
+    if(!user){
+      // pas connecté -> redirige vers login
+      location.replace(GH_ROOT+'compte/login.html');
+      return;
+    }
+
+    // --- UI User
+    const avatar=document.getElementById('avatar');
+    const uName=document.getElementById('userName');
+    const uEmail=document.getElementById('userEmail');
+    const lastLogin=document.getElementById('lastLogin');
+
+    const name = user.name || user.email?.split('@')[0] || 'Client';
+    uName.textContent = name;
+    uEmail.textContent = user.email || '—';
+    const initial = (name||'?').trim().charAt(0).toUpperCase();
+    avatar.textContent = initial;
+    if(user.lastLogin){
+      const d = new Date(user.lastLogin);
+      if(!isNaN(+d)) lastLogin.textContent = `Dernière connexion : ${d.toLocaleString('fr-FR')}`;
+    }
+
+    // --- KPIs
+    document.getElementById('kpiCart').textContent = cartCount();
+    const orders = getOrders().filter(o=>String(o.userId||'')===String(user.id||user.email));
+    document.getElementById('kpiOrders').textContent = orders.length;
+    const addresses = Array.isArray(user.addresses)? user.addresses : (user.address? [user.address] : []);
+    document.getElementById('kpiAddresses').textContent = addresses.length;
+
+    // --- Commandes
+    const EUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    const ordersWrap=document.getElementById('ordersWrap');
+    function renderOrders(){
+      if(!orders.length){ ordersWrap.classList.add('empty'); ordersWrap.innerHTML='Aucune commande pour le moment.'; return; }
+      ordersWrap.classList.remove('empty');
+      ordersWrap.innerHTML = orders.slice().reverse().map(o=>{
+        const total = (o.items||[]).reduce((s,x)=>s + Number(x.price||0)*Number(x.qty||1),0);
+        return `
+          <div class="order">
+            <div class="top">
+              <strong>Commande #${o.id||'—'}</strong>
+              <span class="pill">${new Date(o.date||Date.now()).toLocaleString('fr-FR')}</span>
+              <span class="pill">${(o.status||'Payée')}</span>
+              <span style="margin-left:auto;font-weight:700">${EUR(total)}</span>
+            </div>
+            <div class="muted">${(o.items||[]).map(x=>`${x.qty}× ${x.name}`).join(' • ') || '—'}</div>
+            <div class="row">
+              <a class="btn" href="${GH_ROOT}checkout.html"><img class="ic" src="${ICONS.box}" alt=""> Voir les détails</a>
+              <button class="btn" data-reorder="${o.id}"><img class="ic" src="${ICONS.cart}" alt=""> Recommander</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    renderOrders();
+
+    // Reorder (ajoute les items au panier)
+    ordersWrap.addEventListener('click',e=>{
+      const id=e.target.closest('[data-reorder]')?.getAttribute('data-reorder');
+      if(!id) return;
+      const found = orders.find(x=>String(x.id)===String(id));
+      if(!found) return;
+      const cart = getCart();
+      for(const it of (found.items||[])){
+        const idx=cart.findIndex(c=>c.id===it.id && c.name===it.name);
+        if(idx>-1){ cart[idx].qty += Number(it.qty||1); }
+        else{
+          cart.push({
+            id: it.id, name: it.name, qty: Number(it.qty||1),
+            price: Number(it.price||0), image: it.image||'', brand: it.brand||'', category: it.category||''
+          });
+        }
+      }
+      localStorage.setItem(KEY_CART, JSON.stringify(cart));
+      document.getElementById('kpiCart').textContent = cartCount();
+      const icon=document.getElementById('cartIcon'); if(icon) icon.src=ICONS.cartFull;
+      alert('Les articles de la commande ont été ajoutés au panier.');
+    });
+
+    // --- Adresse
+    const addrBox=document.getElementById('addrBox');
+    function renderAddress(){
+      if(addresses.length){
+        const a = addresses[0];
+        addrBox.classList.remove('empty');
+        addrBox.innerHTML = `
+          <div><strong>${a.fullname||name}</strong></div>
+          <div>${[a.line1,a.line2,a.zip,a.city].filter(Boolean).join(', ')}</div>
+          <div>${a.country||''}</div>
+          <div class="muted" style="margin-top:6px">${a.phone? '☎ '+a.phone : ''}</div>
+        `;
+      }else{
+        addrBox.classList.add('empty');
+        addrBox.textContent = 'Aucune adresse enregistrée.';
+      }
+    }
+    renderAddress();
+
+    // Boutons
+    const go=(path)=>location.href = GH_ROOT + path;
+    document.getElementById('btnProfile').addEventListener('click',()=>go('compte/profile.html'));
+    document.getElementById('btnPwd').addEventListener('click',()=>go('compte/password-change.html'));
+    document.getElementById('btnEditAddress').addEventListener('click',()=>go('compte/profile.html#adresse'));
+
+    document.getElementById('btnLogout').addEventListener('click',()=>{
+      localStorage.removeItem(KEY_USER);
+      location.replace(GH_ROOT+'compte/login.html');
+    });
+
+    document.getElementById('btnDelete').addEventListener('click',()=>{
+      if(!confirm('Confirmer la suppression locale de votre compte ? (démo)')) return;
+      // Démo : on efface uniquement côté navigateur
+      localStorage.removeItem(KEY_USER);
+      // Optionnel : effacer aussi les “commandes locales” de cet utilisateur
+      const all = getOrders().filter(o=>String(o.userId||'')!==String(user.id||user.email));
+      saveOrders(all);
+      location.replace(GH_ROOT+'compte/register.html');
+    });
+
+    // Mettre à jour icône panier selon contenu
+    const count=cartCount();
+    const icon=document.getElementById('cartIcon');
+    if(icon) icon.src = count>0 ? ICONS.cartFull : ICONS.cart;
+
+    // Lien Panier => checkout
+    document.getElementById('cartBtn').addEventListener('click',e=>{
+      e.preventDefault();
+      go('checkout.html');
+    });
+
+  })();
+  </script>
+</body>
+</html>
