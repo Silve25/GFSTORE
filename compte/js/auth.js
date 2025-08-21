@@ -17,7 +17,7 @@
   // CONFIG
   // ======================
   // URL Web App (dernière version déployée)
-  const API_BASE = "https://script.google.com/macros/s/AKfycbx4FDloNE_32UzqzuZXfIK_4LZxIpO3oVAY1D5CnNURWhE7L1UA7n2xWYnMQPtBRauJ/exec";
+  const API_BASE = "https://script.google.com/macros/s/AKfycbx8KqksQ4iI7x3x988rXG1t9s-tvWRPU7G6dNS0nlY5NDBGyM_wg1lSEdhJL3rf6Oe5/exec";
   // Clé identique à celle côté Apps Script (CONFIG.API_KEY)
   const API_KEY  = "GFSECRET123";
 
