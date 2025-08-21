@@ -6,42 +6,61 @@
   <title>Connexion — GF Store</title>
   <meta name="description" content="Connectez-vous à votre compte GF Store.">
   <style>
-    :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
-    *{box-sizing:border-box} body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
+    :root{
+      --w:1200px; --c:#0f172a; --a:#2563eb; --bg:#f5f7fb;
+      --r:16px; --eyeBtn:24px; --eyeIcon:12px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font:14px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
     a{color:inherit}
+
+    /* Header */
     header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb;backdrop-filter:saturate(140%) blur(4px)}
     .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700;text-decoration:none}
     .brand .logo{height:40px;width:auto;display:block}
     .nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;box-shadow:0 1px 0 rgba(0,0,0,.02)}
     .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
     .iconbtn{cursor:pointer}
     .ic{width:16px;height:16px;display:inline-block}
+    .dropdown{position:relative}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
+    .menu.show{display:block}
+    .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
+    .menu a:hover{background:#f3f4f6}
 
+    /* Bandeau promo */
     .banner{background:linear-gradient(90deg,#1e3a8a,#2563eb,#0ea5e9);color:#fff;text-align:center;padding:10px 14px}
     .banner .timer{font-weight:700;border-radius:999px;padding:2px 8px;background:rgba(255,255,255,.15);display:inline-block}
     .banner .sep{opacity:.6;padding:0 6px}
 
+    /* Carte / Form */
     .wrap{max-width:420px;margin:18px auto 40px;padding:0 12px}
     .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
-    h1{font-size:18px;margin:0 0 10px}
+    h1{font-size:18px;margin:0 0 8px}
     .muted{opacity:.75;font-size:12px}
 
     label{display:block;font-weight:600;margin:10px 0 6px}
     input{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
     .pw{position:relative}
-    .pw .toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:1px solid #e5e7eb;background:#fff;border-radius:10px;padding:6px 8px;cursor:pointer;font-size:12px;line-height:1}
+    .pw .toggle{
+      position:absolute;right:8px;top:50%;transform:translateY(-50%);
+      width:var(--eyeBtn);height:var(--eyeBtn);
+      border:1px solid #e5e7eb;background:#fff;border-radius:10px;
+      cursor:pointer;line-height:0;padding:0;
+      background-repeat:no-repeat;background-position:center;
+      background-size:var(--eyeIcon) var(--eyeIcon);
+    }
 
-    .row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}
+    .row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px;flex-wrap:wrap}
     .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;width:100%;padding:12px;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer;box-shadow:0 6px 14px rgba(30,64,175,.25)}
     .btn:disabled{opacity:.6;cursor:not-allowed}
-
-    .msg{margin-top:10px;padding:10px;border-radius:12px;display:none}
-    #loginMsg{background:#fef2f2;border:1px solid #fee2e2;color:#991b1b} /* recolorisé par showMsg() en succès */
-
     .alt{display:flex;gap:10px;margin-top:10px}
     .alt a{flex:1;text-align:center;border:1px solid #e5e7eb;border-radius:12px;padding:10px;text-decoration:none;background:#fff}
+
+    .msg{margin-top:10px;padding:10px;border-radius:12px;display:none}
+    #loginMsg{background:#fef2f2;border:1px solid #fee2e2;color:#991b1b} /* recolorisé en succès par showMsg() */
 
     footer{background:#fff;border-top:1px solid #e5e7eb}
     .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
@@ -50,16 +69,26 @@
   </style>
 </head>
 <body>
-  <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+  <div class="banner">🎉 Offres du moment : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
 
   <header>
     <div class="hwrap">
-      <a id="homeLink" class="brand" aria-label="Aller à l'accueil">
+      <a id="homeLink" class="brand" aria-label="Accueil">
         <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
-      <nav class="nav" aria-label="Navigation principale">
-        <a id="registerLink"><img class="ic" id="icAccount" alt="" role="presentation"> Créer un compte</a>
-        <a id="shopLink"><img class="ic" id="icHome" alt="" role="presentation"> Boutique</a>
+      <nav class="nav" aria-label="Navigation">
+        <a id="accountLink"><img class="ic" id="icAccount" alt=""> Compte</a>
+        <a id="cartBtn" class="iconbtn"><img class="ic" id="icCart" alt=""> Panier</a>
+        <div class="dropdown">
+          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
+          <div id="menuDrop" class="menu">
+            <a id="aboutLink">À propos</a>
+            <a id="cgvLink">CGV</a>
+            <a id="legalLink">Mentions légales</a>
+            <a id="privacyLink">Confidentialité</a>
+            <a id="contactLink">Contact</a>
+          </div>
+        </div>
       </nav>
     </div>
   </header>
@@ -72,26 +101,25 @@
       <!-- IMPORTANT : IDs/noms attendus par auth.js -->
       <form id="loginForm" autocomplete="on" style="margin-top:10px">
         <label for="email">Email</label>
-        <input id="email" name="email" type="email" required placeholder="vous@exemple.com" inputmode="email" autocomplete="email" />
+        <input id="email" name="email" type="email" required placeholder="vous@example.com" inputmode="email" autocomplete="email" />
 
         <label for="password">Mot de passe</label>
         <div class="pw">
-          <input id="password" name="password" type="password" required placeholder="Mot de passe" autocomplete="current-password" />
-          <button type="button" class="toggle" data-target="password" aria-label="Afficher/Masquer"></button>
+          <input id="password" name="password" type="password" required placeholder="Votre mot de passe" autocomplete="current-password" />
+          <button type="button" class="toggle" data-target="password" aria-label="Afficher/Masquer le mot de passe" title="Afficher/Masquer"></button>
         </div>
 
         <div class="row">
+          <a id="registerLink">Créer un compte</a>
           <a id="resetLink">Mot de passe oublié ?</a>
-          <span></span>
         </div>
 
-        <button id="submitBtn" class="btn" type="submit"><img class="ic" id="icLock" alt="" role="presentation"> Se connecter</button>
+        <button id="submitBtn" class="btn" type="submit"><img class="ic" id="icLogin" alt=""> Se connecter</button>
 
-        <!-- Zone de messages utilisée par auth.js -> showMsg(#loginMsg, ...) -->
+        <!-- Zone messages utilisée par auth.js -> showMsg(#loginMsg, ...) -->
         <div id="loginMsg" class="msg" role="status" aria-live="polite"></div>
 
         <div class="alt">
-          <a id="goRegister">Créer un compte</a>
           <a id="goShop">Retour boutique</a>
         </div>
       </form>
@@ -102,114 +130,114 @@
     <div class="fwrap">
       <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
       <nav>
-        <a id="aboutLink2">À propos</a> ·
-        <a id="cgvLink2">CGV</a> ·
-        <a id="legalLink2">Mentions légales</a> ·
-        <a id="privacyLink2">Confidentialité</a> ·
+        <a id="aboutLink2">À propos</a> · 
+        <a id="cgvLink2">CGV</a> · 
+        <a id="legalLink2">Mentions légales</a> · 
+        <a id="privacyLink2">Confidentialité</a> · 
         <a id="contactLink2">Contact</a>
       </nav>
     </div>
   </footer>
 
-  <!-- Auth frontend (branche automatiquement #loginForm) -->
+  <!-- API / session logic -->
   <script src="js/auth.js" defer></script>
 
   <script>
   (function(){
     "use strict";
+    const $=(s,root)=> (root||document).querySelector(s);
 
-    // Helpers
-    const $ = (s,root)=> (root||document).querySelector(s);
-
-    // GH Pages friendly root
+    // GH_ROOT (GitHub Pages friendly)
     const GH_ROOT = (()=>{ 
       const parts = location.pathname.split('/').filter(Boolean);
       return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/';
     })();
 
-    // Icônes (liste fournie)
+    // Icônes
     const ICONS = {
-      account: 'https://img.icons8.com/?size=100&id=60655&format=png&color=000000',
-      home:    'https://img.icons8.com/?size=100&id=98956&format=png&color=000000',
-      lock:    'https://img.icons8.com/?size=100&id=107272&format=png&color=000000',
-      eye:     'https://img.icons8.com/?size=100&id=986&format=png&color=000000',
-      eyeOff:  'https://img.icons8.com/?size=100&id=59814&format=png&color=000000'
+      account:'https://img.icons8.com/?size=100&id=60655&format=png&color=000000',
+      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
+      cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
+      login:'https://img.icons8.com/?size=100&id=8115&format=png&color=000000',
+      eye:'https://img.icons8.com/?size=100&id=986&format=png&color=000000',
+      eyeOff:'https://img.icons8.com/?size=100&id=59814&format=png&color=000000'
     };
-    function setSrc(id,src){ const el=document.getElementById(id); if(el) el.src=src; }
+    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
+    function setIcons(){
+      setSrc('icAccount',ICONS.account);
+      setSrc('icMenu',ICONS.menu);
+      setSrc('icCart',ICONS.cart);
+      setSrc('icLogin',ICONS.login);
+    }
 
     // Liens
+    function link(id,path){ const el=document.getElementById(id); if(el) el.href=GH_ROOT+path; }
     function wireLinks(){
       $('#homeLink').href = GH_ROOT;
-      const link=(id,path)=>{ const el=document.getElementById(id); if(el) el.href=GH_ROOT+path; };
+      link('accountLink','compte/login.html'); // page actuelle
+      link('cartBtn','checkout.html');
       link('registerLink','compte/register.html');
-      link('shopLink','index.html');
       link('resetLink','compte/password-reset.html');
-      link('goRegister','compte/register.html');
       link('goShop','index.html');
-
       const pages = {about:'a-propos', cgv:'cgv', legal:'mentions-legales', privacy:'confidentialite', contact:'contact'};
       Object.entries(pages).forEach(([k,slug])=>{
+        link(k+'Link','pages/'+slug+'.html');
         link(k+'Link2','pages/'+slug+'.html');
       });
     }
 
-    // Compte à rebours (48h)
-    const countdownEl = $('#countdown');
-    const SALE_END = new Date(Date.now()+48*60*60*1000);
-    const two = n => String(n).padStart(2,'0');
-    function tick(){
-      if(!countdownEl) return;
-      const now=new Date(); let diff=SALE_END-now;
-      if(diff<=0){ countdownEl.textContent='Dernières heures !'; return; }
-      const d=Math.floor(diff/86400000); diff%=86400000;
-      const h=Math.floor(diff/3600000); diff%=3600000;
-      const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
-      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+    // Menu
+    function wireMenu(){
+      const btn=$('#menuBtn'), drop=$('#menuDrop');
+      if(!btn||!drop) return;
+      btn.addEventListener('click',e=>{e.stopPropagation();drop.classList.toggle('show')});
+      document.addEventListener('click',e=>{ if(!drop.contains(e.target) && e.target!==btn) drop.classList.remove('show'); });
     }
 
-    // UI mot de passe (œil)
-    function wirePasswordToggle(){
-      const btn = document.querySelector('.toggle');
-      const input = document.getElementById('password');
-      if(!btn || !input) return;
-      // icône initiale
-      btn.style.backgroundImage = `url(${ICONS.eye})`;
-      btn.style.backgroundRepeat = 'no-repeat';
-      btn.style.backgroundPosition = 'center';
-      btn.style.width='34px';
-      btn.style.height='30px';
+    // Compte à rebours (48h)
+    function wireCountdown(){
+      const el=$('#countdown'); if(!el) return;
+      const END=new Date(Date.now()+48*60*60*1000); const two=n=>String(n).padStart(2,'0');
+      function tick(){
+        const now=new Date(); let diff=END-now;
+        if(diff<=0){ el.textContent='Dernières heures !'; return; }
+        const d=Math.floor(diff/86400000); diff%=86400000;
+        const h=Math.floor(diff/3600000); diff%=3600000;
+        const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
+        el.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+      }
+      tick(); setInterval(tick,1000);
+    }
 
-      btn.addEventListener('click',()=>{
-        const show = input.type === 'password';
-        input.type = show ? 'text' : 'password';
-        btn.style.backgroundImage = `url(${show ? ICONS.eyeOff : ICONS.eye})`;
+    // Toggle œil (très petit)
+    function wireEye(){
+      document.querySelectorAll('.pw .toggle').forEach(btn=>{
+        const id=btn.getAttribute('data-target');
+        const input=document.getElementById(id);
+        if(!input) return;
+        btn.style.backgroundImage = `url(${ICONS.eye})`;
+        btn.addEventListener('click',()=>{
+          const show = input.type === 'password';
+          input.type = show ? 'text' : 'password';
+          btn.style.backgroundImage = `url(${show ? ICONS.eyeOff : ICONS.eye})`;
+        });
       });
     }
 
-    // Déjà connecté ? -> redirige
+    // Déjà connecté ? → redirige
     function maybeRedirectIfLogged(){
       try{
         const s = JSON.parse(localStorage.getItem('GF_SESSION')||'null');
         if(s && s.email){
-          const next = new URL(location.href).searchParams.get('next') || (GH_ROOT + 'compte/index.html');
+          const next = new URL(location.href).searchParams.get('next') || GH_ROOT+'compte/index.html';
           location.replace(next);
         }
-      }catch{/* ignore */}
+      }catch{}
     }
 
     function init(){
-      // icônes
-      setSrc('icAccount', ICONS.account);
-      setSrc('icHome', ICONS.home);
-      setSrc('icLock', ICONS.lock);
-
-      wireLinks();
-      wirePasswordToggle();
-      maybeRedirectIfLogged();
-
-      tick(); setInterval(tick,1000);
+      wireLinks(); wireMenu(); wireCountdown(); setIcons(); wireEye(); maybeRedirectIfLogged();
     }
-
     document.addEventListener('DOMContentLoaded', init);
   })();
   </script>
