@@ -8,7 +8,7 @@
   <style>
     :root{
       --w:1200px; --c:#0f172a; --a:#2563eb; --bg:#f5f7fb;
-      --r:16px; --eyeBtn:26px; --eyeIcon:14px;
+      --r:16px; --eyeBtn:24px; --eyeIcon:12px;
     }
     *{box-sizing:border-box}
     body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
@@ -74,7 +74,7 @@
   </style>
 </head>
 <body>
-  <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+  <div class="banner">🎉 Promo spéciale : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
 
   <header>
     <div class="hwrap">
@@ -96,10 +96,10 @@
       <!-- IMPORTANT : IDs/noms attendus par auth.js -->
       <form id="registerForm" autocomplete="on" style="margin-top:10px">
         <label for="name">Nom complet</label>
-        <input id="name" name="name" type="text" required placeholder="Nom et prénom" autocomplete="name" />
+        <input id="name" name="name" type="text" required placeholder="Ex. Marie Dupont" autocomplete="name" />
 
         <label for="email">Email</label>
-        <input id="email" name="email" type="email" required placeholder="vous@exemple.com" inputmode="email" autocomplete="email" />
+        <input id="email" name="email" type="email" required placeholder="Ex. marie.dupont@example.com" inputmode="email" autocomplete="email" />
 
         <label for="password">Mot de passe</label>
         <div class="pw">
@@ -114,29 +114,62 @@
           <button type="button" class="toggle" data-target="password2" aria-label="Afficher/Masquer la confirmation" title="Afficher/Masquer"></button>
         </div>
 
-        <!-- Champs facultatifs compatibles avec l’API -->
+        <!-- Champs optionnels -->
         <div class="grid2" style="margin-top:6px">
           <div>
             <label for="phone">Téléphone (facultatif)</label>
-            <input id="phone" name="phone" type="tel" inputmode="tel" placeholder="+229…" autocomplete="tel" />
+            <input id="phone" name="phone" type="tel" inputmode="tel" placeholder="Ex. +33 6 12 34 56 78" autocomplete="tel" />
           </div>
           <div>
             <label for="country">Pays (facultatif)</label>
-            <input id="country" name="country" type="text" placeholder="Bénin" autocomplete="country-name" />
+            <select id="country" name="country">
+              <option value="">— Choisir —</option>
+              <option>France</option>
+              <option>Belgique</option>
+              <option>Luxembourg</option>
+              <option>Suisse</option>
+              <option>Allemagne</option>
+              <option>Autriche</option>
+              <option>Italie</option>
+              <option>Espagne</option>
+              <option>Portugal</option>
+              <option>Pays-Bas</option>
+              <option>Irlande</option>
+              <option>Royaume-Uni</option>
+              <option>Danemark</option>
+              <option>Suède</option>
+              <option>Norvège</option>
+              <option>Finlande</option>
+              <option>Pologne</option>
+              <option>Tchéquie</option>
+              <option>Slovaquie</option>
+              <option>Hongrie</option>
+              <option>Slovénie</option>
+              <option>Croatie</option>
+              <option>Roumanie</option>
+              <option>Bulgarie</option>
+              <option>Grèce</option>
+              <option>Estonie</option>
+              <option>Lettonie</option>
+              <option>Lituanie</option>
+              <option>Malte</option>
+              <option>Chypre</option>
+              <option value="Other">Autre</option>
+            </select>
           </div>
         </div>
 
         <label for="address">Adresse (facultatif)</label>
-        <input id="address" name="address" type="text" placeholder="Rue, résidence…" autocomplete="address-line1" />
+        <input id="address" name="address" type="text" placeholder="Ex. 221B Baker Street, Apt 4" autocomplete="address-line1" />
 
         <div class="grid2">
           <div>
             <label for="city">Ville (facultatif)</label>
-            <input id="city" name="city" type="text" placeholder="Cotonou" autocomplete="address-level2" />
+            <input id="city" name="city" type="text" placeholder="Ex. Paris / Berlin / Madrid" autocomplete="address-level2" />
           </div>
           <div>
             <label for="zip">Code postal (facultatif)</label>
-            <input id="zip" name="zip" type="text" placeholder="—" autocomplete="postal-code" />
+            <input id="zip" name="zip" type="text" placeholder="Ex. 75001, SW1A 1AA, 10115" autocomplete="postal-code" />
           </div>
         </div>
 
@@ -166,7 +199,7 @@
     </div>
   </footer>
 
-  <!-- Branche l’API et la logique submit (CORS-safe) -->
+  <!-- Branche l’API et la logique submit -->
   <script src="js/auth.js" defer></script>
 
   <script>
@@ -189,10 +222,10 @@
       eyeOff: 'https://img.icons8.com/?size=100&id=59814&format=png&color=000000'
     };
 
-    // Liens
+    function link(id,path){ const el=document.getElementById(id); if(el) el.href=GH_ROOT+path; }
+
     function wireLinks(){
       $('#homeLink').href = GH_ROOT;
-      const link=(id,path)=>{ const el=document.getElementById(id); if(el) el.href=GH_ROOT+path; };
       link('loginLink','compte/login.html');
       link('shopLink','index.html');
       link('goLogin','compte/login.html');
