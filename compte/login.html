@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Connexion — GF Store</title>
-  <meta name="description" content="Connectez-vous à votre compte GF Store pour gérer vos commandes, adresses et préférences." />
+  <meta name="description" content="Connectez-vous à votre compte GF Store.">
   <style>
     :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
     *{box-sizing:border-box} body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
@@ -13,16 +13,11 @@
     .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
     .brand{display:flex;align-items:center;gap:10px;font-weight:700}
     .brand .logo{height:40px;width:auto;display:block}
-    .nav{display:flex;gap:10px;align-items:center}
+    .nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;box-shadow:0 1px 0 rgba(0,0,0,.02)}
     .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
     .iconbtn{cursor:pointer}
     .ic{width:16px;height:16px;display:inline-block}
-    .dropdown{position:relative}
-    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
-    .menu.show{display:block}
-    .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
-    .menu a:hover{background:#f3f4f6}
 
     .banner{background:linear-gradient(90deg,#1e3a8a,#2563eb,#0ea5e9);color:#fff;text-align:center;padding:10px 14px}
     .banner .timer{font-weight:700;border-radius:999px;padding:2px 8px;background:rgba(255,255,255,.15);display:inline-block}
@@ -32,18 +27,26 @@
     .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
     h1{font-size:18px;margin:0 0 10px}
     .muted{opacity:.75;font-size:12px}
+
     label{display:block;font-weight:600;margin:10px 0 6px}
     input{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
     .pw{position:relative}
-    .pw button{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:6px;cursor:pointer}
+    .pw .toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:1px solid #e5e7eb;background:#fff;border-radius:10px;padding:6px 8px;cursor:pointer;font-size:12px;line-height:1}
+
     .row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}
     .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;width:100%;padding:12px;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer;box-shadow:0 6px 14px rgba(30,64,175,.25)}
     .btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .msg{margin-top:10px;padding:10px;border-radius:12px;display:none}
+    #loginMsg{background:#fef2f2;border:1px solid #fee2e2;color:#991b1b} /* recolorisé par showMsg() en succès */
+
     .alt{display:flex;gap:10px;margin-top:10px}
     .alt a{flex:1;text-align:center;border:1px solid #e5e7eb;border-radius:12px;padding:10px;text-decoration:none;background:#fff}
-    .msg{margin-top:10px;padding:10px;border-radius:12px;display:none}
-    #loginMsg{background:#fef2f2;border:1px solid #fee2e2;color:#991b1b} /* auth.js utilisera cette zone */
-    .hint{font-size:12px;opacity:.8;margin-top:10px}
+
+    footer{background:#fff;border-top:1px solid #e5e7eb}
+    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
+    .fwrap a{text-decoration:none;color:inherit;opacity:.9}
+    .fwrap a:hover{text-decoration:underline}
   </style>
 </head>
 <body>
@@ -55,18 +58,8 @@
         <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
       <nav class="nav" aria-label="Navigation principale">
-        <a id="accountLink"><img class="ic" id="icUser" alt="" role="presentation"> Compte</a>
-        <a id="cartBtn" class="iconbtn"><img id="cartIcon" class="ic" alt="" role="presentation"> Panier</a>
-        <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><img class="ic" id="icMenu" alt="" role="presentation"></button>
-          <div id="menuDrop" class="menu" role="menu">
-            <a id="aboutLink" role="menuitem">À propos</a>
-            <a id="cgvLink" role="menuitem">CGV</a>
-            <a id="legalLink" role="menuitem">Mentions légales</a>
-            <a id="privacyLink" role="menuitem">Politique de confidentialité</a>
-            <a id="contactLink" role="menuitem">Contact</a>
-          </div>
-        </div>
+        <a id="registerLink"><img class="ic" id="icAccount" alt="" role="presentation"> Créer un compte</a>
+        <a id="shopLink"><img class="ic" id="icHome" alt="" role="presentation"> Boutique</a>
       </nav>
     </div>
   </header>
@@ -74,71 +67,93 @@
   <main class="wrap">
     <div class="card">
       <h1>Connexion</h1>
-      <div class="muted">Connecte-toi à ton espace GF Store.</div>
+      <div class="muted">Accédez à votre espace GF Store.</div>
 
-      <!-- IMPORTANT: ids/names attendus par auth.js -->
+      <!-- IMPORTANT : IDs/noms attendus par auth.js -->
       <form id="loginForm" autocomplete="on" style="margin-top:10px">
         <label for="email">Email</label>
-        <input id="email" name="email" type="email" required placeholder="vous@exemple.com" inputmode="email" />
+        <input id="email" name="email" type="email" required placeholder="vous@exemple.com" inputmode="email" autocomplete="email" />
 
         <label for="password">Mot de passe</label>
         <div class="pw">
-          <input id="password" name="password" type="password" required placeholder="Mot de passe" />
-          <button type="button" id="togglePw" aria-label="Afficher le mot de passe"><img class="ic" id="icEye" alt="" role="presentation"></button>
+          <input id="password" name="password" type="password" required placeholder="Mot de passe" autocomplete="current-password" />
+          <button type="button" class="toggle" data-target="password" aria-label="Afficher/Masquer"></button>
         </div>
 
         <div class="row">
-          <a id="registerLink">Créer un compte</a>
           <a id="resetLink">Mot de passe oublié ?</a>
+          <span></span>
         </div>
 
-        <button id="submitBtn" class="btn" type="submit"><img class="ic" id="icLogin" alt="" role="presentation"> Se connecter</button>
+        <button id="submitBtn" class="btn" type="submit"><img class="ic" id="icLock" alt="" role="presentation"> Se connecter</button>
 
         <!-- Zone de messages utilisée par auth.js -> showMsg(#loginMsg, ...) -->
         <div id="loginMsg" class="msg" role="status" aria-live="polite"></div>
 
         <div class="alt">
+          <a id="goRegister">Créer un compte</a>
           <a id="goShop">Retour boutique</a>
-        </div>
-
-        <div class="hint">
-          Les identifiants sont vérifiés via <b>Google Apps Script</b> (base <b>Google Sheet</b>).<br>
-          Astuce : tu peux passer un paramètre <code>?next=URL</code> pour revenir automatiquement où tu étais.
         </div>
       </form>
     </div>
   </main>
 
-  <footer style="background:#fff;border-top:1px solid #e5e7eb">
-    <div class="hwrap" style="justify-content:space-between;font-size:12px">
+  <footer>
+    <div class="fwrap">
       <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
-      <nav style="display:flex;gap:10px;flex-wrap:wrap" aria-label="Liens de pied de page">
-        <a id="aboutLink2">À propos</a> · 
-        <a id="cgvLink2">CGV</a> · 
-        <a id="legalLink2">Mentions légales</a> · 
-        <a id="privacyLink2">Confidentialité</a> · 
+      <nav>
+        <a id="aboutLink2">À propos</a> ·
+        <a id="cgvLink2">CGV</a> ·
+        <a id="legalLink2">Mentions légales</a> ·
+        <a id="privacyLink2">Confidentialité</a> ·
         <a id="contactLink2">Contact</a>
       </nav>
     </div>
   </footer>
 
-  <!-- Auth frontend: expose window.GFAuth (init() s'occupe de brancher #loginForm) -->
+  <!-- Auth frontend (branche automatiquement #loginForm) -->
   <script src="js/auth.js" defer></script>
 
   <script>
   (function(){
     "use strict";
 
-    // --- Petits helpers
+    // Helpers
     const $ = (s,root)=> (root||document).querySelector(s);
 
-    // --- GH_ROOT (GitHub Pages friendly)
+    // GH Pages friendly root
     const GH_ROOT = (()=>{ 
       const parts = location.pathname.split('/').filter(Boolean);
       return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/';
     })();
 
-    // --- Compte à rebours (48h)
+    // Icônes (liste fournie)
+    const ICONS = {
+      account: 'https://img.icons8.com/?size=100&id=60655&format=png&color=000000',
+      home:    'https://img.icons8.com/?size=100&id=98956&format=png&color=000000',
+      lock:    'https://img.icons8.com/?size=100&id=107272&format=png&color=000000',
+      eye:     'https://img.icons8.com/?size=100&id=986&format=png&color=000000',
+      eyeOff:  'https://img.icons8.com/?size=100&id=59814&format=png&color=000000'
+    };
+    function setSrc(id,src){ const el=document.getElementById(id); if(el) el.src=src; }
+
+    // Liens
+    function wireLinks(){
+      $('#homeLink').href = GH_ROOT;
+      const link=(id,path)=>{ const el=document.getElementById(id); if(el) el.href=GH_ROOT+path; };
+      link('registerLink','compte/register.html');
+      link('shopLink','index.html');
+      link('resetLink','compte/password-reset.html');
+      link('goRegister','compte/register.html');
+      link('goShop','index.html');
+
+      const pages = {about:'a-propos', cgv:'cgv', legal:'mentions-legales', privacy:'confidentialite', contact:'contact'};
+      Object.entries(pages).forEach(([k,slug])=>{
+        link(k+'Link2','pages/'+slug+'.html');
+      });
+    }
+
+    // Compte à rebours (48h)
     const countdownEl = $('#countdown');
     const SALE_END = new Date(Date.now()+48*60*60*1000);
     const two = n => String(n).padStart(2,'0');
@@ -151,105 +166,48 @@
       const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
       countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
     }
-    tick(); setInterval(tick,1000);
 
-    // --- Icônes
-    const ICONS = {
-      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
-      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
-      cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
-      login:'https://img.icons8.com/?size=100&id=8115&format=png&color=000000',
-      eye:'https://img.icons8.com/?size=100&id=12580&format=png&color=000000',
-      eyeOff:'https://img.icons8.com/?size=100&id=123000&format=png&color=000000'
-    };
-    function setSrc(id,src){ const el=document.getElementById(id); if(el) el.src=src; }
-    function setIcons(){
-      setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu);
-      setSrc('cartIcon',ICONS.cart); setSrc('icLogin',ICONS.login);
-      setSrc('icEye',ICONS.eye);
-    }
-
-    // --- Liens nav
-    function wireLinks(){
-      $('#homeLink').href = GH_ROOT;
-      const link=(id,path)=>{ const el=document.getElementById(id); if(el) el.href=GH_ROOT+path; };
-      link('accountLink','compte/login.html'); // on est ici
-      link('cartBtn','checkout.html');
-      link('registerLink','compte/register.html');
-      link('resetLink','compte/password-reset.html');
-      link('goShop','index.html');
-
-      // Footer & menu
-      const map = {about:'a-propos', cgv:'cgv', legal:'mentions-legales', privacy:'confidentialite', contact:'contact'};
-      Object.entries(map).forEach(([k,slug])=>{
-        link(k+'Link','pages/'+slug+'.html'); link(k+'Link2','pages/'+slug+'.html');
-      });
-    }
-
-    // --- Menu déroulant
-    function wireMenu(){
-      const menuBtn = $('#menuBtn'), menuDrop = $('#menuDrop');
-      if(!menuBtn || !menuDrop) return;
-      menuBtn.addEventListener('click', e=>{
-        e.stopPropagation();
-        const shown = menuDrop.classList.toggle('show');
-        menuBtn.setAttribute('aria-expanded', shown ? 'true' : 'false');
-      });
-      document.addEventListener('click', e=>{
-        if(!menuDrop.contains(e.target) && e.target!==menuBtn){
-          menuDrop.classList.remove('show');
-          menuBtn.setAttribute('aria-expanded','false');
-        }
-      });
-    }
-
-    // --- Œil mot de passe
+    // UI mot de passe (œil)
     function wirePasswordToggle(){
-      const btn = document.getElementById('togglePw');
+      const btn = document.querySelector('.toggle');
       const input = document.getElementById('password');
-      const eye = document.getElementById('icEye');
-      if(!btn || !input || !eye) return;
-      let shown=false;
-      btn.addEventListener('click', ()=>{
-        shown = !shown;
-        input.type = shown ? 'text' : 'password';
-        eye.src = shown ? ICONS.eyeOff : ICONS.eye;
+      if(!btn || !input) return;
+      // icône initiale
+      btn.style.backgroundImage = `url(${ICONS.eye})`;
+      btn.style.backgroundRepeat = 'no-repeat';
+      btn.style.backgroundPosition = 'center';
+      btn.style.width='34px';
+      btn.style.height='30px';
+
+      btn.addEventListener('click',()=>{
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        btn.style.backgroundImage = `url(${show ? ICONS.eyeOff : ICONS.eye})`;
       });
     }
 
-    // --- Si déjà connecté via GF_SESSION -> redirige
+    // Déjà connecté ? -> redirige
     function maybeRedirectIfLogged(){
       try{
-        if(!window.GFAuth || typeof window.GFAuth.getSession!=='function') return;
-        const s = window.GFAuth.getSession();
+        const s = JSON.parse(localStorage.getItem('GF_SESSION')||'null');
         if(s && s.email){
-          const url = new URL(location.href);
-          const next = url.searchParams.get('next') || (GH_ROOT + 'compte/index.html');
+          const next = new URL(location.href).searchParams.get('next') || (GH_ROOT + 'compte/index.html');
           location.replace(next);
         }
       }catch{/* ignore */}
     }
 
-    // --- Init
     function init(){
-      setIcons();
-      wireLinks();
-      wireMenu();
-      wirePasswordToggle();
+      // icônes
+      setSrc('icAccount', ICONS.account);
+      setSrc('icHome', ICONS.home);
+      setSrc('icLock', ICONS.lock);
 
-      // Si l’auth frontend est chargée, son init() branchera automatiquement #loginForm
-      // et gérera la redirection vers ?next=… en cas de succès.
-      // On tente aussi une redirection immédiate si une session existe déjà.
+      wireLinks();
+      wirePasswordToggle();
       maybeRedirectIfLogged();
 
-      // Fallback très léger si GFAuth indisponible
-      if(!window.GFAuth || typeof window.GFAuth.getSession!=='function'){
-        const box = document.getElementById('loginMsg');
-        if(box){
-          box.style.display='block';
-          box.textContent = "Erreur : module d’authentification indisponible. Vérifie /compte/js/auth.js.";
-        }
-      }
+      tick(); setInterval(tick,1000);
     }
 
     document.addEventListener('DOMContentLoaded', init);
