@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Finaliser ma commande — GF Store</title>
+  <meta name="description" content="Paiement sécurisé GF Store : adresse, livraison, moyens de paiement (carte, PayPal, crypto, SEPA), paiement en plusieurs fois.">
+  <style>
+    :root{
+      --w:1200px; --c:#0f172a; --a:#2563eb; --g:#10b981; --bg:#f5f7fb;
+      --danger:#b91c1c; --muted:#64748b; --r:16px;
+      --panel:#ffffff; --bd:#e5e7eb;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font:14px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
+    a{color:inherit}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--bd);backdrop-filter:saturate(140%) blur(4px)}
+    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700;text-decoration:none}
+    .brand .logo{height:40px;width:auto;display:block}
+    .nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--bd);background:#fff;border-radius:12px;text-decoration:none;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .iconbtn{cursor:pointer}
+    .ic{width:16px;height:16px;display:inline-block}
+    .dropdown{position:relative}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid var(--bd);border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
+    .menu.show{display:block}
+    .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
+    .menu a:hover{background:#f3f4f6}
+
+    /* Banner */
+    .banner{background:linear-gradient(90deg,#1e3a8a,#2563eb,#0ea5e9);color:#fff;text-align:center;padding:10px 14px}
+    .banner .timer{font-weight:700;border-radius:999px;padding:2px 8px;background:rgba(255,255,255,.15);display:inline-block}
+    .banner .sep{opacity:.6;padding:0 6px}
+
+    /* Layout */
+    .wrap{max-width:var(--w);margin:16px auto 28px;padding:0 12px;display:grid;gap:16px;grid-template-columns:2fr 1fr}
+    @media (max-width:980px){ .wrap{grid-template-columns:1fr} }
+    .card{background:var(--panel);border:1px solid var(--bd);border-radius:16px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .card .box{padding:14px}
+    .hdr{padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px}
+    .hdr b{font-size:15px}
+    .muted{color:var(--muted);font-size:12px}
+
+    /* Forms */
+    form{display:grid;gap:12px}
+    label{display:block;font-weight:600;margin:4px 0}
+    input,select,textarea{width:100%;padding:12px;border:1px solid var(--bd);border-radius:12px;background:#fff}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width:720px){ .grid2{grid-template-columns:1fr} }
+    .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .check{display:flex;align-items:center;gap:8px}
+    .help{font-size:12px;color:var(--muted)}
+
+    .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:12px 14px;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer}
+    .btn.secondary{background:#fff;border:1px solid var(--bd);color:#111}
+    .btn.ghost{background:transparent;border:1px dashed var(--bd);color:#111}
+    .btn.danger{background:linear-gradient(180deg,#ef4444,#b91c1c);border-color:#7f1d1d}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .line{border:none;border-top:1px dashed var(--bd);margin:8px 0}
+
+    /* Summary */
+    .sumli{display:grid;grid-template-columns:1fr auto;gap:8px;margin:4px 0}
+    .total{font-weight:800;font-size:16px}
+    .badge{display:inline-grid;place-items:center;border-radius:999px;background:#ecfdf5;border:1px solid #bbf7d0;color:#166534;font-size:11px;padding:2px 8px}
+    .badge.info{background:#eff6ff;border-color:#dbeafe;color:#1e3a8a}
+
+    /* Cart items mini */
+    .mini{display:flex;flex-direction:column;gap:10px}
+    .ci{display:grid;grid-template-columns:60px 1fr auto;gap:8px}
+    .ci img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--bd);background:#f8fafc}
+    .price{font-weight:700}
+
+    /* Payment sub-panels */
+    .pm-panel{display:none;margin-top:8px;padding:10px;border:1px dashed var(--bd);border-radius:12px;background:#fcfcff}
+    .pm-panel.show{display:block}
+
+    /* Toast */
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#111;color:#fff;padding:10px 14px;border-radius:12px;box-shadow:0 12px 24px rgba(0,0,0,.25);display:none;z-index:20000}
+    .toast.show{display:block}
+
+    /* Footer */
+    footer{background:#fff;border-top:1px solid var(--bd)}
+    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
+    .fwrap a{text-decoration:none;color:inherit;opacity:.9}
+    .fwrap a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+  <div class="banner">🧾 Finalisez votre commande — <b>Paiement sécurisé</b> <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+
+  <header>
+    <div class="hwrap">
+      <a id="homeLink" class="brand" aria-label="Accueil">
+        <img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
+      </a>
+      <nav class="nav" aria-label="Navigation">
+        <a id="accountLink"><img class="ic" id="icUser" alt=""> Compte</a>
+        <a id="backShop"><img class="ic" id="icBack" alt=""> Continuer mes achats</a>
+        <div class="dropdown">
+          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
+          <div id="menuDrop" class="menu">
+            <a id="aboutLink">À propos</a>
+            <a id="cgvLink">CGV</a>
+            <a id="legalLink">Mentions légales</a>
+            <a id="privacyLink">Confidentialité</a>
+            <a id="contactLink">Contact</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" aria-live="polite">
+    <!-- Colonne gauche : étapes -->
+    <section class="card">
+      <div class="hdr"><img class="ic" id="icSteps" alt=""><b>Étapes de paiement</b> <span class="muted" id="authState" style="margin-left:auto"></span></div>
+      <div class="box">
+        <!-- Adresse -->
+        <form id="addrForm" class="step">
+          <h3 style="margin:0 0 6px">1) Adresse de livraison</h3>
+          <div class="grid2">
+            <div>
+              <label for="name">Nom complet</label>
+              <input id="name" name="name" type="text" placeholder="Prénom Nom" required>
+            </div>
+            <div>
+              <label for="email">Email (confirmation)</label>
+              <input id="email" name="email" type="email" placeholder="vous@example.com" required>
+            </div>
+          </div>
+          <div class="grid2">
+            <div>
+              <label for="phone">Téléphone</label>
+              <input id="phone" name="phone" type="tel" placeholder="+33 6 12 34 56 78" inputmode="tel">
+            </div>
+            <div>
+              <label for="country">Pays</label>
+              <input id="country" name="country" list="countries" placeholder="France">
+              <datalist id="countries">
+                <option value="France"></option><option value="Belgique"></option><option value="Suisse"></option>
+                <option value="Luxembourg"></option><option value="Espagne"></option><option value="Italie"></option>
+                <option value="Allemagne"></option><option value="Pays-Bas"></option><option value="Portugal"></option>
+                <option value="Royaume-Uni"></option>
+              </datalist>
+            </div>
+          </div>
+          <label for="address">Adresse</label>
+          <input id="address" name="address" type="text" placeholder="10 Avenue de l’Europe" required>
+          <div class="grid2">
+            <div>
+              <label for="city">Ville</label>
+              <input id="city" name="city" type="text" placeholder="Paris" required>
+            </div>
+            <div>
+              <label for="zip">Code postal</label>
+              <input id="zip" name="zip" type="text" placeholder="75008" inputmode="numeric" required>
+            </div>
+          </div>
+          <div class="row">
+            <label class="check"><input type="checkbox" id="billingSame" checked> L’adresse de facturation est identique</label>
+          </div>
+        </form>
+
+        <hr class="line">
+
+        <!-- Livraison -->
+        <form id="shipForm" class="step">
+          <h3 style="margin:0 0 6px">2) Mode de livraison</h3>
+          <div class="row">
+            <label class="check"><input type="radio" name="ship" value="standard" checked> Standard (3–5 j ouvrés)</label>
+            <span class="badge info" title="Livraison sous 1 semaine">≤ 1 semaine</span>
+            <span style="margin-left:auto" id="shipStandardPrice">—</span>
+          </div>
+          <div class="row">
+            <label class="check"><input type="radio" name="ship" value="express"> Express (48 h)</label>
+            <span class="badge info">Rapide</span>
+            <span style="margin-left:auto" id="shipExpressPrice">—</span>
+          </div>
+        </form>
+
+        <hr class="line">
+
+        <!-- Paiement -->
+        <form id="payForm" class="step">
+          <h3 style="margin:0 0 6px">3) Paiement</h3>
+
+          <div class="row" style="gap:12px;flex-wrap:wrap">
+            <label class="check"><input type="radio" name="pm" value="card" checked> Carte</label>
+            <label class="check"><input type="radio" name="pm" value="paypal"> PayPal</label>
+            <label class="check"><input type="radio" name="pm" value="crypto"> Crypto</label>
+            <label class="check"><input type="radio" name="pm" value="sepa"> SEPA</label>
+          </div>
+
+          <div id="pmCard" class="pm-panel show">
+            <div class="grid2">
+              <div>
+                <label for="ccnum">Numéro de carte</label>
+                <input id="ccnum" inputmode="numeric" placeholder="4242 4242 4242 4242" maxlength="19">
+              </div>
+              <div>
+                <label for="ccexp">Expiration</label>
+                <input id="ccexp" placeholder="MM/AA" maxlength="5">
+              </div>
+            </div>
+            <div class="grid2">
+              <div>
+                <label for="ccname">Nom sur la carte</label>
+                <input id="ccname" placeholder="Prénom Nom">
+              </div>
+              <div>
+                <label for="cccvc">CVC</label>
+                <input id="cccvc" inputmode="numeric" placeholder="123" maxlength="4">
+              </div>
+            </div>
+          </div>
+
+          <div id="pmPayPal" class="pm-panel">
+            <label for="ppmail">Email PayPal</label>
+            <input id="ppmail" type="email" placeholder="vous@paypal.com">
+            <div class="help">Vous serez redirigé(e) pour confirmer le paiement.</div>
+          </div>
+
+          <div id="pmCrypto" class="pm-panel">
+            <div class="grid2">
+              <div>
+                <label for="chain">Réseau</label>
+                <select id="chain">
+                  <option value="BTC">Bitcoin (BTC)</option>
+                  <option value="ETH">Ethereum (ETH)</option>
+                  <option value="USDT">Tether (USDT-TRC20)</option>
+                </select>
+              </div>
+              <div>
+                <label for="wallet">Adresse de réception</label>
+                <input id="wallet" readonly value="sera affichée après validation">
+              </div>
+            </div>
+            <div class="help">Paiement rapide et flexible. Un QR code/adresse s’affichera à la confirmation.</div>
+          </div>
+
+          <div id="pmSEPA" class="pm-panel">
+            <label for="iban">IBAN</label>
+            <input id="iban" placeholder="FR76 3000 6000 0112 3456 7890 189">
+            <div class="help">Virement instantané conseillé. La commande est expédiée après réception.</div>
+          </div>
+
+          <div class="row" style="margin-top:6px">
+            <label class="check"><input id="splitPay" type="checkbox"> Payer en plusieurs fois</label>
+            <select id="splitCount" disabled>
+              <option value="2">2x</option>
+              <option value="3">3x</option>
+              <option value="4" selected>4x</option>
+            </select>
+            <span id="splitHint" class="help"></span>
+          </div>
+
+          <div class="row">
+            <label for="note">Message au vendeur (optionnel)</label>
+            <textarea id="note" rows="2" placeholder="Précisez une consigne de livraison…"></textarea>
+          </div>
+        </form>
+
+        <hr class="line">
+        <div class="row" style="justify-content:flex-end">
+          <button id="placeOrder" class="btn"><img class="ic" id="icLock" alt=""> Confirmer et payer</button>
+          <button id="clearCart" class="btn ghost"><img class="ic" id="icTrash" alt=""> Vider le panier</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Colonne droite : résumé -->
+    <aside class="card">
+      <div class="hdr"><img class="ic" id="icSummary" alt=""><b>Résumé</b></div>
+      <div class="box">
+        <div id="miniCart" class="mini" style="margin-bottom:8px"></div>
+
+        <hr class="line">
+
+        <div class="sumli"><span>Sous-total</span><span id="sub">—</span></div>
+        <div class="sumli"><span>Livraison</span><span id="ship">—</span></div>
+        <div class="sumli"><span>Remises promo</span><span id="disc">—</span></div>
+        <div class="sumli"><span>Taxes incl.</span><span id="tax">—</span></div>
+        <div class="sumli total"><span>Total à payer</span><span id="total">—</span></div>
+
+        <div id="splitDetail" class="help" style="margin-top:6px"></div>
+
+        <hr class="line">
+
+        <div class="help">
+          ✅ Livraison sous 1 semaine • 🔁 Retours 14 jours • 💸 Remboursement produit neuf<br>
+          🔐 Paiement sécurisé • ₿ Crypto acceptées
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <footer>
+    <div class="fwrap">
+      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <nav>
+        <a id="aboutLink2">À propos</a> ·
+        <a id="cgvLink2">CGV</a> ·
+        <a id="legalLink2">Mentions légales</a> ·
+        <a id="privacyLink2">Confidentialité</a> ·
+        <a id="contactLink2">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Facultatif : autorise le préremplissage depuis le profil si présent -->
+  <script src="compte/js/auth.js" defer></script>
+
+  <script>
+  (async()=>{
+    "use strict";
+    const $=s=>document.querySelector(s);
+
+    /* ---------- NAV / Liens / Icônes ---------- */
+    const GH_ROOT = (()=>{ 
+      const parts = location.pathname.split('/').filter(Boolean);
+      return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/';
+    })();
+
+    function link(id,path){ const el=$(id.startsWith('#')?id:('#'+id)); if(el) el.href=GH_ROOT+path; }
+    link('homeLink','index.html');
+    link('accountLink','compte/index.html');
+    link('backShop','index.html');
+    const pages = {about:'a-propos', cgv:'cgv', legal:'mentions-legales', privacy:'confidentialite', contact:'contact'};
+    Object.entries(pages).forEach(([k,slug])=>{
+      link(k+'Link','pages/'+slug+'.html');
+      link(k+'Link2','pages/'+slug+'.html');
+    });
+
+    const ICONS={
+      user:'https://img.icons8.com/?size=100&id=60655&format=png&color=000000',
+      back:'https://img.icons8.com/?size=100&id=98956&format=png&color=000000',
+      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
+      steps:'https://img.icons8.com/?size=100&id=59812&format=png&color=000000',
+      lock:'https://img.icons8.com/?size=100&id=107272&format=png&color=000000',
+      trash:'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000',
+      summary:'https://img.icons8.com/?size=100&id=7820&format=png&color=000000'
+    };
+    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
+    setSrc('icUser',ICONS.user); setSrc('icBack',ICONS.back); setSrc('icMenu',ICONS.menu);
+    setSrc('icSteps',ICONS.steps); setSrc('icLock',ICONS.lock); setSrc('icTrash',ICONS.trash);
+    setSrc('icSummary',ICONS.summary);
+
+    const menuBtn=$('#menuBtn'), menuDrop=$('#menuDrop');
+    if(menuBtn&&menuDrop){
+      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
+      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+    }
+
+    /* ---------- Bandeau compte à rebours ---------- */
+    (function(){
+      const el=document.getElementById('countdown'); if(!el) return;
+      const END=new Date(Date.now()+48*60*60*1000); const two=n=>String(n).padStart(2,'0');
+      function tick(){
+        let diff=END-new Date(); if(diff<=0){ el.textContent='Dernières heures !'; return; }
+        const d=Math.floor(diff/86400000); diff%=86400000;
+        const h=Math.floor(diff/3600000); diff%=3600000;
+        const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
+        el.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+      }
+      tick(); setInterval(tick,1000);
+    })();
+
+    /* ---------- Panier ---------- */
+    const KEY_CART='gf_cart';
+    const KEY_ORDERS='gf_orders';
+    const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY_CART)||'[]')}catch{return[]}};
+    const setCart=arr=>localStorage.setItem(KEY_CART,JSON.stringify(arr));
+    const EUR=v=>Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+
+    /* ---------- Prix / Remises / Livraison ---------- */
+    // Hypothèses : prix TTC ; remises déjà appliquées sur certains produits (promoPrice). On affiche "Remises promo" si promoPrice<price
+    function computeSub(cart){
+      return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0);
+    }
+    const shippingPrices={ standard: 6.90, express: 14.90 };
+
+    function detectPromos(cart){
+      // Si un item possède .basePrice > price, on l'exploite (compatible avec nos cartes)
+      // Sinon on ne peut pas déduire. On tente brand/category heuristique ? -> Non. On reste simple.
+      // On renvoie 0 par défaut, car price est déjà après promo dans la fiche produit.
+      return 0;
+    }
+
+    function vatIncluded(total){ // Info : affichage "Taxes incl." ~20% estimé sur TTC (indicatif)
+      const rate=0.20; return total - (total/(1+rate));
+    }
+
+    /* ---------- Rendu Résumé ---------- */
+    function renderMiniCart(){
+      const list=getCart();
+      const wrap=$('#miniCart');
+      if(!list.length){
+        wrap.innerHTML='<div class="muted">Votre panier est vide.</div>';
+        $('#sub').textContent='—';
+        $('#ship').textContent='—';
+        $('#disc').textContent='—';
+        $('#tax').textContent='—';
+        $('#total').textContent='—';
+        $('#placeOrder').disabled=true;
+        return;
+      }
+      $('#placeOrder').disabled=false;
+
+      wrap.innerHTML=list.map(x=>`
+        <div class="ci">
+          <img src="${x.image||''}" alt="${x.name||''}">
+          <div>
+            <div style="font-weight:600">${x.name||''}</div>
+            <div class="muted" style="font-size:12px">${x.brand||''} • ${x.category||''}</div>
+          </div>
+          <div class="price">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
+        </div>
+      `).join('');
+
+      const sub=computeSub(list);
+      const shipMeth=(document.querySelector('input[name=ship]:checked')?.value)||'standard';
+      const ship=shippingPrices[shipMeth]||0;
+      const disc=detectPromos(list);
+      const total=Math.max(0, sub + ship - disc);
+      const tax=vatIncluded(total);
+
+      $('#sub').textContent=EUR(sub);
+      $('#ship').textContent= ship ? EUR(ship) : 'Offert';
+      $('#disc').textContent= disc ? '–'+EUR(disc) : '—';
+      $('#tax').textContent= '≈ '+EUR(tax);
+      $('#total').textContent=EUR(total);
+
+      // Paiement en X fois aperçu
+      updateSplitText(total);
+    }
+
+    function updateShipLabels(){
+      $('#shipStandardPrice').textContent = EUR(shippingPrices.standard);
+      $('#shipExpressPrice').textContent  = EUR(shippingPrices.express);
+    }
+
+    /* ---------- Paiement en plusieurs fois ---------- */
+    const splitBox = $('#splitPay');
+    const splitCountSel = $('#splitCount');
+    const splitHint = $('#splitHint');
+    function splitBreakdown(total, n){
+      // Répartition arrondie au centime : on arrondit et compense sur la dernière échéance.
+      const cents=Math.round(total*100);
+      const base=Math.floor(cents/n);
+      const parts=new Array(n).fill(base);
+      parts[n-1]+= cents - base*n;
+      return parts.map(c=>c/100);
+    }
+    function updateSplitText(total){
+      if(!splitBox.checked){ $('#splitDetail').textContent=''; splitHint.textContent=''; return; }
+      const n = Number(splitCountSel.value||4);
+      const parts = splitBreakdown(total, n);
+      $('#splitDetail').textContent = `Paiement en ${n} échéances : ` + parts.map((p,i)=>`${EUR(p)}${i===0?' (aujourd’hui)':''}`).join(' · ');
+      splitHint.textContent = `Échéancier indicatif sans frais.`;
+    }
+
+    splitBox.addEventListener('change', ()=>{
+      splitCountSel.disabled = !splitBox.checked;
+      renderMiniCart();
+    });
+    splitCountSel.addEventListener('change', ()=>renderMiniCart());
+
+    /* ---------- UI Paiement ---------- */
+    function showPanel(which){
+      ['pmCard','pmPayPal','pmCrypto','pmSEPA'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(!el) return;
+        el.classList.toggle('show', id.toLowerCase().includes(which));
+      });
+    }
+    document.querySelectorAll('input[name=pm]').forEach(r=>{
+      r.addEventListener('change', ()=>{
+        showPanel(r.value);
+        renderMiniCart();
+      });
+    });
+
+    /* ---------- Préremplissage compte ---------- */
+    (async function preloadProfile(){
+      try{
+        // 1) Depuis la session locale
+        const sess = JSON.parse(localStorage.getItem('GF_SESSION')||'null');
+        if(sess && sess.email){
+          $('#authState').textContent='Connecté';
+          $('#email').value = sess.email;
+          if(sess.name) $('#name').value = sess.name;
+        }else{
+          $('#authState').textContent='Invité';
+        }
+
+        // 2) Depuis la “base” si auth.js/Apps Script dispo
+        if(window.GFAuth && GFAuth.api && typeof GFAuth.api.listUsers==='function' && sess && sess.email){
+          const list = await GFAuth.api.listUsers(); // array of users
+          const me = (list||[]).find(u => (u.email||'').toLowerCase() === String(sess.email||'').toLowerCase());
+          if(me){
+            if(me.name && !$('#name').value) $('#name').value = me.name;
+            ['phone','address','city','zip','country'].forEach(k=>{
+              if(me[k] && $('#'+k)) $('#'+k).value = me[k];
+            });
+          }
+        }
+      }catch{}
+    })();
+
+    /* ---------- Validation légère ---------- */
+    function validateAll(){
+      const req=['name','email','address','city','zip'];
+      for(const id of req){ const el=$('#'+id); if(!el||!el.value.trim()) return false; }
+      return getCart().length>0;
+    }
+
+    /* ---------- Actions / Événements ---------- */
+    // shipping change
+    document.querySelectorAll('input[name=ship]').forEach(r=>{
+      r.addEventListener('change', renderMiniCart);
+    });
+
+    // Clear cart
+    $('#clearCart').addEventListener('click', ()=>{
+      if(!confirm('Vider votre panier ?')) return;
+      setCart([]); renderMiniCart(); toast('Panier vidé.');
+    });
+
+    // Place order (simulation)
+    $('#placeOrder').addEventListener('click', async ()=>{
+      if(!validateAll()){ toast('Veuillez compléter l’adresse et vérifier votre panier.'); return; }
+
+      const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
+
+      const shipMeth=(document.querySelector('input[name=ship]:checked')?.value)||'standard';
+      const ship=shippingPrices[shipMeth]||0;
+      const sub=computeSub(cart);
+      const disc=detectPromos(cart);
+      const total=Math.max(0, sub + ship - disc);
+
+      const pm = document.querySelector('input[name=pm]:checked')?.value || 'card';
+
+      // Construction de la commande
+      const order={
+        id: 'CMD-'+Date.now(),
+        date: new Date().toISOString(),
+        status: (pm==='sepa' || pm==='crypto') ? 'En attente de paiement' : 'Payée',
+        userId: (JSON.parse(localStorage.getItem('GF_SESSION')||'null')||{}).email || 'guest',
+        items: cart,
+        pricing: {sub, ship, disc, total, currency:'EUR'},
+        shipping: {
+          method: shipMeth,
+          name: $('#name').value.trim(),
+          email: $('#email').value.trim(),
+          phone: $('#phone').value.trim(),
+          address: $('#address').value.trim(),
+          city: $('#city').value.trim(),
+          zip: $('#zip').value.trim(),
+          country: $('#country').value.trim()
+        },
+        payment: {
+          method: pm,
+          split: splitBox.checked ? Number(splitCountSel.value||4) : 1,
+          note: $('#note').value.trim()
+        }
+      };
+
+      // Si crypto -> générer une adresse fictive (démo)
+      if(pm==='crypto'){
+        const chain=$('#chain').value;
+        const addr = chain==='BTC' ? 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh'
+                   : chain==='ETH' ? '0x5A…2b3C'
+                   : 'TN…USDT-TRC20';
+        order.payment.crypto = { chain, address: addr };
+      }
+
+      // Persistance locale des commandes
+      try{
+        const all=JSON.parse(localStorage.getItem(KEY_ORDERS)||'[]');
+        all.push(order);
+        localStorage.setItem(KEY_ORDERS, JSON.stringify(all));
+      }catch{}
+
+      // Vider le panier après passage de commande (sauf SEPA/crypto ? on le vide quand même pour la démo)
+      setCart([]);
+      renderMiniCart();
+
+      // Redirections UX
+      toast('Commande créée : '+order.id);
+      // Si crypto : afficher l’adresse
+      if(pm==='crypto'){
+        alert(`Adresse de paiement (${order.payment.crypto.chain}) :\n${order.payment.crypto.address}\n\nMontant: ${EUR(order.pricing.total)}`);
+      }
+      // Aller vers Mon Compte
+      location.replace(GH_ROOT+'compte/index.html');
+    });
+
+    /* ---------- UI helpers ---------- */
+    function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 1800); }
+
+    /* ---------- Init ---------- */
+    updateShipLabels();
+    renderMiniCart();
+  })();
+  </script>
+</body>
+</html>
