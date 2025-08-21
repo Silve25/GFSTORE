@@ -3,79 +3,89 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mon compte — Profil & Tableau de bord | GF Store</title>
+  <title>Mon profil — GF Store</title>
+  <meta name="description" content="Gérez vos informations personnelles GF Store : nom, email, téléphone, adresse et pays.">
   <style>
-    :root{--w:1000px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
+    :root{
+      --w:1200px; --c:#0f172a; --a:#2563eb; --bg:#f5f7fb;
+      --r:16px;
+    }
     *{box-sizing:border-box}
     body{margin:0;font:14px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
     a{color:inherit}
-    header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #e5e7eb;backdrop-filter:saturate(140%) blur(4px)}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb;backdrop-filter:saturate(140%) blur(4px)}
     .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
-    .brand .logo{height:34px;width:auto;display:block}
-    .nav{display:flex;gap:8px;align-items:center}
-    .iconbtn,.nav a{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;color:inherit}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700;text-decoration:none}
+    .brand .logo{height:40px;width:auto;display:block}
+    .nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
     .iconbtn{cursor:pointer}
     .ic{width:16px;height:16px;display:inline-block}
     .dropdown{position:relative}
-    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:30}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
     .menu.show{display:block}
     .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
     .menu a:hover{background:#f3f4f6}
 
-    .wrap{max-width:var(--w);margin:18px auto 28px;padding:0 12px;display:grid;gap:14px}
-    .grid{display:grid;gap:14px;grid-template-columns:1.2fr 1fr}
-    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 1px 0 rgba(0,0,0,.02);padding:16px}
-    h1{font-size:22px;margin:6px 0 0}
-    h2{font-size:16px;margin:0 0 8px}
-    .muted{opacity:.7;font-size:12px}
-    .row{display:grid;gap:6px;margin-bottom:10px}
-    label{font-weight:600}
-    input,select,textarea{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
-    textarea{min-height:84px;resize:vertical}
-    .two{display:grid;gap:10px;grid-template-columns:1fr 1fr}
-    .actions{display:flex;gap:8px;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:11px 14px;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer}
+    /* Bandeau */
+    .banner{background:linear-gradient(90deg,#1e3a8a,#2563eb,#0ea5e9);color:#fff;text-align:center;padding:10px 14px}
+    .banner .timer{font-weight:700;border-radius:999px;padding:2px 8px;background:rgba(255,255,255,.15);display:inline-block}
+    .banner .sep{opacity:.6;padding:0 6px}
+
+    /* Layout */
+    .wrap{max-width:860px;margin:18px auto 40px;padding:0 12px;display:grid;gap:14px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .hdr{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+    .avatar{width:56px;height:56px;border-radius:999px;display:grid;place-items:center;font-weight:800;background:#eff6ff;border:1px solid #dbeafe;color:#1d4ed8}
+    h1{font-size:18px;margin:0}
+    h2{font-size:15px;margin:14px 0 8px}
+    .muted{opacity:.75;font-size:12px}
+
+    form{display:grid;gap:12px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width:720px){ .grid2{grid-template-columns:1fr} }
+    label{display:block;font-weight:600;margin:4px 0}
+    input,select{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+    input[readonly]{background:#f9fafb;color:#64748b}
+
+    .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:12px 14px;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer;min-width:160px}
     .btn.secondary{background:#fff;border:1px solid #e5e7eb;color:#111}
-    .btn.danger{background:linear-gradient(180deg,#ef4444,#b91c1c);border-color:#7f1d1d}
     .btn:disabled{opacity:.6;cursor:not-allowed}
-    .section{display:grid;gap:10px}
-    .alert{border-radius:12px;padding:10px 12px;border:1px solid #fecaca;background:#fef2f2;color:#991b1b;display:none}
-    .ok{border-radius:12px;padding:10px 12px;border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;display:none}
-    .show{display:block!important}
-    .hr{border:none;border-top:1px dashed #e5e7eb;margin:12px 0}
 
-    .headerline{display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .avatar{width:56px;height:56px;border-radius:999px;background:#e5e7eb;display:grid;place-items:center;font-weight:800}
-    .who{display:flex;align-items:center;gap:10px}
-    .chip{display:inline-block;line-height:1;padding:2px 6px;border-radius:999px;background:#f0f9ff;color:#0ea5e9;font-size:11px;border:1px solid #bae6fd}
+    .msg{margin-top:6px;padding:10px;border-radius:12px;display:none}
+    #profileMsg{background:#fef2f2;border:1px solid #fee2e2;color:#991b1b} /* recolorisé en succès par showMsg() */
 
-    .empty{display:grid;gap:10px;place-items:center;text-align:center;padding:26px;border:1px dashed #e5e7eb;border-radius:16px;background:#fff}
-    .links{display:inline-flex;gap:8px;flex-wrap:wrap}
+    .help{font-size:12px;opacity:.75}
 
-    @media (max-width:900px){
-      .grid{grid-template-columns:1fr}
-    }
+    footer{background:#fff;border-top:1px solid #e5e7eb}
+    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
+    .fwrap a{text-decoration:none;color:inherit;opacity:.9}
+    .fwrap a:hover{text-decoration:underline}
   </style>
 </head>
 <body>
+  <div class="banner">👤 Gérez votre profil <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+
   <header>
     <div class="hwrap">
-      <a href="../index.html" class="brand">
+      <a id="homeLink" class="brand" aria-label="Accueil">
         <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
-      <nav class="nav">
-        <a href="./profile.html"><img class="ic" id="icUser" alt=""> Mon compte</a>
-        <a href="../index.html"><img class="ic" id="icHome" alt=""> Boutique</a>
-        <button class="iconbtn" id="logoutBtn" title="Se déconnecter"><img class="ic" id="icLogout" alt=""> Déconnexion</button>
+      <nav class="nav" aria-label="Navigation">
+        <a id="accountLink"><img class="ic" id="icAccount" alt=""> Mon compte</a>
+        <button class="iconbtn" id="logoutBtn"><img class="ic" id="icLogout" alt=""> Déconnexion</button>
         <div class="dropdown">
           <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
           <div id="menuDrop" class="menu">
-            <a href="../a-propos.html">À propos</a>
-            <a href="../cgv.html">CGV</a>
-            <a href="../mentions-legales.html">Mentions légales</a>
-            <a href="../confidentialite.html">Confidentialité</a>
-            <a href="../contact.html">Contact</a>
+            <a id="aboutLink">À propos</a>
+            <a id="cgvLink">CGV</a>
+            <a id="legalLink">Mentions légales</a>
+            <a id="privacyLink">Confidentialité</a>
+            <a id="contactLink">Contact</a>
           </div>
         </div>
       </nav>
@@ -83,334 +93,200 @@
   </header>
 
   <main class="wrap">
-    <div id="state-guest" class="empty" style="display:none">
-      <img class="ic" id="icLock" alt="">
-      <h1>Mon compte</h1>
-      <p class="muted">Vous n’êtes pas connecté. Accédez à votre espace pour suivre vos commandes et gérer vos informations.</p>
-      <div class="links">
-        <a class="btn" href="./login.html"><img class="ic" id="icLogin" alt=""> Se connecter</a>
-        <a class="btn secondary" href="./register.html">Créer un compte</a>
-        <a class="btn secondary" href="./password-reset.html">Mot de passe oublié</a>
+    <section class="card">
+      <div class="hdr">
+        <div class="avatar" id="avatar">?</div>
+        <div>
+          <h1>Mon profil</h1>
+          <div class="muted">Modifiez vos informations personnelles et d’adresse de livraison.</div>
+        </div>
       </div>
-    </div>
 
-    <div id="state-user" style="display:none">
-      <div class="grid">
-        <!-- Colonne 1 -->
-        <section class="card section">
-          <div class="headerline">
-            <div class="who">
-              <div class="avatar" id="avatar">U</div>
-              <div>
-                <h1 id="hello">Bonjour !</h1>
-                <div class="muted">Connecté depuis <span id="since">—</span></div>
-              </div>
-            </div>
-            <span class="chip" id="emailChip">—</span>
+      <!-- Zone messages (utilisée par auth.js) -->
+      <div id="profileMsg" class="msg" role="status" aria-live="polite"></div>
+
+      <!-- IDs et names attendus par auth.js -->
+      <form id="profileForm" novalidate>
+        <h2>Identité</h2>
+        <div class="grid2">
+          <div>
+            <label for="name">Nom complet</label>
+            <input id="name" name="name" type="text" placeholder="Jane Dupont" required>
           </div>
-
-          <hr class="hr">
-
-          <h2>Profil</h2>
-          <div id="msgProfile" class="ok"></div>
-          <form id="formProfile" class="section" novalidate>
-            <div class="two">
-              <div class="row">
-                <label for="firstName">Prénom</label>
-                <input id="firstName" name="firstName" placeholder="Votre prénom">
-              </div>
-              <div class="row">
-                <label for="lastName">Nom</label>
-                <input id="lastName" name="lastName" placeholder="Votre nom">
-              </div>
-            </div>
-            <div class="row">
-              <label for="phone">Téléphone</label>
-              <input id="phone" name="phone" placeholder="+33 6 12 34 56 78">
-            </div>
-            <div class="row">
-              <label for="email">Email (identifiant)</label>
-              <input id="email" name="email" type="email" required>
-              <div class="muted">Pour changer d’email, confirmez votre mot de passe ci-dessous.</div>
-            </div>
-            <div class="row">
-              <label for="currentPw">Mot de passe (pour confirmer un changement d’email)</label>
-              <input id="currentPw" type="password" placeholder="Mot de passe actuel">
-            </div>
-
-            <h2>Adresses</h2>
-            <div class="row">
-              <label for="addr1">Adresse (ligne 1)</label>
-              <input id="addr1" name="addr1" placeholder="N°, rue">
-            </div>
-            <div class="row">
-              <label for="addr2">Complément (optionnel)</label>
-              <input id="addr2" name="addr2" placeholder="Bâtiment, étage, société…">
-            </div>
-            <div class="two">
-              <div class="row">
-                <label for="city">Ville</label>
-                <input id="city" name="city" placeholder="Ville">
-              </div>
-              <div class="row">
-                <label for="zip">Code postal</label>
-                <input id="zip" name="zip" placeholder="75001">
-              </div>
-            </div>
-            <div class="row">
-              <label for="country">Pays</label>
-              <input id="country" name="country" placeholder="France">
-            </div>
-
-            <div class="actions">
-              <a class="btn secondary" href="../index.html">Retour boutique</a>
-              <button class="btn" id="saveProfile" type="submit"><img class="ic" id="icSave" alt=""> Enregistrer</button>
-            </div>
-            <div id="errProfile" class="alert"></div>
-          </form>
-
-          <hr class="hr">
-
-          <h2>Sécurité</h2>
-          <div class="actions">
-            <a class="btn secondary" href="./password-change.html">Changer le mot de passe</a>
-            <a class="btn secondary" href="./password-reset.html">Réinitialiser par email</a>
-            <button class="btn danger" id="deleteAccount"><img class="ic" id="icTrash" alt=""> Supprimer mon compte</button>
+          <div>
+            <label for="email">Email (lecture seule)</label>
+            <input id="email" name="email" type="email" placeholder="vous@example.com" readonly>
           </div>
-        </section>
+        </div>
 
-        <!-- Colonne 2 -->
-        <section class="card section">
-          <h2>Récap rapide</h2>
-          <div class="row">
-            <strong>Dernière connexion</strong>
-            <div id="lastLogin" class="muted">—</div>
+        <div class="grid2">
+          <div>
+            <label for="phone">Téléphone</label>
+            <input id="phone" name="phone" type="tel" placeholder="+33 6 12 34 56 78" inputmode="tel">
           </div>
-          <div class="row">
-            <strong>Commandes</strong>
-            <div id="orders">Aucune commande enregistrée (démo).</div>
+          <div>
+            <label for="country">Pays</label>
+            <input id="country" name="country" list="countries" placeholder="France">
+            <datalist id="countries">
+              <option value="France"></option>
+              <option value="Belgique"></option>
+              <option value="Suisse"></option>
+              <option value="Luxembourg"></option>
+              <option value="Espagne"></option>
+              <option value="Italie"></option>
+              <option value="Allemagne"></option>
+              <option value="Pays-Bas"></option>
+              <option value="Portugal"></option>
+              <option value="Royaume-Uni"></option>
+            </datalist>
           </div>
+        </div>
 
-          <hr class="hr">
-          <h2>Liens rapides</h2>
-          <div class="actions">
-            <a class="btn secondary" href="../checkout.html">Aller au paiement</a>
-            <button class="btn secondary" id="logoutBtn2"><img class="ic" id="icLogout2" alt=""> Se déconnecter</button>
+        <h2 id="adresse">Adresse</h2>
+        <div class="grid2">
+          <div>
+            <label for="address">Adresse</label>
+            <input id="address" name="address" type="text" placeholder="10 Avenue de l’Europe">
           </div>
+          <div>
+            <label for="city">Ville</label>
+            <input id="city" name="city" type="text" placeholder="Paris">
+          </div>
+        </div>
 
-          <hr class="hr">
-          <h2>Aide</h2>
-          <div class="muted">Besoin d’assistance ? <a href="../contact.html">Contactez-nous</a>. Retours sous 14 jours, paiement sécurisé, crypto acceptées.</div>
-        </section>
-      </div>
-    </div>
+        <div class="grid2">
+          <div>
+            <label for="zip">Code postal</label>
+            <input id="zip" name="zip" type="text" placeholder="75008" inputmode="numeric">
+          </div>
+          <div class="help">Ces informations sont utilisées pour la livraison et la facturation.</div>
+        </div>
+
+        <div class="row" style="margin-top:6px">
+          <a id="cancelBtn" class="btn secondary">Annuler</a>
+          <button class="btn" type="submit"><img class="ic" id="icSave" alt=""> Enregistrer</button>
+        </div>
+      </form>
+    </section>
   </main>
 
   <footer>
-    <div class="hwrap" style="justify-content:space-between">
+    <div class="fwrap">
       <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
-      <nav style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px">
-        <a href="../a-propos.html">À propos</a> ·
-        <a href="../cgv.html">CGV</a> ·
-        <a href="../mentions-legales.html">Mentions légales</a> ·
-        <a href="../confidentialite.html">Confidentialité</a> ·
-        <a href="../contact.html">Contact</a>
+      <nav>
+        <a id="aboutLink2">À propos</a> ·
+        <a id="cgvLink2">CGV</a> ·
+        <a id="legalLink2">Mentions légales</a> ·
+        <a id="privacyLink2">Confidentialité</a> ·
+        <a id="contactLink2">Contact</a>
       </nav>
     </div>
   </footer>
 
+  <!-- API / session logic -->
+  <script src="js/auth.js" defer></script>
+
   <script>
-  (async()=>{
-    // --- Icônes ---
-    const ICONS={
+  (function(){
+    "use strict";
+    const $=(s,root)=> (root||document).querySelector(s);
+
+    // GH_ROOT (GitHub Pages friendly)
+    const GH_ROOT = (()=>{ 
+      const parts = location.pathname.split('/').filter(Boolean);
+      return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/';
+    })();
+
+    // Icônes
+    const ICONS = {
+      account:'https://img.icons8.com/?size=100&id=60655&format=png&color=000000',
       menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
       logout:'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
-      home:'https://img.icons8.com/?size=100&id=99667&format=png&color=000000',
-      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
-      lock:'https://img.icons8.com/?size=100&id=13655&format=png&color=000000',
-      login:'https://img.icons8.com/?size=100&id=64088&format=png&color=000000',
-      save:'https://img.icons8.com/?size=100&id=63257&format=png&color=ffffff',
-      trash:'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=ffffff'
+      save:'https://img.icons8.com/?size=100&id=63257&format=png&color=ffffff'
     };
     const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
-    setSrc('icMenu',ICONS.menu); setSrc('icLogout',ICONS.logout); setSrc('icLogout2',ICONS.logout);
-    setSrc('icHome',ICONS.home); setSrc('icUser',ICONS.user); setSrc('icLock',ICONS.lock);
-    setSrc('icLogin',ICONS.login); setSrc('icSave',ICONS.save); setSrc('icTrash',ICONS.trash);
-
-    // --- Menu ---
-    const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
-    if(menuBtn&&menuDrop){
-      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
-      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+    function setIcons(){
+      setSrc('icAccount', ICONS.account);
+      setSrc('icMenu', ICONS.menu);
+      setSrc('icLogout', ICONS.logout);
+      setSrc('icSave', ICONS.save);
     }
 
-    // --- Helpers (démo front-only) ---
-    const $=s=>document.querySelector(s);
-    const te=new TextEncoder();
-    const toB64=buf=>btoa(String.fromCharCode(...new Uint8Array(buf)));
-    async function sha256(str){const buf=await crypto.subtle.digest('SHA-256', te.encode(str)); return toB64(buf);}
-    const PEPPER='gfstore-pepper-demo-v1'; // ⚠️ Démo : ne jamais mettre la pepper côté client en production.
-    async function hashPassword(password,saltB64){ return sha256(`${saltB64}:${password}:${PEPPER}`); }
-
-    function getUsers(){ try{return JSON.parse(localStorage.getItem('gf_users')||'[]')}catch{return[]} }
-    function setUsers(arr){ localStorage.setItem('gf_users', JSON.stringify(arr)); }
-    function getSession(){ try{ return JSON.parse(localStorage.getItem('gf_user')||'null'); }catch{ return null; } }
-    function setSession(obj){ localStorage.setItem('gf_user', JSON.stringify(obj)); }
-    function signOut(){ localStorage.removeItem('gf_user'); location.replace('./login.html'); }
-
-    // --- State switcher ---
-    const guest=$('#state-guest'), userZone=$('#state-user');
-    const session=getSession();
-
-    if(!session || (session.exp && session.exp<=Date.now())){
-      guest.style.display='grid';
-      userZone.style.display='none';
-      // cacher boutons déconnexion
-      document.getElementById('logoutBtn').style.display='none';
-    }else{
-      guest.style.display='none';
-      userZone.style.display='block';
+    // Liens
+    function link(id,path){ const el=document.getElementById(id); if(el) el.href=GH_ROOT+path; }
+    function wireLinks(){
+      $('#homeLink').href = GH_ROOT;
+      link('accountLink','compte/index.html');
+      link('cancelBtn','compte/index.html');
+      const pages = {about:'a-propos', cgv:'cgv', legal:'mentions-legales', privacy:'confidentialite', contact:'contact'};
+      Object.entries(pages).forEach(([k,slug])=>{
+        link(k+'Link','pages/'+slug+'.html');
+        link(k+'Link2','pages/'+slug+'.html');
+      });
     }
 
-    // Quitter si invité
-    if(!session || (session.exp && session.exp<=Date.now())) return;
-
-    // --- Charger l'utilisateur ---
-    const email=(session.email||'').toLowerCase();
-    const users=getUsers();
-    const idx=users.findIndex(u=>String(u.email||'').toLowerCase()===email);
-    if(idx===-1){ signOut(); return; }
-    let user=users[idx];
-
-    // --- Rendu en-tête ---
-    function initials(u){
-      const f=u.firstName||'', l=u.lastName||'';
-      const base=(f||l)?(f[0]||'')+(l[0]||''):(u.email||'?')[0]||'?';
-      return base.toUpperCase();
+    // Menu
+    function wireMenu(){
+      const btn=$('#menuBtn'), drop=$('#menuDrop');
+      if(!btn||!drop) return;
+      btn.addEventListener('click',e=>{e.stopPropagation();drop.classList.toggle('show')});
+      document.addEventListener('click',e=>{ if(!drop.contains(e.target) && e.target!==btn) drop.classList.remove('show'); });
     }
-    $('#avatar').textContent=initials(user);
-    $('#hello').textContent = (user.firstName||user.lastName) ? `Bonjour ${user.firstName||''} ${user.lastName||''}`.trim() : 'Bonjour !';
-    $('#emailChip').textContent = user.email;
-    if(session.iat){ $('#since').textContent = new Date(session.iat).toLocaleString('fr-FR'); }
-    if(session.last){ $('#lastLogin').textContent = new Date(session.last).toLocaleString('fr-FR'); }
 
-    // --- Pré-remplir le formulaire ---
-    const F = {
-      firstName: $('#firstName'),
-      lastName:  $('#lastName'),
-      phone:     $('#phone'),
-      email:     $('#email'),
-      currentPw: $('#currentPw'),
-      addr1:     $('#addr1'),
-      addr2:     $('#addr2'),
-      city:      $('#city'),
-      zip:       $('#zip'),
-      country:   $('#country')
-    };
-    function fill(u){
-      F.firstName.value = u.firstName||'';
-      F.lastName.value  = u.lastName||'';
-      F.phone.value     = u.phone||'';
-      F.email.value     = u.email||'';
-      F.addr1.value     = u.addr1||'';
-      F.addr2.value     = u.addr2||'';
-      F.city.value      = u.city||'';
-      F.zip.value       = u.zip||'';
-      F.country.value   = u.country||'France';
+    // Bandeau compte à rebours (48h)
+    function wireCountdown(){
+      const el=$('#countdown'); if(!el) return;
+      const END=new Date(Date.now()+48*60*60*1000); const two=n=>String(n).padStart(2,'0');
+      function tick(){
+        const now=new Date(); let diff=END-now;
+        if(diff<=0){ el.textContent='Dernières heures !'; return; }
+        const d=Math.floor(diff/86400000); diff%=86400000;
+        const h=Math.floor(diff/3600000); diff%=3600000;
+        const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
+        el.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+      }
+      tick(); setInterval(tick,1000);
     }
-    fill(user);
 
-    // --- Sauvegarde profil (et changement d'email sécurisé) ---
-    const msgOk = $('#msgProfile'), msgErr = $('#errProfile');
-    function showOk(m){ msgOk.textContent=m; msgOk.classList.add('show'); msgErr.classList.remove('show'); }
-    function showErr(m){ msgErr.textContent=m; msgErr.classList.add('show'); msgOk.classList.remove('show'); }
+    // Avatar initial
+    function setAvatar(nameOrEmail){
+      const a = document.getElementById('avatar');
+      if(!a) return;
+      const t = (nameOrEmail||'?').trim();
+      a.textContent = (t[0] || '?').toUpperCase();
+    }
 
-    $('#formProfile').addEventListener('submit', async (e)=>{
-      e.preventDefault(); msgOk.classList.remove('show'); msgErr.classList.remove('show');
-      const submitting=$('#saveProfile'); submitting.disabled=true;
-
+    // Session & logout local (UX)
+    function wireSession(){
+      // Si pas de session, auth.js redirigera ; on anticipe
       try{
-        const newEmail=(F.email.value||'').trim().toLowerCase();
-        const emailChanged = newEmail && newEmail!==user.email;
-
-        // Si l'email change, vérifier unicité + demander le mot de passe
-        if(emailChanged){
-          if(!F.currentPw.value){ showErr('Veuillez confirmer votre mot de passe pour changer d’email.'); submitting.disabled=false; return; }
-          const already = users.some((u,i)=>i!==idx && String(u.email||'').toLowerCase()===newEmail);
-          if(already){ showErr('Cet email est déjà utilisé.'); submitting.disabled=false; return; }
-          const okPw = (await hashPassword(F.currentPw.value, user.salt))===user.hash;
-          if(!okPw){ showErr('Mot de passe incorrect.'); submitting.disabled=false; return; }
+        const s = JSON.parse(localStorage.getItem('GF_SESSION')||'null');
+        if(!s || !s.email){
+          location.replace(GH_ROOT+'compte/login.html?next='+encodeURIComponent(location.href));
+          return;
         }
-
-        // Mettre à jour les champs de profil
-        user = {
-          ...user,
-          firstName:F.firstName.value.trim(),
-          lastName:F.lastName.value.trim(),
-          phone:F.phone.value.trim(),
-          addr1:F.addr1.value.trim(),
-          addr2:F.addr2.value.trim(),
-          city:F.city.value.trim(),
-          zip:F.zip.value.trim(),
-          country:F.country.value.trim(),
-          email: emailChanged ? newEmail : user.email,
-          updatedAt: new Date().toISOString()
-        };
-        users[idx]=user; setUsers(users);
-
-        // Mettre à jour session + UI si email changé
-        if(emailChanged){
-          const newSession = {...session, email:newEmail};
-          setSession(newSession);
-          $('#emailChip').textContent=newEmail;
-        }
-        $('#avatar').textContent=initials(user);
-        $('#hello').textContent=(user.firstName||user.lastName)?`Bonjour ${user.firstName||''} ${user.lastName||''}`.trim():'Bonjour !';
-
-        F.currentPw.value='';
-
-        showOk('Profil mis à jour avec succès.');
-      }catch(ex){
-        console.error(ex);
-        showErr('Erreur lors de l’enregistrement. Réessayez.');
-      }finally{
-        submitting.disabled=false;
+        setAvatar(s.name || s.email);
+      }catch{}
+      const logoutBtn = document.getElementById('logoutBtn');
+      if(logoutBtn){
+        logoutBtn.addEventListener('click',(e)=>{
+          e.preventDefault();
+          localStorage.removeItem('GF_SESSION');
+          location.replace(GH_ROOT+'compte/login.html');
+        });
       }
-    });
+    }
 
-    // --- Commandes (démo) ---
-    const ordersEl = document.getElementById('orders');
-    try{
-      const all = JSON.parse(localStorage.getItem('gf_orders')||'[]');
-      const mine = all.filter(o=>String(o.email||'').toLowerCase()===email);
-      if(mine.length){
-        ordersEl.innerHTML = mine.slice(-5).map(o=>{
-          const d=new Date(o.date||Date.now()).toLocaleString('fr-FR');
-          const total=(o.total||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-          return `<div style="border:1px solid #e5e7eb;border-radius:12px;padding:8px;margin-bottom:8px">
-            <div><strong>Commande #${o.id||'—'}</strong> — ${d}</div>
-            <div class="muted">${(o.items||[]).length} article(s) • Total ${total}</div>
-          </div>`;
-        }).join('');
+    function init(){
+      wireLinks(); wireMenu(); wireCountdown(); setIcons(); wireSession();
+
+      // Défilement direct sur #adresse si présent
+      if(location.hash === '#adresse'){
+        const el = document.getElementById('adresse');
+        if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
       }
-    }catch{}
-
-    // --- Déconnexion & suppression compte ---
-    const doLogout=()=>signOut();
-    document.getElementById('logoutBtn').addEventListener('click', doLogout);
-    document.getElementById('logoutBtn2').addEventListener('click', doLogout);
-
-    document.getElementById('deleteAccount').addEventListener('click', ()=>{
-      const yes = confirm('Supprimer définitivement votre compte ? Cette action est irréversible.');
-      if(!yes) return;
-      // Effacer utilisateur
-      const list=getUsers().filter(u=>String(u.email||'').toLowerCase()!==email);
-      setUsers(list);
-      // Effacer session
-      localStorage.removeItem('gf_user');
-      alert('Compte supprimé.');
-      location.replace('../index.html');
-    });
+    }
+    document.addEventListener('DOMContentLoaded', init);
   })();
   </script>
 </body>
