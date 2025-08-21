@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Connexion — GF Store</title>
+  <meta name="description" content="Connectez-vous à votre compte GF Store pour gérer vos commandes, adresses et préférences." />
   <style>
     :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
     *{box-sizing:border-box} body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
@@ -40,8 +41,8 @@
     .btn:disabled{opacity:.6;cursor:not-allowed}
     .alt{display:flex;gap:10px;margin-top:10px}
     .alt a{flex:1;text-align:center;border:1px solid #e5e7eb;border-radius:12px;padding:10px;text-decoration:none;background:#fff}
-    .err{margin-top:10px;padding:10px;border-radius:12px;background:#fef2f2;border:1px solid #fee2e2;color:#991b1b;display:none}
-    .ok{margin-top:10px;padding:10px;border-radius:12px;background:#ecfdf5;border:1px solid #d1fae5;color:#065f46;display:none}
+    .msg{margin-top:10px;padding:10px;border-radius:12px;display:none}
+    #loginMsg{background:#fef2f2;border:1px solid #fee2e2;color:#991b1b} /* auth.js utilisera cette zone */
     .hint{font-size:12px;opacity:.8;margin-top:10px}
   </style>
 </head>
@@ -50,20 +51,20 @@
 
   <header>
     <div class="hwrap">
-      <a id="homeLink" class="brand">
+      <a id="homeLink" class="brand" aria-label="Aller à l'accueil">
         <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
-      <nav class="nav">
-        <a id="accountLink"><img class="ic" id="icUser" alt=""> Compte</a>
-        <a id="cartBtn" class="iconbtn"><img id="cartIcon" class="ic" alt=""> Panier</a>
+      <nav class="nav" aria-label="Navigation principale">
+        <a id="accountLink"><img class="ic" id="icUser" alt="" role="presentation"> Compte</a>
+        <a id="cartBtn" class="iconbtn"><img id="cartIcon" class="ic" alt="" role="presentation"> Panier</a>
         <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
-          <div id="menuDrop" class="menu">
-            <a id="aboutLink">À propos</a>
-            <a id="cgvLink">CGV</a>
-            <a id="legalLink">Mentions légales</a>
-            <a id="privacyLink">Politique de confidentialité</a>
-            <a id="contactLink">Contact</a>
+          <button class="iconbtn" id="menuBtn" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><img class="ic" id="icMenu" alt="" role="presentation"></button>
+          <div id="menuDrop" class="menu" role="menu">
+            <a id="aboutLink" role="menuitem">À propos</a>
+            <a id="cgvLink" role="menuitem">CGV</a>
+            <a id="legalLink" role="menuitem">Mentions légales</a>
+            <a id="privacyLink" role="menuitem">Politique de confidentialité</a>
+            <a id="contactLink" role="menuitem">Contact</a>
           </div>
         </div>
       </nav>
@@ -75,14 +76,15 @@
       <h1>Connexion</h1>
       <div class="muted">Connecte-toi à ton espace GF Store.</div>
 
-      <form id="form" autocomplete="on" style="margin-top:10px">
+      <!-- IMPORTANT: ids/names attendus par auth.js -->
+      <form id="loginForm" autocomplete="on" style="margin-top:10px">
         <label for="email">Email</label>
         <input id="email" name="email" type="email" required placeholder="vous@exemple.com" inputmode="email" />
 
         <label for="password">Mot de passe</label>
         <div class="pw">
           <input id="password" name="password" type="password" required placeholder="Mot de passe" />
-          <button type="button" id="togglePw" aria-label="Afficher le mot de passe"><img class="ic" id="icEye" alt=""></button>
+          <button type="button" id="togglePw" aria-label="Afficher le mot de passe"><img class="ic" id="icEye" alt="" role="presentation"></button>
         </div>
 
         <div class="row">
@@ -90,15 +92,19 @@
           <a id="resetLink">Mot de passe oublié ?</a>
         </div>
 
-        <button id="submitBtn" class="btn" type="submit"><img class="ic" id="icLogin" alt=""> Se connecter</button>
+        <button id="submitBtn" class="btn" type="submit"><img class="ic" id="icLogin" alt="" role="presentation"> Se connecter</button>
+
+        <!-- Zone de messages utilisée par auth.js -> showMsg(#loginMsg, ...) -->
+        <div id="loginMsg" class="msg" role="status" aria-live="polite"></div>
+
         <div class="alt">
-          <a id="fillDemo">Remplir démo</a>
           <a id="goShop">Retour boutique</a>
         </div>
 
-        <div id="err" class="err"></div>
-        <div id="ok" class="ok"></div>
-        <div class="hint">Démo 100% front (localStorage). Pour de la vraie prod : serveur + hash salé côté backend.</div>
+        <div class="hint">
+          Les identifiants sont vérifiés via <b>Google Apps Script</b> (base <b>Google Sheet</b>).<br>
+          Astuce : tu peux passer un paramètre <code>?next=URL</code> pour revenir automatiquement où tu étais.
+        </div>
       </form>
     </div>
   </main>
@@ -106,7 +112,7 @@
   <footer style="background:#fff;border-top:1px solid #e5e7eb">
     <div class="hwrap" style="justify-content:space-between;font-size:12px">
       <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
-      <nav style="display:flex;gap:10px;flex-wrap:wrap">
+      <nav style="display:flex;gap:10px;flex-wrap:wrap" aria-label="Liens de pied de page">
         <a id="aboutLink2">À propos</a> · 
         <a id="cgvLink2">CGV</a> · 
         <a id="legalLink2">Mentions légales</a> · 
@@ -116,29 +122,36 @@
     </div>
   </footer>
 
-  <script>
-  (async()=>{
+  <!-- Auth frontend: expose window.GFAuth (init() s'occupe de brancher #loginForm) -->
+  <script src="js/auth.js" defer></script>
 
-    // --- Compte à rebours (48h)
-    const countdownEl=document.getElementById('countdown');
-    const SALE_END=new Date(Date.now()+48*60*60*1000);
-    const two=n=>String(n).padStart(2,'0');
-    function tick(){
-      if(!countdownEl) return;
-      const now=new Date(); let diff=SALE_END-now;
-      if(diff<=0){countdownEl.textContent='Dernières heures !';return}
-      const d=Math.floor(diff/86400000); diff%=86400000;
-      const h=Math.floor(diff/3600000); diff%=3600000;
-      const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
-      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
-    }
-    tick(); setInterval(tick,1000);
+  <script>
+  (function(){
+    "use strict";
+
+    // --- Petits helpers
+    const $ = (s,root)=> (root||document).querySelector(s);
 
     // --- GH_ROOT (GitHub Pages friendly)
     const GH_ROOT = (()=>{ 
       const parts = location.pathname.split('/').filter(Boolean);
       return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/';
     })();
+
+    // --- Compte à rebours (48h)
+    const countdownEl = $('#countdown');
+    const SALE_END = new Date(Date.now()+48*60*60*1000);
+    const two = n => String(n).padStart(2,'0');
+    function tick(){
+      if(!countdownEl) return;
+      const now=new Date(); let diff=SALE_END-now;
+      if(diff<=0){ countdownEl.textContent='Dernières heures !'; return; }
+      const d=Math.floor(diff/86400000); diff%=86400000;
+      const h=Math.floor(diff/3600000); diff%=3600000;
+      const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
+      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+    }
+    tick(); setInterval(tick,1000);
 
     // --- Icônes
     const ICONS = {
@@ -149,123 +162,97 @@
       eye:'https://img.icons8.com/?size=100&id=12580&format=png&color=000000',
       eyeOff:'https://img.icons8.com/?size=100&id=123000&format=png&color=000000'
     };
-    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
-    setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('cartIcon',ICONS.cart);
-    setSrc('icLogin',ICONS.login); setSrc('icEye',ICONS.eye);
+    function setSrc(id,src){ const el=document.getElementById(id); if(el) el.src=src; }
+    function setIcons(){
+      setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu);
+      setSrc('cartIcon',ICONS.cart); setSrc('icLogin',ICONS.login);
+      setSrc('icEye',ICONS.eye);
+    }
 
     // --- Liens nav
-    const link=(id,path)=>{const el=document.getElementById(id); if(el) el.href=GH_ROOT+path;};
-    document.getElementById('homeLink').href = GH_ROOT;
-    link('accountLink','compte/login.html'); // on est déjà ici
-    link('cartBtn','checkout.html');
-    ['about','cgv','legal','privacy','contact'].forEach(k=>{
-      link(k+'Link','pages/'+(k==='about'?'a-propos':k)+'.html');
-      link(k+'Link2','pages/'+(k==='about'?'a-propos':k)+'.html');
-    });
-    link('registerLink','compte/register.html');
-    link('resetLink','compte/password-reset.html');
-    link('goShop','index.html');
+    function wireLinks(){
+      $('#homeLink').href = GH_ROOT;
+      const link=(id,path)=>{ const el=document.getElementById(id); if(el) el.href=GH_ROOT+path; };
+      link('accountLink','compte/login.html'); // on est ici
+      link('cartBtn','checkout.html');
+      link('registerLink','compte/register.html');
+      link('resetLink','compte/password-reset.html');
+      link('goShop','index.html');
 
-    // --- Menu
-    const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
-    if(menuBtn&&menuDrop){
-      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
-      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+      // Footer & menu
+      const map = {about:'a-propos', cgv:'cgv', legal:'mentions-legales', privacy:'confidentialite', contact:'contact'};
+      Object.entries(map).forEach(([k,slug])=>{
+        link(k+'Link','pages/'+slug+'.html'); link(k+'Link2','pages/'+slug+'.html');
+      });
     }
 
-    // --- Déjà connecté ? -> redirige
-    const KEY_USER='gf_user';
-    try{
-      const cur=JSON.parse(localStorage.getItem(KEY_USER)||'null');
-      if(cur && cur.email){ location.replace(GH_ROOT+'compte/index.html'); return; }
-    }catch{ /* ignore */ }
-
-    // --- Utils crypto
-    const te = new TextEncoder();
-    const toHex = buf => Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-    async function sha256(input){ return toHex(await crypto.subtle.digest('SHA-256', te.encode(input))); }
-
-    // --- “Base utilisateurs” locale (démo)
-    const KEY_USERS='gf_users';
-    function loadUsers(){ try{ return JSON.parse(localStorage.getItem(KEY_USERS)||'[]'); }catch{return []} }
-    function saveUsers(arr){ localStorage.setItem(KEY_USERS, JSON.stringify(arr)); }
-
-    // Crée un compte démo si vide
-    async function ensureDemoUser(){
-      const list = loadUsers();
-      if(list.length) return;
-      const email='demo@gfstore.test', name='Démo GF Store', salt=crypto.getRandomValues(new Uint8Array(8)).join('');
-      const passHash = await sha256(salt+':demo123');
-      list.push({ id:'u_demo', email, name, salt, passHash, createdAt:new Date().toISOString(), lastLogin:null, addresses:[] });
-      saveUsers(list);
+    // --- Menu déroulant
+    function wireMenu(){
+      const menuBtn = $('#menuBtn'), menuDrop = $('#menuDrop');
+      if(!menuBtn || !menuDrop) return;
+      menuBtn.addEventListener('click', e=>{
+        e.stopPropagation();
+        const shown = menuDrop.classList.toggle('show');
+        menuBtn.setAttribute('aria-expanded', shown ? 'true' : 'false');
+      });
+      document.addEventListener('click', e=>{
+        if(!menuDrop.contains(e.target) && e.target!==menuBtn){
+          menuDrop.classList.remove('show');
+          menuBtn.setAttribute('aria-expanded','false');
+        }
+      });
     }
-    await ensureDemoUser();
 
-    // --- Formulaire
-    const form=document.getElementById('form');
-    const email=document.getElementById('email');
-    const password=document.getElementById('password');
-    const submitBtn=document.getElementById('submitBtn');
-    const err=document.getElementById('err');
-    const ok=document.getElementById('ok');
+    // --- Œil mot de passe
+    function wirePasswordToggle(){
+      const btn = document.getElementById('togglePw');
+      const input = document.getElementById('password');
+      const eye = document.getElementById('icEye');
+      if(!btn || !input || !eye) return;
+      let shown=false;
+      btn.addEventListener('click', ()=>{
+        shown = !shown;
+        input.type = shown ? 'text' : 'password';
+        eye.src = shown ? ICONS.eyeOff : ICONS.eye;
+      });
+    }
 
-    const togglePw=document.getElementById('togglePw');
-    let pwShown=false;
-    togglePw.addEventListener('click',()=>{
-      pwShown=!pwShown;
-      password.type = pwShown ? 'text' : 'password';
-      document.getElementById('icEye').src = pwShown ? ICONS.eyeOff : ICONS.eye;
-    });
-
-    // Remplir compte démo
-    document.getElementById('fillDemo').addEventListener('click',e=>{
-      e.preventDefault();
-      email.value='demo@gfstore.test';
-      password.value='demo123';
-      password.focus();
-    });
-
-    function showError(msg){ err.textContent=msg; err.style.display='block'; ok.style.display='none'; }
-    function showOk(msg){ ok.textContent=msg; ok.style.display='block'; err.style.display='none'; }
-
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      err.style.display='none'; ok.style.display='none';
-
-      const mail=(email.value||'').trim().toLowerCase();
-      const pw=(password.value||'');
-      if(!mail || !pw){ showError('Merci de remplir email et mot de passe.'); return; }
-
-      submitBtn.disabled=true;
-
+    // --- Si déjà connecté via GF_SESSION -> redirige
+    function maybeRedirectIfLogged(){
       try{
-        const users=loadUsers();
-        const u = users.find(x=>x.email?.toLowerCase()===mail);
-        if(!u){ showError('Compte introuvable. Créez un compte.'); submitBtn.disabled=false; return; }
+        if(!window.GFAuth || typeof window.GFAuth.getSession!=='function') return;
+        const s = window.GFAuth.getSession();
+        if(s && s.email){
+          const url = new URL(location.href);
+          const next = url.searchParams.get('next') || (GH_ROOT + 'compte/index.html');
+          location.replace(next);
+        }
+      }catch{/* ignore */}
+    }
 
-        const digest = await sha256((u.salt||'')+':'+pw);
-        if(digest !== u.passHash){ showError('Email ou mot de passe incorrect.'); submitBtn.disabled=false; return; }
+    // --- Init
+    function init(){
+      setIcons();
+      wireLinks();
+      wireMenu();
+      wirePasswordToggle();
 
-        // OK : session “gf_user” (sans secrets)
-        const session = {
-          id: u.id, email: u.email, name: u.name||u.email.split('@')[0],
-          addresses: u.addresses||[], lastLogin: new Date().toISOString()
-        };
-        localStorage.setItem(KEY_USER, JSON.stringify(session));
-        // maj lastLogin dans “base”
-        u.lastLogin = session.lastLogin; saveUsers(users);
+      // Si l’auth frontend est chargée, son init() branchera automatiquement #loginForm
+      // et gérera la redirection vers ?next=… en cas de succès.
+      // On tente aussi une redirection immédiate si une session existe déjà.
+      maybeRedirectIfLogged();
 
-        showOk('Connexion réussie. Redirection…');
-        setTimeout(()=>location.replace(GH_ROOT+'compte/index.html'), 400);
-      }catch(ex){
-        console.error(ex);
-        showError('Une erreur est survenue. Réessayez.');
-      }finally{
-        // on ne réactive pas si succès (redirection)
-        if(ok.style.display!=='block') submitBtn.disabled=false;
+      // Fallback très léger si GFAuth indisponible
+      if(!window.GFAuth || typeof window.GFAuth.getSession!=='function'){
+        const box = document.getElementById('loginMsg');
+        if(box){
+          box.style.display='block';
+          box.textContent = "Erreur : module d’authentification indisponible. Vérifie /compte/js/auth.js.";
+        }
       }
-    });
+    }
 
+    document.addEventListener('DOMContentLoaded', init);
   })();
   </script>
 </body>
