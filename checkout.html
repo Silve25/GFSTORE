@@ -4,30 +4,29 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Finaliser ma commande — GF Store</title>
-  <meta name="description" content="Paiement sécurisé GF Store : adresse, livraison, moyens de paiement (carte, PayPal, crypto, SEPA), paiement en plusieurs fois.">
+  <meta name="description" content="Paiement sécurisé GF Store. Crypto & Virement priorisés (bonus immédiat). Carte & PayPal en maintenance. Responsive, rapide, moderne.">
   <style>
     :root{
-      --w:1200px; --c:#0f172a; --a:#2563eb; --g:#10b981; --bg:#f5f7fb;
-      --danger:#b91c1c; --muted:#64748b; --r:16px;
-      --panel:#ffffff; --bd:#e5e7eb;
+      --bg:#f6f8fb; --panel:#ffffff; --muted:#6b7280; --text:#0f172a; --brand:#2563eb; --ok:#059669; --warn:#d97706; --danger:#dc2626; --line:#e5e7eb;
+      --shadow: 0 10px 30px rgba(15,23,36,.06); --radius:16px; --radius-sm:12px; --accent:linear-gradient(90deg,#2563eb,#1e40af);
     }
     *{box-sizing:border-box}
-    body{margin:0;font:14px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
-    a{color:inherit}
+    body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu}
+    a{color:inherit;text-decoration:none}
 
     /* Header */
-    header{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--bd);backdrop-filter:saturate(140%) blur(4px)}
-    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:700;text-decoration:none}
+    header{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(6px)}
+    .hwrap{max-width:1200px;margin:auto;padding:10px 12px;display:flex;gap:12px;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:10px}
     .brand .logo{height:40px;width:auto;display:block}
-    .nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--bd);background:#fff;border-radius:12px;text-decoration:none;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .nav{display:flex;gap:10px;flex-wrap:wrap}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--line);background:#fff;border-radius:12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
     .iconbtn{cursor:pointer}
     .ic{width:16px;height:16px;display:inline-block}
     .dropdown{position:relative}
-    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid var(--bd);border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
     .menu.show{display:block}
-    .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
+    .menu a{display:block;padding:8px 10px;border-radius:10px}
     .menu a:hover{background:#f3f4f6}
 
     /* Banner */
@@ -36,72 +35,96 @@
     .banner .sep{opacity:.6;padding:0 6px}
 
     /* Layout */
-    .wrap{max-width:var(--w);margin:16px auto 28px;padding:0 12px;display:grid;gap:16px;grid-template-columns:2fr 1fr}
+    .wrap{max-width:1200px;margin:16px auto 28px;padding:0 12px;display:grid;gap:16px;grid-template-columns:1.2fr .8fr}
     @media (max-width:980px){ .wrap{grid-template-columns:1fr} }
-    .card{background:var(--panel);border:1px solid var(--bd);border-radius:16px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
-    .card .box{padding:14px}
-    .hdr{padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px}
-    .hdr b{font-size:15px}
-    .muted{color:var(--muted);font-size:12px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+    .bd{padding:14px 16px}
+
+    .title{font-weight:800;font-size:18px}
+    .muted{color:var(--muted);font-size:13px}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#f3f6ff;border:1px solid #e1e9ff;font-size:12px;color:#0a56d8}
+    .chip{display:inline-grid;place-items:center;border:1px solid var(--line);background:#fff;border-radius:999px;padding:2px 8px;font-size:11px;color:#0a56d8}
 
     /* Forms */
     form{display:grid;gap:12px}
-    label{display:block;font-weight:600;margin:4px 0}
-    input,select,textarea{width:100%;padding:12px;border:1px solid var(--bd);border-radius:12px;background:#fff}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    @media (max-width:720px){ .grid2{grid-template-columns:1fr} }
-    .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .check{display:flex;align-items:center;gap:8px}
-    .help{font-size:12px;color:var(--muted)}
+    label{display:block;font-weight:700;margin:4px 0}
+    input,select,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#fbfdff;outline:none}
+    input::placeholder{color:#a3abb8}
+    input:focus,select:focus,textarea:focus{box-shadow:0 8px 24px rgba(37,99,235,.08);border-color:rgba(37,99,235,.38)}
+    .row{display:grid;gap:12px}
+    .cols-2{grid-template-columns:1fr 1fr}
+    .cols-3{grid-template-columns:1fr 1fr 1fr}
+    @media (max-width:760px){.cols-2,.cols-3{grid-template-columns:1fr}}
 
-    .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:12px 14px;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer}
-    .btn.secondary{background:#fff;border:1px solid var(--bd);color:#111}
-    .btn.ghost{background:transparent;border:1px dashed var(--bd);color:#111}
-    .btn.danger{background:linear-gradient(180deg,#ef4444,#b91c1c);border-color:#7f1d1d}
-    .btn:disabled{opacity:.6;cursor:not-allowed}
+    /* Methods - Decoy effect */
+    .methods{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    @media (max-width:900px){.methods{grid-template-columns:repeat(2,1fr)}}
+    .tab{position:relative;border:1px solid var(--line);background:#ffffff;border-radius:14px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease}
+    .tab:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.06)}
+    .tab[aria-selected="true"]{border-color:#0a56d8;box-shadow:0 16px 40px rgba(37,99,235,.12)}
+    .tab .ico{width:26px;height:26px}
+    .tab .badge{position:absolute;top:8px;right:8px;font-size:11px;background:#fff;border:1px solid #eef2ff;color:#0a56d8;padding:4px 8px;border-radius:999px}
+    .tab .badge.best{background:#ecfdf5;border-color:#bbf7d0;color:#065f46}
+    .tab .badge.maint{background:#fff6e6;border-color:#ffe3b8;color:var(--warn)}
+    .tab .sub{font-size:11px;color:#0a56d8;opacity:.85}
+    .tab.disabled{opacity:.5;cursor:not-allowed}
+    .tab.disabled::after{
+      content:"Maintenance"; position:absolute; inset:0; display:grid; place-items:center;
+      background:rgba(255,255,255,.7); border-radius:14px; font-weight:700; color:#a16207; letter-spacing:.02em
+    }
 
-    .line{border:none;border-top:1px dashed var(--bd);margin:8px 0}
+    /* Panels */
+    .pm-panel{display:none;margin-top:12px;border:1px dashed var(--line);background:#fbfdff;border-radius:14px;padding:12px}
+    .pm-panel.show{display:block}
+    .pair{display:grid;gap:10px}
+    @media(min-width:720px){.pair{grid-template-columns:1.2fr .8fr}}
+    .copyline{display:grid;grid-template-columns:1fr auto;gap:10px}
+    .copy-btn{padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:700}
+    .copy-btn:hover{box-shadow:0 6px 18px rgba(1,97,234,.06)}
+    .qr{display:flex;align-items:center;justify-content:center;height:210px;border-radius:12px;border:1px dashed #dbe7ff;background:#f3f6ff;color:var(--muted);font-weight:700}
 
     /* Summary */
-    .sumli{display:grid;grid-template-columns:1fr auto;gap:8px;margin:4px 0}
-    .total{font-weight:800;font-size:16px}
-    .badge{display:inline-grid;place-items:center;border-radius:999px;background:#ecfdf5;border:1px solid #bbf7d0;color:#166534;font-size:11px;padding:2px 8px}
-    .badge.info{background:#eff6ff;border-color:#dbeafe;color:#1e3a8a}
-
-    /* Cart items mini */
     .mini{display:flex;flex-direction:column;gap:10px}
     .ci{display:grid;grid-template-columns:60px 1fr auto;gap:8px}
-    .ci img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--bd);background:#f8fafc}
-    .price{font-weight:700}
+    .ci img{width:60px;height:60px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#f8fafc}
+    .sum{display:grid;gap:10px;margin-top:10px}
+    .sum-row{display:flex;align-items:center;justify-content:space-between}
+    .total{font-size:18px;font-weight:900}
+    .save{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:12px;padding:6px 8px}
 
-    /* Payment sub-panels */
-    .pm-panel{display:none;margin-top:8px;padding:10px;border:1px dashed var(--bd);border-radius:12px;background:#fcfcff}
-    .pm-panel.show{display:block}
+    /* Buttons */
+    .btn{display:inline-flex;gap:10px;align-items:center;justify-content:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--text);cursor:pointer;font-weight:800}
+    .btn:hover{transform:translateY(-1px)}
+    .btn.primary{background:var(--accent);border:none;color:#fff;box-shadow:0 14px 34px rgba(37,99,235,.25)}
+    .btn.secondary{background:#fff;border:1px solid var(--line);color:#0f172a}
+    .btn.ghost{background:#fafcff}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
 
     /* Toast */
     .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#111;color:#fff;padding:10px 14px;border-radius:12px;box-shadow:0 12px 24px rgba(0,0,0,.25);display:none;z-index:20000}
     .toast.show{display:block}
 
     /* Footer */
-    footer{background:#fff;border-top:1px solid var(--bd)}
-    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
-    .fwrap a{text-decoration:none;color:inherit;opacity:.9}
+    footer{background:#fff;border-top:1px solid var(--line);margin-top:16px}
+    .fwrap{max-width:1200px;margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
+    .fwrap a{opacity:.9}
     .fwrap a:hover{text-decoration:underline}
   </style>
 </head>
 <body>
-  <div class="banner">🧾 Finalisez votre commande — <b>Paiement sécurisé</b> <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+  <div class="banner">🎉 Promo spéciale : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
 
   <header>
     <div class="hwrap">
       <a id="homeLink" class="brand" aria-label="Accueil">
         <img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
-      <nav class="nav" aria-label="Navigation">
-        <a id="accountLink"><img class="ic" id="icUser" alt=""> Compte</a>
-        <a id="backShop"><img class="ic" id="icBack" alt=""> Continuer mes achats</a>
+      <nav class="nav" aria-label="Navigation principale">
+        <a id="accountLink"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.418 3.582-8 8-8s8 3.582 8 8"/></svg> Compte</a>
+        <a id="backShop"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 18l-6-6 6-6"/></svg> Continuer mes achats</a>
         <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
+          <button class="iconbtn" id="menuBtn" aria-label="Menu"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16M4 12h16M4 18h16"/></svg> </button>
           <div id="menuDrop" class="menu">
             <a id="aboutLink">À propos</a>
             <a id="cgvLink">CGV</a>
@@ -115,184 +138,225 @@
   </header>
 
   <main class="wrap" aria-live="polite">
-    <!-- Colonne gauche : étapes -->
+    <!-- LEFT -->
     <section class="card">
-      <div class="hdr"><img class="ic" id="icSteps" alt=""><b>Étapes de paiement</b> <span class="muted" id="authState" style="margin-left:auto"></span></div>
-      <div class="box">
-        <!-- Adresse -->
-        <form id="addrForm" class="step">
-          <h3 style="margin:0 0 6px">1) Adresse de livraison</h3>
-          <div class="grid2">
-            <div>
-              <label for="name">Nom complet</label>
-              <input id="name" name="name" type="text" placeholder="Prénom Nom" required>
-            </div>
-            <div>
-              <label for="email">Email (confirmation)</label>
-              <input id="email" name="email" type="email" placeholder="vous@example.com" required>
-            </div>
+      <div class="hd">
+        <div>
+          <div class="title">Paiement sécurisé <span id="orderIdHeader" class="muted" style="margin-left:8px"></span></div>
+          <div class="muted" id="authState">Identification rapide (invité)</div>
+        </div>
+        <span class="pill">SSL activé</span>
+      </div>
+
+      <div class="bd">
+        <!-- Address -->
+        <form id="addrForm" class="row cols-2" novalidate>
+          <div>
+            <label>Nom complet</label>
+            <input id="name" placeholder="Prénom Nom" required>
           </div>
-          <div class="grid2">
-            <div>
-              <label for="phone">Téléphone</label>
-              <input id="phone" name="phone" type="tel" placeholder="+33 6 12 34 56 78" inputmode="tel">
-            </div>
-            <div>
-              <label for="country">Pays</label>
-              <input id="country" name="country" list="countries" placeholder="France">
-              <datalist id="countries">
-                <option value="France"></option><option value="Belgique"></option><option value="Suisse"></option>
-                <option value="Luxembourg"></option><option value="Espagne"></option><option value="Italie"></option>
-                <option value="Allemagne"></option><option value="Pays-Bas"></option><option value="Portugal"></option>
-                <option value="Royaume-Uni"></option>
-              </datalist>
-            </div>
+          <div>
+            <label>Email</label>
+            <input id="email" type="email" placeholder="vous@example.com" required>
           </div>
-          <label for="address">Adresse</label>
-          <input id="address" name="address" type="text" placeholder="10 Avenue de l’Europe" required>
-          <div class="grid2">
-            <div>
-              <label for="city">Ville</label>
-              <input id="city" name="city" type="text" placeholder="Paris" required>
-            </div>
-            <div>
-              <label for="zip">Code postal</label>
-              <input id="zip" name="zip" type="text" placeholder="75008" inputmode="numeric" required>
-            </div>
+          <div>
+            <label>Téléphone</label>
+            <input id="phone" inputmode="tel" placeholder="+33 6 12 34 56 78">
           </div>
-          <div class="row">
-            <label class="check"><input type="checkbox" id="billingSame" checked> L’adresse de facturation est identique</label>
+          <div>
+            <label>Pays</label>
+            <input id="country" list="countries" placeholder="France">
+            <datalist id="countries">
+              <option value="France"></option><option value="Belgique"></option><option value="Suisse"></option>
+              <option value="Luxembourg"></option><option value="Espagne"></option><option value="Italie"></option>
+              <option value="Allemagne"></option><option value="Pays-Bas"></option><option value="Portugal"></option>
+              <option value="Royaume-Uni"></option>
+            </datalist>
+          </div>
+          <div>
+            <label>Adresse</label>
+            <input id="address" placeholder="10 Avenue de l’Europe" required>
+          </div>
+          <div class="cols-2">
+            <div>
+              <label>Ville</label>
+              <input id="city" placeholder="Paris" required>
+            </div>
+            <div>
+              <label>Code postal</label>
+              <input id="zip" inputmode="numeric" placeholder="75008" required>
+            </div>
           </div>
         </form>
 
-        <hr class="line">
+        <!-- Methods (Decoy: highlight Crypto & Virement, show Card/PayPal as maintenance with fees note) -->
+        <div style="margin:14px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <div class="title" style="font-size:16px">Méthodes de paiement</div>
+          <span class="muted">Carte & PayPal en maintenance — profitez des <b>bonus immédiats</b> Crypto & Virement</span>
+        </div>
 
-        <!-- Livraison -->
-        <form id="shipForm" class="step">
-          <h3 style="margin:0 0 6px">2) Mode de livraison</h3>
-          <div class="row">
-            <label class="check"><input type="radio" name="ship" value="standard" checked> Standard (3–5 j ouvrés)</label>
-            <span class="badge info" title="Livraison sous 1 semaine">≤ 1 semaine</span>
-            <span style="margin-left:auto" id="shipStandardPrice">—</span>
-          </div>
-          <div class="row">
-            <label class="check"><input type="radio" name="ship" value="express"> Express (48 h)</label>
-            <span class="badge info">Rapide</span>
-            <span style="margin-left:auto" id="shipExpressPrice">—</span>
-          </div>
-        </form>
+        <div class="methods" role="tablist">
+          <button class="tab" role="tab" aria-selected="true" data-method="crypto" title="Crypto — bonus -2%">
+            <span class="badge best">Recommandé</span>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/></svg>
+            <div>Crypto</div>
+            <div class="sub">0% frais GF • <b>-2%</b> immédiat</div>
+          </button>
 
-        <hr class="line">
+          <button class="tab" role="tab" aria-selected="false" data-method="sepa" title="Virement SEPA — bonus -1%">
+            <span class="badge">Zen</span>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 10l9-6 9 6"/><path d="M4 10v8h16v-8"/></svg>
+            <div>Virement</div>
+            <div class="sub">0% frais GF • <b>-1%</b> immédiat</div>
+          </button>
 
-        <!-- Paiement -->
-        <form id="payForm" class="step">
-          <h3 style="margin:0 0 6px">3) Paiement</h3>
+          <button class="tab disabled" role="tab" aria-selected="false" data-method="card" title="Carte (maintenance)">
+            <span class="badge maint">Maintenance</span>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>
+            <div>Carte</div>
+            <div class="sub">habituellement <s>+2.9% + 0,30€</s></div>
+          </button>
 
-          <div class="row" style="gap:12px;flex-wrap:wrap">
-            <label class="check"><input type="radio" name="pm" value="card" checked> Carte</label>
-            <label class="check"><input type="radio" name="pm" value="paypal"> PayPal</label>
-            <label class="check"><input type="radio" name="pm" value="crypto"> Crypto</label>
-            <label class="check"><input type="radio" name="pm" value="sepa"> SEPA</label>
-          </div>
+          <button class="tab disabled" role="tab" aria-selected="false" data-method="paypal" title="PayPal (maintenance)">
+            <span class="badge maint">Maintenance</span>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18h6a6 6 0 0 0 0-12H8"/></svg>
+            <div>PayPal</div>
+            <div class="sub">frais variables • non dispo</div>
+          </button>
+        </div>
 
-          <div id="pmCard" class="pm-panel show">
-            <div class="grid2">
-              <div>
-                <label for="ccnum">Numéro de carte</label>
-                <input id="ccnum" inputmode="numeric" placeholder="4242 4242 4242 4242" maxlength="19">
+        <!-- Panels -->
+        <div id="pmCrypto" class="pm-panel show" aria-labelledby="Crypto">
+          <div class="pair">
+            <div>
+              <div class="row cols-2">
+                <div>
+                  <label>Monnaie</label>
+                  <select id="ccy">
+                    <option value="USDT-TRC20" selected>USDT (TRC20)</option>
+                    <option value="USDT-ERC20">USDT (ERC20)</option>
+                    <option value="BTC">Bitcoin (BTC)</option>
+                    <option value="ETH">Ethereum (ETH)</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Montant à régler (EUR)</label>
+                  <input id="amountEur" type="number" min="1" step="0.01" value="0" readonly>
+                </div>
               </div>
-              <div>
-                <label for="ccexp">Expiration</label>
-                <input id="ccexp" placeholder="MM/AA" maxlength="5">
+
+              <div class="row">
+                <div class="copyline">
+                  <div>
+                    <label>Adresse de paiement</label>
+                    <input id="wallet" readonly value="TQf3k7s9h2x4y5z6a7b8c9d0e1f2g3h4i">
+                  </div>
+                  <button class="copy-btn" data-copy="#wallet">Copier</button>
+                </div>
+
+                <div class="copyline">
+                  <div>
+                    <label>Montant à envoyer (<span id="ccyLabel">USDT</span>)</label>
+                    <input id="amountCcy" readonly value="0">
+                  </div>
+                  <button class="copy-btn" data-copy="#amountCcy">Copier</button>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                  <span class="chip">Taux verrouillé : <span id="rateLock">15:00</span></span>
+                  <span class="chip" style="color:#065f46;border-color:#bbf7d0;background:#ecfdf5">Bonus -2% appliqué</span>
+                  <span class="muted">Frais réseau non inclus</span>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+                <button class="btn primary" id="confirmCrypto">J’ai payé — confirmer</button>
+                <button class="btn secondary" id="refreshRate">Actualiser le taux</button>
               </div>
             </div>
-            <div class="grid2">
-              <div>
-                <label for="ccname">Nom sur la carte</label>
-                <input id="ccname" placeholder="Prénom Nom">
-              </div>
-              <div>
-                <label for="cccvc">CVC</label>
-                <input id="cccvc" inputmode="numeric" placeholder="123" maxlength="4">
-              </div>
+
+            <div>
+              <div class="qr" aria-label="QR code de paiement">QR DE PAIEMENT</div>
+              <div class="muted" style="text-align:center;margin-top:8px">Scannez pour pré-remplir l’adresse et le montant</div>
             </div>
           </div>
+        </div>
 
-          <div id="pmPayPal" class="pm-panel">
-            <label for="ppmail">Email PayPal</label>
-            <input id="ppmail" type="email" placeholder="vous@paypal.com">
-            <div class="help">Vous serez redirigé(e) pour confirmer le paiement.</div>
-          </div>
-
-          <div id="pmCrypto" class="pm-panel">
-            <div class="grid2">
-              <div>
-                <label for="chain">Réseau</label>
-                <select id="chain">
-                  <option value="BTC">Bitcoin (BTC)</option>
-                  <option value="ETH">Ethereum (ETH)</option>
-                  <option value="USDT">Tether (USDT-TRC20)</option>
-                </select>
-              </div>
-              <div>
-                <label for="wallet">Adresse de réception</label>
-                <input id="wallet" readonly value="sera affichée après validation">
-              </div>
-            </div>
-            <div class="help">Paiement rapide et flexible. Un QR code/adresse s’affichera à la confirmation.</div>
-          </div>
-
-          <div id="pmSEPA" class="pm-panel">
-            <label for="iban">IBAN</label>
-            <input id="iban" placeholder="FR76 3000 6000 0112 3456 7890 189">
-            <div class="help">Virement instantané conseillé. La commande est expédiée après réception.</div>
-          </div>
-
-          <div class="row" style="margin-top:6px">
-            <label class="check"><input id="splitPay" type="checkbox"> Payer en plusieurs fois</label>
-            <select id="splitCount" disabled>
-              <option value="2">2x</option>
-              <option value="3">3x</option>
-              <option value="4" selected>4x</option>
-            </select>
-            <span id="splitHint" class="help"></span>
-          </div>
-
+        <div id="pmSEPA" class="pm-panel" aria-labelledby="Virement SEPA">
           <div class="row">
-            <label for="note">Message au vendeur (optionnel)</label>
-            <textarea id="note" rows="2" placeholder="Précisez une consigne de livraison…"></textarea>
-          </div>
-        </form>
+            <div class="pair" style="gap:12px">
+              <div>
+                <div class="row cols-2">
+                  <div>
+                    <label>Bénéficiaire</label>
+                    <input id="bene" readonly value="GF STORE EU">
+                  </div>
+                  <div>
+                    <label>Banque</label>
+                    <input readonly value="Demo International Bank (FR)">
+                  </div>
+                  <div>
+                    <label>IBAN</label>
+                    <input id="iban" readonly value="FR76 3000 6000 0112 3456 7890 189">
+                  </div>
+                  <div>
+                    <label>SWIFT/BIC</label>
+                    <input id="swift" readonly value="DIBLFRPP">
+                  </div>
+                  <div>
+                    <label>Référence virement</label>
+                    <input id="vref" readonly value="GF-REF-123456">
+                  </div>
+                  <div>
+                    <label>Total à régler (EUR)</label>
+                    <input id="bankTotal" readonly value="0">
+                  </div>
+                </div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                  <button class="btn ghost" data-copy="#iban">Copier IBAN</button>
+                  <button class="btn ghost" data-copy="#swift">Copier BIC</button>
+                  <button class="btn ghost" data-copy="#vref">Copier Référence</button>
+                </div>
+                <div class="muted">Conseil : virement instantané = traitement plus rapide. <b>Bonus -1% appliqué.</b></div>
+              </div>
 
-        <hr class="line">
-        <div class="row" style="justify-content:flex-end">
-          <button id="placeOrder" class="btn"><img class="ic" id="icLock" alt=""> Confirmer et payer</button>
-          <button id="clearCart" class="btn ghost"><img class="ic" id="icTrash" alt=""> Vider le panier</button>
+              <div>
+                <label>Preuve de virement (facultatif)</label>
+                <input type="file" id="proof" accept="image/*,.pdf">
+                <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+                  <button class="btn primary" id="confirmBank">J’ai viré — confirmer</button>
+                  <button class="btn secondary" id="askSplit">Étaler en 2x (sans frais)</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA bottom -->
+        <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px">
+          <button id="placeOrder" class="btn primary"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg> Confirmer la commande</button>
+          <button id="clearCart" class="btn ghost"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18"/><path d="M8 6v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6"/><path d="M10 11v6M14 11v6"/></svg> Vider le panier</button>
         </div>
       </div>
     </section>
 
-    <!-- Colonne droite : résumé -->
+    <!-- RIGHT -->
     <aside class="card">
-      <div class="hdr"><img class="ic" id="icSummary" alt=""><b>Résumé</b></div>
-      <div class="box">
-        <div id="miniCart" class="mini" style="margin-bottom:8px"></div>
-
-        <hr class="line">
-
-        <div class="sumli"><span>Sous-total</span><span id="sub">—</span></div>
-        <div class="sumli"><span>Livraison</span><span id="ship">—</span></div>
-        <div class="sumli"><span>Remises promo</span><span id="disc">—</span></div>
-        <div class="sumli"><span>Taxes incl.</span><span id="tax">—</span></div>
-        <div class="sumli total"><span>Total à payer</span><span id="total">—</span></div>
-
-        <div id="splitDetail" class="help" style="margin-top:6px"></div>
-
-        <hr class="line">
-
-        <div class="help">
-          ✅ Livraison sous 1 semaine • 🔁 Retours 14 jours • 💸 Remboursement produit neuf<br>
-          🔐 Paiement sécurisé • ₿ Crypto acceptées
+      <div class="hd">
+        <div class="title">Récapitulatif <span id="orderIdSummary" class="muted" style="margin-left:8px"></span></div>
+        <span class="pill">Livraison ≤ 1 semaine</span>
+      </div>
+      <div class="bd">
+        <div id="miniCart" class="mini" style="margin-bottom:10px"></div>
+        <hr style="border:none;border-top:1px dashed var(--line);margin:10px 0">
+        <div class="sum">
+          <div class="sum-row"><span>Sous-total</span><span id="sub">—</span></div>
+          <div class="sum-row"><span>Livraison</span><span id="ship">—</span></div>
+          <div class="sum-row"><span>Avantage méthode</span><span id="benefit">—</span></div>
+          <div class="sum-row"><span>Taxes incl.</span><span id="tax">—</span></div>
+          <div class="sum-row total"><span>Total à payer</span><span id="total">—</span></div>
+          <div id="saveLine" class="save" style="display:none"></div>
+          <div class="muted">🔁 Retours sous 14 jours • 💸 Remboursement produits neufs • 🔐 Paiement sécurisé</div>
         </div>
       </div>
     </aside>
@@ -313,300 +377,230 @@
     </div>
   </footer>
 
-  <!-- Facultatif : autorise le préremplissage depuis le profil si présent -->
+  <!-- (Optionnel) pour préremplir depuis le compte si connecté -->
   <script src="compte/js/auth.js" defer></script>
 
   <script>
   (async()=>{
     "use strict";
-    const $=s=>document.querySelector(s);
+    const $=s=>document.querySelector(s); const $$=s=>Array.from(document.querySelectorAll(s));
 
-    /* ---------- NAV / Liens / Icônes ---------- */
-    const GH_ROOT = (()=>{ 
-      const parts = location.pathname.split('/').filter(Boolean);
-      return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/';
-    })();
-
-    function link(id,path){ const el=$(id.startsWith('#')?id:('#'+id)); if(el) el.href=GH_ROOT+path; }
-    link('homeLink','index.html');
-    link('accountLink','compte/index.html');
-    link('backShop','index.html');
-    const pages = {about:'a-propos', cgv:'cgv', legal:'mentions-legales', privacy:'confidentialite', contact:'contact'};
-    Object.entries(pages).forEach(([k,slug])=>{
-      link(k+'Link','pages/'+slug+'.html');
-      link(k+'Link2','pages/'+slug+'.html');
-    });
-
-    const ICONS={
-      user:'https://img.icons8.com/?size=100&id=60655&format=png&color=000000',
-      back:'https://img.icons8.com/?size=100&id=98956&format=png&color=000000',
-      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
-      steps:'https://img.icons8.com/?size=100&id=59812&format=png&color=000000',
-      lock:'https://img.icons8.com/?size=100&id=107272&format=png&color=000000',
-      trash:'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000',
-      summary:'https://img.icons8.com/?size=100&id=7820&format=png&color=000000'
-    };
-    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
-    setSrc('icUser',ICONS.user); setSrc('icBack',ICONS.back); setSrc('icMenu',ICONS.menu);
-    setSrc('icSteps',ICONS.steps); setSrc('icLock',ICONS.lock); setSrc('icTrash',ICONS.trash);
-    setSrc('icSummary',ICONS.summary);
+    /* --------- GH Root & Nav --------- */
+    const GH_ROOT = (()=>{ const p=location.pathname.split('/').filter(Boolean); return (location.host.endsWith('github.io') && p.length)? `/${p[0]}/` : '/'; })();
+    function link(id,path){ const el=$('#'+id); if(el) el.href=GH_ROOT+path; }
+    link('homeLink','index.html'); link('accountLink','compte/index.html'); link('backShop','index.html');
+    ['about','cgv','legal','privacy','contact'].forEach(k=>{ link(k+'Link','pages/'+(k==='about'?'a-propos':k)+'.html'); link(k+'Link2','pages/'+(k==='about'?'a-propos':k)+'.html'); });
 
     const menuBtn=$('#menuBtn'), menuDrop=$('#menuDrop');
-    if(menuBtn&&menuDrop){
-      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
-      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
-    }
+    if(menuBtn&&menuDrop){ menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')}); document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target)&&e.target!==menuBtn) menuDrop.classList.remove('show'); }); }
 
-    /* ---------- Bandeau compte à rebours ---------- */
-    (function(){
-      const el=document.getElementById('countdown'); if(!el) return;
-      const END=new Date(Date.now()+48*60*60*1000); const two=n=>String(n).padStart(2,'0');
-      function tick(){
-        let diff=END-new Date(); if(diff<=0){ el.textContent='Dernières heures !'; return; }
-        const d=Math.floor(diff/86400000); diff%=86400000;
-        const h=Math.floor(diff/3600000); diff%=3600000;
-        const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
-        el.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
-      }
+    /* --------- Promo countdown --------- */
+    (function(){ const el=$('#countdown'); if(!el) return; const END=new Date(Date.now()+48*60*60*1000); const two=n=>String(n).padStart(2,'0');
+      function tick(){ let d=END-new Date(); if(d<=0){el.textContent='Dernières heures !';return} const dj=Math.floor(d/86400000); d%=86400000; const h=Math.floor(d/3600000); d%=3600000; const m=Math.floor(d/60000); const s=Math.floor((d%60000)/1000); el.textContent=`${dj?dj+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`; }
       tick(); setInterval(tick,1000);
     })();
 
-    /* ---------- Panier ---------- */
-    const KEY_CART='gf_cart';
-    const KEY_ORDERS='gf_orders';
+    /* --------- Utils --------- */
+    const KEY_CART='gf_cart', KEY_ORDERS='gf_orders';
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY_CART)||'[]')}catch{return[]}};
     const setCart=arr=>localStorage.setItem(KEY_CART,JSON.stringify(arr));
     const EUR=v=>Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    const vatIncluded=t=> { const rate=0.20; return t - (t/(1+rate)); };
+    const toast=msg=>{const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); };
 
-    /* ---------- Prix / Remises / Livraison ---------- */
-    // Hypothèses : prix TTC ; remises déjà appliquées sur certains produits (promoPrice). On affiche "Remises promo" si promoPrice<price
-    function computeSub(cart){
-      return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0);
-    }
-    const shippingPrices={ standard: 6.90, express: 14.90 };
+    // Order id
+    const orderId = (()=>{ const d=new Date(), y=String(d.getFullYear()).slice(2), mm=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0'), rnd=Math.floor(Math.random()*9000)+1000; return `GF-${y}${mm}${dd}-${rnd}`; })();
+    $('#orderIdHeader').textContent=orderId; $('#orderIdSummary').textContent=orderId;
 
-    function detectPromos(cart){
-      // Si un item possède .basePrice > price, on l'exploite (compatible avec nos cartes)
-      // Sinon on ne peut pas déduire. On tente brand/category heuristique ? -> Non. On reste simple.
-      // On renvoie 0 par défaut, car price est déjà après promo dans la fiche produit.
-      return 0;
-    }
-
-    function vatIncluded(total){ // Info : affichage "Taxes incl." ~20% estimé sur TTC (indicatif)
-      const rate=0.20; return total - (total/(1+rate));
-    }
-
-    /* ---------- Rendu Résumé ---------- */
-    function renderMiniCart(){
-      const list=getCart();
-      const wrap=$('#miniCart');
-      if(!list.length){
-        wrap.innerHTML='<div class="muted">Votre panier est vide.</div>';
-        $('#sub').textContent='—';
-        $('#ship').textContent='—';
-        $('#disc').textContent='—';
-        $('#tax').textContent='—';
-        $('#total').textContent='—';
-        $('#placeOrder').disabled=true;
-        return;
-      }
-      $('#placeOrder').disabled=false;
-
-      wrap.innerHTML=list.map(x=>`
-        <div class="ci">
-          <img src="${x.image||''}" alt="${x.name||''}">
-          <div>
-            <div style="font-weight:600">${x.name||''}</div>
-            <div class="muted" style="font-size:12px">${x.brand||''} • ${x.category||''}</div>
-          </div>
-          <div class="price">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
-        </div>
-      `).join('');
-
-      const sub=computeSub(list);
-      const shipMeth=(document.querySelector('input[name=ship]:checked')?.value)||'standard';
-      const ship=shippingPrices[shipMeth]||0;
-      const disc=detectPromos(list);
-      const total=Math.max(0, sub + ship - disc);
-      const tax=vatIncluded(total);
-
-      $('#sub').textContent=EUR(sub);
-      $('#ship').textContent= ship ? EUR(ship) : 'Offert';
-      $('#disc').textContent= disc ? '–'+EUR(disc) : '—';
-      $('#tax').textContent= '≈ '+EUR(tax);
-      $('#total').textContent=EUR(total);
-
-      // Paiement en X fois aperçu
-      updateSplitText(total);
-    }
-
-    function updateShipLabels(){
-      $('#shipStandardPrice').textContent = EUR(shippingPrices.standard);
-      $('#shipExpressPrice').textContent  = EUR(shippingPrices.express);
-    }
-
-    /* ---------- Paiement en plusieurs fois ---------- */
-    const splitBox = $('#splitPay');
-    const splitCountSel = $('#splitCount');
-    const splitHint = $('#splitHint');
-    function splitBreakdown(total, n){
-      // Répartition arrondie au centime : on arrondit et compense sur la dernière échéance.
-      const cents=Math.round(total*100);
-      const base=Math.floor(cents/n);
-      const parts=new Array(n).fill(base);
-      parts[n-1]+= cents - base*n;
-      return parts.map(c=>c/100);
-    }
-    function updateSplitText(total){
-      if(!splitBox.checked){ $('#splitDetail').textContent=''; splitHint.textContent=''; return; }
-      const n = Number(splitCountSel.value||4);
-      const parts = splitBreakdown(total, n);
-      $('#splitDetail').textContent = `Paiement en ${n} échéances : ` + parts.map((p,i)=>`${EUR(p)}${i===0?' (aujourd’hui)':''}`).join(' · ');
-      splitHint.textContent = `Échéancier indicatif sans frais.`;
-    }
-
-    splitBox.addEventListener('change', ()=>{
-      splitCountSel.disabled = !splitBox.checked;
-      renderMiniCart();
-    });
-    splitCountSel.addEventListener('change', ()=>renderMiniCart());
-
-    /* ---------- UI Paiement ---------- */
-    function showPanel(which){
-      ['pmCard','pmPayPal','pmCrypto','pmSEPA'].forEach(id=>{
-        const el=document.getElementById(id);
-        if(!el) return;
-        el.classList.toggle('show', id.toLowerCase().includes(which));
-      });
-    }
-    document.querySelectorAll('input[name=pm]').forEach(r=>{
-      r.addEventListener('change', ()=>{
-        showPanel(r.value);
-        renderMiniCart();
-      });
-    });
-
-    /* ---------- Préremplissage compte ---------- */
-    (async function preloadProfile(){
+    /* --------- Prefill from session / Apps Script --------- */
+    (async function preload(){
       try{
-        // 1) Depuis la session locale
-        const sess = JSON.parse(localStorage.getItem('GF_SESSION')||'null');
-        if(sess && sess.email){
-          $('#authState').textContent='Connecté';
-          $('#email').value = sess.email;
-          if(sess.name) $('#name').value = sess.name;
-        }else{
-          $('#authState').textContent='Invité';
-        }
-
-        // 2) Depuis la “base” si auth.js/Apps Script dispo
-        if(window.GFAuth && GFAuth.api && typeof GFAuth.api.listUsers==='function' && sess && sess.email){
-          const list = await GFAuth.api.listUsers(); // array of users
-          const me = (list||[]).find(u => (u.email||'').toLowerCase() === String(sess.email||'').toLowerCase());
-          if(me){
-            if(me.name && !$('#name').value) $('#name').value = me.name;
-            ['phone','address','city','zip','country'].forEach(k=>{
-              if(me[k] && $('#'+k)) $('#'+k).value = me[k];
-            });
-          }
+        const sess=JSON.parse(localStorage.getItem('GF_SESSION')||'null');
+        if(sess && sess.email){ $('#authState').textContent='Connecté'; $('#email').value=sess.email; if(sess.name) $('#name').value=sess.name; }
+        else $('#authState').textContent='Invité';
+        if(window.GFAuth?.api?.listUsers && sess?.email){
+          const list=await GFAuth.api.listUsers();
+          const me=(list||[]).find(u=>(u.email||'').toLowerCase()===(sess.email||'').toLowerCase());
+          if(me){ ['phone','address','city','zip','country','name','email'].forEach(k=>{ if(me[k] && $('#'+k) && !$('#'+k).value) $('#'+k).value=me[k]; }); }
         }
       }catch{}
     })();
 
-    /* ---------- Validation légère ---------- */
-    function validateAll(){
-      const req=['name','email','address','city','zip'];
-      for(const id of req){ const el=$('#'+id); if(!el||!el.value.trim()) return false; }
-      return getCart().length>0;
+    /* --------- Shipping (flat for demo) --------- */
+    const shipping=6.90; // Standard forfaitaire (déjà optimisé)
+
+    /* --------- Method benefits (Decoy effect) --------- */
+    // Crypto: -2%, SEPA: -1%, others: 0 (others disabled)
+    function benefitRate(){ return currentPM()==='crypto' ? 0.02 : currentPM()==='sepa' ? 0.01 : 0; }
+
+    /* --------- FX mock for crypto --------- */
+    const fx = {
+      'USDT-TRC20': {symbol:'USDT', rate:1.00}, // assume 1 USDT = 1 EUR (démo)
+      'USDT-ERC20': {symbol:'USDT', rate:1.00},
+      'BTC': {symbol:'BTC', rate: 60000 },   // 1 BTC ≈ 60k EUR (démo)
+      'ETH': {symbol:'ETH', rate: 3000 }     // 1 ETH ≈ 3k EUR (démo)
+    };
+    function setCryptoAddress(ccy){
+      const map={
+        'USDT-TRC20':'TQf3k7s9h2x4y5z6a7b8c9d0e1f2g3h4i',
+        'USDT-ERC20':'0x3Fb8b7E6cA9f4D2E1b0C9a8F7e6D5c4B3a2F1E0',
+        'BTC':'bc1q9v8w7x6y5z4a3b2c1d0e9f8g7h6j5k4l3m2n',
+        'ETH':'0x9eF2B3cD4a5E6f7B8c9D0E1F2A3b4C5d6E7f8A9B'
+      };
+      $('#wallet').value=map[ccy]||'';
     }
 
-    /* ---------- Actions / Événements ---------- */
-    // shipping change
-    document.querySelectorAll('input[name=ship]').forEach(r=>{
-      r.addEventListener('change', renderMiniCart);
+    /* --------- Summary rendering --------- */
+    function computeSub(cart){ return cart.reduce((s,x)=>s+Number(x.price||0)*Number(x.qty||1),0); }
+    function currentPM(){ return $('.tab[aria-selected="true"]')?.dataset.method || 'crypto'; }
+    function updateSummary(){
+      const cart=getCart();
+      const wrap=$('#miniCart');
+      if(!cart.length){
+        wrap.innerHTML='<div class="muted">Votre panier est vide.</div>';
+        ['sub','ship','benefit','tax','total'].forEach(id=>$('#'+id).textContent='—');
+        $('#amountEur').value=0; $('#bankTotal').value=0; $('#placeOrder').disabled=true; $('#saveLine').style.display='none';
+        return;
+      }
+      $('#placeOrder').disabled=false;
+      wrap.innerHTML=cart.map(x=>`
+        <div class="ci">
+          <img src="${x.image||''}" alt="${x.name||''}">
+          <div>
+            <div style="font-weight:700">${x.name||''}</div>
+            <div class="muted" style="font-size:12px">${x.brand||''} • ${x.category||''}</div>
+          </div>
+          <div style="font-weight:800">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
+        </div>`).join('');
+
+      const sub=computeSub(cart);
+      const benefit = sub * benefitRate();
+      const total = Math.max(0, sub + shipping - benefit);
+      const tax = vatIncluded(total);
+
+      $('#sub').textContent=EUR(sub);
+      $('#ship').textContent=EUR(shipping);
+      $('#benefit').textContent= benefit ? '–'+EUR(benefit) : '—';
+      $('#tax').textContent='≈ '+EUR(tax);
+      $('#total').textContent=EUR(total);
+
+      // Save line (marketing nudge)
+      if(benefit>0){
+        $('#saveLine').style.display='block';
+        const label = currentPM()==='crypto' ? 'crypto' : 'virement';
+        $('#saveLine').textContent = `Vous économisez ${EUR(benefit)} en choisissant le ${label}. Intelligent 👏`;
+      }else{
+        $('#saveLine').style.display='none';
+      }
+
+      // Feed panels
+      $('#amountEur').value = total.toFixed(2);
+      $('#bankTotal').value = total.toFixed(2);
+
+      const ccy=$('#ccy').value; const r=fx[ccy]?.rate||1; const amt = total / r;
+      $('#amountCcy').value = (amt>0? amt : 0).toFixed(6).replace(/0+$/,'').replace(/\.$/,'');
+      $('#ccyLabel').textContent = fx[ccy]?.symbol || '';
+    }
+
+    /* --------- Methods tabs --------- */
+    $$('.tab').forEach(tab=>{
+      tab.addEventListener('click', ()=>{
+        if(tab.classList.contains('disabled')){
+          toast('Indisponible. Astuce : Crypto (-2%) ou Virement (-1%) = meilleur prix.');
+          return;
+        }
+        $$('.tab').forEach(t=>t.setAttribute('aria-selected', String(t===tab)));
+        // Panels
+        $('#pmCrypto').classList.toggle('show', tab.dataset.method==='crypto');
+        $('#pmSEPA').classList.toggle('show', tab.dataset.method==='sepa');
+        // Recompute benefit & amounts
+        updateSummary();
+      });
+    });
+
+    // Crypto controls
+    $('#ccy').addEventListener('change', ()=>{
+      const ccy=$('#ccy').value;
+      setCryptoAddress(ccy);
+      updateSummary();
+    });
+    $('#refreshRate').addEventListener('click', ()=>{ rateLock=15*60; toast('Taux rafraîchi'); });
+
+    // Rate lock 15:00
+    let rateLock=15*60;
+    setInterval(()=>{ if(rateLock>0){ rateLock--; const m=String(Math.floor(rateLock/60)).padStart(2,'0'), s=String(rateLock%60).padStart(2,'0'); $('#rateLock').textContent=`${m}:${s}`; } else { $('#rateLock').textContent='expiré'; } },1000);
+
+    // Copy helpers
+    function copySel(sel){
+      const el=$(sel); if(!el) return;
+      if(navigator.clipboard?.writeText){ navigator.clipboard.writeText(el.value||''); toast('Copié ✅'); }
+      else{ el.select(); document.execCommand('copy'); toast('Copié ✅'); }
+    }
+    $$('[data-copy]').forEach(btn=> btn.addEventListener('click', ()=> copySel(btn.getAttribute('data-copy')) ));
+
+    // Ask Split (SEPA)
+    $('#askSplit').addEventListener('click', ()=>{
+      const totalRaw = Number($('#bankTotal').value||0);
+      if(!totalRaw) return;
+      const half = Math.round(totalRaw*50)/100;
+      toast(`Proposition : 2 échéances de ${EUR(half)} (aujourd’hui) puis ${EUR(totalRaw-half)} dans 30 jours.`);
     });
 
     // Clear cart
     $('#clearCart').addEventListener('click', ()=>{
       if(!confirm('Vider votre panier ?')) return;
-      setCart([]); renderMiniCart(); toast('Panier vidé.');
+      setCart([]); updateSummary(); toast('Panier vidé.');
     });
 
-    // Place order (simulation)
-    $('#placeOrder').addEventListener('click', async ()=>{
-      if(!validateAll()){ toast('Veuillez compléter l’adresse et vérifier votre panier.'); return; }
+    // Confirmations
+    function validateAddress(){
+      const req=['name','email','address','city','zip'];
+      for(const id of req){ const el=$('#'+id); if(!el || !el.value.trim()){ el?.focus(); toast('Veuillez compléter vos informations.'); return false; } }
+      return true;
+    }
 
+    $('#confirmCrypto').addEventListener('click', ()=>{
+      if(!validateAddress()) return;
+      toast('Paiement crypto détecté — en attente de confirmation réseau ⏳');
+    });
+    $('#confirmBank').addEventListener('click', ()=>{
+      if(!validateAddress()) return;
+      toast($('#proof').files.length? 'Preuve reçue — vérification sous 24h' : 'Virement signalé — traitement sous 24–48h');
+    });
+
+    // Place order (save locally & redirect to compte)
+    $('#placeOrder').addEventListener('click', ()=>{
+      if(!validateAddress()) return;
+      const pm = currentPM(); // 'crypto' | 'sepa'
       const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
+      const sub=computeSub(cart), benefit=sub*benefitRate(), total=Math.max(0, sub+shipping-benefit);
 
-      const shipMeth=(document.querySelector('input[name=ship]:checked')?.value)||'standard';
-      const ship=shippingPrices[shipMeth]||0;
-      const sub=computeSub(cart);
-      const disc=detectPromos(cart);
-      const total=Math.max(0, sub + ship - disc);
-
-      const pm = document.querySelector('input[name=pm]:checked')?.value || 'card';
-
-      // Construction de la commande
+      const sess=JSON.parse(localStorage.getItem('GF_SESSION')||'null');
       const order={
-        id: 'CMD-'+Date.now(),
-        date: new Date().toISOString(),
-        status: (pm==='sepa' || pm==='crypto') ? 'En attente de paiement' : 'Payée',
-        userId: (JSON.parse(localStorage.getItem('GF_SESSION')||'null')||{}).email || 'guest',
+        id:orderId, date:new Date().toISOString(),
+        status: pm==='crypto' ? 'En attente de réseau' : 'En attente de réception',
+        userId: (sess?.email || 'guest'),
         items: cart,
-        pricing: {sub, ship, disc, total, currency:'EUR'},
-        shipping: {
-          method: shipMeth,
-          name: $('#name').value.trim(),
-          email: $('#email').value.trim(),
-          phone: $('#phone').value.trim(),
-          address: $('#address').value.trim(),
-          city: $('#city').value.trim(),
-          zip: $('#zip').value.trim(),
-          country: $('#country').value.trim()
+        pricing:{sub, ship:shipping, benefit, total, currency:'EUR'},
+        shipping:{
+          name:$('#name').value.trim(), email:$('#email').value.trim(), phone:$('#phone').value.trim(),
+          address:$('#address').value.trim(), city:$('#city').value.trim(), zip:$('#zip').value.trim(), country:$('#country').value.trim(),
+          method:'standard'
         },
-        payment: {
-          method: pm,
-          split: splitBox.checked ? Number(splitCountSel.value||4) : 1,
-          note: $('#note').value.trim()
-        }
+        payment:{method: pm, details: pm==='crypto' ? {ccy:$('#ccy').value, address:$('#wallet').value, amount:$('#amountCcy').value} : {iban:$('#iban').value, ref:$('#vref').value}}
       };
 
-      // Si crypto -> générer une adresse fictive (démo)
-      if(pm==='crypto'){
-        const chain=$('#chain').value;
-        const addr = chain==='BTC' ? 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh'
-                   : chain==='ETH' ? '0x5A…2b3C'
-                   : 'TN…USDT-TRC20';
-        order.payment.crypto = { chain, address: addr };
-      }
+      try{ const all=JSON.parse(localStorage.getItem(KEY_ORDERS)||'[]'); all.push(order); localStorage.setItem(KEY_ORDERS, JSON.stringify(all)); }catch{}
 
-      // Persistance locale des commandes
-      try{
-        const all=JSON.parse(localStorage.getItem(KEY_ORDERS)||'[]');
-        all.push(order);
-        localStorage.setItem(KEY_ORDERS, JSON.stringify(all));
-      }catch{}
-
-      // Vider le panier après passage de commande (sauf SEPA/crypto ? on le vide quand même pour la démo)
-      setCart([]);
-      renderMiniCart();
-
-      // Redirections UX
-      toast('Commande créée : '+order.id);
-      // Si crypto : afficher l’adresse
-      if(pm==='crypto'){
-        alert(`Adresse de paiement (${order.payment.crypto.chain}) :\n${order.payment.crypto.address}\n\nMontant: ${EUR(order.pricing.total)}`);
-      }
-      // Aller vers Mon Compte
-      location.replace(GH_ROOT+'compte/index.html');
+      setCart([]); updateSummary();
+      toast('Commande '+order.id+' créée ✅');
+      setTimeout(()=>location.replace(GH_ROOT+'compte/index.html'), 900);
     });
 
-    /* ---------- UI helpers ---------- */
-    function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 1800); }
+    // Initial
+    setCryptoAddress($('#ccy').value);
+    updateSummary();
 
-    /* ---------- Init ---------- */
-    updateShipLabels();
-    renderMiniCart();
   })();
   </script>
 </body>
