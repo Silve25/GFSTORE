@@ -4,269 +4,250 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Créer un compte — GF Store</title>
+  <meta name="description" content="Créez votre compte GF Store pour suivre vos commandes et gérer vos informations.">
   <style>
-    :root{--w:860px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
-    *{box-sizing:border-box}
-    body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
+    :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
+    *{box-sizing:border-box} body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
     a{color:inherit}
-    header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #e5e7eb;backdrop-filter:saturate(140%) blur(4px)}
+    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb;backdrop-filter:saturate(140%) blur(4px)}
     .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
     .brand{display:flex;align-items:center;gap:10px;font-weight:700}
-    .brand .logo{height:34px;width:auto;display:block}
-    .nav{display:flex;gap:8px;align-items:center}
-    .iconbtn,.nav a{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;color:inherit}
+    .brand .logo{height:40px;width:auto;display:block}
+    .nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
     .iconbtn{cursor:pointer}
     .ic{width:16px;height:16px;display:inline-block}
-    .dropdown{position:relative}
-    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:30}
-    .menu.show{display:block}
-    .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
-    .menu a:hover{background:#f3f4f6}
 
-    .wrap{max-width:600px;margin:18px auto 28px;padding:0 12px}
-    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 1px 0 rgba(0,0,0,.02);padding:16px}
-    h1{font-size:20px;margin:6px 0 2px}
-    .muted{opacity:.7;font-size:13px;margin-bottom:12px}
+    .banner{background:linear-gradient(90deg,#1e3a8a,#2563eb,#0ea5e9);color:#fff;text-align:center;padding:10px 14px}
+    .banner .timer{font-weight:700;border-radius:999px;padding:2px 8px;background:rgba(255,255,255,.15);display:inline-block}
+    .banner .sep{opacity:.6;padding:0 6px}
 
-    form{display:grid;gap:12px}
-    .row{display:grid;gap:6px}
-    label{font-weight:600}
-    input[type=text],input[type=email],input[type=password]{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
-    .hint{font-size:12px;opacity:.7}
-    .grid2{display:grid;gap:12px}
-    @media (min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
+    .wrap{max-width:460px;margin:18px auto 40px;padding:0 12px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    h1{font-size:18px;margin:0 0 10px}
+    .muted{opacity:.75;font-size:12px}
 
+    label{display:block;font-weight:600;margin:10px 0 6px}
+    input{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
     .pw{position:relative}
-    .pw .toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:1px solid #e5e7eb;background:#fff;border-radius:10px;padding:6px 8px;cursor:pointer;font-size:12px}
+    .pw .toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:1px solid #e5e7eb;background:#fff;border-radius:10px;padding:6px 8px;cursor:pointer;font-size:12px;line-height:1}
 
-    .meter{height:8px;background:#f1f5f9;border-radius:999px;overflow:hidden;border:1px solid #e5e7eb}
+    .meter{height:8px;background:#f1f5f9;border-radius:999px;overflow:hidden;border:1px solid #e5e7eb;margin-top:6px}
     .meter>i{display:block;height:100%;width:0;transition:width .2s}
     .meter[data-lvl="1"]>i{width:25%;background:#ef4444}
     .meter[data-lvl="2"]>i{width:50%;background:#f59e0b}
     .meter[data-lvl="3"]>i{width:75%;background:#10b981}
     .meter[data-lvl="4"]>i{width:100%;background:#10b981}
 
-    .terms{display:flex;gap:8px;align-items:flex-start}
-    .actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
-    .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:12px 14px;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer;min-width:160px}
+    .row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}
+    .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;width:100%;padding:12px;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer;box-shadow:0 6px 14px rgba(30,64,175,.25)}
     .btn:disabled{opacity:.6;cursor:not-allowed}
-    .btn.secondary{background:#fff;border:1px solid #e5e7eb;color:#111}
+    .alt{display:flex;gap:10px;margin-top:10px}
+    .alt a{flex:1;text-align:center;border:1px solid #e5e7eb;border-radius:12px;padding:10px;text-decoration:none;background:#fff}
 
-    .alert{border-radius:12px;padding:10px 12px;border:1px solid #fecaca;background:#fef2f2;color:#991b1b;display:none}
-    .alert.show{display:block}
-    .ok{border-radius:12px;padding:10px 12px;border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;display:none}
-    .ok.show{display:block}
-
-    footer{background:#fff;border-top:1px solid #e5e7eb;margin-top:26px}
-    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
-    .fwrap a{text-decoration:none;color:inherit;opacity:.9}
-    .fwrap a:hover{text-decoration:underline}
+    .msg{margin-top:10px;padding:10px;border-radius:12px;display:none}
+    #registerMsg{background:#fef2f2;border:1px solid #fee2e2;color:#991b1b} /* recolorisé par showMsg() en succès */
+    .hint{font-size:12px;opacity:.8;margin-top:10px}
   </style>
 </head>
 <body>
+  <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+
   <header>
     <div class="hwrap">
-      <a href="../index.html" class="brand">
+      <a id="homeLink" class="brand" aria-label="Aller à l'accueil">
         <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
-      <nav class="nav">
-        <a href="./login.html"><img class="ic" id="icUser" alt=""> Déjà inscrit ? Connexion</a>
-        <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
-          <div id="menuDrop" class="menu">
-            <a href="../a-propos.html">À propos</a>
-            <a href="../cgv.html">CGV</a>
-            <a href="../mentions-legales.html">Mentions légales</a>
-            <a href="../confidentialite.html">Confidentialité</a>
-            <a href="../contact.html">Contact</a>
-          </div>
-        </div>
+      <nav class="nav" aria-label="Navigation principale">
+        <a id="loginLink"><img class="ic" id="icAccount" alt="" role="presentation"> Connexion</a>
+        <a id="shopLink"><img class="ic" id="icHome" alt="" role="presentation"> Boutique</a>
       </nav>
     </div>
   </header>
 
   <main class="wrap">
     <div class="card">
-      <h1>Créer un compte</h1>
-      <div class="muted">Rejoignez GF Store pour suivre vos commandes, gérer vos informations et accélérer vos achats.</div>
+      <h1>Créer mon compte</h1>
+      <div class="muted">Rejoignez GF Store pour suivre vos commandes et gérer vos informations.</div>
 
-      <div id="err" class="alert" role="alert"></div>
-      <div id="ok" class="ok" role="status"></div>
+      <!-- IMPORTANT : IDs/noms attendus par auth.js -->
+      <form id="registerForm" autocomplete="on" style="margin-top:10px">
+        <label for="name">Nom complet</label>
+        <input id="name" name="name" type="text" required placeholder="Nom et prénom" autocomplete="name" />
 
-      <form id="form" novalidate>
-        <div class="row">
-          <label for="name">Nom complet</label>
-          <input id="name" name="name" type="text" placeholder="Ex. Marie Dupont" autocomplete="name" required>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required placeholder="vous@exemple.com" inputmode="email" autocomplete="email" />
+
+        <label for="password">Mot de passe</label>
+        <div class="pw">
+          <input id="password" name="password" type="password" required minlength="6" placeholder="Au moins 6 caractères" autocomplete="new-password" />
+          <button type="button" class="toggle" data-target="password" aria-label="Afficher/Masquer"></button>
+        </div>
+        <div class="meter" id="meter"><i></i></div>
+
+        <label for="password2">Confirmez le mot de passe</label>
+        <div class="pw">
+          <input id="password2" type="password" required minlength="6" placeholder="Ressaisissez le mot de passe" autocomplete="new-password" />
+          <button type="button" class="toggle" data-target="password2" aria-label="Afficher/Masquer"></button>
         </div>
 
-        <div class="row">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="vous@exemple.com" autocomplete="email" required>
-          <div class="hint">Nous vous enverrons les confirmations à cette adresse.</div>
-        </div>
+        <button id="submitBtn" class="btn" type="submit"><img class="ic" id="icLock" alt="" role="presentation"> Créer mon compte</button>
 
-        <div class="grid2">
-          <div class="row pw">
-            <label for="password">Mot de passe</label>
-            <input id="password" name="password" type="password" placeholder="Au moins 8 caractères" autocomplete="new-password" required>
-            <button type="button" class="toggle" data-target="password">Afficher</button>
-            <div class="meter" id="meter" aria-hidden="true"><i></i></div>
-            <div class="hint">Utilisez au moins 8 caractères avec majuscules, minuscules, chiffres et symbole.</div>
-          </div>
+        <!-- Zone messages utilisée par auth.js -> showMsg(#registerMsg, ...) -->
+        <div id="registerMsg" class="msg" role="status" aria-live="polite"></div>
 
-          <div class="row pw">
-            <label for="password2">Confirmer le mot de passe</label>
-            <input id="password2" name="password2" type="password" placeholder="Ressaisissez le mot de passe" autocomplete="new-password" required>
-            <button type="button" class="toggle" data-target="password2">Afficher</button>
-          </div>
-        </div>
-
-        <div class="terms">
-          <input id="tos" type="checkbox" required>
-          <label for="tos">J’accepte les <a href="../cgv.html" target="_blank" rel="noopener">Conditions générales</a> et la <a href="../confidentialite.html" target="_blank" rel="noopener">Politique de confidentialité</a>.</label>
-        </div>
-
-        <div class="actions">
-          <a class="btn secondary" href="./login.html">J’ai déjà un compte</a>
-          <button id="submitBtn" class="btn" type="submit"><img class="ic" id="icCreate" alt=""> Créer mon compte</button>
+        <div class="alt">
+          <a id="goLogin">Déjà inscrit ? Connexion</a>
+          <a id="goShop">Retour boutique</a>
         </div>
       </form>
     </div>
   </main>
 
-  <footer>
-    <div class="fwrap">
+  <footer style="background:#fff;border-top:1px solid #e5e7eb">
+    <div class="hwrap" style="justify-content:space-between;font-size:12px">
       <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
-      <nav>
-        <a href="../a-propos.html">À propos</a> ·
-        <a href="../cgv.html">CGV</a> ·
-        <a href="../mentions-legales.html">Mentions légales</a> ·
-        <a href="../confidentialite.html">Confidentialité</a> ·
-        <a href="../contact.html">Contact</a>
+      <nav style="display:flex;gap:10px;flex-wrap:wrap" aria-label="Liens">
+        <a id="aboutLink2">À propos</a> · 
+        <a id="cgvLink2">CGV</a> · 
+        <a id="legalLink2">Mentions légales</a> · 
+        <a id="privacyLink2">Confidentialité</a> · 
+        <a id="contactLink2">Contact</a>
       </nav>
     </div>
   </footer>
 
+  <!-- Auth frontend (branche automatiquement #registerForm) -->
+  <script src="js/auth.js" defer></script>
+
   <script>
-  (async()=>{
-    // --- Icônes ---
-    const ICONS={
-      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
-      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
-      adduser:'https://img.icons8.com/?size=100&id=54027&format=png&color=ffffff'
+  (function(){
+    "use strict";
+
+    // --- Helpers
+    const $ = (s,root)=> (root||document).querySelector(s);
+
+    // --- GH_ROOT (GitHub Pages friendly)
+    const GH_ROOT = (()=>{ 
+      const parts = location.pathname.split('/').filter(Boolean);
+      return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/';
+    })();
+
+    // --- Icônes (liste fournie)
+    const ICONS = {
+      account: 'https://img.icons8.com/?size=100&id=60655&format=png&color=000000',
+      home:    'https://img.icons8.com/?size=100&id=98956&format=png&color=000000',
+      lock:    'https://img.icons8.com/?size=100&id=107272&format=png&color=000000',
+      eye:     'https://img.icons8.com/?size=100&id=986&format=png&color=000000',
+      eyeOff:  'https://img.icons8.com/?size=100&id=59814&format=png&color=000000'
     };
-    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
-    setSrc('icUser', ICONS.user);
-    setSrc('icMenu', ICONS.menu);
-    setSrc('icCreate', ICONS.adduser);
 
-    // --- Menu ---
-    const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
-    if(menuBtn&&menuDrop){
-      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
-      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
-    }
+    function setSrc(id,src){ const el=document.getElementById(id); if(el) el.src=src; }
 
-    // --- Si déjà connecté -> dashboard ---
-    try{
-      const cur=JSON.parse(localStorage.getItem('gf_user')||'null');
-      if(cur && cur.email){ location.replace('./index.html'); return; }
-    }catch{}
+    // --- Liens
+    function wireLinks(){
+      $('#homeLink').href = GH_ROOT;
+      const link=(id,path)=>{ const el=document.getElementById(id); if(el) el.href=GH_ROOT+path; };
+      link('loginLink','compte/login.html');
+      link('shopLink','index.html');
+      link('goLogin','compte/login.html');
+      link('goShop','index.html');
 
-    // --- Helpers sécurité (démo front-only) ---
-    const PEPPER='gfstore-pepper-demo-v1'; // ⚠️ Démo : en prod, ceci vit côté serveur, jamais dans le client.
-    const te=new TextEncoder();
-    const toB64=buf=>btoa(String.fromCharCode(...new Uint8Array(buf)));
-    const rndB64=len=>{const a=new Uint8Array(len); crypto.getRandomValues(a); return btoa(String.fromCharCode(...a));};
-    async function sha256(str){ const buf=await crypto.subtle.digest('SHA-256', te.encode(str)); return toB64(buf); }
-    async function hashPassword(password,saltB64){ return sha256(`${saltB64}:${password}:${PEPPER}`); }
-
-    // --- Validation & UI ---
-    const $=s=>document.querySelector(s);
-    const form=$('#form'), err=$('#err'), ok=$('#ok'), meter=$('#meter');
-    const name=$('#name'), email=$('#email'), pw=$('#password'), pw2=$('#password2'), tos=$('#tos'), submitBtn=$('#submitBtn');
-
-    function showErr(msg){ err.textContent=msg; err.classList.add('show'); ok.classList.remove('show'); }
-    function showOk(msg){ ok.textContent=msg; ok.classList.add('show'); err.classList.remove('show'); }
-    function clrMsg(){ err.classList.remove('show'); ok.classList.remove('show'); }
-
-    function pwStrength(v){
-      let score=0;
-      if(v.length>=8) score++;
-      if(/[A-Z]/.test(v)) score++;
-      if(/[a-z]/.test(v)) score++;
-      if(/[0-9\W_]/.test(v)) score++;
-      return Math.min(score,4);
-    }
-    function updateMeter(){ const lvl=pwStrength(pw.value); meter.setAttribute('data-lvl', String(lvl||0)); }
-
-    document.querySelectorAll('.toggle').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const id=btn.getAttribute('data-target'); const input=document.getElementById(id);
-        if(!input) return;
-        const t=input.getAttribute('type')==='password'?'text':'password';
-        input.setAttribute('type',t);
-        btn.textContent=t==='password'?'Afficher':'Masquer';
+      const pages = {about:'a-propos', cgv:'cgv', legal:'mentions-legales', privacy:'confidentialite', contact:'contact'};
+      Object.entries(pages).forEach(([k,slug])=>{
+        link(k+'Link2','pages/'+slug+'.html');
       });
-    });
-    pw.addEventListener('input',updateMeter);
-    updateMeter();
+    }
 
-    function isEmail(s){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(s||'').trim()); }
+    // --- Compte à rebours (48h)
+    const countdownEl = $('#countdown');
+    const SALE_END = new Date(Date.now()+48*60*60*1000);
+    const two = n => String(n).padStart(2,'0');
+    function tick(){
+      if(!countdownEl) return;
+      const now=new Date(); let diff=SALE_END-now;
+      if(diff<=0){ countdownEl.textContent='Dernières heures !'; return; }
+      const d=Math.floor(diff/86400000); diff%=86400000;
+      const h=Math.floor(diff/3600000); diff%=3600000;
+      const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
+      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+    }
 
-    // --- Stockage ---
-    function getUsers(){ try{return JSON.parse(localStorage.getItem('gf_users')||'[]')}catch{return[]} }
-    function setUsers(arr){ localStorage.setItem('gf_users', JSON.stringify(arr)); }
+    // --- UI mot de passe (œil + force + confirmation)
+    function wirePasswordUI(){
+      // toggles œil
+      document.querySelectorAll('.toggle').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          const id=btn.getAttribute('data-target');
+          const input=document.getElementById(id);
+          if(!input) return;
+          const show = input.type === 'password';
+          input.type = show ? 'text' : 'password';
+          btn.style.backgroundImage = `url(${show ? ICONS.eyeOff : ICONS.eye})`;
+          btn.style.backgroundRepeat = 'no-repeat';
+          btn.style.backgroundPosition = 'center';
+          btn.style.width='34px';
+          btn.style.height='30px';
+        });
+        // init icon
+        btn.style.backgroundImage = `url(${ICONS.eye})`;
+        btn.style.backgroundRepeat = 'no-repeat';
+        btn.style.backgroundPosition = 'center';
+        btn.style.width='34px';
+        btn.style.height='30px';
+      });
 
-    // --- Submit ---
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault(); clrMsg();
-      submitBtn.disabled=true;
-
-      const nm=(name.value||'').trim();
-      const em=(email.value||'').trim().toLowerCase();
-      const p1=String(pw.value||'');
-      const p2=String(pw2.value||'');
-
-      if(nm.length<2){ showErr('Votre nom complet doit contenir au moins 2 caractères.'); submitBtn.disabled=false; return; }
-      if(!isEmail(em)){ showErr('Adresse email invalide.'); submitBtn.disabled=false; return; }
-      if(p1.length<8 || pwStrength(p1)<3){ showErr('Mot de passe trop faible. Utilisez au moins 8 caractères, avec majuscules, minuscules et chiffres/symbole.'); submitBtn.disabled=false; return; }
-      if(p1!==p2){ showErr('Les mots de passe ne correspondent pas.'); submitBtn.disabled=false; return; }
-      if(!tos.checked){ showErr('Vous devez accepter les CGV et la Politique de confidentialité.'); submitBtn.disabled=false; return; }
-
-      const users=getUsers();
-      if(users.some(u=>String(u.email).toLowerCase()===em)){ showErr('Un compte existe déjà avec cet email. Essayez la connexion.'); submitBtn.disabled=false; return; }
-
-      try{
-        const salt=rndB64(16);
-        const hash=await hashPassword(p1, salt);
-        const id='u_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8);
-
-        const user={
-          id, name:nm, email:em,
-          hash, salt,
-          createdAt:new Date().toISOString(),
-          // Champs extensibles (adresse, commandes, etc.)
-          profile:{address:null, phone:null},
-          orders:[]
-        };
-        users.push(user);
-        setUsers(users);
-
-        // Créer une "session" légère (sans hash/salt)
-        localStorage.setItem('gf_user', JSON.stringify({
-          id, name:nm, email:em, createdAt:user.createdAt
-        }));
-
-        showOk('Compte créé avec succès. Redirection en cours…');
-        // Petite pause pour que l’utilisateur voie le message
-        setTimeout(()=>location.replace('./index.html'), 600);
-      }catch(ex){
-        console.error(ex);
-        showErr("Une erreur est survenue lors de l'inscription. Réessayez.");
-        submitBtn.disabled=false;
+      // force
+      const meter = document.getElementById('meter');
+      const pw = document.getElementById('password');
+      function strength(v){
+        let s=0; if(v.length>=6) s++; if(/[A-Z]/.test(v)) s++; if(/[a-z]/.test(v)) s++; if(/[0-9\W_]/.test(v)) s++;
+        return Math.min(s,4);
       }
-    });
+      function updateMeter(){ if(meter && pw) meter.setAttribute('data-lvl', String(strength(pw.value)||0)); }
+      if(pw){ pw.addEventListener('input', updateMeter); updateMeter(); }
+
+      // confirmation (empêche l'envoi si mismatch)
+      const pw2 = document.getElementById('password2');
+      function validateMatch(){
+        if(!pw || !pw2) return;
+        if(pw2.value && pw.value !== pw2.value){
+          pw2.setCustomValidity('Les mots de passe ne correspondent pas.');
+        }else{
+          pw2.setCustomValidity('');
+        }
+      }
+      if(pw && pw2){
+        pw.addEventListener('input', validateMatch);
+        pw2.addEventListener('input', validateMatch);
+      }
+    }
+
+    // --- Déjà connecté ? -> redirige vers le tableau de bord
+    function maybeRedirectIfLogged(){
+      try{
+        const s = JSON.parse(localStorage.getItem('GF_SESSION')||'null');
+        if(s && s.email){
+          location.replace(GH_ROOT + 'compte/index.html');
+        }
+      }catch{/* ignore */}
+    }
+
+    function init(){
+      // icônes
+      setSrc('icAccount', ICONS.account);
+      setSrc('icHome', ICONS.home);
+      setSrc('icLock', ICONS.lock);
+
+      wireLinks();
+      wirePasswordUI();
+      maybeRedirectIfLogged();
+
+      tick(); setInterval(tick,1000);
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
   })();
   </script>
 </body>
