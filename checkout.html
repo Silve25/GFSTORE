@@ -3,106 +3,112 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Finaliser ma commande — GF Store (refonte)</title>
+  <title>Finaliser ma commande — GF Store</title>
+  <meta name="description" content="Paiement sécurisé GF Store. Crypto & Virement actifs. Carte & PayPal momentanément indisponibles. Livraison sous 1 semaine, retours 14 jours."/>
   <style>
-    /* ===== Design tokens (sobre, accessible) ===== */
     :root{
-      --w:1200px; --bg:#f6f8fb; --card:#ffffff; --text:#0b1324; --muted:#5b667a; --line:#e6e8ee;
-      --primary:#1e3a8a; --primary-2:#2563eb; --success:#0ea5e9; --ok:#10b981; --warning:#f59e0b; --danger:#dc2626;
-      --r:16px; --shadow:0 6px 18px rgba(16,24,40,.06);
+      --w:1200px; --text:#0f172a; --muted:#64748b; --bg:#f6f8fb; --panel:#ffffff; --line:#e6edf6;
+      --brand:#2563eb; --brand2:#1e40af; --good:#16a34a; --warn:#d97706; --danger:#dc2626; --ok:#0ea5e9;
+      --radius:14px; --shadow:0 6px 22px rgba(2,8,23,.06);
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--text);background:var(--bg)}
+    body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu}
     a{color:inherit;text-decoration:none}
-    .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
 
-    /* ===== Header ===== */
-    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(4px)}
-    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
-    .brand .logo{height:40px;width:auto;display:block}
+    /* Header */
+    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)}
+    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand .logo{height:38px;width:auto;display:block}
+    @media (max-width:640px){ .brand .logo{height:22px} }
     .nav{display:flex;gap:10px;align-items:center}
-    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);background:#fff;border-radius:12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
-    .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
-    .ic{width:18px;height:18px;display:inline-block}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);background:#fff;border-radius:12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .iconbtn{cursor:pointer}
+    .nav a:hover,.iconbtn:hover{box-shadow:0 6px 16px rgba(0,0,0,.06)}
+    .ic{width:16px;height:16px;display:inline-block}
+    .dropdown{position:relative}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
+    .menu.show{display:block}
+    .menu a{display:block;padding:8px 10px;border-radius:8px}
+    .menu a:hover{background:#f3f4f6}
 
-    /* ===== Layout ===== */
-    .wrap{max-width:var(--w);margin:14px auto 28px;padding:0 12px;display:grid;gap:16px;grid-template-columns:1.1fr .9fr}
+    /* Layout */
+    .wrap{max-width:var(--w);margin:18px auto 28px;padding:0 12px;display:grid;gap:16px;grid-template-columns:1.1fr .9fr}
     @media (max-width:980px){.wrap{grid-template-columns:1fr}}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
     .hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
-    .title{font-weight:900;font-size:18px}
-    .sub{color:var(--muted);font-size:13px}
-    .bd{padding:16px}
+    .bd{padding:14px}
+    .title{font-weight:800;font-size:18px}
+    .muted{color:var(--muted);font-size:13px}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#f3f6ff;border:1px solid #e1e9ff;font-size:12px;color:#0ea5e9}
 
-    /* ===== Formes (plus grandes) ===== */
+    /* Form */
     form{display:grid;gap:12px}
     .row{display:grid;gap:12px}
     .cols-2{grid-template-columns:1fr 1fr}
     @media (max-width:760px){.cols-2{grid-template-columns:1fr}}
     label{display:block;font-weight:700;margin:4px 0}
     .req::after{content:" *";color:var(--danger)}
-    input,select{width:100%;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfdff;font-size:16px}
-    input:focus,select:focus{outline:3px solid rgba(37,99,235,.18);box-shadow:0 8px 22px rgba(37,99,235,.08)}
+    input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fbfdff}
+    input::placeholder{color:#9aa3b2}
+    input:focus,select:focus{outline:2px solid rgba(37,99,235,.22);box-shadow:0 8px 22px rgba(37,99,235,.10)}
 
-    /* ===== Mode de paiement (cartes + bulles en bas) ===== */
-    .methods{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-    @media (max-width:980px){.methods{grid-template-columns:1fr}}
-    .mcard{position:relative;border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px;display:grid;grid-template-rows:auto auto 1fr auto;gap:8px;cursor:pointer;transition:box-shadow .12s ease,transform .06s}
+    /* Méthodes */
+    .methods{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    @media (max-width:980px){.methods{grid-template-columns:repeat(2,1fr)}}
+    .mcard{position:relative;border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;display:grid;gap:8px;cursor:pointer;transition:box-shadow .12s ease,transform .06s}
     .mcard:hover{box-shadow:0 10px 24px rgba(0,0,0,.06);transform:translateY(-1px)}
-    .mcard[aria-selected="true"]{border:2px solid var(--primary-2);box-shadow:0 12px 30px rgba(37,99,235,.12)}
-    .mhead{display:flex;align-items:center;gap:8px;font-weight:800}
-    .mcopy{font-size:13px;color:var(--muted)}
-    .mfooter{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-start}
-    .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f0f9ff;border:1px solid #bae6fd;font-size:12px;color:#0369a1}
+    .mcard[aria-selected="true"]{border-color:var(--brand);box-shadow:0 12px 30px rgba(37,99,235,.14)}
+    .mhead{display:flex;align-items:center;gap:8px;font-weight:700}
+    .mlogos{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .mlogos img{height:18px;opacity:.95}
+    .bubbles{display:flex;gap:6px;flex-wrap:wrap}
+    .bubble{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:#fbfdff;font-size:12px}
+    .deal{background:#ecfdf5;border-color:#bbf7d0;color:#065f46}
+    .warn{background:#fff7ed;border-color:#ffedd5;color:#9a3412}
+    .disabled{opacity:.7;cursor:not-allowed}
+    .badge{position:absolute;right:8px;top:8px;font-size:11px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:2px 8px}
 
-    /* ===== Panneaux paiement (progressif) ===== */
+    /* Panneaux */
     .pm{display:none;margin-top:12px;border:1px dashed var(--line);border-radius:12px;background:#fbfdff;padding:12px}
     .pm.show{display:block}
 
-    /* ===== Choix d'échéances (Klarna-like) ===== */
-    .splits{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
-    @media (max-width:620px){.splits{grid-template-columns:1fr}}
-    .split{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;display:flex;flex-direction:column;gap:6px;cursor:pointer}
-    .split:hover{box-shadow:0 8px 22px rgba(0,0,0,.06)}
-    .split[aria-checked="true"]{border:2px solid var(--primary-2);box-shadow:0 0 0 4px rgba(37,99,235,.10);background:#f8fbff}
-    .split strong{font-size:16px}
-    .split .note{font-size:12px;color:var(--muted)}
+    /* Segmented (échéances type Klarna) */
+    .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+    .seg input{display:none}
+    .seg label{border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;display:flex;flex-direction:column;gap:4px;cursor:pointer;min-height:64px}
+    .seg small{color:var(--muted)}
+    .seg .big{font-weight:800;font-size:15px}
+    .seg input:checked + label{border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.12);background:#f8fbff}
 
-    /* ===== Timeline échéancier ===== */
-    .timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-    @media (max-width:620px){.timeline{grid-template-columns:1fr}}
-    .step{display:flex;align-items:center;gap:10px;border:1px dashed var(--line);border-radius:12px;padding:10px;background:#fff}
-    .dot{min-width:36px;height:36px;border-radius:999px;background:#eef2ff;border:2px solid var(--primary-2);display:grid;place-items:center;font-weight:800}
-    .smeta{font-size:12px;color:var(--muted)}
+    /* Copy / QR */
+    .copyline{display:grid;grid-template-columns:1fr auto;gap:8px}
+    .copy-btn{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font-weight:700}
+    .qr{display:flex;align-items:center;justify-content:center;height:180px;border-radius:10px;border:1px dashed #dbe7ff;background:#f3f6ff;color:var(--muted);font-weight:700}
 
-    /* ===== Résumé ===== */
+    /* Résumé */
     .mini{display:flex;flex-direction:column;gap:10px}
     .ci{display:grid;grid-template-columns:60px 1fr auto;gap:8px}
     .ci img{width:60px;height:60px;object-fit:cover;border:1px solid var(--line);border-radius:10px;background:#f8fafc}
     .sum{display:grid;gap:10px;margin-top:10px}
     .sum-row{display:flex;align-items:center;justify-content:space-between}
-    .total{font-size:22px;font-weight:900}
-    .due{font-weight:900}
-    .help{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:13px;color:#0f766e}
+    .total{font-size:18px;font-weight:900}
+    .note{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:10px;padding:6px 8px}
+    .due{font-weight:800}
+    .schedule{display:grid;gap:6px;font-size:13px}
 
-    /* ===== Boutons ===== */
+    /* CTA */
     .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:800}
-    .btn.primary{background:linear-gradient(180deg,#2563eb,#1e40af);border:1px solid #1e40af;color:#fff;box-shadow:0 10px 24px rgba(30,64,175,.25)}
+    .btn.primary{background:linear-gradient(180deg,var(--brand),var(--brand2));border:1px solid var(--brand2);color:#fff;box-shadow:0 10px 24px rgba(30,64,175,.25)}
     .btn:disabled{opacity:.6;cursor:not-allowed}
 
-    /* ===== Toast ===== */
+    /* Alert */
     .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#111;color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:9999}
     .toast.show{display:block}
 
-    footer{background:#fff;border-top:1px solid var(--line);margin-top:16px}
-    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
-
-    /* Reduce motion for people who prefer it */
-    @media (prefers-reduced-motion:reduce){
-      *{scroll-behavior:auto!important;transition:none!important;animation:none!important}
-    }
+    /* Utility */
+    .grid-2{display:grid;gap:12px;grid-template-columns:1.1fr .9fr}
+    @media (max-width:900px){.grid-2{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -112,21 +118,31 @@
         <img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
       <nav class="nav">
-        <a id="accountLink"><img class="ic" id="icUser" alt=""> Compte</a>
-        <a id="backShop"><img class="ic" id="icShop" alt=""> Continuer mes achats</a>
+        <a id="accountLink"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-5 0-9 2.5-9 5.5V22h18v-2.5C21 16.5 17 14 12 14Z"/></svg> Compte</a>
+        <a id="backShop"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6A2 2 0 0 0 8.4 17H19a2 2 0 0 0 2-2V7H7Zm0 2h12v8H8.4L7 6Z"/></svg> Continuer</a>
+        <div class="dropdown">
+          <button class="iconbtn" id="menuBtn" aria-label="Menu"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16M4 12h16M4 18h16"/></svg> Menu</button>
+          <div id="menuDrop" class="menu">
+            <a id="aboutLink">À propos</a>
+            <a id="cgvLink">CGV</a>
+            <a id="legalLink">Mentions légales</a>
+            <a id="privacyLink">Confidentialité</a>
+            <a id="contactLink">Contact</a>
+          </div>
+        </div>
       </nav>
     </div>
   </header>
 
   <main class="wrap" aria-live="polite">
     <!-- Colonne gauche -->
-    <section class="card" aria-labelledby="h-pay">
+    <section class="card">
       <div class="hd">
         <div>
-          <div id="h-pay" class="title">Paiement sécurisé <span id="orderId" class="sub" style="margin-left:8px"></span></div>
-          <div class="sub">Livraison prioritaire sous 1 semaine • Retours 14 jours • Assistance réactive</div>
+          <div class="title">Paiement sécurisé <span id="orderId" class="muted" style="margin-left:8px"></span></div>
+          <div class="muted">Livraison sous 1 semaine • Retours 14 jours • Assistance réactive</div>
         </div>
-        <span class="pill" title="Connexion sécurisée">SSL actif</span>
+        <span class="pill">SSL actif</span>
       </div>
       <div class="bd">
         <!-- Adresse -->
@@ -140,7 +156,7 @@
             <input id="email" type="email" placeholder="vous@example.com" required>
           </div>
           <div>
-            <label for="phone">Téléphone (optionnel)</label>
+            <label for="phone">Téléphone</label>
             <input id="phone" inputmode="tel" placeholder="+33 6 12 34 56 78">
           </div>
           <div>
@@ -168,66 +184,79 @@
           </div>
         </form>
 
-        <!-- Mode de paiement -->
-        <div style="margin:14px 0 6px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <!-- Méthodes de paiement -->
+        <div style="margin:14px 0 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
           <div class="title" style="font-size:16px">Mode de paiement</div>
-          <span class="sub">Choisissez et vérifiez le montant dû aujourd’hui</span>
+          <span class="muted">Carte & PayPal momentanément indisponibles</span>
         </div>
 
         <div class="methods" role="tablist">
           <!-- Crypto -->
-          <button class="mcard" role="tab" aria-selected="true" data-method="crypto" aria-controls="pmCrypto" id="tab-crypto">
+          <button class="mcard" role="tab" aria-selected="true" data-method="crypto">
             <div class="mhead">Crypto (USDT, BTC, ETH)</div>
-            <div class="mcopy">Rapide et pratique. Nous validons votre paiement dès détection du TxID.</div>
-            <div class="splits" role="radiogroup" aria-label="Échéances crypto">
-              <div class="split" role="radio" aria-checked="true" data-split="1">
-                <strong>En une fois</strong>
-                <div class="note">À payer aujourd’hui : <span class="now-1">—</span></div>
-              </div>
-              <div class="split" role="radio" aria-checked="false" data-split="2">
-                <strong>En 2 fois</strong>
-                <div class="note">Aujourd’hui : <span class="now-2">—</span> • puis J+30</div>
-              </div>
-              <div class="split" role="radio" aria-checked="false" data-split="3">
-                <strong>En 3 fois</strong>
-                <div class="note">Aujourd’hui : <span class="now-3">—</span> • J+30 • J+60</div>
-              </div>
+            <div class="mlogos">
+              <img alt="Bitcoin" src="https://cdn.simpleicons.org/bitcoin" onerror="this.style.display='none'">
+              <img alt="Ethereum" src="https://cdn.simpleicons.org/ethereum" onerror="this.style.display='none'">
+              <img alt="Tether" src="https://cdn.simpleicons.org/tether" onerror="this.style.display='none'">
             </div>
-            <div class="mfooter">
-              <span class="pill">Frais réduits</span>
-              <span class="pill">Validation rapide</span>
-              <span class="pill">Assistance humaine</span>
+            <div class="bubbles">
+              <span class="bubble deal">Économisez ~2%</span>
+              <span class="bubble">Validation rapide</span>
             </div>
           </button>
 
           <!-- SEPA -->
-          <button class="mcard" role="tab" aria-selected="false" data-method="sepa" aria-controls="pmSEPA" id="tab-sepa">
-            <div class="mhead">Virement bancaire SEPA</div>
-            <div class="mcopy">Sécurisé depuis votre banque. Référence obligatoire pour lier votre virement.</div>
-            <div class="splits" role="radiogroup" aria-label="Échéances virement">
-              <div class="split" role="radio" aria-checked="true" data-split="1">
-                <strong>En une fois</strong>
-                <div class="note">À payer aujourd’hui : <span class="nowb-1">—</span></div>
-              </div>
-              <div class="split" role="radio" aria-checked="false" data-split="2">
-                <strong>En 2 fois</strong>
-                <div class="note">Aujourd’hui : <span class="nowb-2">—</span> • puis J+30</div>
-              </div>
-              <div class="split" role="radio" aria-checked="false" data-split="3">
-                <strong>En 3 fois</strong>
-                <div class="note">Aujourd’hui : <span class="nowb-3">—</span> • J+30 • J+60</div>
-              </div>
+          <button class="mcard" role="tab" aria-selected="false" data-method="sepa">
+            <div class="mhead">Virement SEPA</div>
+            <div class="mlogos">
+              <img alt="SEPA" src="https://img.icons8.com/?size=100&id=7IJfqNBSaJ0N&format=png&color=000000" onerror="this.style.display='none'">
+              <img alt="IBAN" src="https://cdn.simpleicons.org/iban" onerror="this.style.display='none'">
             </div>
-            <div class="mfooter">
-              <span class="pill">Référence de paiement fournie</span>
-              <span class="pill">Suivi et confirmation</span>
+            <div class="bubbles">
+              <span class="bubble deal">Économisez ~1%</span>
+              <span class="bubble">Preuve obligatoire</span>
             </div>
           </button>
+
+          <!-- Carte (indispo) -->
+          <div class="mcard disabled" aria-selected="false" title="Indisponible">
+            <span class="badge">Indisponible</span>
+            <div class="mhead">Carte bancaire</div>
+            <div class="mlogos">
+              <img alt="Visa" src="https://cdn.simpleicons.org/visa" onerror="this.style.display='none'">
+              <img alt="Mastercard" src="https://cdn.simpleicons.org/mastercard" onerror="this.style.display='none'">
+              <img alt="American Express" src="https://cdn.simpleicons.org/americanexpress" onerror="this.style.display='none'">
+            </div>
+            <div class="bubbles">
+              <span class="bubble warn">Maintenance</span>
+            </div>
+          </div>
+
+          <!-- PayPal (indispo) -->
+          <div class="mcard disabled" aria-selected="false" title="Indisponible">
+            <span class="badge">Indisponible</span>
+            <div class="mhead">PayPal</div>
+            <div class="mlogos">
+              <img alt="PayPal" src="https://cdn.simpleicons.org/paypal" onerror="this.style.display='none'">
+            </div>
+            <div class="bubbles">
+              <span class="bubble warn">Maintenance</span>
+            </div>
+          </div>
         </div>
 
         <!-- Panneau CRYPTO -->
-        <div id="pmCrypto" class="pm show" aria-labelledby="tab-crypto">
+        <div id="pmCrypto" class="pm show">
           <div class="row">
+            <div class="seg" role="group" aria-label="Échéances crypto">
+              <input id="c1" type="radio" name="csplit" value="1" checked>
+              <label for="c1"><span class="big" id="c1v">—</span><small>Aujourd'hui</small></label>
+              <input id="c2" type="radio" name="csplit" value="2">
+              <label for="c2"><span class="big" id="c2v">—</span><small>2× (0 / 30 jours)</small></label>
+              <input id="c3" type="radio" name="csplit" value="3">
+              <label for="c3"><span class="big" id="c3v">—</span><small>3× (0 / 30 / 60 jours)</small></label>
+            </div>
+
             <div class="cols-2">
               <div>
                 <label for="ccy">Monnaie</label>
@@ -239,28 +268,25 @@
                 </select>
               </div>
               <div>
-                <label for="amountNow">À payer aujourd’hui (EUR)</label>
+                <label for="amountNow">À régler maintenant (EUR)</label>
                 <input id="amountNow" readonly value="0">
               </div>
             </div>
 
-            <div class="timeline" id="tlCrypto" aria-live="polite"></div>
-
-            <div class="row">
+            <div class="copyline">
               <div>
                 <label for="wallet">Adresse de paiement</label>
-                <div style="display:grid;grid-template-columns:1fr auto;gap:8px">
-                  <input id="wallet" readonly>
-                  <button class="btn" data-copy="#wallet">Copier</button>
-                </div>
+                <input id="wallet" readonly>
               </div>
+              <button class="copy-btn" data-copy="#wallet">Copier</button>
+            </div>
+
+            <div class="copyline">
               <div>
                 <label for="ccyAmt">Montant à envoyer maintenant (<span id="ccyLabel">—</span>)</label>
-                <div style="display:grid;grid-template-columns:1fr auto;gap:8px">
-                  <input id="ccyAmt" readonly>
-                  <button class="btn" data-copy="#ccyAmt">Copier</button>
-                </div>
+                <input id="ccyAmt" readonly>
               </div>
+              <button class="copy-btn" data-copy="#ccyAmt">Copier</button>
             </div>
 
             <div>
@@ -268,14 +294,27 @@
               <input id="txid" placeholder="0x… / bc1… / TX123…" required>
             </div>
 
-            <div class="help">💬 Besoin d’aide ? Notre équipe peut vérifier votre TxID et accélérer la validation.</div>
-            <button id="confirmCrypto" class="btn primary">Confirmer mon paiement crypto</button>
+            <div class="grid-2">
+              <div class="qr" aria-label="QR de paiement">QR CODE</div>
+              <div class="muted" style="align-self:center">Scannez pour pré-remplir l'adresse & le montant. Aucun frais caché. Confirmation réseaux requise.</div>
+            </div>
+
+            <button id="confirmCrypto" class="btn primary">Confirmer le paiement crypto</button>
           </div>
         </div>
 
         <!-- Panneau SEPA -->
-        <div id="pmSEPA" class="pm" aria-labelledby="tab-sepa">
+        <div id="pmSEPA" class="pm">
           <div class="row">
+            <div class="seg" role="group" aria-label="Échéances virement">
+              <input id="b1" type="radio" name="bsplit" value="1" checked>
+              <label for="b1"><span class="big" id="b1v">—</span><small>Aujourd'hui</small></label>
+              <input id="b2" type="radio" name="bsplit" value="2">
+              <label for="b2"><span class="big" id="b2v">—</span><small>2× (0 / 30 jours)</small></label>
+              <input id="b3" type="radio" name="bsplit" value="3">
+              <label for="b3"><span class="big" id="b3v">—</span><small>3× (0 / 30 / 60 jours)</small></label>
+            </div>
+
             <div class="cols-2">
               <div>
                 <label>Bénéficiaire</label>
@@ -294,21 +333,20 @@
                 <input id="swift" readonly value="DIBLFRPP">
               </div>
               <div>
-                <label for="vref">Référence (à mettre dans l’objet du virement)</label>
+                <label for="vref">Référence</label>
                 <input id="vref" readonly>
               </div>
               <div>
-                <label for="amountNowBank">À payer aujourd’hui (EUR)</label>
+                <label for="amountNowBank">À régler maintenant (EUR)</label>
                 <input id="amountNowBank" readonly value="0">
               </div>
             </div>
 
-            <div class="timeline" id="tlSEPA" aria-live="polite"></div>
-
-            <div class="row">
-              <div class="sub">Joignez une preuve de virement (obligatoire pour lancement de préparation)</div>
-              <input type="file" id="proof" accept="image/*,.pdf" required>
+            <div class="copyline" style="margin-top:6px">
+              <div class="muted">Preuve de virement <strong>obligatoire</strong> (image/PDF)</div>
+              <span></span>
             </div>
+            <input type="file" id="proof" accept="image/*,.pdf" required>
 
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <button class="btn" data-copy="#iban">Copier IBAN</button>
@@ -316,45 +354,50 @@
               <button class="btn" data-copy="#vref">Copier Référence</button>
             </div>
 
-            <button id="confirmBank" class="btn primary">J’ai effectué mon virement</button>
+            <button id="confirmBank" class="btn primary">Confirmer le virement</button>
           </div>
         </div>
 
         <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px">
-          <button id="placeOrder" class="btn primary">Valider et créer la commande</button>
+          <button id="placeOrder" class="btn primary">Créer la commande</button>
           <button id="clearCart" class="btn">Vider le panier</button>
         </div>
       </div>
     </section>
 
     <!-- Colonne droite : Récap -->
-    <aside class="card" aria-labelledby="h-recap">
+    <aside class="card">
       <div class="hd">
-        <div class="title" id="h-recap">Récapitulatif</div>
-        <span class="pill">Suivi & assistance</span>
+        <div class="title">Récapitulatif</div>
+        <span class="pill">Assistance & suivi</span>
       </div>
       <div class="bd">
         <div id="miniCart" class="mini"></div>
         <hr style="border:none;border-top:1px dashed var(--line);margin:10px 0">
         <div class="sum">
           <div class="sum-row"><span>Sous-total</span><span id="sub">—</span></div>
-          <div class="sum-row"><span>Livraison</span><span>Gratuite</span></div>
-          <div class="sum-row"><span>Ajustement paiement</span><span id="benefit">—</span></div>
+          <div class="sum-row"><span>Livraison</span><span id="ship">Gratuite</span></div>
+          <div class="sum-row"><span>Avantage méthode</span><span id="benefit">—</span></div>
           <div class="sum-row total"><span>Total</span><span id="total">—</span></div>
-          <div class="sum-row" id="dueRow"><span class="due" id="dueLabel">À payer aujourd’hui</span><span class="due" id="dueNow">—</span></div>
-          <div class="timeline" id="tlRecap" aria-live="polite"></div>
+          <div class="sum-row" id="dueRow"><span class="due">À régler aujourd'hui</span><span class="due" id="dueNow">—</span></div>
+          <div id="scheduleWrap" class="schedule" style="display:none"></div>
+          <div id="saveLine" class="note" style="display:none"></div>
         </div>
-        <div class="help">🚚 Livraison prioritaire sous 7 jours • 🔄 Retours 14 jours • 🔐 Paiement sécurisé</div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <span class="bubble"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12l2-2 4 4 10-10 2 2L9 20z"/></svg> Livraison 7 jours</span>
+          <span class="bubble"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21c-4.97 0-9-4.03-9-9S7.03 3 12 3s9 4.03 9 9-4.03 9-9 9Zm-1-13h2v6h-2V8Zm0 8h2v2h-2v-2Z"/></svg> Retours 14 jours</span>
+          <span class="bubble"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1a4 4 0 0 0-4 4v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-2V5a4 4 0 0 0-4-4zM9 8V5a3 3 0 0 1 6 0v3z"/></svg> Paiement sécurisé</span>
+        </div>
       </div>
     </aside>
   </main>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <footer>
-    <div class="fwrap">
-      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
-      <nav>
+  <footer style="background:#fff;border-top:1px solid var(--line)">
+    <div class="hwrap" style="padding:12px 12px;justify-content:space-between">
+      <div class="muted">© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <nav class="muted" style="display:flex;gap:8px;flex-wrap:wrap">
         <a id="aboutLink2">À propos</a> ·
         <a id="cgvLink2">CGV</a> ·
         <a id="legalLink2">Mentions légales</a> ·
@@ -366,63 +409,42 @@
 
   <script>
   (async()=>{
-    // --- Icônes (mêmes URLs ; fallback si non chargé) ---
-    const ICONS = {
-      buy:'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
-      cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
-      cartFull:'https://img.icons8.com/?size=100&id=K5Jv3BfpxPYa&format=png&color=000000',
-      checkout:'https://img.icons8.com/?size=100&id=qVsd2YOgeizO&format=png&color=000000',
-      truck:'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
-      logout:'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
-      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
-      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
-      trash:'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000',
-      fourx:'https://img.icons8.com/?size=100&id=3c0Tk1f266bf&format=png&color=000000',
-      ssl:'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
-      refund:'https://img.icons8.com/?size=100&id=lRNQ5N7CjFht&format=png&color=000000',
-      search:'https://img.icons8.com/?size=100&id=7964&format=png&color=000000'
-    };
-    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el){ el.src=src; el.onerror=()=>{el.replaceWith(Object.assign(document.createElement('span'),{textContent:'•'})); }; }};
-    setSrc('icUser',ICONS.user); setSrc('icShop',ICONS.buy);
-
     // --- Root & menu liens (GitHub Pages safe) ---
     const GH_ROOT=(()=>{const p=location.pathname.split('/').filter(Boolean);return (location.host.endsWith('github.io')&&p.length)?`/${p[0]}/`:'/';})();
     const link=(id,path)=>{const el=document.getElementById(id); if(el) el.href=GH_ROOT+path};
     link('homeLink','index.html'); link('accountLink','compte/index.html'); link('backShop','index.html');
-    ['about','cgv','legal','privacy','contact'].forEach(k=>{link(k+'Link2','pages/'+(k==='about'?'a-propos':k)+'.html');});
+    ['about','cgv','legal','privacy','contact'].forEach(k=>{link(k+'Link','pages/'+(k==='about'?'a-propos':k)+'.html');link(k+'Link2','pages/'+(k==='about'?'a-propos':k)+'.html');});
+    const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
+    if(menuBtn&&menuDrop){ menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')}); document.addEventListener('click',e=>{if(!menuDrop.contains(e.target)&&e.target!==menuBtn)menuDrop.classList.remove('show');}); }
 
-    // --- Utils ---
+    // --- Helpers ---
     const $=s=>document.querySelector(s); const $$=s=>Array.from(document.querySelectorAll(s));
     const toast=msg=>{const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1500);};
     const EUR=v=>Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-
-    // --- Panier ---
     const KEY='gf_cart';
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
     const setCart=arr=>localStorage.setItem(KEY,JSON.stringify(arr));
-
-    // --- OrderID & référence ---
     const orderId=(()=>{const d=new Date(); const y=String(d.getFullYear()).slice(2); const mm=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); const rnd=Math.floor(Math.random()*9000)+1000; return `GF-${y}${mm}${dd}-${rnd}`;})();
-    $('#orderId').textContent=orderId; $('#vref') && ($('#vref').value='GF-'+orderId);
+    $('#orderId').textContent=orderId; $('#vref').value='GF-'+orderId;
 
-    // --- Rendu mini panier ---
+    // --- Panier -> récap ---
     function computeSub(cart){ return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0); }
     function renderMini(){
       const wrap=$('#miniCart'); const cart=getCart();
-      if(!cart.length){ wrap.innerHTML='<div class="sub">Votre panier est vide.</div>'; $('#sub').textContent='—'; $('#benefit').textContent='—'; $('#total').textContent='—'; $('#dueRow').style.display='none'; $('#tlRecap').innerHTML=''; return; }
+      if(!cart.length){ wrap.innerHTML='<div class="muted">Votre panier est vide.</div>'; $('#sub').textContent='—'; $('#benefit').textContent='—'; $('#total').textContent='—'; $('#dueRow').style.display='none'; $('#scheduleWrap').style.display='none'; $('#saveLine').style.display='none'; return; }
       wrap.innerHTML=cart.map(x=>`
         <div class="ci">
-          <img src="${x.image||''}" alt="${x.name||''}" onerror="this.style.display='none'">
-          <div><div style="font-weight:700">${x.name||''}</div><div class="sub">${x.brand||''} ${x.category?('• '+x.category):''}</div></div>
+          <img src="${x.image||''}" alt="${x.name||''}" onerror="this.style.visibility='hidden'">
+          <div><div style="font-weight:700">${x.name||''}</div><div class="muted" style="font-size:12px">${x.brand||''} ${x.category?('• '+x.category):''}</div></div>
           <div style="font-weight:800">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
         </div>`).join('');
     }
 
-    // --- Paiement : avantage (sobre, pas d'accroche marketing) ---
-    function currentPM(){ return document.querySelector('.mcard[aria-selected="true"]')?.dataset.method || 'crypto'; }
+    // --- Paiement : taux/avantages ---
+    function currentPM(){ return document.querySelector('.mcard[role="tab"][aria-selected="true"]')?.dataset.method || 'crypto'; }
     function benefitRate(){ return currentPM()==='crypto'?0.02 : currentPM()==='sepa'?0.01 : 0; }
 
-    // --- FX mock (affichage crypto) ---
+    // --- FX mock pour crypto (montant à envoyer) ---
     const fx={'USDT-TRC20':{symbol:'USDT',rate:1},'USDT-ERC20':{symbol:'USDT',rate:1},'BTC':{symbol:'BTC',rate:60000},'ETH':{symbol:'ETH',rate:3000}};
     function setCryptoAddress(ccy){
       const map={'USDT-TRC20':'TQf3k7s9h2x4y5z6a7b8c9d0e1f2g3h4i','USDT-ERC20':'0x3Fb8b7E6cA9f4D2E1b0C9a8F7e6D5c4B3a2F1E0','BTC':'bc1q9v8w7x6y5z4a3b2c1d0e9f8g7h6j5k4l3m2n','ETH':'0x9eF2B3cD4a5E6f7B8c9D0E1F2A3b4C5d6E7f8A9B'};
@@ -430,26 +452,17 @@
       $('#ccyLabel').textContent=fx[ccy]?.symbol||'';
     }
 
-    // --- Échéancier clair ---
+    // --- Échéancier (affichage clair) ---
     function splitAmounts(total, parts){
-      const cents=Math.round(total*100);
-      const base=Math.floor(cents/parts);
-      const first=base + (cents - base*parts);
-      const arr=[first]; for(let i=1;i<parts;i++) arr.push(base);
-      return arr.map(c=>c/100);
+      const cents=Math.round(total*100); const base=Math.floor(cents/parts); const first=base + (cents - base*parts);
+      const arr=[first]; for(let i=1;i<parts;i++) arr.push(base); return arr.map(c=>c/100);
     }
-    function dateAdd(days){ const d=new Date(); d.setDate(d.getDate()+days); return d; }
-    function fmtDate(d){ return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}); }
-
-    function renderTimeline(container, amounts){
-      const steps=[0,30,60];
-      container.innerHTML=amounts.map((amt,i)=>{
-        const d=fmtDate(dateAdd(steps[i]||0));
-        return `<div class="step"><div class="dot">${i+1}</div><div><div><strong>${EUR(amt)}</strong> ${i===0?'• aujourd\'hui':''}</div><div class="smeta">${d}</div></div></div>`;
-      }).join('');
+    function scheduleList(total, parts){
+      const amts=splitAmounts(total,parts); const today=new Date(); const steps=[0,30,60];
+      return amts.map((amt,i)=>{ const d=new Date(today); d.setDate(d.getDate()+steps[i]); return {label: i===0?"Aujourd'hui": (i===1?'Dans 30 jours':'Dans 60 jours'), date: d.toLocaleDateString('fr-FR'), amt}; });
     }
 
-    // --- Mise à jour récap global + cartes d'échéances ---
+    // --- Mise à jour récap global ---
     const SHIPPING=0;
     function updateSummary(){
       const cart=getCart(); if(!cart.length){ renderMini(); return; }
@@ -459,40 +472,43 @@
 
       // Sélections
       const pm=currentPM();
-      const groupSel = pm==='crypto' ? '#tab-crypto .split[aria-checked="true"]' : '#tab-sepa .split[aria-checked="true"]';
-      const parts = Number(document.querySelector(groupSel)?.dataset.split||1);
+      const parts = Number((pm==='crypto'?document.querySelector('input[name="csplit"]:checked'):document.querySelector('input[name="bsplit"]:checked'))?.value || 1);
       const amts=splitAmounts(total,parts);
       const dueNow=amts[0];
 
-      // Inject recap
+      // Inject résumé
       $('#sub').textContent=EUR(sub);
-      $('#benefit').textContent= (benefit>0? '–'+EUR(benefit) : '—');
+      $('#benefit').textContent= benefit>0 ? '–'+EUR(benefit) : '—';
       $('#total').textContent=EUR(total);
       $('#dueRow').style.display='flex';
-      $('#dueLabel').textContent = parts>1 ? '1ère échéance aujourd\'hui' : 'À payer aujourd\'hui';
       $('#dueNow').textContent=EUR(dueNow);
 
-      // Timelines (panneaux + récap)
+      // Schedule liste claire
+      const sched= scheduleList(total, parts);
+      const wrap=$('#scheduleWrap'); wrap.style.display='grid';
+      wrap.innerHTML = sched.map(s=>`<div class="sum-row"><span>${s.label} • ${s.date}</span><span>${EUR(s.amt)}</span></div>`).join('');
+
+      // Ligne d'économie visible
+      const saveLine=$('#saveLine');
+      if(benefit>0){ saveLine.style.display='block'; saveLine.textContent = `Vous économisez ${EUR(benefit)} avec ce mode de paiement.`; } else { saveLine.style.display='none'; }
+
+      // Miroir vers panneaux
       if(pm==='crypto'){
         $('#amountNow').value = dueNow.toFixed(2);
-        const ccy=$('#ccy').value; const r=fx[ccy]?.rate||1;
-        const amt=(dueNow/r);
+        const ccy=$('#ccy').value; const r=fx[ccy]?.rate||1; const amt=(dueNow/r);
         $('#ccyAmt').value = (amt>0?amt:0).toFixed(6).replace(/0+$/,'').replace(/\.$/,'');
-        renderTimeline($('#tlCrypto'), amts);
       }
-      if(pm==='sepa'){
-        $('#amountNowBank').value = dueNow.toFixed(2);
-        renderTimeline($('#tlSEPA'), amts);
-      }
-      renderTimeline($('#tlRecap'), amts);
+      if(pm==='sepa'){ $('#amountNowBank').value = dueNow.toFixed(2); }
 
-      // Miroir vals sur cartes split (texte "Aujourd'hui")
-      $('.now-1').textContent = EUR(amts[0]);
-      $('.now-2').textContent = EUR(amts[0]);
-      $('.now-3').textContent = EUR(amts[0]);
-      $('.nowb-1').textContent = EUR(amts[0]);
-      $('.nowb-2').textContent = EUR(amts[0]);
-      $('.nowb-3').textContent = EUR(amts[0]);
+      // Cartes “Klarna-like” : chiffres visibles directement
+      const labels=[['#c1v','#c2v','#c3v'],['#b1v','#b2v','#b3v']];
+      const pretty=(parts,amts)=>{
+        if(parts===1) return [EUR(total), '', ''];
+        if(parts===2) return [`Aujourd'hui: ${EUR(amts[0])}`, `Puis: ${EUR(amts[1])}`,''];
+        return [`Aujourd'hui: ${EUR(amts[0])}`, `${EUR(amts[1])}`, `${EUR(amts[2])}`];
+      };
+      const vals=pretty(parts,amts);
+      ['#c1v','#c2v','#c3v','#b1v','#b2v','#b3v'].forEach((id,i)=>{ const idx=i%3; const set = i<3 ? vals : vals; const el=$(id); if(el) el.textContent = set[idx]||'—'; });
     }
 
     // --- Rendu initial mini panier
@@ -501,9 +517,7 @@
     // --- Interactions ---
     // Choix méthode
     $$('.mcard[role="tab"]').forEach(card=>{
-      card.addEventListener('click', (e)=>{
-        // Eviter sélection quand on clique sur une split interne => ne rien faire ici si target est .split
-        if(e.target.closest('.split')) return;
+      card.addEventListener('click', ()=>{
         $$('.mcard[role="tab"]').forEach(c=>c.setAttribute('aria-selected', String(c===card)));
         const m=card.dataset.method;
         $('#pmCrypto').classList.toggle('show', m==='crypto');
@@ -511,17 +525,9 @@
         updateSummary();
       });
     });
-
-    // Split selection
-    function handleSplitClick(scopeSel, ev){
-      const box=ev.target.closest('.split'); if(!box) return;
-      $$(scopeSel+' .split').forEach(s=>s.setAttribute('aria-checked','false'));
-      box.setAttribute('aria-checked','true');
-      updateSummary();
-    }
-    $('#tab-crypto').addEventListener('click', e=>handleSplitClick('#tab-crypto', e));
-    $('#tab-sepa').addEventListener('click', e=>handleSplitClick('#tab-sepa', e));
-
+    // Échéances
+    $$('input[name="csplit"]').forEach(r=>r.addEventListener('change', updateSummary));
+    $$('input[name="bsplit"]').forEach(r=>r.addEventListener('change', updateSummary));
     // Crypto ccy
     $('#ccy').addEventListener('change', ()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
     setCryptoAddress($('#ccy').value);
@@ -559,20 +565,16 @@
       if(!validateAddress()) return;
       const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
       const pm=currentPM();
-
-      // Vérifs simples selon méthode
       if(pm==='crypto' && !$('#txid').value.trim()){ $('#txid').focus(); toast('TxID requis.'); return; }
       if(pm==='sepa' && !$('#proof').files.length){ $('#proof').focus(); toast('Preuve de virement requise.'); return; }
 
       const sub=computeSub(cart), benefit=sub*benefitRate(), total=Math.max(0, sub - benefit);
-      const parts = Number((pm==='crypto'?document.querySelector('#tab-crypto .split[aria-checked="true"]'):document.querySelector('#tab-sepa .split[aria-checked="true"]'))?.dataset.split || 1);
-
+      const parts = Number((pm==='crypto'?document.querySelector('input[name="csplit"]:checked'):document.querySelector('input[name="bsplit"]:checked'))?.value || 1);
       const order={
         id:orderId, date:new Date().toISOString(), status:'En préparation',
         items:cart, pricing:{sub,ship:0,benefit,total,currency:'EUR'},
         shipping:{name:$('#name').value,email:$('#email').value,phone:$('#phone').value,address:$('#address').value,city:$('#city').value,zip:$('#zip').value,country:$('#country').value},
-        payment:{
-          method:pm, split:parts,
+        payment:{ method:pm, split:parts,
           details: pm==='crypto'
             ? {ccy:$('#ccy').value,address:$('#wallet').value,txid:$('#txid').value,amountNow:$('#amountNow').value}
             : {iban:$('#iban').value,ref:$('#vref').value,amountNow:$('#amountNowBank').value}
@@ -582,6 +584,8 @@
       setCart([]); toast('Commande '+orderId+' créée'); setTimeout(()=>location.replace(GH_ROOT+'compte/index.html'), 900);
     });
 
+    // Init
+    updateSummary();
   })();
   </script>
 </body>
