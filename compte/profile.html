@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mon compte — Profil & Tableau de bord | GF Store</title>
+  <style>
+    :root{--w:1000px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
+    *{box-sizing:border-box}
+    body{margin:0;font:14px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
+    a{color:inherit}
+    header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #e5e7eb;backdrop-filter:saturate(140%) blur(4px)}
+    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .brand .logo{height:34px;width:auto;display:block}
+    .nav{display:flex;gap:8px;align-items:center}
+    .iconbtn,.nav a{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;color:inherit}
+    .iconbtn{cursor:pointer}
+    .ic{width:16px;height:16px;display:inline-block}
+    .dropdown{position:relative}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:30}
+    .menu.show{display:block}
+    .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
+    .menu a:hover{background:#f3f4f6}
+
+    .wrap{max-width:var(--w);margin:18px auto 28px;padding:0 12px;display:grid;gap:14px}
+    .grid{display:grid;gap:14px;grid-template-columns:1.2fr 1fr}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 1px 0 rgba(0,0,0,.02);padding:16px}
+    h1{font-size:22px;margin:6px 0 0}
+    h2{font-size:16px;margin:0 0 8px}
+    .muted{opacity:.7;font-size:12px}
+    .row{display:grid;gap:6px;margin-bottom:10px}
+    label{font-weight:600}
+    input,select,textarea{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+    textarea{min-height:84px;resize:vertical}
+    .two{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:11px 14px;border:1px solid #1e40af;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:12px;cursor:pointer}
+    .btn.secondary{background:#fff;border:1px solid #e5e7eb;color:#111}
+    .btn.danger{background:linear-gradient(180deg,#ef4444,#b91c1c);border-color:#7f1d1d}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .section{display:grid;gap:10px}
+    .alert{border-radius:12px;padding:10px 12px;border:1px solid #fecaca;background:#fef2f2;color:#991b1b;display:none}
+    .ok{border-radius:12px;padding:10px 12px;border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;display:none}
+    .show{display:block!important}
+    .hr{border:none;border-top:1px dashed #e5e7eb;margin:12px 0}
+
+    .headerline{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .avatar{width:56px;height:56px;border-radius:999px;background:#e5e7eb;display:grid;place-items:center;font-weight:800}
+    .who{display:flex;align-items:center;gap:10px}
+    .chip{display:inline-block;line-height:1;padding:2px 6px;border-radius:999px;background:#f0f9ff;color:#0ea5e9;font-size:11px;border:1px solid #bae6fd}
+
+    .empty{display:grid;gap:10px;place-items:center;text-align:center;padding:26px;border:1px dashed #e5e7eb;border-radius:16px;background:#fff}
+    .links{display:inline-flex;gap:8px;flex-wrap:wrap}
+
+    @media (max-width:900px){
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hwrap">
+      <a href="../index.html" class="brand">
+        <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
+      </a>
+      <nav class="nav">
+        <a href="./profile.html"><img class="ic" id="icUser" alt=""> Mon compte</a>
+        <a href="../index.html"><img class="ic" id="icHome" alt=""> Boutique</a>
+        <button class="iconbtn" id="logoutBtn" title="Se déconnecter"><img class="ic" id="icLogout" alt=""> Déconnexion</button>
+        <div class="dropdown">
+          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
+          <div id="menuDrop" class="menu">
+            <a href="../a-propos.html">À propos</a>
+            <a href="../cgv.html">CGV</a>
+            <a href="../mentions-legales.html">Mentions légales</a>
+            <a href="../confidentialite.html">Confidentialité</a>
+            <a href="../contact.html">Contact</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="state-guest" class="empty" style="display:none">
+      <img class="ic" id="icLock" alt="">
+      <h1>Mon compte</h1>
+      <p class="muted">Vous n’êtes pas connecté. Accédez à votre espace pour suivre vos commandes et gérer vos informations.</p>
+      <div class="links">
+        <a class="btn" href="./login.html"><img class="ic" id="icLogin" alt=""> Se connecter</a>
+        <a class="btn secondary" href="./register.html">Créer un compte</a>
+        <a class="btn secondary" href="./password-reset.html">Mot de passe oublié</a>
+      </div>
+    </div>
+
+    <div id="state-user" style="display:none">
+      <div class="grid">
+        <!-- Colonne 1 -->
+        <section class="card section">
+          <div class="headerline">
+            <div class="who">
+              <div class="avatar" id="avatar">U</div>
+              <div>
+                <h1 id="hello">Bonjour !</h1>
+                <div class="muted">Connecté depuis <span id="since">—</span></div>
+              </div>
+            </div>
+            <span class="chip" id="emailChip">—</span>
+          </div>
+
+          <hr class="hr">
+
+          <h2>Profil</h2>
+          <div id="msgProfile" class="ok"></div>
+          <form id="formProfile" class="section" novalidate>
+            <div class="two">
+              <div class="row">
+                <label for="firstName">Prénom</label>
+                <input id="firstName" name="firstName" placeholder="Votre prénom">
+              </div>
+              <div class="row">
+                <label for="lastName">Nom</label>
+                <input id="lastName" name="lastName" placeholder="Votre nom">
+              </div>
+            </div>
+            <div class="row">
+              <label for="phone">Téléphone</label>
+              <input id="phone" name="phone" placeholder="+33 6 12 34 56 78">
+            </div>
+            <div class="row">
+              <label for="email">Email (identifiant)</label>
+              <input id="email" name="email" type="email" required>
+              <div class="muted">Pour changer d’email, confirmez votre mot de passe ci-dessous.</div>
+            </div>
+            <div class="row">
+              <label for="currentPw">Mot de passe (pour confirmer un changement d’email)</label>
+              <input id="currentPw" type="password" placeholder="Mot de passe actuel">
+            </div>
+
+            <h2>Adresses</h2>
+            <div class="row">
+              <label for="addr1">Adresse (ligne 1)</label>
+              <input id="addr1" name="addr1" placeholder="N°, rue">
+            </div>
+            <div class="row">
+              <label for="addr2">Complément (optionnel)</label>
+              <input id="addr2" name="addr2" placeholder="Bâtiment, étage, société…">
+            </div>
+            <div class="two">
+              <div class="row">
+                <label for="city">Ville</label>
+                <input id="city" name="city" placeholder="Ville">
+              </div>
+              <div class="row">
+                <label for="zip">Code postal</label>
+                <input id="zip" name="zip" placeholder="75001">
+              </div>
+            </div>
+            <div class="row">
+              <label for="country">Pays</label>
+              <input id="country" name="country" placeholder="France">
+            </div>
+
+            <div class="actions">
+              <a class="btn secondary" href="../index.html">Retour boutique</a>
+              <button class="btn" id="saveProfile" type="submit"><img class="ic" id="icSave" alt=""> Enregistrer</button>
+            </div>
+            <div id="errProfile" class="alert"></div>
+          </form>
+
+          <hr class="hr">
+
+          <h2>Sécurité</h2>
+          <div class="actions">
+            <a class="btn secondary" href="./password-change.html">Changer le mot de passe</a>
+            <a class="btn secondary" href="./password-reset.html">Réinitialiser par email</a>
+            <button class="btn danger" id="deleteAccount"><img class="ic" id="icTrash" alt=""> Supprimer mon compte</button>
+          </div>
+        </section>
+
+        <!-- Colonne 2 -->
+        <section class="card section">
+          <h2>Récap rapide</h2>
+          <div class="row">
+            <strong>Dernière connexion</strong>
+            <div id="lastLogin" class="muted">—</div>
+          </div>
+          <div class="row">
+            <strong>Commandes</strong>
+            <div id="orders">Aucune commande enregistrée (démo).</div>
+          </div>
+
+          <hr class="hr">
+          <h2>Liens rapides</h2>
+          <div class="actions">
+            <a class="btn secondary" href="../checkout.html">Aller au paiement</a>
+            <button class="btn secondary" id="logoutBtn2"><img class="ic" id="icLogout2" alt=""> Se déconnecter</button>
+          </div>
+
+          <hr class="hr">
+          <h2>Aide</h2>
+          <div class="muted">Besoin d’assistance ? <a href="../contact.html">Contactez-nous</a>. Retours sous 14 jours, paiement sécurisé, crypto acceptées.</div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="hwrap" style="justify-content:space-between">
+      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <nav style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px">
+        <a href="../a-propos.html">À propos</a> ·
+        <a href="../cgv.html">CGV</a> ·
+        <a href="../mentions-legales.html">Mentions légales</a> ·
+        <a href="../confidentialite.html">Confidentialité</a> ·
+        <a href="../contact.html">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+  (async()=>{
+    // --- Icônes ---
+    const ICONS={
+      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
+      logout:'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
+      home:'https://img.icons8.com/?size=100&id=99667&format=png&color=000000',
+      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
+      lock:'https://img.icons8.com/?size=100&id=13655&format=png&color=000000',
+      login:'https://img.icons8.com/?size=100&id=64088&format=png&color=000000',
+      save:'https://img.icons8.com/?size=100&id=63257&format=png&color=ffffff',
+      trash:'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=ffffff'
+    };
+    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
+    setSrc('icMenu',ICONS.menu); setSrc('icLogout',ICONS.logout); setSrc('icLogout2',ICONS.logout);
+    setSrc('icHome',ICONS.home); setSrc('icUser',ICONS.user); setSrc('icLock',ICONS.lock);
+    setSrc('icLogin',ICONS.login); setSrc('icSave',ICONS.save); setSrc('icTrash',ICONS.trash);
+
+    // --- Menu ---
+    const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
+    if(menuBtn&&menuDrop){
+      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
+      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+    }
+
+    // --- Helpers (démo front-only) ---
+    const $=s=>document.querySelector(s);
+    const te=new TextEncoder();
+    const toB64=buf=>btoa(String.fromCharCode(...new Uint8Array(buf)));
+    async function sha256(str){const buf=await crypto.subtle.digest('SHA-256', te.encode(str)); return toB64(buf);}
+    const PEPPER='gfstore-pepper-demo-v1'; // ⚠️ Démo : ne jamais mettre la pepper côté client en production.
+    async function hashPassword(password,saltB64){ return sha256(`${saltB64}:${password}:${PEPPER}`); }
+
+    function getUsers(){ try{return JSON.parse(localStorage.getItem('gf_users')||'[]')}catch{return[]} }
+    function setUsers(arr){ localStorage.setItem('gf_users', JSON.stringify(arr)); }
+    function getSession(){ try{ return JSON.parse(localStorage.getItem('gf_user')||'null'); }catch{ return null; } }
+    function setSession(obj){ localStorage.setItem('gf_user', JSON.stringify(obj)); }
+    function signOut(){ localStorage.removeItem('gf_user'); location.replace('./login.html'); }
+
+    // --- State switcher ---
+    const guest=$('#state-guest'), userZone=$('#state-user');
+    const session=getSession();
+
+    if(!session || (session.exp && session.exp<=Date.now())){
+      guest.style.display='grid';
+      userZone.style.display='none';
+      // cacher boutons déconnexion
+      document.getElementById('logoutBtn').style.display='none';
+    }else{
+      guest.style.display='none';
+      userZone.style.display='block';
+    }
+
+    // Quitter si invité
+    if(!session || (session.exp && session.exp<=Date.now())) return;
+
+    // --- Charger l'utilisateur ---
+    const email=(session.email||'').toLowerCase();
+    const users=getUsers();
+    const idx=users.findIndex(u=>String(u.email||'').toLowerCase()===email);
+    if(idx===-1){ signOut(); return; }
+    let user=users[idx];
+
+    // --- Rendu en-tête ---
+    function initials(u){
+      const f=u.firstName||'', l=u.lastName||'';
+      const base=(f||l)?(f[0]||'')+(l[0]||''):(u.email||'?')[0]||'?';
+      return base.toUpperCase();
+    }
+    $('#avatar').textContent=initials(user);
+    $('#hello').textContent = (user.firstName||user.lastName) ? `Bonjour ${user.firstName||''} ${user.lastName||''}`.trim() : 'Bonjour !';
+    $('#emailChip').textContent = user.email;
+    if(session.iat){ $('#since').textContent = new Date(session.iat).toLocaleString('fr-FR'); }
+    if(session.last){ $('#lastLogin').textContent = new Date(session.last).toLocaleString('fr-FR'); }
+
+    // --- Pré-remplir le formulaire ---
+    const F = {
+      firstName: $('#firstName'),
+      lastName:  $('#lastName'),
+      phone:     $('#phone'),
+      email:     $('#email'),
+      currentPw: $('#currentPw'),
+      addr1:     $('#addr1'),
+      addr2:     $('#addr2'),
+      city:      $('#city'),
+      zip:       $('#zip'),
+      country:   $('#country')
+    };
+    function fill(u){
+      F.firstName.value = u.firstName||'';
+      F.lastName.value  = u.lastName||'';
+      F.phone.value     = u.phone||'';
+      F.email.value     = u.email||'';
+      F.addr1.value     = u.addr1||'';
+      F.addr2.value     = u.addr2||'';
+      F.city.value      = u.city||'';
+      F.zip.value       = u.zip||'';
+      F.country.value   = u.country||'France';
+    }
+    fill(user);
+
+    // --- Sauvegarde profil (et changement d'email sécurisé) ---
+    const msgOk = $('#msgProfile'), msgErr = $('#errProfile');
+    function showOk(m){ msgOk.textContent=m; msgOk.classList.add('show'); msgErr.classList.remove('show'); }
+    function showErr(m){ msgErr.textContent=m; msgErr.classList.add('show'); msgOk.classList.remove('show'); }
+
+    $('#formProfile').addEventListener('submit', async (e)=>{
+      e.preventDefault(); msgOk.classList.remove('show'); msgErr.classList.remove('show');
+      const submitting=$('#saveProfile'); submitting.disabled=true;
+
+      try{
+        const newEmail=(F.email.value||'').trim().toLowerCase();
+        const emailChanged = newEmail && newEmail!==user.email;
+
+        // Si l'email change, vérifier unicité + demander le mot de passe
+        if(emailChanged){
+          if(!F.currentPw.value){ showErr('Veuillez confirmer votre mot de passe pour changer d’email.'); submitting.disabled=false; return; }
+          const already = users.some((u,i)=>i!==idx && String(u.email||'').toLowerCase()===newEmail);
+          if(already){ showErr('Cet email est déjà utilisé.'); submitting.disabled=false; return; }
+          const okPw = (await hashPassword(F.currentPw.value, user.salt))===user.hash;
+          if(!okPw){ showErr('Mot de passe incorrect.'); submitting.disabled=false; return; }
+        }
+
+        // Mettre à jour les champs de profil
+        user = {
+          ...user,
+          firstName:F.firstName.value.trim(),
+          lastName:F.lastName.value.trim(),
+          phone:F.phone.value.trim(),
+          addr1:F.addr1.value.trim(),
+          addr2:F.addr2.value.trim(),
+          city:F.city.value.trim(),
+          zip:F.zip.value.trim(),
+          country:F.country.value.trim(),
+          email: emailChanged ? newEmail : user.email,
+          updatedAt: new Date().toISOString()
+        };
+        users[idx]=user; setUsers(users);
+
+        // Mettre à jour session + UI si email changé
+        if(emailChanged){
+          const newSession = {...session, email:newEmail};
+          setSession(newSession);
+          $('#emailChip').textContent=newEmail;
+        }
+        $('#avatar').textContent=initials(user);
+        $('#hello').textContent=(user.firstName||user.lastName)?`Bonjour ${user.firstName||''} ${user.lastName||''}`.trim():'Bonjour !';
+
+        F.currentPw.value='';
+
+        showOk('Profil mis à jour avec succès.');
+      }catch(ex){
+        console.error(ex);
+        showErr('Erreur lors de l’enregistrement. Réessayez.');
+      }finally{
+        submitting.disabled=false;
+      }
+    });
+
+    // --- Commandes (démo) ---
+    const ordersEl = document.getElementById('orders');
+    try{
+      const all = JSON.parse(localStorage.getItem('gf_orders')||'[]');
+      const mine = all.filter(o=>String(o.email||'').toLowerCase()===email);
+      if(mine.length){
+        ordersEl.innerHTML = mine.slice(-5).map(o=>{
+          const d=new Date(o.date||Date.now()).toLocaleString('fr-FR');
+          const total=(o.total||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+          return `<div style="border:1px solid #e5e7eb;border-radius:12px;padding:8px;margin-bottom:8px">
+            <div><strong>Commande #${o.id||'—'}</strong> — ${d}</div>
+            <div class="muted">${(o.items||[]).length} article(s) • Total ${total}</div>
+          </div>`;
+        }).join('');
+      }
+    }catch{}
+
+    // --- Déconnexion & suppression compte ---
+    const doLogout=()=>signOut();
+    document.getElementById('logoutBtn').addEventListener('click', doLogout);
+    document.getElementById('logoutBtn2').addEventListener('click', doLogout);
+
+    document.getElementById('deleteAccount').addEventListener('click', ()=>{
+      const yes = confirm('Supprimer définitivement votre compte ? Cette action est irréversible.');
+      if(!yes) return;
+      // Effacer utilisateur
+      const list=getUsers().filter(u=>String(u.email||'').toLowerCase()!==email);
+      setUsers(list);
+      // Effacer session
+      localStorage.removeItem('gf_user');
+      alert('Compte supprimé.');
+      location.replace('../index.html');
+    });
+  })();
+  </script>
+</body>
+</html>
