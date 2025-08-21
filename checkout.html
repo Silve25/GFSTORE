@@ -3,44 +3,39 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Finaliser ma commande — GF Store</title>
-  <meta name="description" content="Paiement sécurisé GF Store. Crypto & Virement actifs. Carte & PayPal momentanément indisponibles. Livraison sous 1 semaine, retours 14 jours."/>
+  <title>GF Store — Paiement sécurisé</title>
+  <meta name="color-scheme" content="light">
   <style>
     :root{
-      --w:1200px; --text:#0f172a; --muted:#64748b; --bg:#f6f8fb; --panel:#ffffff; --line:#e6edf6;
-      --brand:#2563eb; --brand2:#1e40af; --good:#16a34a; --warn:#d97706; --danger:#dc2626; --ok:#0ea5e9;
-      --radius:14px; --shadow:0 6px 22px rgba(2,8,23,.06);
+      --w:1200px; --c:#0f172a; --muted:#64748b; --a:#2563eb; --g:#10b981; --line:#e5e7eb; --bg:#f6f8fb;
+      --panel:#ffffff; --r:14px; --shadow:0 6px 22px rgba(15,23,42,.06)
     }
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu}
+    body{margin:0;font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
     a{color:inherit;text-decoration:none}
 
     /* Header */
-    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)}
-    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(4px)}
+    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
     .brand{display:flex;align-items:center;gap:10px}
-    .brand .logo{height:38px;width:auto;display:block}
+    .brand .logo{height:38px;width:auto}
+    .actions{display:flex;gap:8px;align-items:center}
+    .iconbtn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px;box-shadow:0 1px 0 rgba(0,0,0,.02);cursor:pointer}
+    .iconbtn img{width:18px;height:18px}
+    .linkbtn{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .linkbtn img{width:16px;height:16px}
     @media (max-width:640px){ .brand .logo{height:22px} }
-    .nav{display:flex;gap:10px;align-items:center}
-    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);background:#fff;border-radius:12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
-    .iconbtn{cursor:pointer}
-    .nav a:hover,.iconbtn:hover{box-shadow:0 6px 16px rgba(0,0,0,.06)}
-    .ic{width:16px;height:16px;display:inline-block}
-    .dropdown{position:relative}
-    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
-    .menu.show{display:block}
-    .menu a{display:block;padding:8px 10px;border-radius:8px}
-    .menu a:hover{background:#f3f4f6}
 
     /* Layout */
-    .wrap{max-width:var(--w);margin:18px auto 28px;padding:0 12px;display:grid;gap:16px;grid-template-columns:1.1fr .9fr}
+    .wrap{max-width:var(--w);margin:16px auto 28px;padding:0 12px;display:grid;gap:16px;grid-template-columns:1.05fr .95fr}
     @media (max-width:980px){.wrap{grid-template-columns:1fr}}
-    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
     .hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
     .bd{padding:14px}
-    .title{font-weight:800;font-size:18px}
+
+    .title{font-weight:800;font-size:18px;letter-spacing:.01em}
     .muted{color:var(--muted);font-size:13px}
-    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#f3f6ff;border:1px solid #e1e9ff;font-size:12px;color:#0ea5e9}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#f0f9ff;border:1px solid #bae6fd;font-size:12px;color:#0ea5e9}
 
     /* Form */
     form{display:grid;gap:12px}
@@ -48,67 +43,67 @@
     .cols-2{grid-template-columns:1fr 1fr}
     @media (max-width:760px){.cols-2{grid-template-columns:1fr}}
     label{display:block;font-weight:700;margin:4px 0}
-    .req::after{content:" *";color:var(--danger)}
+    .req::after{content:" *";color:#dc2626}
     input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fbfdff}
-    input::placeholder{color:#9aa3b2}
-    input:focus,select:focus{outline:2px solid rgba(37,99,235,.22);box-shadow:0 8px 22px rgba(37,99,235,.10)}
+    input:focus,select:focus{outline:2px solid rgba(37,99,235,.25);box-shadow:0 8px 22px rgba(37,99,235,.10)}
 
-    /* Méthodes */
+    /* Methods grid */
     .methods{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
     @media (max-width:980px){.methods{grid-template-columns:repeat(2,1fr)}}
-    .mcard{position:relative;border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;display:grid;gap:8px;cursor:pointer;transition:box-shadow .12s ease,transform .06s}
+    .mcard{position:relative;border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px;display:grid;gap:8px;cursor:pointer;transition:box-shadow .12s ease,transform .06s}
     .mcard:hover{box-shadow:0 10px 24px rgba(0,0,0,.06);transform:translateY(-1px)}
-    .mcard[aria-selected="true"]{border-color:var(--brand);box-shadow:0 12px 30px rgba(37,99,235,.14)}
-    .mhead{display:flex;align-items:center;gap:8px;font-weight:700}
-    .mlogos{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    .mlogos img{height:18px;opacity:.95}
-    .bubbles{display:flex;gap:6px;flex-wrap:wrap}
-    .bubble{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:#fbfdff;font-size:12px}
+    .mcard[aria-selected="true"]{border-color:#2563eb;box-shadow:0 12px 30px rgba(37,99,235,.14)}
+    .mhead{display:flex;align-items:center;gap:8px;font-weight:800}
+    .mlogos{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .mlogos img{height:18px;opacity:.9}
+    .badge{position:absolute;top:8px;right:8px;display:inline-flex;gap:6px;align-items:center;border-radius:999px;border:1px solid var(--line);background:#fff;padding:4px 8px;font-size:12px}
     .deal{background:#ecfdf5;border-color:#bbf7d0;color:#065f46}
-    .warn{background:#fff7ed;border-color:#ffedd5;color:#9a3412}
-    .disabled{opacity:.7;cursor:not-allowed}
-    .badge{position:absolute;right:8px;top:8px;font-size:11px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:2px 8px}
+    .maintenance{background:#fff7ed;border-color:#ffedd5;color:#9a3412}
+    .disabled{opacity:.55;pointer-events:none}
 
-    /* Panneaux */
+    /* Panels */
     .pm{display:none;margin-top:12px;border:1px dashed var(--line);border-radius:12px;background:#fbfdff;padding:12px}
     .pm.show{display:block}
 
-    /* Segmented (échéances type Klarna) */
-    .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+    /* Installments (clear & big) */
+    .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    @media (max-width:780px){.seg{grid-template-columns:1fr}}
     .seg input{display:none}
-    .seg label{border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;display:flex;flex-direction:column;gap:4px;cursor:pointer;min-height:64px}
-    .seg small{color:var(--muted)}
-    .seg .big{font-weight:800;font-size:15px}
-    .seg input:checked + label{border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.12);background:#f8fbff}
+    .seg label{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px;display:flex;flex-direction:column;gap:6px;cursor:pointer}
+    .seg label .lg{font-size:16px;font-weight:800}
+    .seg label .line{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+    .seg input:checked + label{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15);background:#f8fbff}
 
     /* Copy / QR */
     .copyline{display:grid;grid-template-columns:1fr auto;gap:8px}
     .copy-btn{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font-weight:700}
-    .qr{display:flex;align-items:center;justify-content:center;height:180px;border-radius:10px;border:1px dashed #dbe7ff;background:#f3f6ff;color:var(--muted);font-weight:700}
+    .qr{display:flex;align-items:center;justify-content:center;height:200px;border-radius:10px;border:1px dashed #dbe7ff;background:#f3f6ff;color:var(--muted);font-weight:700}
 
-    /* Résumé */
+    /* Summary */
     .mini{display:flex;flex-direction:column;gap:10px}
     .ci{display:grid;grid-template-columns:60px 1fr auto;gap:8px}
     .ci img{width:60px;height:60px;object-fit:cover;border:1px solid var(--line);border-radius:10px;background:#f8fafc}
-    .sum{display:grid;gap:10px;margin-top:10px}
+    .sum{display:grid;gap:8px;margin-top:10px}
     .sum-row{display:flex;align-items:center;justify-content:space-between}
     .total{font-size:18px;font-weight:900}
+    .dueBig{font-size:20px;font-weight:900}
     .note{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:10px;padding:6px 8px}
-    .due{font-weight:800}
-    .schedule{display:grid;gap:6px;font-size:13px}
+    .sch{margin-top:6px;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;background:#fff}
+    .sch div{display:flex;justify-content:space-between;font-size:13px}
 
-    /* CTA */
+    /* Buttons */
     .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:800}
-    .btn.primary{background:linear-gradient(180deg,var(--brand),var(--brand2));border:1px solid var(--brand2);color:#fff;box-shadow:0 10px 24px rgba(30,64,175,.25)}
+    .btn.primary{background:linear-gradient(180deg,#2563eb,#1e40af);border:1px solid #1e40af;color:#fff;box-shadow:0 10px 24px rgba(30,64,175,.25)}
     .btn:disabled{opacity:.6;cursor:not-allowed}
 
-    /* Alert */
+    /* Toast */
     .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#111;color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:9999}
     .toast.show{display:block}
 
-    /* Utility */
-    .grid-2{display:grid;gap:12px;grid-template-columns:1.1fr .9fr}
-    @media (max-width:900px){.grid-2{grid-template-columns:1fr}}
+    footer{background:#fff;border-top:1px solid var(--line);margin-top:16px}
+    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
+    .fwrap a{opacity:.9}
+    .fwrap a:hover{text-decoration:underline}
   </style>
 </head>
 <body>
@@ -117,20 +112,16 @@
       <a id="homeLink" class="brand" aria-label="Accueil">
         <img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
-      <nav class="nav">
-        <a id="accountLink"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-5 0-9 2.5-9 5.5V22h18v-2.5C21 16.5 17 14 12 14Z"/></svg> Compte</a>
-        <a id="backShop"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4h-2l-1 2H1v2h2l3.6 7.6A2 2 0 0 0 8.4 17H19a2 2 0 0 0 2-2V7H7Zm0 2h12v8H8.4L7 6Z"/></svg> Continuer</a>
-        <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Menu"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16M4 12h16M4 18h16"/></svg> Menu</button>
-          <div id="menuDrop" class="menu">
-            <a id="aboutLink">À propos</a>
-            <a id="cgvLink">CGV</a>
-            <a id="legalLink">Mentions légales</a>
-            <a id="privacyLink">Confidentialité</a>
-            <a id="contactLink">Contact</a>
-          </div>
-        </div>
-      </nav>
+      <div class="actions">
+        <a id="backShop" class="linkbtn" title="Continuer les achats">
+          <img src="https://img.icons8.com/?size=100&id=26138&format=png&color=000000" alt="">
+          <span>Continuer les achats</span>
+        </a>
+        <button class="iconbtn" id="menuBtn" aria-label="Ouvrir">
+          <!-- icône menu (juste l’icône, pas de texte) -->
+          <img src="https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000" alt="">
+        </button>
+      </div>
     </div>
   </header>
 
@@ -140,7 +131,7 @@
       <div class="hd">
         <div>
           <div class="title">Paiement sécurisé <span id="orderId" class="muted" style="margin-left:8px"></span></div>
-          <div class="muted">Livraison sous 1 semaine • Retours 14 jours • Assistance réactive</div>
+          <div class="muted">Livraison prioritaire sous 1 semaine • Retours 14 jours</div>
         </div>
         <span class="pill">SSL actif</span>
       </div>
@@ -185,23 +176,20 @@
         </form>
 
         <!-- Méthodes de paiement -->
-        <div style="margin:14px 0 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <div style="margin:14px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
           <div class="title" style="font-size:16px">Mode de paiement</div>
-          <span class="muted">Carte & PayPal momentanément indisponibles</span>
+          <span class="muted">Crypto & Virement — Carte & PayPal indisponibles</span>
         </div>
 
         <div class="methods" role="tablist">
           <!-- Crypto -->
           <button class="mcard" role="tab" aria-selected="true" data-method="crypto">
-            <div class="mhead">Crypto (USDT, BTC, ETH)</div>
+            <div class="mhead">Crypto</div>
             <div class="mlogos">
-              <img alt="Bitcoin" src="https://cdn.simpleicons.org/bitcoin" onerror="this.style.display='none'">
-              <img alt="Ethereum" src="https://cdn.simpleicons.org/ethereum" onerror="this.style.display='none'">
-              <img alt="Tether" src="https://cdn.simpleicons.org/tether" onerror="this.style.display='none'">
-            </div>
-            <div class="bubbles">
-              <span class="bubble deal">Économisez ~2%</span>
-              <span class="bubble">Validation rapide</span>
+              <span class="badge deal">Économie estimée : –2%</span>
+              <img alt="Bitcoin" src="https://cdn.simpleicons.org/bitcoin">
+              <img alt="Ethereum" src="https://cdn.simpleicons.org/ethereum">
+              <img alt="Tether" src="https://cdn.simpleicons.org/tether">
             </div>
           </button>
 
@@ -209,54 +197,63 @@
           <button class="mcard" role="tab" aria-selected="false" data-method="sepa">
             <div class="mhead">Virement SEPA</div>
             <div class="mlogos">
-              <img alt="SEPA" src="https://img.icons8.com/?size=100&id=7IJfqNBSaJ0N&format=png&color=000000" onerror="this.style.display='none'">
-              <img alt="IBAN" src="https://cdn.simpleicons.org/iban" onerror="this.style.display='none'">
-            </div>
-            <div class="bubbles">
-              <span class="bubble deal">Économisez ~1%</span>
-              <span class="bubble">Preuve obligatoire</span>
+              <span class="badge deal">Économie estimée : –1%</span>
+              <img alt="SEPA" src="https://img.icons8.com/?size=100&id=7IJfqNBSaJ0N&format=png&color=000000">
+              <img alt="IBAN" src="https://cdn.simpleicons.org/iban">
             </div>
           </button>
 
           <!-- Carte (indispo) -->
-          <div class="mcard disabled" aria-selected="false" title="Indisponible">
-            <span class="badge">Indisponible</span>
+          <div class="mcard disabled" aria-selected="false">
+            <span class="badge maintenance">Indisponible</span>
             <div class="mhead">Carte bancaire</div>
             <div class="mlogos">
-              <img alt="Visa" src="https://cdn.simpleicons.org/visa" onerror="this.style.display='none'">
-              <img alt="Mastercard" src="https://cdn.simpleicons.org/mastercard" onerror="this.style.display='none'">
-              <img alt="American Express" src="https://cdn.simpleicons.org/americanexpress" onerror="this.style.display='none'">
-            </div>
-            <div class="bubbles">
-              <span class="bubble warn">Maintenance</span>
+              <img alt="Visa" src="https://cdn.simpleicons.org/visa">
+              <img alt="Mastercard" src="https://cdn.simpleicons.org/mastercard">
+              <img alt="American Express" src="https://cdn.simpleicons.org/americanexpress">
             </div>
           </div>
 
           <!-- PayPal (indispo) -->
-          <div class="mcard disabled" aria-selected="false" title="Indisponible">
-            <span class="badge">Indisponible</span>
+          <div class="mcard disabled" aria-selected="false">
+            <span class="badge maintenance">Indisponible</span>
             <div class="mhead">PayPal</div>
             <div class="mlogos">
-              <img alt="PayPal" src="https://cdn.simpleicons.org/paypal" onerror="this.style.display='none'">
+              <img alt="PayPal" src="https://cdn.simpleicons.org/paypal">
             </div>
-            <div class="bubbles">
-              <span class="bubble warn">Maintenance</span>
-            </div>
+          </div>
+        </div>
+
+        <!-- Échéancier clair -->
+        <div style="margin-top:14px">
+          <div class="title" style="font-size:16px;margin-bottom:6px">Payer en plusieurs fois</div>
+          <div class="seg" role="group" aria-label="Échéancier">
+            <input id="pay1" type="radio" name="split" value="1" checked>
+            <label for="pay1">
+              <span class="lg">1 fois — <span id="p1_now">—</span></span>
+              <div class="line"><span>Aujourd’hui</span><span id="p1_l1">—</span></div>
+            </label>
+
+            <input id="pay2" type="radio" name="split" value="2">
+            <label for="pay2">
+              <span class="lg">2 fois — <span id="p2_now">—</span></span>
+              <div class="line"><span>Aujourd’hui</span><span id="p2_l1">—</span></div>
+              <div class="line"><span>Dans 30 jours</span><span id="p2_l2">—</span></div>
+            </label>
+
+            <input id="pay3" type="radio" name="split" value="3">
+            <label for="pay3">
+              <span class="lg">3 fois — <span id="p3_now">—</span></span>
+              <div class="line"><span>Aujourd’hui</span><span id="p3_l1">—</span></div>
+              <div class="line"><span>Dans 30 jours</span><span id="p3_l2">—</span></div>
+              <div class="line"><span>Dans 60 jours</span><span id="p3_l3">—</span></div>
+            </label>
           </div>
         </div>
 
         <!-- Panneau CRYPTO -->
         <div id="pmCrypto" class="pm show">
           <div class="row">
-            <div class="seg" role="group" aria-label="Échéances crypto">
-              <input id="c1" type="radio" name="csplit" value="1" checked>
-              <label for="c1"><span class="big" id="c1v">—</span><small>Aujourd'hui</small></label>
-              <input id="c2" type="radio" name="csplit" value="2">
-              <label for="c2"><span class="big" id="c2v">—</span><small>2× (0 / 30 jours)</small></label>
-              <input id="c3" type="radio" name="csplit" value="3">
-              <label for="c3"><span class="big" id="c3v">—</span><small>3× (0 / 30 / 60 jours)</small></label>
-            </div>
-
             <div class="cols-2">
               <div>
                 <label for="ccy">Monnaie</label>
@@ -268,7 +265,7 @@
                 </select>
               </div>
               <div>
-                <label for="amountNow">À régler maintenant (EUR)</label>
+                <label for="amountNow">À payer maintenant (EUR)</label>
                 <input id="amountNow" readonly value="0">
               </div>
             </div>
@@ -283,7 +280,7 @@
 
             <div class="copyline">
               <div>
-                <label for="ccyAmt">Montant à envoyer maintenant (<span id="ccyLabel">—</span>)</label>
+                <label for="ccyAmt">Montant à envoyer (<span id="ccyLabel">—</span>)</label>
                 <input id="ccyAmt" readonly>
               </div>
               <button class="copy-btn" data-copy="#ccyAmt">Copier</button>
@@ -294,27 +291,14 @@
               <input id="txid" placeholder="0x… / bc1… / TX123…" required>
             </div>
 
-            <div class="grid-2">
-              <div class="qr" aria-label="QR de paiement">QR CODE</div>
-              <div class="muted" style="align-self:center">Scannez pour pré-remplir l'adresse & le montant. Aucun frais caché. Confirmation réseaux requise.</div>
-            </div>
-
-            <button id="confirmCrypto" class="btn primary">Confirmer le paiement crypto</button>
+            <div class="qr" aria-label="QR de paiement">QR CODE</div>
+            <button id="confirmCrypto" class="btn primary">J’ai envoyé le paiement</button>
           </div>
         </div>
 
         <!-- Panneau SEPA -->
         <div id="pmSEPA" class="pm">
           <div class="row">
-            <div class="seg" role="group" aria-label="Échéances virement">
-              <input id="b1" type="radio" name="bsplit" value="1" checked>
-              <label for="b1"><span class="big" id="b1v">—</span><small>Aujourd'hui</small></label>
-              <input id="b2" type="radio" name="bsplit" value="2">
-              <label for="b2"><span class="big" id="b2v">—</span><small>2× (0 / 30 jours)</small></label>
-              <input id="b3" type="radio" name="bsplit" value="3">
-              <label for="b3"><span class="big" id="b3v">—</span><small>3× (0 / 30 / 60 jours)</small></label>
-            </div>
-
             <div class="cols-2">
               <div>
                 <label>Bénéficiaire</label>
@@ -337,13 +321,13 @@
                 <input id="vref" readonly>
               </div>
               <div>
-                <label for="amountNowBank">À régler maintenant (EUR)</label>
+                <label for="amountNowBank">À payer maintenant (EUR)</label>
                 <input id="amountNowBank" readonly value="0">
               </div>
             </div>
 
             <div class="copyline" style="margin-top:6px">
-              <div class="muted">Preuve de virement <strong>obligatoire</strong> (image/PDF)</div>
+              <div class="muted"><strong>Preuve de virement obligatoire</strong> (reçu ou capture d’écran)</div>
               <span></span>
             </div>
             <input type="file" id="proof" accept="image/*,.pdf" required>
@@ -354,13 +338,13 @@
               <button class="btn" data-copy="#vref">Copier Référence</button>
             </div>
 
-            <button id="confirmBank" class="btn primary">Confirmer le virement</button>
+            <button id="confirmBank" class="btn primary">J’ai effectué le virement</button>
           </div>
         </div>
 
         <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px">
-          <button id="placeOrder" class="btn primary">Créer la commande</button>
-          <button id="clearCart" class="btn">Vider le panier</button>
+          <button id="placeOrder" class="btn primary">Finaliser ma commande</button>
+          <a id="backShop2" class="btn" href="#">Continuer les achats</a>
         </div>
       </div>
     </section>
@@ -369,7 +353,7 @@
     <aside class="card">
       <div class="hd">
         <div class="title">Récapitulatif</div>
-        <span class="pill">Assistance & suivi</span>
+        <span class="pill">Suivi & assistance</span>
       </div>
       <div class="bd">
         <div id="miniCart" class="mini"></div>
@@ -377,16 +361,11 @@
         <div class="sum">
           <div class="sum-row"><span>Sous-total</span><span id="sub">—</span></div>
           <div class="sum-row"><span>Livraison</span><span id="ship">Gratuite</span></div>
-          <div class="sum-row"><span>Avantage méthode</span><span id="benefit">—</span></div>
+          <div class="sum-row"><span>Économie méthode de paiement</span><span id="benefit">—</span></div>
           <div class="sum-row total"><span>Total</span><span id="total">—</span></div>
-          <div class="sum-row" id="dueRow"><span class="due">À régler aujourd'hui</span><span class="due" id="dueNow">—</span></div>
-          <div id="scheduleWrap" class="schedule" style="display:none"></div>
-          <div id="saveLine" class="note" style="display:none"></div>
-        </div>
-        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-          <span class="bubble"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12l2-2 4 4 10-10 2 2L9 20z"/></svg> Livraison 7 jours</span>
-          <span class="bubble"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21c-4.97 0-9-4.03-9-9S7.03 3 12 3s9 4.03 9 9-4.03 9-9 9Zm-1-13h2v6h-2V8Zm0 8h2v2h-2v-2Z"/></svg> Retours 14 jours</span>
-          <span class="bubble"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1a4 4 0 0 0-4 4v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-2V5a4 4 0 0 0-4-4zM9 8V5a3 3 0 0 1 6 0v3z"/></svg> Paiement sécurisé</span>
+          <div class="sum-row" id="dueRow"><span class="dueBig">À payer aujourd’hui</span><span class="dueBig" id="dueNow">—</span></div>
+          <div id="schedule" class="sch" style="display:none"></div>
+          <div class="note">Livraison prioritaire sous 7 jours. Retours possibles sous 14 jours sur produits neufs.</div>
         </div>
       </div>
     </aside>
@@ -394,31 +373,34 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <footer style="background:#fff;border-top:1px solid var(--line)">
-    <div class="hwrap" style="padding:12px 12px;justify-content:space-between">
-      <div class="muted">© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
-      <nav class="muted" style="display:flex;gap:8px;flex-wrap:wrap">
-        <a id="aboutLink2">À propos</a> ·
-        <a id="cgvLink2">CGV</a> ·
-        <a id="legalLink2">Mentions légales</a> ·
-        <a id="privacyLink2">Confidentialité</a> ·
-        <a id="contactLink2">Contact</a>
+  <footer>
+    <div class="fwrap">
+      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <nav>
+        <a id="aboutLink">À propos</a> ·
+        <a id="cgvLink">CGV</a> ·
+        <a id="legalLink">Mentions légales</a> ·
+        <a id="privacyLink">Confidentialité</a> ·
+        <a id="contactLink">Contact</a>
       </nav>
     </div>
   </footer>
 
   <script>
-  (async()=>{
-    // --- Root & menu liens (GitHub Pages safe) ---
+  (()=>{
+
+    /* ---------- Liens / Header ---------- */
     const GH_ROOT=(()=>{const p=location.pathname.split('/').filter(Boolean);return (location.host.endsWith('github.io')&&p.length)?`/${p[0]}/`:'/';})();
     const link=(id,path)=>{const el=document.getElementById(id); if(el) el.href=GH_ROOT+path};
-    link('homeLink','index.html'); link('accountLink','compte/index.html'); link('backShop','index.html');
-    ['about','cgv','legal','privacy','contact'].forEach(k=>{link(k+'Link','pages/'+(k==='about'?'a-propos':k)+'.html');link(k+'Link2','pages/'+(k==='about'?'a-propos':k)+'.html');});
-    const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
-    if(menuBtn&&menuDrop){ menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')}); document.addEventListener('click',e=>{if(!menuDrop.contains(e.target)&&e.target!==menuBtn)menuDrop.classList.remove('show');}); }
+    link('homeLink','index.html'); link('aboutLink','pages/a-propos.html'); link('cgvLink','pages/cgv.html');
+    link('legalLink','pages/mentions-legales.html'); link('privacyLink','pages/confidentialite.html'); link('contactLink','pages/contact.html');
+    const goShop=()=>location.assign(GH_ROOT+'index.html');
+    const backShop=document.getElementById('backShop'); if(backShop) backShop.addEventListener('click',e=>{e.preventDefault();goShop();});
+    const backShop2=document.getElementById('backShop2'); if(backShop2) backShop2.addEventListener('click',e=>{e.preventDefault();goShop();});
 
-    // --- Helpers ---
-    const $=s=>document.querySelector(s); const $$=s=>Array.from(document.querySelectorAll(s));
+    /* ---------- Helpers ---------- */
+    const $=s=>document.querySelector(s);
+    const $$=s=>Array.from(document.querySelectorAll(s));
     const toast=msg=>{const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1500);};
     const EUR=v=>Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
     const KEY='gf_cart';
@@ -427,42 +409,77 @@
     const orderId=(()=>{const d=new Date(); const y=String(d.getFullYear()).slice(2); const mm=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); const rnd=Math.floor(Math.random()*9000)+1000; return `GF-${y}${mm}${dd}-${rnd}`;})();
     $('#orderId').textContent=orderId; $('#vref').value='GF-'+orderId;
 
-    // --- Panier -> récap ---
+    /* ---------- Mini panier ---------- */
     function computeSub(cart){ return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0); }
     function renderMini(){
       const wrap=$('#miniCart'); const cart=getCart();
-      if(!cart.length){ wrap.innerHTML='<div class="muted">Votre panier est vide.</div>'; $('#sub').textContent='—'; $('#benefit').textContent='—'; $('#total').textContent='—'; $('#dueRow').style.display='none'; $('#scheduleWrap').style.display='none'; $('#saveLine').style.display='none'; return; }
+      if(!cart.length){ wrap.innerHTML='<div class="muted">Votre panier est vide.</div>'; $('#sub').textContent='—'; $('#benefit').textContent='—'; $('#total').textContent='—'; $('#dueNow').textContent='—'; $('#schedule').style.display='none'; return; }
       wrap.innerHTML=cart.map(x=>`
         <div class="ci">
-          <img src="${x.image||''}" alt="${x.name||''}" onerror="this.style.visibility='hidden'">
+          <img src="${x.image||''}" alt="${x.name||''}">
           <div><div style="font-weight:700">${x.name||''}</div><div class="muted" style="font-size:12px">${x.brand||''} ${x.category?('• '+x.category):''}</div></div>
           <div style="font-weight:800">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
         </div>`).join('');
     }
 
-    // --- Paiement : taux/avantages ---
-    function currentPM(){ return document.querySelector('.mcard[role="tab"][aria-selected="true"]')?.dataset.method || 'crypto'; }
+    /* ---------- Paiement : avantage ---------- */
+    function currentPM(){ return document.querySelector('.mcard[aria-selected="true"]')?.dataset.method || 'crypto'; }
     function benefitRate(){ return currentPM()==='crypto'?0.02 : currentPM()==='sepa'?0.01 : 0; }
 
-    // --- FX mock pour crypto (montant à envoyer) ---
+    /* ---------- FX mock pour crypto ---------- */
     const fx={'USDT-TRC20':{symbol:'USDT',rate:1},'USDT-ERC20':{symbol:'USDT',rate:1},'BTC':{symbol:'BTC',rate:60000},'ETH':{symbol:'ETH',rate:3000}};
     function setCryptoAddress(ccy){
       const map={'USDT-TRC20':'TQf3k7s9h2x4y5z6a7b8c9d0e1f2g3h4i','USDT-ERC20':'0x3Fb8b7E6cA9f4D2E1b0C9a8F7e6D5c4B3a2F1E0','BTC':'bc1q9v8w7x6y5z4a3b2c1d0e9f8g7h6j5k4l3m2n','ETH':'0x9eF2B3cD4a5E6f7B8c9D0E1F2A3b4C5d6E7f8A9B'};
-      $('#wallet').value=map[ccy]||'';
-      $('#ccyLabel').textContent=fx[ccy]?.symbol||'';
+      $('#wallet').value=map[ccy]||''; $('#ccyLabel').textContent=fx[ccy]?.symbol||'';
     }
 
-    // --- Échéancier (affichage clair) ---
+    /* ---------- Échéancier lisible ---------- */
     function splitAmounts(total, parts){
-      const cents=Math.round(total*100); const base=Math.floor(cents/parts); const first=base + (cents - base*parts);
-      const arr=[first]; for(let i=1;i<parts;i++) arr.push(base); return arr.map(c=>c/100);
+      const cents=Math.round(total*100);
+      const base=Math.floor(cents/parts);
+      const first=base + (cents - base*parts);
+      const arr=[first]; for(let i=1;i<parts;i++) arr.push(base);
+      return arr.map(c=>c/100);
     }
-    function scheduleList(total, parts){
-      const amts=splitAmounts(total,parts); const today=new Date(); const steps=[0,30,60];
-      return amts.map((amt,i)=>{ const d=new Date(today); d.setDate(d.getDate()+steps[i]); return {label: i===0?"Aujourd'hui": (i===1?'Dans 30 jours':'Dans 60 jours'), date: d.toLocaleDateString('fr-FR'), amt}; });
+    function scheduleLines(total, parts){
+      const amts=splitAmounts(total,parts);
+      const now=new Date();
+      const steps=[0,30,60];
+      const lines=[];
+      for(let i=0;i<parts;i++){
+        const d=new Date(now); d.setDate(d.getDate()+steps[i]);
+        const label=i===0?'Aujourd’hui':(i===1?'Dans 30 jours':'Dans 60 jours');
+        lines.push({label, date:d.toLocaleDateString('fr-FR'), amt:amts[i]});
+      }
+      return lines;
     }
 
-    // --- Mise à jour récap global ---
+    function fillInstallmentTiles(total){
+      // 1x
+      const l1=scheduleLines(total,1);
+      $('#p1_now').textContent=EUR(l1[0].amt);
+      $('#p1_l1').textContent=EUR(l1[0].amt);
+      // 2x
+      const l2=scheduleLines(total,2);
+      $('#p2_now').textContent=EUR(l2[0].amt);
+      $('#p2_l1').textContent=EUR(l2[0].amt);
+      $('#p2_l2').textContent=EUR(l2[1].amt);
+      // 3x
+      const l3=scheduleLines(total,3);
+      $('#p3_now').textContent=EUR(l3[0].amt);
+      $('#p3_l1').textContent=EUR(l3[0].amt);
+      $('#p3_l2').textContent=EUR(l3[1].amt);
+      $('#p3_l3').textContent=EUR(l3[2].amt);
+    }
+
+    function renderScheduleBox(total, parts){
+      const box=$('#schedule');
+      const lines=scheduleLines(total, parts);
+      box.style.display='block';
+      box.innerHTML = lines.map(l=>`<div><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
+    }
+
+    /* ---------- Recap update ---------- */
     const SHIPPING=0;
     function updateSummary(){
       const cart=getCart(); if(!cart.length){ renderMini(); return; }
@@ -470,51 +487,39 @@
       const benefit=sub*benefitRate();
       const total=Math.max(0, sub + SHIPPING - benefit);
 
-      // Sélections
-      const pm=currentPM();
-      const parts = Number((pm==='crypto'?document.querySelector('input[name="csplit"]:checked'):document.querySelector('input[name="bsplit"]:checked'))?.value || 1);
+      const parts = Number(document.querySelector('input[name="split"]:checked')?.value || 1);
       const amts=splitAmounts(total,parts);
       const dueNow=amts[0];
 
-      // Inject résumé
+      // Inject
       $('#sub').textContent=EUR(sub);
-      $('#benefit').textContent= benefit>0 ? '–'+EUR(benefit) : '—';
+      $('#benefit').textContent= (benefit>0? '–'+EUR(benefit) : '—');
       $('#total').textContent=EUR(total);
-      $('#dueRow').style.display='flex';
       $('#dueNow').textContent=EUR(dueNow);
 
-      // Schedule liste claire
-      const sched= scheduleList(total, parts);
-      const wrap=$('#scheduleWrap'); wrap.style.display='grid';
-      wrap.innerHTML = sched.map(s=>`<div class="sum-row"><span>${s.label} • ${s.date}</span><span>${EUR(s.amt)}</span></div>`).join('');
-
-      // Ligne d'économie visible
-      const saveLine=$('#saveLine');
-      if(benefit>0){ saveLine.style.display='block'; saveLine.textContent = `Vous économisez ${EUR(benefit)} avec ce mode de paiement.`; } else { saveLine.style.display='none'; }
+      // Échéancier clair
+      renderScheduleBox(total, parts);
+      // Remplir les tuiles (pour que les montants affichés dans les options soient justes)
+      fillInstallmentTiles(total);
 
       // Miroir vers panneaux
-      if(pm==='crypto'){
+      if(currentPM()==='crypto'){
         $('#amountNow').value = dueNow.toFixed(2);
-        const ccy=$('#ccy').value; const r=fx[ccy]?.rate||1; const amt=(dueNow/r);
+        const ccy=$('#ccy').value; const r=fx[ccy]?.rate||1;
+        const amt=(dueNow/r);
         $('#ccyAmt').value = (amt>0?amt:0).toFixed(6).replace(/0+$/,'').replace(/\.$/,'');
-      }
-      if(pm==='sepa'){ $('#amountNowBank').value = dueNow.toFixed(2); }
 
-      // Cartes “Klarna-like” : chiffres visibles directement
-      const labels=[['#c1v','#c2v','#c3v'],['#b1v','#b2v','#b3v']];
-      const pretty=(parts,amts)=>{
-        if(parts===1) return [EUR(total), '', ''];
-        if(parts===2) return [`Aujourd'hui: ${EUR(amts[0])}`, `Puis: ${EUR(amts[1])}`,''];
-        return [`Aujourd'hui: ${EUR(amts[0])}`, `${EUR(amts[1])}`, `${EUR(amts[2])}`];
-      };
-      const vals=pretty(parts,amts);
-      ['#c1v','#c2v','#c3v','#b1v','#b2v','#b3v'].forEach((id,i)=>{ const idx=i%3; const set = i<3 ? vals : vals; const el=$(id); if(el) el.textContent = set[idx]||'—'; });
+      }else{
+        $('#amountNowBank').value = dueNow.toFixed(2);
+      }
     }
 
-    // --- Rendu initial mini panier
+    /* ---------- Initial render ---------- */
     renderMini(); updateSummary();
+    // focus: set crypto address & label
+    setCryptoAddress($('#ccy').value);
 
-    // --- Interactions ---
+    /* ---------- Interactions ---------- */
     // Choix méthode
     $$('.mcard[role="tab"]').forEach(card=>{
       card.addEventListener('click', ()=>{
@@ -525,19 +530,16 @@
         updateSummary();
       });
     });
+
     // Échéances
-    $$('input[name="csplit"]').forEach(r=>r.addEventListener('change', updateSummary));
-    $$('input[name="bsplit"]').forEach(r=>r.addEventListener('change', updateSummary));
+    $$('input[name="split"]').forEach(r=>r.addEventListener('change', updateSummary));
+
     // Crypto ccy
     $('#ccy').addEventListener('change', ()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
-    setCryptoAddress($('#ccy').value);
 
     // Copier
     const copySel=sel=>{const el=$(sel); if(!el) return; const txt=el.value||''; if(navigator.clipboard?.writeText){navigator.clipboard.writeText(txt).then(()=>toast('Copié'));} else {el.select(); document.execCommand('copy'); toast('Copié');}};
     $$('[data-copy]').forEach(b=>b.addEventListener('click',()=>copySel(b.getAttribute('data-copy'))));
-
-    // Vider panier
-    $('#clearCart').addEventListener('click',()=>{ if(!confirm('Vider votre panier ?')) return; setCart([]); renderMini(); updateSummary(); });
 
     // Validation adresse minimum
     function validateAddress(){
@@ -550,7 +552,7 @@
     $('#confirmCrypto').addEventListener('click', ()=>{
       if(!validateAddress()) return;
       if(!$('#txid').value.trim()){ $('#txid').focus(); toast('TxID requis.'); return; }
-      toast('Paiement crypto enregistré — validation en cours');
+      toast('Paiement crypto signalé — vérification en cours');
     });
 
     // Confirmer SEPA (preuve obligatoire)
@@ -560,7 +562,7 @@
       toast('Preuve envoyée — vérification en cours');
     });
 
-    // Créer la commande (simulation locale)
+    // Créer la commande
     $('#placeOrder').addEventListener('click', ()=>{
       if(!validateAddress()) return;
       const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
@@ -569,12 +571,13 @@
       if(pm==='sepa' && !$('#proof').files.length){ $('#proof').focus(); toast('Preuve de virement requise.'); return; }
 
       const sub=computeSub(cart), benefit=sub*benefitRate(), total=Math.max(0, sub - benefit);
-      const parts = Number((pm==='crypto'?document.querySelector('input[name="csplit"]:checked'):document.querySelector('input[name="bsplit"]:checked'))?.value || 1);
+      const parts = Number(document.querySelector('input[name="split"]:checked')?.value || 1);
       const order={
         id:orderId, date:new Date().toISOString(), status:'En préparation',
         items:cart, pricing:{sub,ship:0,benefit,total,currency:'EUR'},
         shipping:{name:$('#name').value,email:$('#email').value,phone:$('#phone').value,address:$('#address').value,city:$('#city').value,zip:$('#zip').value,country:$('#country').value},
-        payment:{ method:pm, split:parts,
+        payment:{
+          method:pm, split:parts,
           details: pm==='crypto'
             ? {ccy:$('#ccy').value,address:$('#wallet').value,txid:$('#txid').value,amountNow:$('#amountNow').value}
             : {iban:$('#iban').value,ref:$('#vref').value,amountNow:$('#amountNowBank').value}
@@ -584,8 +587,6 @@
       setCart([]); toast('Commande '+orderId+' créée'); setTimeout(()=>location.replace(GH_ROOT+'compte/index.html'), 900);
     });
 
-    // Init
-    updateSummary();
   })();
   </script>
 </body>
