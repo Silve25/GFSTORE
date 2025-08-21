@@ -1,577 +1,586 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Paiement — GF Store</title>
-  <meta name="description" content="Paiement sécurisé GF Store. Crypto et Virement disponibles. Carte & PayPal temporairement en maintenance.">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Finaliser ma commande — GF Store (refonte)</title>
   <style>
+    /* ===== Design tokens (sobre, accessible) ===== */
     :root{
-      --w:1200px; --c:#0f172a; --muted:#6b7280; --a:#2563eb; --ok:#16a34a; --warn:#b45309; --line:#e5e7eb; --bg:#f5f7fb; --card:#fff;
-      --r:14px; --shadow:0 6px 18px rgba(15,23,42,.06);
+      --w:1200px; --bg:#f6f8fb; --card:#ffffff; --text:#0b1324; --muted:#5b667a; --line:#e6e8ee;
+      --primary:#1e3a8a; --primary-2:#2563eb; --success:#0ea5e9; --ok:#10b981; --warning:#f59e0b; --danger:#dc2626;
+      --r:16px; --shadow:0 6px 18px rgba(16,24,40,.06);
     }
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--c);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu}
+    html,body{height:100%}
+    body{margin:0;font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--text);background:var(--bg)}
     a{color:inherit;text-decoration:none}
+    .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
 
-    header{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(4px)}
+    /* ===== Header ===== */
+    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(4px)}
     .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
-    .brand .logo{height:34px;width:auto;display:block}
-    .nav{display:flex;gap:8px;align-items:center}
-    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);background:#fff;border-radius:12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
-    .iconbtn{cursor:pointer}
-    .ic{width:16px;height:16px;display:inline-block}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .brand .logo{height:40px;width:auto;display:block}
+    .nav{display:flex;gap:10px;align-items:center}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);background:#fff;border-radius:12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
+    .ic{width:18px;height:18px;display:inline-block}
 
-    .wrap{max-width:var(--w);margin:12px auto 24px;padding:0 12px}
-    .grid{display:grid;gap:14px}
-    @media(min-width:980px){.grid{grid-template-columns:1.1fr .9fr}}
+    /* ===== Layout ===== */
+    .wrap{max-width:var(--w);margin:14px auto 28px;padding:0 12px;display:grid;gap:16px;grid-template-columns:1.1fr .9fr}
+    @media (max-width:980px){.wrap{grid-template-columns:1fr}}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+    .hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+    .title{font-weight:900;font-size:18px}
+    .sub{color:var(--muted);font-size:13px}
+    .bd{padding:16px}
 
-    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-    .card .hd{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-    .card .bd{padding:14px 16px}
-    .title{font-weight:800}
-    .muted{color:var(--muted);font-size:12px}
+    /* ===== Formes (plus grandes) ===== */
+    form{display:grid;gap:12px}
+    .row{display:grid;gap:12px}
+    .cols-2{grid-template-columns:1fr 1fr}
+    @media (max-width:760px){.cols-2{grid-template-columns:1fr}}
+    label{display:block;font-weight:700;margin:4px 0}
+    .req::after{content:" *";color:var(--danger)}
+    input,select{width:100%;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfdff;font-size:16px}
+    input:focus,select:focus{outline:3px solid rgba(37,99,235,.18);box-shadow:0 8px 22px rgba(37,99,235,.08)}
 
-    .row{display:grid;gap:10px}
-    @media(min-width:680px){.row.cols-2{grid-template-columns:1fr 1fr}}
-    label{font-weight:600}
-    input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}
-    input:focus,select:focus,textarea:focus{outline:2px solid rgba(37,99,235,.25)}
+    /* ===== Mode de paiement (cartes + bulles en bas) ===== */
+    .methods{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    @media (max-width:980px){.methods{grid-template-columns:1fr}}
+    .mcard{position:relative;border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px;display:grid;grid-template-rows:auto auto 1fr auto;gap:8px;cursor:pointer;transition:box-shadow .12s ease,transform .06s}
+    .mcard:hover{box-shadow:0 10px 24px rgba(0,0,0,.06);transform:translateY(-1px)}
+    .mcard[aria-selected="true"]{border:2px solid var(--primary-2);box-shadow:0 12px 30px rgba(37,99,235,.12)}
+    .mhead{display:flex;align-items:center;gap:8px;font-weight:800}
+    .mcopy{font-size:13px;color:var(--muted)}
+    .mfooter{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-start}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f0f9ff;border:1px solid #bae6fd;font-size:12px;color:#0369a1}
 
-    .method-list{display:grid;gap:10px}
-    @media(min-width:680px){.method-list{grid-template-columns:repeat(4,1fr)}}
-    .method{position:relative;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px;display:flex;flex-direction:column;gap:10px}
-    .method[aria-selected="true"]{border-color:var(--a);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
-    .m-logos{display:flex;gap:8px;align-items:center;min-height:22px}
-    .m-logos img{height:18px}
-    .m-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:6px}
-    .badge{border:1px solid #e8eef9;border-radius:999px;padding:4px 8px;font-size:11px;background:#f7faff;color:#1f2a44}
-    .badge.ok{border-color:#c8f3d0;background:#f1fdf4;color:#166534}
-    .badge.warn{border-color:#ffe0b3;background:#fff7e6;color:#9a5b00}
-    .pick{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;cursor:pointer;font-weight:700}
-    .pick.primary{background:linear-gradient(180deg,#2563eb,#1e40af);border-color:#1e40af;color:#fff}
+    /* ===== Panneaux paiement (progressif) ===== */
+    .pm{display:none;margin-top:12px;border:1px dashed var(--line);border-radius:12px;background:#fbfdff;padding:12px}
+    .pm.show{display:block}
 
-    .panel{display:none}
-    .panel.show{display:block}
+    /* ===== Choix d'échéances (Klarna-like) ===== */
+    .splits{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+    @media (max-width:620px){.splits{grid-template-columns:1fr}}
+    .split{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;display:flex;flex-direction:column;gap:6px;cursor:pointer}
+    .split:hover{box-shadow:0 8px 22px rgba(0,0,0,.06)}
+    .split[aria-checked="true"]{border:2px solid var(--primary-2);box-shadow:0 0 0 4px rgba(37,99,235,.10);background:#f8fbff}
+    .split strong{font-size:16px}
+    .split .note{font-size:12px;color:var(--muted)}
 
-    .subtle{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
+    /* ===== Timeline échéancier ===== */
+    .timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+    @media (max-width:620px){.timeline{grid-template-columns:1fr}}
+    .step{display:flex;align-items:center;gap:10px;border:1px dashed var(--line);border-radius:12px;padding:10px;background:#fff}
+    .dot{min-width:36px;height:36px;border-radius:999px;background:#eef2ff;border:2px solid var(--primary-2);display:grid;place-items:center;font-weight:800}
+    .smeta{font-size:12px;color:var(--muted)}
 
-    .options{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{border:1px solid var(--line);border-radius:999px;padding:6px 10px;cursor:pointer}
-    .chip[aria-checked="true"]{border-color:var(--a);background:#f5f8ff}
+    /* ===== Résumé ===== */
+    .mini{display:flex;flex-direction:column;gap:10px}
+    .ci{display:grid;grid-template-columns:60px 1fr auto;gap:8px}
+    .ci img{width:60px;height:60px;object-fit:cover;border:1px solid var(--line);border-radius:10px;background:#f8fafc}
+    .sum{display:grid;gap:10px;margin-top:10px}
+    .sum-row{display:flex;align-items:center;justify-content:space-between}
+    .total{font-size:22px;font-weight:900}
+    .due{font-weight:900}
+    .help{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:13px;color:#0f766e}
 
-    .copyline{display:grid;grid-template-columns:1fr auto;gap:8px}
-    .copybtn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;cursor:pointer;font-weight:700}
-    .qr{display:grid;place-items:center;height:180px;border:1px dashed #dbe4f3;border-radius:12px;background:#f7faff;color:#6b7280}
-
-    .schedule{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-    .schedule th,.schedule td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left}
-    .schedule tr:last-child td{border-bottom:none}
-    .sched-mobile{display:none}
-    @media(max-width:640px){
-      .brand .logo{height:22px}
-      .schedule{display:none}
-      .sched-mobile{display:grid;gap:6px}
-      .sched-item{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:#fff}
-      .method-list{grid-template-columns:1fr 1fr}
-    }
-
-    .summary-list{display:grid;gap:8px}
-    .sum-row{display:flex;justify-content:space-between;align-items:center}
-    .total{font-size:16px;font-weight:800}
-    .hint{font-size:12px;color:var(--muted)}
-
+    /* ===== Boutons ===== */
     .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:800}
-    .btn.primary{background:linear-gradient(180deg,#2563eb,#1e40af);border-color:#1e40af;color:#fff}
+    .btn.primary{background:linear-gradient(180deg,#2563eb,#1e40af);border:1px solid #1e40af;color:#fff;box-shadow:0 10px 24px rgba(30,64,175,.25)}
     .btn:disabled{opacity:.6;cursor:not-allowed}
 
-    .ok{border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;padding:10px;display:none}
-    .err{border:1px solid #fecaca;background:#fef2f2;color:#991b1b;border-radius:12px;padding:10px;display:none}
+    /* ===== Toast ===== */
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#111;color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:9999}
+    .toast.show{display:block}
 
-    footer{background:#fff;border-top:1px solid var(--line)}
-    .fwrap{max-width:var(--w);margin:0 auto;padding:14px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
-    .fwrap a{opacity:.9}
+    footer{background:#fff;border-top:1px solid var(--line);margin-top:16px}
+    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
+
+    /* Reduce motion for people who prefer it */
+    @media (prefers-reduced-motion:reduce){
+      *{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+    }
   </style>
 </head>
 <body>
   <header>
     <div class="hwrap">
-      <a href="./index.html" class="brand">
-        <img src="./assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
+      <a id="homeLink" class="brand" aria-label="Accueil">
+        <img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
       <nav class="nav">
-        <a href="./compte/index.html"><img class="ic" id="icUser" alt=""> Compte</a>
-        <a href="./checkout.html" class="iconbtn"><img id="cartIcon" class="ic" alt=""> Panier</a>
-        <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
+        <a id="accountLink"><img class="ic" id="icUser" alt=""> Compte</a>
+        <a id="backShop"><img class="ic" id="icShop" alt=""> Continuer mes achats</a>
       </nav>
     </div>
   </header>
 
-  <main class="wrap">
-    <div class="grid">
-      <!-- Colonne gauche : Infos & Paiement -->
-      <section class="card">
-        <div class="hd">
-          <div class="title">Informations & Paiement</div>
-          <span class="subtle"><img class="ic" id="icSSL" alt=""> Paiement sécurisé</span>
+  <main class="wrap" aria-live="polite">
+    <!-- Colonne gauche -->
+    <section class="card" aria-labelledby="h-pay">
+      <div class="hd">
+        <div>
+          <div id="h-pay" class="title">Paiement sécurisé <span id="orderId" class="sub" style="margin-left:8px"></span></div>
+          <div class="sub">Livraison prioritaire sous 1 semaine • Retours 14 jours • Assistance réactive</div>
         </div>
-        <div class="bd">
-          <div class="row cols-2">
+        <span class="pill" title="Connexion sécurisée">SSL actif</span>
+      </div>
+      <div class="bd">
+        <!-- Adresse -->
+        <form id="addrForm" class="row cols-2" novalidate>
+          <div>
+            <label for="name" class="req">Nom complet</label>
+            <input id="name" placeholder="Prénom Nom" required>
+          </div>
+          <div>
+            <label for="email" class="req">Email</label>
+            <input id="email" type="email" placeholder="vous@example.com" required>
+          </div>
+          <div>
+            <label for="phone">Téléphone (optionnel)</label>
+            <input id="phone" inputmode="tel" placeholder="+33 6 12 34 56 78">
+          </div>
+          <div>
+            <label for="country">Pays</label>
+            <input id="country" list="countries" placeholder="France">
+            <datalist id="countries">
+              <option value="France"/><option value="Belgique"/><option value="Suisse"/><option value="Luxembourg"/>
+              <option value="Espagne"/><option value="Italie"/><option value="Allemagne"/><option value="Pays-Bas"/>
+              <option value="Portugal"/><option value="Royaume-Uni"/>
+            </datalist>
+          </div>
+          <div>
+            <label for="address" class="req">Adresse</label>
+            <input id="address" placeholder="10 Avenue de l’Europe" required>
+          </div>
+          <div class="cols-2">
             <div>
-              <label>Prénom</label>
-              <input id="firstName" autocomplete="given-name" placeholder="Ex : Marie" required>
+              <label for="city" class="req">Ville</label>
+              <input id="city" placeholder="Paris" required>
             </div>
             <div>
-              <label>Nom</label>
-              <input id="lastName" autocomplete="family-name" placeholder="Ex : Durand" required>
-            </div>
-            <div>
-              <label>Email</label>
-              <input id="email" type="email" autocomplete="email" placeholder="vous@exemple.com" required>
-            </div>
-            <div>
-              <label>Téléphone</label>
-              <input id="phone" autocomplete="tel" placeholder="+33 6 12 34 56 78" required>
+              <label for="zip" class="req">Code postal</label>
+              <input id="zip" inputmode="numeric" placeholder="75008" required>
             </div>
           </div>
+        </form>
 
-          <div class="row cols-2" style="margin-top:10px">
-            <div>
-              <label>Adresse</label>
-              <input id="addr" autocomplete="address-line1" placeholder="10 rue des Lilas" required>
-            </div>
-            <div>
-              <label>Complément (facultatif)</label>
-              <input id="addr2" autocomplete="address-line2" placeholder="Bâtiment, étage, etc.">
-            </div>
-            <div>
-              <label>Ville</label>
-              <input id="city" autocomplete="address-level2" placeholder="Paris" required>
-            </div>
-            <div>
-              <label>Code postal</label>
-              <input id="zip" autocomplete="postal-code" placeholder="75001" required>
-            </div>
-            <div>
-              <label>Pays</label>
-              <select id="country" autocomplete="country" required>
-                <option>France</option>
-                <option>Belgique</option>
-                <option>Suisse</option>
-                <option>Luxembourg</option>
-                <option>Espagne</option>
-                <option>Italie</option>
-                <option>Allemagne</option>
-              </select>
-            </div>
-            <div>
-              <label>Livraison</label>
-              <select id="shipping" required>
-                <option value="0">Standard — Gratuit (≤ 7 jours)</option>
-                <option value="9.9">Express — 9,90 € (2–4 jours)</option>
-              </select>
-            </div>
-          </div>
+        <!-- Mode de paiement -->
+        <div style="margin:14px 0 6px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <div class="title" style="font-size:16px">Mode de paiement</div>
+          <span class="sub">Choisissez et vérifiez le montant dû aujourd’hui</span>
+        </div>
 
-          <hr style="margin:14px 0;border:none;border-top:1px dashed var(--line)">
-
-          <!-- Méthodes -->
-          <div class="title" style="margin-bottom:8px">Méthode de paiement</div>
-          <div class="method-list" id="methods" role="tablist">
-            <div class="method" role="tab" aria-selected="true" data-method="crypto">
-              <div class="m-logos">
-                <img src="https://cdn.simpleicons.org/bitcoin" alt="Bitcoin">
-                <img src="https://cdn.simpleicons.org/ethereum" alt="Ethereum">
-                <img src="https://cdn.simpleicons.org/tether" alt="USDT">
+        <div class="methods" role="tablist">
+          <!-- Crypto -->
+          <button class="mcard" role="tab" aria-selected="true" data-method="crypto" aria-controls="pmCrypto" id="tab-crypto">
+            <div class="mhead">Crypto (USDT, BTC, ETH)</div>
+            <div class="mcopy">Rapide et pratique. Nous validons votre paiement dès détection du TxID.</div>
+            <div class="splits" role="radiogroup" aria-label="Échéances crypto">
+              <div class="split" role="radio" aria-checked="true" data-split="1">
+                <strong>En une fois</strong>
+                <div class="note">À payer aujourd’hui : <span class="now-1">—</span></div>
               </div>
-              <div class="muted">Envoi sur adresse affichée. Confirmation rapide.</div>
-              <div class="m-foot">
-                <span class="badge ok">Frais 0 €</span>
-                <button class="pick primary" type="button">Choisir</button>
+              <div class="split" role="radio" aria-checked="false" data-split="2">
+                <strong>En 2 fois</strong>
+                <div class="note">Aujourd’hui : <span class="now-2">—</span> • puis J+30</div>
               </div>
-            </div>
-
-            <div class="method" role="tab" aria-selected="false" data-method="bank">
-              <div class="m-logos">
-                <img src="https://cdn.simpleicons.org/sepa" alt="SEPA">
-                <img src="https://cdn.simpleicons.org/iban" alt="IBAN">
-              </div>
-              <div class="muted">Virement SEPA. Référence à indiquer obligatoire.</div>
-              <div class="m-foot">
-                <span class="badge ok">Frais 0 €</span>
-                <button class="pick" type="button">Choisir</button>
+              <div class="split" role="radio" aria-checked="false" data-split="3">
+                <strong>En 3 fois</strong>
+                <div class="note">Aujourd’hui : <span class="now-3">—</span> • J+30 • J+60</div>
               </div>
             </div>
+            <div class="mfooter">
+              <span class="pill">Frais réduits</span>
+              <span class="pill">Validation rapide</span>
+              <span class="pill">Assistance humaine</span>
+            </div>
+          </button>
 
-            <div class="method" role="tab" aria-selected="false" data-method="card" aria-disabled="true">
-              <div class="m-logos">
-                <img src="https://cdn.simpleicons.org/visa" alt="Visa">
-                <img src="https://cdn.simpleicons.org/mastercard" alt="Mastercard">
+          <!-- SEPA -->
+          <button class="mcard" role="tab" aria-selected="false" data-method="sepa" aria-controls="pmSEPA" id="tab-sepa">
+            <div class="mhead">Virement bancaire SEPA</div>
+            <div class="mcopy">Sécurisé depuis votre banque. Référence obligatoire pour lier votre virement.</div>
+            <div class="splits" role="radiogroup" aria-label="Échéances virement">
+              <div class="split" role="radio" aria-checked="true" data-split="1">
+                <strong>En une fois</strong>
+                <div class="note">À payer aujourd’hui : <span class="nowb-1">—</span></div>
               </div>
-              <div class="muted">Indisponible pour le moment.</div>
-              <div class="m-foot">
-                <span class="badge warn">Maintenance</span>
-                <button class="pick" type="button" disabled>Indispo</button>
+              <div class="split" role="radio" aria-checked="false" data-split="2">
+                <strong>En 2 fois</strong>
+                <div class="note">Aujourd’hui : <span class="nowb-2">—</span> • puis J+30</div>
+              </div>
+              <div class="split" role="radio" aria-checked="false" data-split="3">
+                <strong>En 3 fois</strong>
+                <div class="note">Aujourd’hui : <span class="nowb-3">—</span> • J+30 • J+60</div>
               </div>
             </div>
-
-            <div class="method" role="tab" aria-selected="false" data-method="paypal" aria-disabled="true">
-              <div class="m-logos">
-                <img src="https://cdn.simpleicons.org/paypal" alt="PayPal">
-              </div>
-              <div class="muted">Indisponible pour le moment.</div>
-              <div class="m-foot">
-                <span class="badge warn">Maintenance</span>
-                <button class="pick" type="button" disabled>Indispo</button>
-              </div>
+            <div class="mfooter">
+              <span class="pill">Référence de paiement fournie</span>
+              <span class="pill">Suivi et confirmation</span>
             </div>
-          </div>
+          </button>
+        </div>
 
-          <!-- PANELS -->
-          <div id="panel-crypto" class="panel show" style="margin-top:12px">
-            <div class="row cols-2">
+        <!-- Panneau CRYPTO -->
+        <div id="pmCrypto" class="pm show" aria-labelledby="tab-crypto">
+          <div class="row">
+            <div class="cols-2">
               <div>
-                <label>Réseau / monnaie</label>
+                <label for="ccy">Monnaie</label>
                 <select id="ccy">
-                  <option value="USDT-TRC20">USDT (TRC20)</option>
+                  <option value="USDT-TRC20" selected>USDT (TRC20)</option>
                   <option value="USDT-ERC20">USDT (ERC20)</option>
                   <option value="BTC">Bitcoin (BTC)</option>
                   <option value="ETH">Ethereum (ETH)</option>
                 </select>
               </div>
               <div>
-                <label>Montant à envoyer (<span id="ccyLabel">USDT</span>)</label>
-                <input id="amountCcy" readonly>
-              </div>
-              <div class="copyline" style="grid-column:1/-1">
-                <div>
-                  <label>Adresse de paiement</label>
-                  <input id="wallet" readonly value="TQf3k7s9h2x4y5z6a7b8c9d0e1f2g3h4i">
-                </div>
-                <button class="copybtn" data-copy="#wallet" type="button">Copier</button>
-              </div>
-              <div class="row" style="grid-column:1/-1">
-                <div class="qr" aria-label="QR Code">QR CODE</div>
-                <div class="hint">Scannez pour préremplir l’adresse et le montant.</div>
+                <label for="amountNow">À payer aujourd’hui (EUR)</label>
+                <input id="amountNow" readonly value="0">
               </div>
             </div>
 
-            <div style="margin-top:10px">
-              <div class="title" style="font-size:14px;margin-bottom:6px">Paiement en plusieurs fois (0 % frais)</div>
-              <div class="options" id="inst-crypto" role="radiogroup" aria-label="Échéances crypto">
-                <button class="chip" data-n="1" aria-checked="true">1 fois</button>
-                <button class="chip" data-n="3">3 fois</button>
-                <button class="chip" data-n="4">4 fois</button>
-              </div>
-            </div>
+            <div class="timeline" id="tlCrypto" aria-live="polite"></div>
 
-            <div class="row cols-2" style="margin-top:10px">
+            <div class="row">
               <div>
-                <label>Identifiant de transaction (hash)</label>
-                <input id="txid" placeholder="Ex : 0x… / TXID" required>
+                <label for="wallet">Adresse de paiement</label>
+                <div style="display:grid;grid-template-columns:1fr auto;gap:8px">
+                  <input id="wallet" readonly>
+                  <button class="btn" data-copy="#wallet">Copier</button>
+                </div>
               </div>
               <div>
-                <label>Preuve de paiement (image / PDF) — obligatoire</label>
-                <input id="proofCrypto" type="file" accept="image/*,.pdf" required>
-              </div>
-            </div>
-          </div>
-
-          <div id="panel-bank" class="panel" style="margin-top:12px">
-            <div class="row cols-2">
-              <div class="copyline">
-                <div>
-                  <label>Bénéficiaire</label>
-                  <input id="benef" value="GF STORE" readonly>
+                <label for="ccyAmt">Montant à envoyer maintenant (<span id="ccyLabel">—</span>)</label>
+                <div style="display:grid;grid-template-columns:1fr auto;gap:8px">
+                  <input id="ccyAmt" readonly>
+                  <button class="btn" data-copy="#ccyAmt">Copier</button>
                 </div>
-                <button class="copybtn" data-copy="#benef" type="button">Copier</button>
-              </div>
-              <div class="copyline">
-                <div>
-                  <label>Banque</label>
-                  <input id="bankname" value="Bank Europe Demo" readonly>
-                </div>
-                <button class="copybtn" data-copy="#bankname" type="button">Copier</button>
-              </div>
-              <div class="copyline">
-                <div>
-                  <label>IBAN / Compte</label>
-                  <input id="iban" value="FR76 3000 6000 0112 3456 7890 189" readonly>
-                </div>
-                <button class="copybtn" data-copy="#iban" type="button">Copier</button>
-              </div>
-              <div class="copyline">
-                <div>
-                  <label>SWIFT/BIC</label>
-                  <input id="swift" value="DIBLFRPP" readonly>
-                </div>
-                <button class="copybtn" data-copy="#swift" type="button">Copier</button>
-              </div>
-              <div class="copyline" style="grid-column:1/-1">
-                <div>
-                  <label>Référence à indiquer</label>
-                  <input id="payref" value="GF-" readonly>
-                </div>
-                <button class="copybtn" data-copy="#payref" type="button">Copier</button>
               </div>
             </div>
 
-            <div style="margin-top:10px">
-              <div class="title" style="font-size:14px;margin-bottom:6px">Paiement en plusieurs virements (0 % frais)</div>
-              <div class="options" id="inst-bank" role="radiogroup" aria-label="Échéances virement">
-                <button class="chip" data-n="1" aria-checked="true">1 fois</button>
-                <button class="chip" data-n="2">2 fois</button>
-                <button class="chip" data-n="3">3 fois</button>
-                <button class="chip" data-n="4">4 fois</button>
-              </div>
+            <div>
+              <label for="txid" class="req">Identifiant de transaction (TxID / Hash)</label>
+              <input id="txid" placeholder="0x… / bc1… / TX123…" required>
             </div>
 
-            <div class="row cols-2" style="margin-top:10px">
-              <div>
-                <label>Preuve de virement (obligatoire)</label>
-                <input id="proofBank" type="file" accept="image/*,.pdf" required>
-              </div>
-              <div>
-                <label>Commentaire (facultatif)</label>
-                <input id="bankNote" placeholder="Ex : Virement effectué via banque X">
-              </div>
-            </div>
-          </div>
-
-          <div class="ok" id="ok"></div>
-          <div class="err" id="err"></div>
-        </div>
-      </section>
-
-      <!-- Colonne droite : Récap -->
-      <aside class="card">
-        <div class="hd">
-          <div class="title">Récapitulatif commande</div>
-          <span class="badge">Livraison sous 7 jours</span>
-        </div>
-        <div class="bd">
-          <div id="cartList" class="summary-list"></div>
-          <hr style="border:none;border-top:1px dashed var(--line);margin:10px 0">
-          <div class="summary-list">
-            <div class="sum-row"><span class="muted">Sous-total</span><span id="subTotal">0 €</span></div>
-            <div class="sum-row"><span class="muted">Livraison</span><span id="shipTotal">0 €</span></div>
-            <div class="sum-row total"><span>Total à payer</span><span id="grandTotal">0 €</span></div>
-          </div>
-
-          <div style="margin-top:14px">
-            <div class="title" style="font-size:14px;margin-bottom:6px">Échéancier</div>
-
-            <!-- Tableau PC -->
-            <table class="schedule" id="scheduleTable" aria-label="Échéancier">
-              <thead><tr><th>Date</th><th>Montant</th></tr></thead>
-              <tbody id="scheduleBody"></tbody>
-            </table>
-
-            <!-- Liste Mobile -->
-            <div class="sched-mobile" id="scheduleList" aria-label="Échéancier (mobile)"></div>
-
-            <div class="hint" style="margin-top:6px" id="feesInfo">Frais de paiement : 0 €</div>
-          </div>
-
-          <div style="margin-top:14px;display:grid;gap:8px">
-            <button id="confirmBtn" class="btn primary">Confirmer et créer la commande</button>
-            <div class="hint">Un email récapitulatif avec les instructions de paiement sera envoyé. Priorité au traitement dès réception du paiement.</div>
+            <div class="help">💬 Besoin d’aide ? Notre équipe peut vérifier votre TxID et accélérer la validation.</div>
+            <button id="confirmCrypto" class="btn primary">Confirmer mon paiement crypto</button>
           </div>
         </div>
-      </aside>
-    </div>
+
+        <!-- Panneau SEPA -->
+        <div id="pmSEPA" class="pm" aria-labelledby="tab-sepa">
+          <div class="row">
+            <div class="cols-2">
+              <div>
+                <label>Bénéficiaire</label>
+                <input readonly value="GF STORE EU">
+              </div>
+              <div>
+                <label>Banque</label>
+                <input readonly value="Demo International Bank (FR)">
+              </div>
+              <div>
+                <label for="iban">IBAN</label>
+                <input id="iban" readonly value="FR76 3000 6000 0112 3456 7890 189">
+              </div>
+              <div>
+                <label for="swift">SWIFT/BIC</label>
+                <input id="swift" readonly value="DIBLFRPP">
+              </div>
+              <div>
+                <label for="vref">Référence (à mettre dans l’objet du virement)</label>
+                <input id="vref" readonly>
+              </div>
+              <div>
+                <label for="amountNowBank">À payer aujourd’hui (EUR)</label>
+                <input id="amountNowBank" readonly value="0">
+              </div>
+            </div>
+
+            <div class="timeline" id="tlSEPA" aria-live="polite"></div>
+
+            <div class="row">
+              <div class="sub">Joignez une preuve de virement (obligatoire pour lancement de préparation)</div>
+              <input type="file" id="proof" accept="image/*,.pdf" required>
+            </div>
+
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn" data-copy="#iban">Copier IBAN</button>
+              <button class="btn" data-copy="#swift">Copier BIC</button>
+              <button class="btn" data-copy="#vref">Copier Référence</button>
+            </div>
+
+            <button id="confirmBank" class="btn primary">J’ai effectué mon virement</button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px">
+          <button id="placeOrder" class="btn primary">Valider et créer la commande</button>
+          <button id="clearCart" class="btn">Vider le panier</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Colonne droite : Récap -->
+    <aside class="card" aria-labelledby="h-recap">
+      <div class="hd">
+        <div class="title" id="h-recap">Récapitulatif</div>
+        <span class="pill">Suivi & assistance</span>
+      </div>
+      <div class="bd">
+        <div id="miniCart" class="mini"></div>
+        <hr style="border:none;border-top:1px dashed var(--line);margin:10px 0">
+        <div class="sum">
+          <div class="sum-row"><span>Sous-total</span><span id="sub">—</span></div>
+          <div class="sum-row"><span>Livraison</span><span>Gratuite</span></div>
+          <div class="sum-row"><span>Ajustement paiement</span><span id="benefit">—</span></div>
+          <div class="sum-row total"><span>Total</span><span id="total">—</span></div>
+          <div class="sum-row" id="dueRow"><span class="due" id="dueLabel">À payer aujourd’hui</span><span class="due" id="dueNow">—</span></div>
+          <div class="timeline" id="tlRecap" aria-live="polite"></div>
+        </div>
+        <div class="help">🚚 Livraison prioritaire sous 7 jours • 🔄 Retours 14 jours • 🔐 Paiement sécurisé</div>
+      </div>
+    </aside>
   </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <footer>
     <div class="fwrap">
       <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
       <nav>
-        <a href="./pages/a-propos.html">À propos</a> ·
-        <a href="./pages/cgv.html">CGV</a> ·
-        <a href="./pages/mentions-legales.html">Mentions légales</a> ·
-        <a href="./pages/confidentialite.html">Confidentialité</a> ·
-        <a href="./pages/contact.html">Contact</a>
+        <a id="aboutLink2">À propos</a> ·
+        <a id="cgvLink2">CGV</a> ·
+        <a id="legalLink2">Mentions légales</a> ·
+        <a id="privacyLink2">Confidentialité</a> ·
+        <a id="contactLink2">Contact</a>
       </nav>
     </div>
   </footer>
 
   <script>
   (async()=>{
-    // --- Icônes cohérentes avec ton site
+    // --- Icônes (mêmes URLs ; fallback si non chargé) ---
     const ICONS = {
-      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
-      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
+      buy:'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
       cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
       cartFull:'https://img.icons8.com/?size=100&id=K5Jv3BfpxPYa&format=png&color=000000',
-      ssl:'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000'
+      checkout:'https://img.icons8.com/?size=100&id=qVsd2YOgeizO&format=png&color=000000',
+      truck:'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
+      logout:'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
+      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
+      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
+      trash:'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000',
+      fourx:'https://img.icons8.com/?size=100&id=3c0Tk1f266bf&format=png&color=000000',
+      ssl:'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
+      refund:'https://img.icons8.com/?size=100&id=lRNQ5N7CjFht&format=png&color=000000',
+      search:'https://img.icons8.com/?size=100&id=7964&format=png&color=000000'
     };
-    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
-    setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('cartIcon',ICONS.cart); setSrc('icSSL',ICONS.ssl);
+    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el){ el.src=src; el.onerror=()=>{el.replaceWith(Object.assign(document.createElement('span'),{textContent:'•'})); }; }};
+    setSrc('icUser',ICONS.user); setSrc('icShop',ICONS.buy);
 
-    // --- Menu bouton (si tu ajoutes un dropdown plus tard)
-    const menuBtn=document.getElementById('menuBtn'); if(menuBtn){ menuBtn.addEventListener('click',()=>location.href='./index.html'); }
+    // --- Root & menu liens (GitHub Pages safe) ---
+    const GH_ROOT=(()=>{const p=location.pathname.split('/').filter(Boolean);return (location.host.endsWith('github.io')&&p.length)?`/${p[0]}/`:'/';})();
+    const link=(id,path)=>{const el=document.getElementById(id); if(el) el.href=GH_ROOT+path};
+    link('homeLink','index.html'); link('accountLink','compte/index.html'); link('backShop','index.html');
+    ['about','cgv','legal','privacy','contact'].forEach(k=>{link(k+'Link2','pages/'+(k==='about'?'a-propos':k)+'.html');});
 
-    // --- Cart utils
+    // --- Utils ---
+    const $=s=>document.querySelector(s); const $$=s=>Array.from(document.querySelectorAll(s));
+    const toast=msg=>{const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1500);};
+    const EUR=v=>Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+
+    // --- Panier ---
     const KEY='gf_cart';
-    const EUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
-    const cart=getCart();
-    function cartTotal(){ return cart.reduce((s,x)=>s + (Number(x.price||0)*Number(x.qty||0)), 0); }
-    function renderCart(){
-      const list=document.getElementById('cartList');
-      if(!cart.length){ list.innerHTML='<div class="muted">Votre panier est vide.</div>'; }
-      else{
-        list.innerHTML = cart.map(x=>`
-          <div class="sum-row">
-            <span>${x.name} × ${x.qty}</span>
-            <span>${EUR(Number(x.price)*Number(x.qty))}</span>
-          </div>`).join('');
-      }
-      document.getElementById('subTotal').textContent = EUR(cartTotal());
+    const setCart=arr=>localStorage.setItem(KEY,JSON.stringify(arr));
+
+    // --- OrderID & référence ---
+    const orderId=(()=>{const d=new Date(); const y=String(d.getFullYear()).slice(2); const mm=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); const rnd=Math.floor(Math.random()*9000)+1000; return `GF-${y}${mm}${dd}-${rnd}`;})();
+    $('#orderId').textContent=orderId; $('#vref') && ($('#vref').value='GF-'+orderId);
+
+    // --- Rendu mini panier ---
+    function computeSub(cart){ return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0); }
+    function renderMini(){
+      const wrap=$('#miniCart'); const cart=getCart();
+      if(!cart.length){ wrap.innerHTML='<div class="sub">Votre panier est vide.</div>'; $('#sub').textContent='—'; $('#benefit').textContent='—'; $('#total').textContent='—'; $('#dueRow').style.display='none'; $('#tlRecap').innerHTML=''; return; }
+      wrap.innerHTML=cart.map(x=>`
+        <div class="ci">
+          <img src="${x.image||''}" alt="${x.name||''}" onerror="this.style.display='none'">
+          <div><div style="font-weight:700">${x.name||''}</div><div class="sub">${x.brand||''} ${x.category?('• '+x.category):''}</div></div>
+          <div style="font-weight:800">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
+        </div>`).join('');
     }
-    renderCart();
 
-    // --- Livraison
-    const shippingSel=document.getElementById('shipping');
-    function shippingCost(){ return Number(shippingSel.value||0); }
+    // --- Paiement : avantage (sobre, pas d'accroche marketing) ---
+    function currentPM(){ return document.querySelector('.mcard[aria-selected="true"]')?.dataset.method || 'crypto'; }
+    function benefitRate(){ return currentPM()==='crypto'?0.02 : currentPM()==='sepa'?0.01 : 0; }
 
-    // --- Méthodes + panneaux
-    const panels={ crypto:document.getElementById('panel-crypto'), bank:document.getElementById('panel-bank') };
-    let method='crypto';
-    document.getElementById('methods').addEventListener('click',(e)=>{
-      const card=e.target.closest('.method'); if(!card || card.getAttribute('aria-disabled')==='true') return;
-      method = card.dataset.method;
-      document.querySelectorAll('.method').forEach(m=>m.setAttribute('aria-selected', String(m===card)));
-      Object.values(panels).forEach(p=>p.classList.remove('show'));
-      if(panels[method]) panels[method].classList.add('show');
-      updateSchedule(); updateTotals(); validateProofs(false);
-    });
-
-    // --- FX crypto (ratios fictifs, cohérents)
-    const fx={ 'USDT-TRC20':{symbol:'USDT',rate:1}, 'USDT-ERC20':{symbol:'USDT',rate:1}, 'BTC':{symbol:'BTC', rateEur:54000}, 'ETH':{symbol:'ETH', rateEur:2400} };
-    const ccySel=document.getElementById('ccy'); const ccyLabel=document.getElementById('ccyLabel'); const amountCcy=document.getElementById('amountCcy');
-    function recalcCryptoAmount(){
-      const total = grandTotal();
-      const v = ccySel.value;
-      if(v.startsWith('USDT')){ ccyLabel.textContent='USDT'; amountCcy.value=(total).toFixed(2); }
-      else if(v==='BTC'){ ccyLabel.textContent='BTC'; amountCcy.value=(total / (fx.BTC.rateEur||54000)).toFixed(6).replace(/0+$/,'').replace(/\.$/,''); }
-      else if(v==='ETH'){ ccyLabel.textContent='ETH'; amountCcy.value=(total / (fx.ETH.rateEur||2400)).toFixed(6).replace(/0+$/,'').replace(/\.$/,''); }
+    // --- FX mock (affichage crypto) ---
+    const fx={'USDT-TRC20':{symbol:'USDT',rate:1},'USDT-ERC20':{symbol:'USDT',rate:1},'BTC':{symbol:'BTC',rate:60000},'ETH':{symbol:'ETH',rate:3000}};
+    function setCryptoAddress(ccy){
+      const map={'USDT-TRC20':'TQf3k7s9h2x4y5z6a7b8c9d0e1f2g3h4i','USDT-ERC20':'0x3Fb8b7E6cA9f4D2E1b0C9a8F7e6D5c4B3a2F1E0','BTC':'bc1q9v8w7x6y5z4a3b2c1d0e9f8g7h6j5k4l3m2n','ETH':'0x9eF2B3cD4a5E6f7B8c9D0E1F2A3b4C5d6E7f8A9B'};
+      $('#wallet').value=map[ccy]||'';
+      $('#ccyLabel').textContent=fx[ccy]?.symbol||'';
     }
-    ccySel.addEventListener('change', recalcCryptoAmount);
 
-    // --- Échéances
-    const instCrypto=document.getElementById('inst-crypto');
-    const instBank=document.getElementById('inst-bank');
-    let nInst=1;
-
-    function attachInst(container){
-      container.addEventListener('click',e=>{
-        const b=e.target.closest('.chip'); if(!b) return;
-        container.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-checked','false'));
-        b.setAttribute('aria-checked','true');
-        nInst = Number(b.dataset.n||1);
-        updateSchedule(); updateTotals(); recalcCryptoAmount();
-      });
-    }
-    attachInst(instCrypto); attachInst(instBank);
-
-    // --- Totaux
-    function grandTotal(){ return Math.max(0, cartTotal() + shippingCost()); }
-    function updateTotals(){
-      document.getElementById('shipTotal').textContent = EUR(shippingCost());
-      document.getElementById('grandTotal').textContent = EUR(grandTotal());
-      recalcCryptoAmount();
-    }
-    shippingSel.addEventListener('change', ()=>{ updateTotals(); updateSchedule(); });
-
-    // --- Échéancier (dates + montants)
-    function addDays(d,days){ const dd=new Date(d); dd.setDate(dd.getDate()+days); return dd; }
-    function fmtDate(d){ return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}); }
-    function splitAmount(total,n){
-      // Répartit avec arrondis pour que la somme = total
+    // --- Échéancier clair ---
+    function splitAmounts(total, parts){
       const cents=Math.round(total*100);
-      const base=Math.floor(cents/n);
-      const rest=cents - base*n;
-      const arr=Array.from({length:n},(_,i)=> (base + (i<rest?1:0))/100 );
-      return arr;
+      const base=Math.floor(cents/parts);
+      const first=base + (cents - base*parts);
+      const arr=[first]; for(let i=1;i<parts;i++) arr.push(base);
+      return arr.map(c=>c/100);
     }
-    function scheduleDates(n){
-      // 0, +30, +60, +90
-      const steps=[0,30,60,90]; return steps.slice(0,n).map(d=>addDays(new Date(), d));
-    }
-    function updateSchedule(){
-      const t = grandTotal();
-      const parts = splitAmount(t, nInst);
-      const dates = scheduleDates(nInst);
-      const tbody=document.getElementById('scheduleBody');
-      tbody.innerHTML = parts.map((amt,i)=>`<tr><td>${i===0?'Aujourd’hui':fmtDate(dates[i])}</td><td>${EUR(amt)}</td></tr>`).join('');
-      const list=document.getElementById('scheduleList');
-      list.innerHTML = parts.map((amt,i)=>`<div class="sched-item"><div>${i===0?'Aujourd’hui':fmtDate(dates[i])}</div><strong>${EUR(amt)}</strong></div>`).join('');
-      document.getElementById('feesInfo').textContent = 'Frais de paiement : 0 €';
+    function dateAdd(days){ const d=new Date(); d.setDate(d.getDate()+days); return d; }
+    function fmtDate(d){ return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}); }
+
+    function renderTimeline(container, amounts){
+      const steps=[0,30,60];
+      container.innerHTML=amounts.map((amt,i)=>{
+        const d=fmtDate(dateAdd(steps[i]||0));
+        return `<div class="step"><div class="dot">${i+1}</div><div><div><strong>${EUR(amt)}</strong> ${i===0?'• aujourd\'hui':''}</div><div class="smeta">${d}</div></div></div>`;
+      }).join('');
     }
 
-    // --- Copie
-    document.querySelectorAll('[data-copy]').forEach(btn=>{
-      btn.addEventListener('click',async()=>{
-        const sel = btn.getAttribute('data-copy');
-        const el = document.querySelector(sel); if(!el) return;
-        try{
-          await navigator.clipboard.writeText(el.value||'');
-          showOk('Copié ✓');
-        }catch{ showErr('Impossible de copier'); }
+    // --- Mise à jour récap global + cartes d'échéances ---
+    const SHIPPING=0;
+    function updateSummary(){
+      const cart=getCart(); if(!cart.length){ renderMini(); return; }
+      const sub=computeSub(cart);
+      const benefit=sub*benefitRate();
+      const total=Math.max(0, sub + SHIPPING - benefit);
+
+      // Sélections
+      const pm=currentPM();
+      const groupSel = pm==='crypto' ? '#tab-crypto .split[aria-checked="true"]' : '#tab-sepa .split[aria-checked="true"]';
+      const parts = Number(document.querySelector(groupSel)?.dataset.split||1);
+      const amts=splitAmounts(total,parts);
+      const dueNow=amts[0];
+
+      // Inject recap
+      $('#sub').textContent=EUR(sub);
+      $('#benefit').textContent= (benefit>0? '–'+EUR(benefit) : '—');
+      $('#total').textContent=EUR(total);
+      $('#dueRow').style.display='flex';
+      $('#dueLabel').textContent = parts>1 ? '1ère échéance aujourd\'hui' : 'À payer aujourd\'hui';
+      $('#dueNow').textContent=EUR(dueNow);
+
+      // Timelines (panneaux + récap)
+      if(pm==='crypto'){
+        $('#amountNow').value = dueNow.toFixed(2);
+        const ccy=$('#ccy').value; const r=fx[ccy]?.rate||1;
+        const amt=(dueNow/r);
+        $('#ccyAmt').value = (amt>0?amt:0).toFixed(6).replace(/0+$/,'').replace(/\.$/,'');
+        renderTimeline($('#tlCrypto'), amts);
+      }
+      if(pm==='sepa'){
+        $('#amountNowBank').value = dueNow.toFixed(2);
+        renderTimeline($('#tlSEPA'), amts);
+      }
+      renderTimeline($('#tlRecap'), amts);
+
+      // Miroir vals sur cartes split (texte "Aujourd'hui")
+      $('.now-1').textContent = EUR(amts[0]);
+      $('.now-2').textContent = EUR(amts[0]);
+      $('.now-3').textContent = EUR(amts[0]);
+      $('.nowb-1').textContent = EUR(amts[0]);
+      $('.nowb-2').textContent = EUR(amts[0]);
+      $('.nowb-3').textContent = EUR(amts[0]);
+    }
+
+    // --- Rendu initial mini panier
+    renderMini(); updateSummary();
+
+    // --- Interactions ---
+    // Choix méthode
+    $$('.mcard[role="tab"]').forEach(card=>{
+      card.addEventListener('click', (e)=>{
+        // Eviter sélection quand on clique sur une split interne => ne rien faire ici si target est .split
+        if(e.target.closest('.split')) return;
+        $$('.mcard[role="tab"]').forEach(c=>c.setAttribute('aria-selected', String(c===card)));
+        const m=card.dataset.method;
+        $('#pmCrypto').classList.toggle('show', m==='crypto');
+        $('#pmSEPA').classList.toggle('show', m==='sepa');
+        updateSummary();
       });
     });
 
-    // --- Référence de paiement (inclut date/heure)
-    const ref=document.getElementById('payref');
-    const refBase='GF-'+String(Date.now()).slice(-6);
-    ref.value = refBase;
+    // Split selection
+    function handleSplitClick(scopeSel, ev){
+      const box=ev.target.closest('.split'); if(!box) return;
+      $$(scopeSel+' .split').forEach(s=>s.setAttribute('aria-checked','false'));
+      box.setAttribute('aria-checked','true');
+      updateSummary();
+    }
+    $('#tab-crypto').addEventListener('click', e=>handleSplitClick('#tab-crypto', e));
+    $('#tab-sepa').addEventListener('click', e=>handleSplitClick('#tab-sepa', e));
 
-    // --- Proofs validation
-    const proofBank=document.getElementById('proofBank');
-    const proofCrypto=document.getElementById('proofCrypto');
-    const txid=document.getElementById('txid');
+    // Crypto ccy
+    $('#ccy').addEventListener('change', ()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
+    setCryptoAddress($('#ccy').value);
 
-    function validateProofs(show=true){
-      let ok=true;
-      if(method==='bank'){
-        if(!proofBank.files || !proofBank.files.length){ ok=false; if(show) showErr('Veuillez joindre la preuve de virement.'); }
-      }
-      if(method==='crypto'){
-        const tx=(txid.value||'').trim();
-        if(!tx || tx.length<8){ ok=false; if(show) showErr('Veuillez renseigner l’identifiant (hash) de transaction.'); }
-        if(!proofCrypto.files || !proofCrypto.files.length){ ok=false; if(show) showErr('Veuillez joindre une preuve (capture ou PDF).'); }
-      }
-      return ok;
+    // Copier
+    const copySel=sel=>{const el=$(sel); if(!el) return; const txt=el.value||''; if(navigator.clipboard?.writeText){navigator.clipboard.writeText(txt).then(()=>toast('Copié'));} else {el.select(); document.execCommand('copy'); toast('Copié');}};
+    $$('[data-copy]').forEach(b=>b.addEventListener('click',()=>copySel(b.getAttribute('data-copy'))));
+
+    // Vider panier
+    $('#clearCart').addEventListener('click',()=>{ if(!confirm('Vider votre panier ?')) return; setCart([]); renderMini(); updateSummary(); });
+
+    // Validation adresse minimum
+    function validateAddress(){
+      const req=['name','email','address','city','zip'];
+      for(const id of req){ const el=$('#'+id); if(!el || !el.value.trim()){ el?.focus(); toast('Veuillez compléter vos informations.'); return false; } }
+      return true;
     }
 
-    // --- Confirmer
-    const confirmBtn=document.getElementById('confirmBtn');
-    function requiredFilled(){
-      const ids=['firstName','lastName','email','phone','addr','city','zip','country','shipping'];
-      return ids.every(id=>String((document.getElementById(id)?.value||'').trim()).length>0);
-    }
-    function showOk(msg){ const el=document.getElementById('ok'); el.textContent=msg; el.style.display='block'; document.getElementById('err').style.display='none'; }
-    function showErr(msg){ const el=document.getElementById('err'); el.textContent=msg; el.style.display='block'; document.getElementById('ok').style.display='none'; }
-
-    confirmBtn.addEventListener('click',()=>{
-      if(!cart.length){ showErr('Votre panier est vide.'); return; }
-      if(!requiredFilled()){ showErr('Merci de compléter vos informations.'); return; }
-      if(!validateProofs(true)) return;
-
-      // À ce stade : créer la commande côté serveur (non inclus ici)
-      showOk('Commande créée. Instructions envoyées par email. Merci !');
-      window.scrollTo({top:0,behavior:'smooth'});
+    // Confirmer crypto
+    $('#confirmCrypto').addEventListener('click', ()=>{
+      if(!validateAddress()) return;
+      if(!$('#txid').value.trim()){ $('#txid').focus(); toast('TxID requis.'); return; }
+      toast('Paiement crypto enregistré — validation en cours');
     });
 
-    // --- Initial
-    function initCounts(){
-      const count=cart.reduce((s,x)=>s+Number(x.qty||0),0);
-      const cartIcon=document.getElementById('cartIcon');
-      if(cartIcon) cartIcon.src = count>0 ? ICONS.cartFull : ICONS.cart;
-    }
-    initCounts(); updateTotals(); updateSchedule(); recalcCryptoAmount();
+    // Confirmer SEPA (preuve obligatoire)
+    $('#confirmBank').addEventListener('click', ()=>{
+      if(!validateAddress()) return;
+      const pf=$('#proof'); if(!pf.files.length){ pf.focus(); toast('Preuve de virement requise.'); return; }
+      toast('Preuve envoyée — vérification en cours');
+    });
+
+    // Créer la commande (simulation locale)
+    $('#placeOrder').addEventListener('click', ()=>{
+      if(!validateAddress()) return;
+      const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
+      const pm=currentPM();
+
+      // Vérifs simples selon méthode
+      if(pm==='crypto' && !$('#txid').value.trim()){ $('#txid').focus(); toast('TxID requis.'); return; }
+      if(pm==='sepa' && !$('#proof').files.length){ $('#proof').focus(); toast('Preuve de virement requise.'); return; }
+
+      const sub=computeSub(cart), benefit=sub*benefitRate(), total=Math.max(0, sub - benefit);
+      const parts = Number((pm==='crypto'?document.querySelector('#tab-crypto .split[aria-checked="true"]'):document.querySelector('#tab-sepa .split[aria-checked="true"]'))?.dataset.split || 1);
+
+      const order={
+        id:orderId, date:new Date().toISOString(), status:'En préparation',
+        items:cart, pricing:{sub,ship:0,benefit,total,currency:'EUR'},
+        shipping:{name:$('#name').value,email:$('#email').value,phone:$('#phone').value,address:$('#address').value,city:$('#city').value,zip:$('#zip').value,country:$('#country').value},
+        payment:{
+          method:pm, split:parts,
+          details: pm==='crypto'
+            ? {ccy:$('#ccy').value,address:$('#wallet').value,txid:$('#txid').value,amountNow:$('#amountNow').value}
+            : {iban:$('#iban').value,ref:$('#vref').value,amountNow:$('#amountNowBank').value}
+        }
+      };
+      try{ const all=JSON.parse(localStorage.getItem('gf_orders')||'[]'); all.push(order); localStorage.setItem('gf_orders', JSON.stringify(all)); }catch{}
+      setCart([]); toast('Commande '+orderId+' créée'); setTimeout(()=>location.replace(GH_ROOT+'compte/index.html'), 900);
+    });
 
   })();
   </script>
