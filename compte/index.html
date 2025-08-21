@@ -4,9 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mon compte — GF Store</title>
+  <meta name="description" content="Espace Mon Compte de GF Store : profil, commandes, adresses et sécurité du compte." />
   <style>
     :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
-    *{box-sizing:border-box} body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
+    *{box-sizing:border-box}
+    body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
     a{color:inherit}
     header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb;backdrop-filter:saturate(140%) blur(4px)}
     .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -55,24 +57,30 @@
   </style>
 </head>
 <body>
-  <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+  <div class="banner" role="status" aria-live="polite">
+    🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles
+    <span class="sep">•</span>
+    <span id="countdown" class="timer"></span>
+  </div>
 
   <header>
     <div class="hwrap">
-      <a id="homeLink" class="brand">
+      <a id="homeLink" class="brand" aria-label="Aller à l'accueil">
         <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
-      <nav class="nav">
-        <a id="accountLink"><img class="ic" id="icUser" alt=""> Compte</a>
-        <a id="cartBtn" class="iconbtn"><img id="cartIcon" class="ic" alt=""> Panier</a>
+      <nav class="nav" aria-label="Navigation principale">
+        <a id="accountLink"><img class="ic" id="icUser" alt="" role="presentation"> Compte</a>
+        <a id="cartBtn" class="iconbtn"><img id="cartIcon" class="ic" alt="" role="presentation"> Panier</a>
         <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
-          <div id="menuDrop" class="menu">
-            <a id="aboutLink">À propos</a>
-            <a id="cgvLink">CGV</a>
-            <a id="legalLink">Mentions légales</a>
-            <a id="privacyLink">Politique de confidentialité</a>
-            <a id="contactLink">Contact</a>
+          <button class="iconbtn" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-label="Menu">
+            <img class="ic" id="icMenu" alt="" role="presentation">
+          </button>
+          <div id="menuDrop" class="menu" role="menu">
+            <a id="aboutLink" role="menuitem">À propos</a>
+            <a id="cgvLink" role="menuitem">CGV</a>
+            <a id="legalLink" role="menuitem">Mentions légales</a>
+            <a id="privacyLink" role="menuitem">Politique de confidentialité</a>
+            <a id="contactLink" role="menuitem">Contact</a>
           </div>
         </div>
       </nav>
@@ -83,7 +91,7 @@
     <!-- Colonne principale -->
     <section class="card">
       <div class="hdr">
-        <div class="avatar" id="avatar">?</div>
+        <div class="avatar" id="avatar" aria-hidden="true">?</div>
         <div>
           <h1>Bonjour <span id="userName">—</span></h1>
           <div class="muted" id="userEmail">—</div>
@@ -92,12 +100,12 @@
       </div>
 
       <div class="row" style="gap:8px;margin-bottom:10px">
-        <a id="btnProfile" class="btn"><img class="ic" id="icProfile" alt=""> Modifier mon profil</a>
-        <a id="btnPwd" class="btn"><img class="ic" id="icKey" alt=""> Changer mon mot de passe</a>
-        <button id="btnLogout" class="btn"><img class="ic" id="icLogout" alt=""> Se déconnecter</button>
+        <a id="btnProfile" class="btn"><img class="ic" id="icProfile" alt="" role="presentation"> Modifier mon profil</a>
+        <a id="btnPwd" class="btn"><img class="ic" id="icKey" alt="" role="presentation"> Changer mon mot de passe</a>
+        <button id="btnLogout" class="btn" type="button"><img class="ic" id="icLogout" alt="" role="presentation"> Se déconnecter</button>
       </div>
 
-      <div class="kpis" id="kpis">
+      <div class="kpis" id="kpis" aria-label="Indicateurs">
         <div class="kpi"><div class="n" id="kpiOrders">0</div><div class="muted">Commandes</div></div>
         <div class="kpi"><div class="n" id="kpiAddresses">0</div><div class="muted">Adresses</div></div>
         <div class="kpi"><div class="n" id="kpiCart">0</div><div class="muted">Articles dans le panier</div></div>
@@ -105,26 +113,28 @@
     </section>
 
     <!-- Colonne latérale -->
-    <aside class="grid2">
+    <aside class="grid2" aria-label="Informations et actions">
       <section class="card">
-        <div class="hdr"><img class="ic" id="icBox" alt=""><strong>Mes dernières commandes</strong></div>
+        <div class="hdr"><img class="ic" id="icBox" alt="" role="presentation"><strong>Mes dernières commandes</strong></div>
         <div id="ordersWrap" class="list empty">Aucune commande pour le moment.</div>
         <div class="hint">Astuce : passe une commande depuis la boutique, elle s’affichera ici (démo : stockage local).</div>
       </section>
 
       <section class="card">
-        <div class="hdr"><img class="ic" id="icHome" alt=""><strong>Mon adresse principale</strong></div>
+        <div class="hdr"><img class="ic" id="icHome" alt="" role="presentation"><strong>Mon adresse principale</strong></div>
         <div id="addrBox" class="addr empty">Aucune adresse enregistrée.</div>
         <div class="row" style="margin-top:8px">
-          <a id="btnEditAddress" class="btn"><img class="ic" id="icEdit" alt=""> Ajouter / Modifier</a>
+          <a id="btnEditAddress" class="btn"><img class="ic" id="icEdit" alt="" role="presentation"> Ajouter / Modifier</a>
         </div>
-        <div class="hint">Les infos sont stockées côté navigateur pour la démo. Prévois un backend pour du vrai.</div>
+        <div class="hint">Adresse lue/écrite via ton profil (Google Sheet). Pour la démo, commandes & panier restent locaux.</div>
       </section>
 
-      <section class="card dangerzone">
-        <div class="hdr"><img class="ic" id="icWarning" alt=""><strong>Zone sensible</strong></div>
-        <div class="muted">Supprimer mon compte local (démo) efface seulement les données du navigateur.</div>
-        <button id="btnDelete" class="btn danger" style="margin-top:8px"><img class="ic" id="icTrash" alt=""> Supprimer mon compte (local)</button>
+      <section class="card dangerzone" aria-label="Zone sensible">
+        <div class="hdr"><img class="ic" id="icWarning" alt="" role="presentation"><strong>Zone sensible</strong></div>
+        <div class="muted">Supprimer les données locales (panier/commandes de démo) et fermer la session.</div>
+        <button id="btnDelete" class="btn danger" style="margin-top:8px" type="button">
+          <img class="ic" id="icTrash" alt="" role="presentation"> Supprimer mes données locales
+        </button>
       </section>
     </aside>
   </main>
@@ -132,7 +142,7 @@
   <footer style="background:#fff;border-top:1px solid #e5e7eb">
     <div class="hwrap" style="justify-content:space-between;font-size:12px">
       <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
-      <nav style="display:flex;gap:10px;flex-wrap:wrap">
+      <nav style="display:flex;gap:10px;flex-wrap:wrap" aria-label="Liens de pied de page">
         <a id="aboutLink2">À propos</a> · 
         <a id="cgvLink2">CGV</a> · 
         <a id="legalLink2">Mentions légales</a> · 
@@ -142,29 +152,38 @@
     </div>
   </footer>
 
+  <!-- Ton auth frontend (exposé global: window.GFAuth) -->
+  <script src="js/auth.js" defer></script>
+
   <script>
-  (async()=>{
+  // Important : ce script suppose que js/auth.js est chargé (defer) et expose window.GFAuth
+  (function(){
+    "use strict";
 
-    // --- Compte à rebours (48h)
-    const countdownEl=document.getElementById('countdown');
-    const SALE_END=new Date(Date.now()+48*60*60*1000);
-    const two=n=>String(n).padStart(2,'0');
-    function tick(){
-      if(!countdownEl) return;
-      const now=new Date(); let diff=SALE_END-now;
-      if(diff<=0){countdownEl.textContent='Dernières heures !';return}
-      const d=Math.floor(diff/86400000); diff%=86400000;
-      const h=Math.floor(diff/3600000); diff%=3600000;
-      const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
-      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
-    }
-    tick(); setInterval(tick,1000);
+    // --- Utilitaires
+    const $ = (s,root)=> (root||document).querySelector(s);
+    const $all = (s,root)=> Array.from((root||document).querySelectorAll(s));
+    const two = n => String(n).padStart(2,'0');
 
-    // --- Détection racine (GitHub Pages friendly)
+    // --- Racine (GitHub Pages friendly)
     const GH_ROOT = (()=>{ 
       const parts = location.pathname.split('/').filter(Boolean);
       return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/';
     })();
+
+    // --- Compte à rebours (48h à partir du chargement)
+    const SALE_END = new Date(Date.now()+48*60*60*1000);
+    const countdownEl = $('#countdown');
+    function tick(){
+      if(!countdownEl) return;
+      const now = new Date(); let diff = SALE_END - now;
+      if(diff <= 0){ countdownEl.textContent = 'Dernières heures !'; return; }
+      const d = Math.floor(diff/86400000); diff%=86400000;
+      const h = Math.floor(diff/3600000); diff%=3600000;
+      const m = Math.floor(diff/60000);   const s = Math.floor((diff%60000)/1000);
+      countdownEl.textContent = `${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+    }
+    tick(); setInterval(tick, 1000);
 
     // --- Icônes
     const ICONS = {
@@ -181,171 +200,225 @@
       warning:'https://img.icons8.com/?size=100&id=12259&format=png&color=000000',
       trash:'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000'
     };
-    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
-    setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('cartIcon',ICONS.cart);
-    setSrc('icProfile',ICONS.profile); setSrc('icKey',ICONS.key); setSrc('icLogout',ICONS.logout);
-    setSrc('icBox',ICONS.box); setSrc('icHome',ICONS.home); setSrc('icEdit',ICONS.edit);
-    setSrc('icWarning',ICONS.warning); setSrc('icTrash',ICONS.trash);
+    const setSrc = (id,src)=>{ const el = document.getElementById(id); if(el) el.src = src; };
+    function setIcons(){
+      setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu);
+      setSrc('cartIcon',ICONS.cart); setSrc('icProfile',ICONS.profile);
+      setSrc('icKey',ICONS.key); setSrc('icLogout',ICONS.logout);
+      setSrc('icBox',ICONS.box); setSrc('icHome',ICONS.home);
+      setSrc('icEdit',ICONS.edit); setSrc('icWarning',ICONS.warning);
+      setSrc('icTrash',ICONS.trash);
+    }
 
-    // --- Lien nav (GH_ROOT)
-    const link = (id, path)=>{const el=document.getElementById(id); if(el) el.href = GH_ROOT + path;};
-    document.getElementById('homeLink').href = GH_ROOT;
-    link('accountLink','compte/index.html');
-    link('cartBtn','checkout.html');
-    link('aboutLink','pages/a-propos.html'); link('aboutLink2','pages/a-propos.html');
-    link('cgvLink','pages/cgv.html');        link('cgvLink2','pages/cgv.html');
-    link('legalLink','pages/mentions-legales.html'); link('legalLink2','pages/mentions-legales.html');
-    link('privacyLink','pages/confidentialite.html'); link('privacyLink2','pages/confidentialite.html');
-    link('contactLink','pages/contact.html'); link('contactLink2','pages/contact.html');
+    // --- Liens selon GH_ROOT
+    function wireLinks(){
+      $('#homeLink').href = GH_ROOT;
+      const link = (id, path)=>{ const el = document.getElementById(id); if(el) el.href = GH_ROOT + path; };
+      link('accountLink','compte/index.html');
+      link('cartBtn','checkout.html');
+      link('aboutLink','pages/a-propos.html'); link('aboutLink2','pages/a-propos.html');
+      link('cgvLink','pages/cgv.html');        link('cgvLink2','pages/cgv.html');
+      link('legalLink','pages/mentions-legales.html'); link('legalLink2','pages/mentions-legales.html');
+      link('privacyLink','pages/confidentialite.html'); link('privacyLink2','pages/confidentialite.html');
+      link('contactLink','pages/contact.html'); link('contactLink2','pages/contact.html');
+    }
 
     // --- Menu déroulant
-    const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop');
-    if(menuBtn&&menuDrop){
-      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
-      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+    function wireMenu(){
+      const menuBtn = $('#menuBtn'); const menuDrop = $('#menuDrop');
+      if(!menuBtn || !menuDrop) return;
+      menuBtn.addEventListener('click', e=>{
+        e.stopPropagation();
+        const shown = menuDrop.classList.toggle('show');
+        menuBtn.setAttribute('aria-expanded', shown ? 'true' : 'false');
+      });
+      document.addEventListener('click', e=>{
+        if(!menuDrop.contains(e.target) && e.target!==menuBtn) {
+          menuDrop.classList.remove('show');
+          menuBtn.setAttribute('aria-expanded','false');
+        }
+      });
     }
 
-    // --- Helpers storage
-    const KEY_USER='gf_user';
-    const KEY_CART='gf_cart';
-    const KEY_ORDERS='gf_orders';
-    const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY_CART)||'[]')}catch{return[]}};
-    const cartCount=()=>getCart().reduce((s,x)=>s+x.qty,0);
-    const getOrders=()=>{try{return JSON.parse(localStorage.getItem(KEY_ORDERS)||'[]')}catch{return[]}};
-    const saveOrders=(arr)=>localStorage.setItem(KEY_ORDERS,JSON.stringify(arr));
+    // --- Storage démo (panier/commandes)
+    const KEY_CART   = 'gf_cart';
+    const KEY_ORDERS = 'gf_orders';
+    const getCart = ()=>{ try{return JSON.parse(localStorage.getItem(KEY_CART)||'[]')}catch{return[]} };
+    const saveCart = (v)=> localStorage.setItem(KEY_CART, JSON.stringify(v||[]));
+    const cartCount = ()=> getCart().reduce((s,x)=> s + Number(x.qty||0), 0);
+    const getOrders = ()=>{ try{return JSON.parse(localStorage.getItem(KEY_ORDERS)||'[]')}catch{return[]} };
+    const saveOrders = (arr)=> localStorage.setItem(KEY_ORDERS, JSON.stringify(arr||[]));
 
-    // --- Auth (démo)
-    const user = (()=>{ try{return JSON.parse(localStorage.getItem(KEY_USER)||'null')}catch{return null} })();
-    if(!user){
-      // pas connecté -> redirige vers login
-      location.replace(GH_ROOT+'compte/login.html');
-      return;
-    }
+    // --- Rendu commandes (local) + reorder
+    function renderOrders(orders, sessionEmail){
+      const ordersWrap = $('#ordersWrap');
+      if(!ordersWrap) return;
+      const EUR = v => Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
 
-    // --- UI User
-    const avatar=document.getElementById('avatar');
-    const uName=document.getElementById('userName');
-    const uEmail=document.getElementById('userEmail');
-    const lastLogin=document.getElementById('lastLogin');
-
-    const name = user.name || user.email?.split('@')[0] || 'Client';
-    uName.textContent = name;
-    uEmail.textContent = user.email || '—';
-    const initial = (name||'?').trim().charAt(0).toUpperCase();
-    avatar.textContent = initial;
-    if(user.lastLogin){
-      const d = new Date(user.lastLogin);
-      if(!isNaN(+d)) lastLogin.textContent = `Dernière connexion : ${d.toLocaleString('fr-FR')}`;
-    }
-
-    // --- KPIs
-    document.getElementById('kpiCart').textContent = cartCount();
-    const orders = getOrders().filter(o=>String(o.userId||'')===String(user.id||user.email));
-    document.getElementById('kpiOrders').textContent = orders.length;
-    const addresses = Array.isArray(user.addresses)? user.addresses : (user.address? [user.address] : []);
-    document.getElementById('kpiAddresses').textContent = addresses.length;
-
-    // --- Commandes
-    const EUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-    const ordersWrap=document.getElementById('ordersWrap');
-    function renderOrders(){
-      if(!orders.length){ ordersWrap.classList.add('empty'); ordersWrap.innerHTML='Aucune commande pour le moment.'; return; }
+      const mine = orders.filter(o => String(o.userId||'').toLowerCase() === String(sessionEmail||'').toLowerCase());
+      if(!mine.length){
+        ordersWrap.classList.add('empty');
+        ordersWrap.textContent = 'Aucune commande pour le moment.';
+        return;
+      }
       ordersWrap.classList.remove('empty');
-      ordersWrap.innerHTML = orders.slice().reverse().map(o=>{
-        const total = (o.items||[]).reduce((s,x)=>s + Number(x.price||0)*Number(x.qty||1),0);
+      ordersWrap.innerHTML = mine.slice().reverse().map(o=>{
+        const total = (o.items||[]).reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0);
         return `
           <div class="order">
             <div class="top">
               <strong>Commande #${o.id||'—'}</strong>
               <span class="pill">${new Date(o.date||Date.now()).toLocaleString('fr-FR')}</span>
-              <span class="pill">${(o.status||'Payée')}</span>
+              <span class="pill">${o.status||'Payée'}</span>
               <span style="margin-left:auto;font-weight:700">${EUR(total)}</span>
             </div>
             <div class="muted">${(o.items||[]).map(x=>`${x.qty}× ${x.name}`).join(' • ') || '—'}</div>
             <div class="row">
-              <a class="btn" href="${GH_ROOT}checkout.html"><img class="ic" src="${ICONS.box}" alt=""> Voir les détails</a>
-              <button class="btn" data-reorder="${o.id}"><img class="ic" src="${ICONS.cart}" alt=""> Recommander</button>
+              <a class="btn" href="${GH_ROOT}checkout.html"><img class="ic" src="${ICONS.box}" alt="" role="presentation"> Voir les détails</a>
+              <button class="btn" data-reorder="${o.id}" type="button"><img class="ic" src="${ICONS.cart}" alt="" role="presentation"> Recommander</button>
             </div>
           </div>
         `;
       }).join('');
-    }
-    renderOrders();
 
-    // Reorder (ajoute les items au panier)
-    ordersWrap.addEventListener('click',e=>{
-      const id=e.target.closest('[data-reorder]')?.getAttribute('data-reorder');
-      if(!id) return;
-      const found = orders.find(x=>String(x.id)===String(id));
-      if(!found) return;
-      const cart = getCart();
-      for(const it of (found.items||[])){
-        const idx=cart.findIndex(c=>c.id===it.id && c.name===it.name);
-        if(idx>-1){ cart[idx].qty += Number(it.qty||1); }
-        else{
-          cart.push({
+      // Reorder handler
+      ordersWrap.addEventListener('click', e=>{
+        const btn = e.target.closest('[data-reorder]');
+        if(!btn) return;
+        const id = btn.getAttribute('data-reorder');
+        const found = mine.find(x=>String(x.id)===String(id));
+        if(!found) return;
+        const cart = getCart();
+        for(const it of (found.items||[])){
+          const idx = cart.findIndex(c=>c.id===it.id && c.name===it.name);
+          if(idx>-1) cart[idx].qty += Number(it.qty||1);
+          else cart.push({
             id: it.id, name: it.name, qty: Number(it.qty||1),
-            price: Number(it.price||0), image: it.image||'', brand: it.brand||'', category: it.category||''
+            price: Number(it.price||0), image: it.image||'',
+            brand: it.brand||'', category: it.category||''
           });
         }
-      }
-      localStorage.setItem(KEY_CART, JSON.stringify(cart));
-      document.getElementById('kpiCart').textContent = cartCount();
-      const icon=document.getElementById('cartIcon'); if(icon) icon.src=ICONS.cartFull;
-      alert('Les articles de la commande ont été ajoutés au panier.');
-    });
+        saveCart(cart);
+        $('#kpiCart').textContent = cartCount();
+        const icon = $('#cartIcon'); if(icon) icon.src = ICONS.cartFull;
+        alert('Les articles de la commande ont été ajoutés au panier.');
+      }, { once: true }); // on attache une fois pour éviter les doublons
+    }
 
-    // --- Adresse
-    const addrBox=document.getElementById('addrBox');
-    function renderAddress(){
-      if(addresses.length){
-        const a = addresses[0];
-        addrBox.classList.remove('empty');
-        addrBox.innerHTML = `
-          <div><strong>${a.fullname||name}</strong></div>
-          <div>${[a.line1,a.line2,a.zip,a.city].filter(Boolean).join(', ')}</div>
-          <div>${a.country||''}</div>
-          <div class="muted" style="margin-top:6px">${a.phone? '☎ '+a.phone : ''}</div>
-        `;
-      }else{
+    // --- Rendu adresse (profil Apps Script)
+    function renderAddressFromProfile(profile, fallbackName){
+      const addrBox = $('#addrBox'); if(!addrBox) return;
+      const hasAddress = (profile.address||profile.city||profile.zip||profile.phone);
+      if(!hasAddress){
         addrBox.classList.add('empty');
         addrBox.textContent = 'Aucune adresse enregistrée.';
+        return;
+      }
+      addrBox.classList.remove('empty');
+      const partsLine = [profile.address||'', profile.zip||'', profile.city||''].filter(Boolean).join(', ');
+      addrBox.innerHTML = `
+        <div><strong>${profile.name || fallbackName || 'Client'}</strong></div>
+        <div>${partsLine || '—'}</div>
+        <div>${profile.country || ''}</div>
+        <div class="muted" style="margin-top:6px">${profile.phone ? '☎ ' + profile.phone : ''}</div>
+      `;
+    }
+
+    // --- Démarrage
+    async function init(){
+      setIcons();
+      wireLinks();
+      wireMenu();
+
+      // Vérifie la présence de GFAuth
+      if(!window.GFAuth || typeof window.GFAuth.getSession!=='function'){
+        console.error('GFAuth introuvable. Vérifie /compte/js/auth.js');
+        alert('Erreur de chargement de l’authentification. Réessaie plus tard.');
+        return;
+      }
+
+      // Session requise sinon redirection vers login.html?next=…
+      const sess = window.GFAuth.getSession();
+      if(!sess || !sess.email){
+        const next = encodeURIComponent(location.href);
+        location.replace(GH_ROOT + 'compte/login.html?next=' + next);
+        return;
+      }
+
+      // Entête & actions
+      const go = path => location.href = GH_ROOT + path;
+      $('#btnProfile').addEventListener('click', ()=> go('compte/profile.html'));
+      $('#btnPwd').addEventListener('click', ()=> go('compte/password-change.html'));
+      $('#btnEditAddress').addEventListener('click', ()=> go('compte/profile.html#adresse'));
+
+      $('#btnLogout').addEventListener('click', ()=>{
+        window.GFAuth.clearSession();
+        location.replace(GH_ROOT + 'compte/login.html');
+      });
+
+      $('#btnDelete').addEventListener('click', ()=>{
+        if(!confirm('Confirmer la suppression des données locales (panier/commandes démo) et la fermeture de session ?')) return;
+        // Efface les données locales de démo
+        saveCart([]);
+        const remaining = getOrders().filter(o => String(o.userId||'').toLowerCase() !== String(sess.email||'').toLowerCase());
+        saveOrders(remaining);
+        // Ferme la session
+        window.GFAuth.clearSession();
+        location.replace(GH_ROOT + 'compte/register.html');
+      });
+
+      // Lien Panier => checkout
+      $('#cartBtn').addEventListener('click', e=>{
+        e.preventDefault();
+        go('checkout.html');
+      });
+
+      // Remplit infos de session
+      const nameFromSess = sess.name || (sess.email?.split('@')[0]) || 'Client';
+      $('#userName').textContent = nameFromSess;
+      $('#userEmail').textContent = sess.email || '—';
+      const initial = (nameFromSess||'?').trim().charAt(0).toUpperCase();
+      $('#avatar').textContent = initial;
+      if(sess.loggedAt){
+        const d = new Date(sess.loggedAt);
+        if(!isNaN(+d)) $('#lastLogin').textContent = 'Dernière connexion : ' + d.toLocaleString('fr-FR');
+      }
+
+      // KPIs (panier + commandes locales)
+      const ordersAll = getOrders();
+      const mine = ordersAll.filter(o => String(o.userId||'').toLowerCase() === String(sess.email||'').toLowerCase());
+      $('#kpiOrders').textContent = mine.length;
+      $('#kpiCart').textContent = cartCount();
+
+      // Icône panier selon contenu
+      const icon = $('#cartIcon'); if(icon) icon.src = cartCount() > 0 ? ICONS.cartFull : ICONS.cart;
+
+      // Commandes (local)
+      renderOrders(ordersAll, sess.email);
+
+      // Profil depuis la base (Apps Script / Google Sheet)
+      try{
+        const list = await window.GFAuth.api.listUsers(); // retourne un tableau [{email, name, phone, address, city, zip, ...}]
+        const me = (list || []).find(u => (u.email||'').toLowerCase() === (sess.email||'').toLowerCase());
+        // Met à jour l’affichage du nom si présent côté base
+        if(me && me.name){
+          $('#userName').textContent = me.name;
+          $('#avatar').textContent = (me.name.trim().charAt(0) || initial).toUpperCase();
+        }
+        // KPI adresse & bloc adresse
+        const hasAddr = me && (me.address || me.city || me.zip || me.phone);
+        $('#kpiAddresses').textContent = hasAddr ? 1 : 0;
+        renderAddressFromProfile(me || {}, $('#userName').textContent);
+      }catch(err){
+        console.warn('Impossible de récupérer le profil via API:', err);
+        // Fallback : KPI adresse = 0
+        $('#kpiAddresses').textContent = 0;
+        renderAddressFromProfile({}, nameFromSess);
       }
     }
-    renderAddress();
 
-    // Boutons
-    const go=(path)=>location.href = GH_ROOT + path;
-    document.getElementById('btnProfile').addEventListener('click',()=>go('compte/profile.html'));
-    document.getElementById('btnPwd').addEventListener('click',()=>go('compte/password-change.html'));
-    document.getElementById('btnEditAddress').addEventListener('click',()=>go('compte/profile.html#adresse'));
-
-    document.getElementById('btnLogout').addEventListener('click',()=>{
-      localStorage.removeItem(KEY_USER);
-      location.replace(GH_ROOT+'compte/login.html');
-    });
-
-    document.getElementById('btnDelete').addEventListener('click',()=>{
-      if(!confirm('Confirmer la suppression locale de votre compte ? (démo)')) return;
-      // Démo : on efface uniquement côté navigateur
-      localStorage.removeItem(KEY_USER);
-      // Optionnel : effacer aussi les “commandes locales” de cet utilisateur
-      const all = getOrders().filter(o=>String(o.userId||'')!==String(user.id||user.email));
-      saveOrders(all);
-      location.replace(GH_ROOT+'compte/register.html');
-    });
-
-    // Mettre à jour icône panier selon contenu
-    const count=cartCount();
-    const icon=document.getElementById('cartIcon');
-    if(icon) icon.src = count>0 ? ICONS.cartFull : ICONS.cart;
-
-    // Lien Panier => checkout
-    document.getElementById('cartBtn').addEventListener('click',e=>{
-      e.preventDefault();
-      go('checkout.html');
-    });
-
+    // Lance quand le DOM est prêt (auth.js est chargé avec defer)
+    document.addEventListener('DOMContentLoaded', init);
   })();
   </script>
 </body>
