@@ -1,12 +1,13 @@
-/* GF Store — auth.js (CORS-safe: x-www-form-urlencoded)
-   S'appuie sur l'onglet "Utilisateurs" et les colonnes indiquées.
-   Pages:
-   - /compte/login.html          -> form#loginForm   (email, password) + #loginMsg
-   - /compte/register.html       -> form#registerForm(name, email, password[+ option: phone,address,city,zip,country]) + #registerMsg
-   - /compte/password-reset.html -> form#resetRequestForm(email) + #resetRequestMsg, form#resetForm(email, token, newPassword) + #resetMsg
-   - /compte/password-change.html-> form#changePasswordForm(oldPassword, newPassword) + #changeMsg
-   - /compte/profile.html        -> form#profileForm(name,email[ro],phone,address,city,zip,country,role) + #profileMsg
-   - /compte/index.html          -> dashboard (utilise GF_SESSION)
+/* File: /compte/js/auth.js
+   GF Store — Frontend Auth (CORS-safe via x-www-form-urlencoded)
+
+   Pages prises en charge :
+   - /compte/login.html            -> form#loginForm (email,password) + #loginMsg
+   - /compte/register.html         -> form#registerForm (name,email,password,phone,address,city,zip,country) + #registerMsg
+   - /compte/password-reset.html   -> form#resetRequestForm + #resetRequestMsg, form#resetForm + #resetMsg
+   - /compte/password-change.html  -> form#changePasswordForm + #changeMsg
+   - /compte/profile.html          -> form#profileForm + #profileMsg
+   - /compte/index.html            -> tableau de bord (utilise GF_SESSION)
 */
 
 (function () {
@@ -15,15 +16,19 @@
   // ======================
   // CONFIG
   // ======================
+  // URL Web App (dernière version déployée)
   const API_BASE = "https://script.google.com/macros/s/AKfycbx4FDloNE_32UzqzuZXfIK_4LZxIpO3oVAY1D5CnNURWhE7L1UA7n2xWYnMQPtBRauJ/exec";
+  // Clé identique à celle côté Apps Script (CONFIG.API_KEY)
   const API_KEY  = "GFSECRET123";
 
+  // Détection racine (GitHub Pages friendly)
   const ROOT = (() => {
     const parts = location.pathname.split("/").filter(Boolean);
     const isProject = location.host.endsWith("github.io") && parts.length > 0;
     return isProject ? `/${parts[0]}/` : "/";
   })();
   const PATH_COMPTE = `${ROOT}compte/`;
+
   const ROUTES = {
     dashboard: PATH_COMPTE + "index.html",
     login:     PATH_COMPTE + "login.html",
@@ -32,7 +37,7 @@
   };
 
   // ======================
-  // UTIL
+  // HELPERS
   // ======================
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
   const $ = (s,root) => (root||document).querySelector(s);
@@ -51,7 +56,7 @@
   function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v||"").trim()); }
 
   // ======================
-  // SESSION
+  // SESSION (localStorage)
   // ======================
   const SKEY = "GF_SESSION";
   function getSession(){ try{return JSON.parse(localStorage.getItem(SKEY)||"null")}catch{return null} }
@@ -64,7 +69,7 @@
   }
 
   // ======================
-  // API (x-www-form-urlencoded -> pas de prévol CORS)
+  // API WRAPPERS (urlencoded -> pas de prévol CORS)
   // ======================
   async function apiGet(action, params = {}) {
     const u = new URL(API_BASE);
@@ -102,7 +107,7 @@
   };
 
   // ======================
-  // PAGES
+  // PAGES : WIRING
   // ======================
   function wireLogin(){
     const form = $("#loginForm"); if(!form) return;
@@ -219,7 +224,7 @@
     if(!requireAuthOrRedirect()) return;
     const sess = getSession();
 
-    // Remplissage
+    // Pré-remplissage depuis /users
     (async()=>{
       try{
         const list = await API.listUsers();
@@ -286,6 +291,7 @@
     if (state) state.textContent = s?.email ? "Connecté" : "Déconnecté";
   }
 
+  // Expose (optionnel)
   window.GFAuth = { init, getSession, clearSession, api: API };
   document.addEventListener("DOMContentLoaded", init);
 })();
