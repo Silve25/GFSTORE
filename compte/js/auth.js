@@ -1,13 +1,8 @@
-/* File: /compte/js/auth.js
-   GF Store — Frontend Auth (CORS-safe via x-www-form-urlencoded)
-
-   Pages prises en charge :
-   - /compte/login.html            -> form#loginForm (email,password) + #loginMsg
-   - /compte/register.html         -> form#registerForm (name,email,password,phone,address,city,zip,country) + #registerMsg
-   - /compte/password-reset.html   -> form#resetRequestForm + #resetRequestMsg, form#resetForm + #resetMsg
-   - /compte/password-change.html  -> form#changePasswordForm + #changeMsg
-   - /compte/profile.html          -> form#profileForm + #profileMsg
-   - /compte/index.html            -> tableau de bord (utilise GF_SESSION)
+/* GF Store — auth.js (CORS-safe, URL-encoded)
+   Backend attendu (Apps Script):
+   - action=register | login | change | reset-request | reset | update-profile (POST)
+   - action=users | ping (GET)
+   - Sheet = "Users"
 */
 
 (function () {
@@ -16,9 +11,9 @@
   // ======================
   // CONFIG
   // ======================
-  // URL Web App (dernière version déployée)
-  const API_BASE = "https://script.google.com/macros/s/AKfycbx8KqksQ4iI7x3x988rXG1t9s-tvWRPU7G6dNS0nlY5NDBGyM_wg1lSEdhJL3rf6Oe5/exec";
-  // Clé identique à celle côté Apps Script (CONFIG.API_KEY)
+  // ⚠️ URL de ton déploiement V5
+  const API_BASE = "https://script.google.com/macros/s/AKfycbx5WPfPCBrykCAPBV8AEsDTQCc2o8UFv_9ClBo8wmUyDxtE8wF8h_x-mWpneDK-igZ0/exec";
+  // Clé identique côté Apps Script (CONFIG.API_KEY)
   const API_KEY  = "GFSECRET123";
 
   // Détection racine (GitHub Pages friendly)
@@ -37,7 +32,7 @@
   };
 
   // ======================
-  // HELPERS
+  // HELPERS UI / FORMS
   // ======================
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
   const $ = (s,root) => (root||document).querySelector(s);
@@ -64,12 +59,15 @@
   function clearSession(){ localStorage.removeItem(SKEY); }
   function requireAuthOrRedirect(){
     const s=getSession();
-    if(!s || !s.email){ location.href = ROUTES.login + "?next=" + encodeURIComponent(location.href); return false; }
+    if(!s || !s.email){
+      location.href = ROUTES.login + "?next=" + encodeURIComponent(location.href);
+      return false;
+    }
     return true;
   }
 
   // ======================
-  // API WRAPPERS (urlencoded -> pas de prévol CORS)
+  // API (urlencoded -> pas de prévol CORS)
   // ======================
   async function apiGet(action, params = {}) {
     const u = new URL(API_BASE);
@@ -95,14 +93,19 @@
   }
 
   const API = {
-    listUsers:     () => apiGet("users"),
+    listUsers:     () => apiGet("users"), // renvoie un tableau d’utilisateurs "sanitized"
     register:      ({ name, email, password, phone, address, city, zip, country }) =>
                     apiPost("register", { name, email, password, phone, address, city, zip, country }),
-    login:         ({ email, password }) => apiPost("login",  { email, password }),
-    resetRequest:  ({ email }) => apiPost("reset-request", { email }),
-    reset:         ({ email, token, newPassword }) => apiPost("reset", { email, token, newPassword }),
-    changePassword:({ email, oldPassword, newPassword }) => apiPost("change", { email, oldPassword, newPassword }),
-    updateProfile: ({ email, updates }) => apiPost("update-profile", { email, updates }),
+    login:         ({ email, password }) =>
+                    apiPost("login",  { email, password }),
+    resetRequest:  ({ email }) =>
+                    apiPost("reset-request", { email }),
+    reset:         ({ email, token, newPassword }) =>
+                    apiPost("reset", { email, token, newPassword }),
+    changePassword:({ email, oldPassword, newPassword }) =>
+                    apiPost("change", { email, oldPassword, newPassword }),
+    updateProfile: ({ email, updates }) =>
+                    apiPost("update-profile", { email, updates }),
     ping:          () => apiGet("ping"),
   };
 
@@ -125,7 +128,7 @@
         showMsg(msg, "Connexion réussie.", true);
         const url = new URL(location.href);
         const next = url.searchParams.get("next") || ROUTES.dashboard;
-        await sleep(300);
+        await sleep(200);
         location.href = next;
       }catch(err){ showMsg(msg, err.message || "Erreur."); }
       finally{ setDisabled(form,false); }
@@ -149,11 +152,16 @@
         if(!name) throw new Error("Nom requis.");
         if(!isEmail(email)) throw new Error("Email invalide.");
         if(String(password).length < 6) throw new Error("Mot de passe : 6 caractères minimum.");
+
         const resp = await API.register({ name, email, password, phone, address, city, zip, country });
-        if(!resp || !resp.ok) throw new Error(resp?.error || "Inscription impossible.");
+        if(!resp || !resp.ok) {
+          const code = resp?.error || "";
+          if (code === "EMAIL_EXISTS") throw new Error("Cet email est déjà utilisé.");
+          throw new Error(resp?.error || "Inscription impossible.");
+        }
         setSession({ email, name, loggedAt: Date.now() });
         showMsg(msg, "Compte créé ! Redirection…", true);
-        await sleep(400);
+        await sleep(300);
         location.href = ROUTES.dashboard;
       }catch(err){ showMsg(msg, err.message || "Erreur."); }
       finally{ setDisabled(form,false); }
@@ -189,9 +197,13 @@
         if(!/^\d{6}$/.test(String(token||""))) throw new Error("Code invalide.");
         if(String(newPassword).length < 6) throw new Error("Nouveau mot de passe trop court.");
         const resp = await API.reset({ email, token, newPassword });
-        if(!resp || !resp.ok) throw new Error(resp?.error || "Réinitialisation impossible.");
+        if(!resp || !resp.ok) {
+          const code = resp?.error || "";
+          if (code === "INVALID_TOKEN") throw new Error("Code expiré ou incorrect.");
+          throw new Error(resp?.error || "Réinitialisation impossible.");
+        }
         showMsg(msg, "Mot de passe réinitialisé. Vous pouvez vous connecter.", true);
-        await sleep(400);
+        await sleep(300);
         location.href = ROUTES.login;
       }catch(err){ showMsg(msg, err.message || "Erreur."); }
       finally{ setDisabled(form,false); }
@@ -210,7 +222,12 @@
         const newPassword = form.newPassword?.value || "";
         if(String(newPassword).length < 6) throw new Error("Nouveau mot de passe trop court (≥6).");
         const resp = await API.changePassword({ email: sess.email, oldPassword, newPassword });
-        if(!resp || !resp.ok) throw new Error(resp?.error || "Impossible de changer le mot de passe.");
+        if(!resp || !resp.ok) {
+          const code = resp?.error || "";
+          if (code === "INVALID_CREDENTIALS") throw new Error("Mot de passe actuel incorrect.");
+          if (code === "NOT_FOUND") throw new Error("Compte introuvable.");
+          throw new Error(resp?.error || "Impossible de changer le mot de passe.");
+        }
         showMsg(msg, "Mot de passe mis à jour.", true);
         form.reset();
       }catch(err){ showMsg(msg, err.message || "Erreur."); }
@@ -227,21 +244,24 @@
     // Pré-remplissage depuis /users
     (async()=>{
       try{
-        const list = await API.listUsers();
-        const me = (list||[]).find(u => (u.email||'').toLowerCase() === (sess.email||'').toLowerCase());
-        if(me){
-          if(form.name) form.name.value = me.name || "";
-          if(form.email) form.email.value = me.email || "";
-          if(form.phone) form.phone.value = me.phone || "";
-          if(form.address) form.address.value = me.address || "";
-          if(form.city) form.city.value = me.city || "";
-          if(form.zip) form.zip.value = me.zip || "";
-          if(form.country) form.country.value = me.country || "";
-          if(form.role) form.role.value = me.role || "";
-        }else{
-          if(form.email) form.email.value = sess.email || "";
-          if(form.name)  form.name.value  = sess.name || "";
+        const list = await API.listUsers(); // tableau
+        if (Array.isArray(list)) {
+          const me = list.find(u => (u.email||'').toLowerCase() === (sess.email||'').toLowerCase());
+          if(me){
+            if(form.name)    form.name.value    = me.name || "";
+            if(form.email)   form.email.value   = me.email || "";
+            if(form.phone)   form.phone.value   = me.phone || "";
+            if(form.address) form.address.value = me.address || "";
+            if(form.city)    form.city.value    = me.city || "";
+            if(form.zip)     form.zip.value     = me.zip || "";
+            if(form.country) form.country.value = me.country || "";
+            if(form.role)    form.role.value    = me.role || "";
+            return;
+          }
         }
+        // fallback
+        if(form.email) form.email.value = sess.email || "";
+        if(form.name)  form.name.value  = sess.name || "";
       }catch{/* ignore */}
     })();
 
@@ -258,7 +278,11 @@
           role: form.role?.value?.trim() || ""
         };
         const resp = await API.updateProfile({ email: sess.email, updates });
-        if(!resp || !resp.ok) throw new Error(resp?.error || "Mise à jour impossible.");
+        if(!resp || !resp.ok) {
+          const code = resp?.error || "";
+          if (code === "NOT_FOUND") throw new Error("Compte introuvable.");
+          throw new Error(resp?.error || "Mise à jour impossible.");
+        }
         showMsg(msg, "Profil mis à jour.", true);
         setSession({ ...sess, name: updates.name || sess.name, updatedAt: Date.now() });
       }catch(err){ showMsg(msg, err.message || "Erreur."); }
