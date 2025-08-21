@@ -1,30 +1,28 @@
-/* GF Store — auth.js
+/* GF Store — auth.js (version CORS-safe)
    Frontend minimal pour Google Apps Script (Sheet "Utilisateurs")
    Pages prévues :
    - /compte/login.html             -> form#loginForm   (input[name=email], input[name=password])
    - /compte/register.html          -> form#registerForm(input[name=name], input[name=email], input[name=password])
-   - /compte/password-reset.html    -> form#resetRequestForm(email) + (optionnel) form#resetForm(email, token, newPassword)
+   - /compte/password-reset.html    -> form#resetRequestForm(email) + form#resetForm(email, token, newPassword)
    - /compte/password-change.html   -> form#changePasswordForm(oldPassword, newPassword)
-   - /compte/profile.html           -> form#profileForm(name, email[readonly], phone, address, city, zip)
+   - /compte/profile.html           -> form#profileForm(name, email[readonly], phone, address, city, zip, country, role)
    - /compte/index.html             -> tableau de bord (affiche la session, bouton #logoutBtn)
 
    Stockage session : localStorage["GF_SESSION"] = { email, name, loggedAt }
 */
-
 (function () {
   "use strict";
 
   // ======================
   // CONFIG
   // ======================
-  // URL de déploiement WebApp (doGet / doPost)
-  const API_BASE = "https://script.google.com/macros/s/AKfycbyrI0zrawr9cs4HGLBn0lzZtXvkP1OIQAiyYFVMDr1NXg1L-pbvFy2bKELMDfl3T6Ke/exec";
-  // Doit être identique à API_KEY côté Apps Script
+  // URL WebApp (ton nouveau déploiement V3)
+  const API_BASE = "https://script.google.com/macros/s/AKfycbx4FDloNE_32UzqzuZXfIK_4LZxIpO3oVAY1D5CnNURWhE7L1UA7n2xWYnMQPtBRauJ/exec";
+  // Doit correspondre à CONFIG.API_KEY côté Apps Script
   const API_KEY  = "GFSECRET123";
 
-  // Redirections par défaut (adapté à /GFSTORE/ si site de projet GitHub Pages)
+  // Racine (GitHub Pages friendly)
   const ROOT = (() => {
-    // Déduit /GFSTORE/ si hébergé sous https://<user>.github.io/GFSTORE/
     const parts = location.pathname.split("/").filter(Boolean);
     const isProject = location.host.endsWith("github.io") && parts.length > 0;
     return isProject ? `/${parts[0]}/` : "/";
@@ -42,9 +40,8 @@
   // UTILITAIRES
   // ======================
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-
-  function $(sel, root) { return (root || document).querySelector(sel); }
-  function $all(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+  const $     = (sel, root) => (root || document).querySelector(sel);
+  const $all  = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
   function setDisabled(form, on) {
     if (!form) return;
@@ -86,7 +83,7 @@
   }
 
   // ======================
-  // APPEL API (Apps Script)
+  // APPELS API (Apps Script)
   // ======================
   async function apiGet(action, params = {}) {
     const u = new URL(API_BASE);
@@ -97,19 +94,24 @@
     }
     const r = await fetch(u.toString(), {
       method: "GET",
-      headers: { "Accept": "application/json" },
-      cache: "no-store",
+      cache: "no-store"
+      // Pas d'en-têtes custom pour rester « simple request »
     });
     if (!r.ok) throw new Error(`GET ${action} HTTP ${r.status}`);
     return r.json();
   }
 
+  // IMPORTANT: POST en x-www-form-urlencoded -> évite le prévol CORS
   async function apiPost(action, body = {}) {
     const payload = { action, key: API_KEY, ...body };
+    const form = new URLSearchParams();
+    for (const [k, v] of Object.entries(payload)) {
+      form.append(k, (v && typeof v === "object") ? JSON.stringify(v) : String(v));
+    }
     const r = await fetch(API_BASE, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: form
+      // Pas de Content-Type explicite, le navigateur mettra application/x-www-form-urlencoded
     });
     if (!r.ok) throw new Error(`POST ${action} HTTP ${r.status}`);
     return r.json();
@@ -117,14 +119,14 @@
 
   // Wrappers
   const API = {
-    listUsers: () => apiGet("users"),
-    register: ({ name, email, password }) => apiPost("register", { name, email, password }),
-    login:    ({ email, password }) => apiPost("login", { email, password }),
-    resetRequest: ({ email }) => apiPost("reset-request", { email }),
-    reset:       ({ email, token, newPassword }) => apiPost("reset", { email, token, newPassword }),
-    changePassword: ({ email, oldPassword, newPassword }) => apiPost("change", { email, oldPassword, newPassword }),
-    updateProfile:  ({ email, updates }) => apiPost("update-profile", { email, updates }),
-    ping: () => apiGet("ping"),
+    listUsers:     () => apiGet("users"),
+    register:      ({ name, email, password }) => apiPost("register", { name, email, password }),
+    login:         ({ email, password }) => apiPost("login", { email, password }),
+    resetRequest:  ({ email }) => apiPost("reset-request", { email }),
+    reset:         ({ email, token, newPassword }) => apiPost("reset", { email, token, newPassword }),
+    changePassword:({ email, oldPassword, newPassword }) => apiPost("change", { email, oldPassword, newPassword }),
+    updateProfile: ({ email, updates }) => apiPost("update-profile", { email, updates }),
+    ping:          () => apiGet("ping"),
   };
 
   // ======================
@@ -197,12 +199,9 @@
         const email = form.email?.value?.trim();
         if (!isEmail(email)) throw new Error("Email invalide.");
         const resp = await API.resetRequest({ email });
-        if (!resp || !resp.ok) throw new Error(resp?.error || "Échec de la demande.");
-        showMsg(msg, "Token généré (consulte la console Apps Script) — saisis-le ci-dessous pour réinitialiser.", true);
-        // Optionnel : si un champ .tokenPreview existe, on l'affiche si renvoyé (utile en dev)
-        if (resp.token && form.querySelector(".tokenPreview")) {
-          form.querySelector(".tokenPreview").textContent = String(resp.token);
-        }
+        if (!resp || !resp.ok) throw new Error(resp?.error || "Demande impossible.");
+        // Message neutre (ne révèle pas l'existence de l'email)
+        showMsg(msg, "Si un compte existe pour cet email, un code a été envoyé.", true);
       } catch (err) {
         showMsg(msg, err.message || "Erreur.");
       } finally {
@@ -222,11 +221,11 @@
         const token = form.token?.value?.trim();
         const newPassword = form.newPassword?.value || "";
         if (!isEmail(email)) throw new Error("Email invalide.");
-        if (!token) throw new Error("Token requis.");
+        if (!/^\d{6}$/.test(String(token||""))) throw new Error("Code invalide.");
         if (String(newPassword).length < 6) throw new Error("Nouveau mot de passe trop court.");
         const resp = await API.reset({ email, token, newPassword });
         if (!resp || !resp.ok) throw new Error(resp?.error || "Réinitialisation impossible.");
-        showMsg(msg, "Mot de passe réinitialisé. Tu peux te connecter.", true);
+        showMsg(msg, "Mot de passe réinitialisé. Vous pouvez vous connecter.", true);
         await sleep(400);
         location.href = ROUTES.login;
       } catch (err) {
@@ -240,7 +239,6 @@
   async function wireChangePassword() {
     const form = $("#changePasswordForm"); if (!form) return;
     const msg = $("#changeMsg");
-    // Protège la page
     if (!requireAuthOrRedirect()) return;
     const sess = getSession();
 
@@ -266,28 +264,28 @@
   async function wireProfile() {
     const form = $("#profileForm"); if (!form) return;
     const msg = $("#profileMsg");
-
     if (!requireAuthOrRedirect()) return;
     const sess = getSession();
 
-    // Pré-remplissage : on récupère la fiche de l'utilisateur depuis l’API users (simple)
+    // Pré-remplissage depuis la base
     try {
-      const data = await API.listUsers();
-      const me = (data || []).find(u => (u.email || "").toLowerCase() === (sess.email || "").toLowerCase());
+      const list = await API.listUsers(); // renvoie un tableau d'objets "sanitisés"
+      const me = (list || []).find(u => (u.email || "").toLowerCase() === (sess.email || "").toLowerCase());
       if (me) {
-        if (form.name)   form.name.value   = me.name || "";
-        if (form.email)  form.email.value  = me.email || "";
-        if (form.phone)  form.phone.value  = me.phone || "";
-        if (form.address)form.address.value= me.address || "";
-        if (form.city)   form.city.value   = me.city || "";
-        if (form.zip)    form.zip.value    = me.zip || "";
+        if (form.name)    form.name.value    = me.name || "";
+        if (form.email)   form.email.value   = me.email || "";
+        if (form.phone)   form.phone.value   = me.phone || "";
+        if (form.address) form.address.value = me.address || "";
+        if (form.city)    form.city.value    = me.city || "";
+        if (form.zip)     form.zip.value     = me.zip || "";
+        if (form.country) form.country.value = me.country || "";
+        if (form.role)    form.role.value    = me.role || "";
       } else {
-        // fallback : au moins l’email de session
-        if (form.email)  form.email.value  = sess.email || "";
-        if (form.name)   form.name.value   = sess.name || "";
+        if (form.email) form.email.value = sess.email || "";
+        if (form.name)  form.name.value  = sess.name || "";
       }
     } catch (e) {
-      // Silencieux : on laisse l’utilisateur voir/éditer ses champs
+      // Silencieux
     }
 
     form.addEventListener("submit", async (e) => {
@@ -300,11 +298,12 @@
           address: form.address?.value?.trim() || "",
           city:    form.city?.value?.trim() || "",
           zip:     form.zip?.value?.trim() || "",
+          country: form.country?.value?.trim() || "",
+          role:    form.role?.value?.trim() || ""
         };
         const resp = await API.updateProfile({ email: sess.email, updates });
         if (!resp || !resp.ok) throw new Error(resp?.error || "Mise à jour impossible.");
         showMsg(msg, "Profil mis à jour.", true);
-        // Mets à jour la session (nom affiché dans le dashboard par ex.)
         setSession({ ...sess, name: updates.name || sess.name, updatedAt: Date.now() });
       } catch (err) {
         showMsg(msg, err.message || "Erreur.");
@@ -315,7 +314,6 @@
   }
 
   function wireDashboard() {
-    // Affichage simple d’infos si présent
     const who = $("#sessionWho");
     const s = getSession();
     if (who) {
@@ -338,7 +336,7 @@
   // INIT
   // ======================
   async function init() {
-    // Fil de fer auto selon la page où l’on est
+    // Brancher les pages si présentes
     wireLogin();
     wireRegister();
     wireResetRequest();
@@ -347,13 +345,13 @@
     wireProfile();
     wireDashboard();
 
-    // Optionnel : affiche un badge "Connecté" (si tu as un span#accountState)
+    // Badge d'état session (optionnel)
     const s = getSession();
     const state = $("#accountState");
     if (state) state.textContent = s?.email ? "Connecté" : "Déconnecté";
   }
 
-  // Expose global (optionnel)
+  // Expose global
   window.GFAuth = {
     init,
     getSession,
