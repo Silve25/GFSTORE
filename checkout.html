@@ -69,12 +69,13 @@
     .disabled{opacity:.5;cursor:not-allowed}
     .disabled .bubble{display:none}
 
-    /* Panels (crypto / sepa) */
+    /* Panels */
     .pm{display:none;margin-top:12px;border:1px dashed var(--line);border-radius:12px;background:#fbfdff;padding:12px}
     .pm.show{display:block}
     .copyline{display:grid;grid-template-columns:1fr auto;gap:8px}
     .copy{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font-weight:600}
-    .qr{display:flex;align-items:center;justify-content:center;height:190px;border:1px dashed #dbe7ff;border-radius:10px;background:#f3f6ff;color:var(--muted);font-weight:600}
+    .qr{display:flex;align-items:center;justify-content:center;min-height:190px;border:1px dashed #dbe7ff;border-radius:10px;background:#f3f6ff}
+    .qr img{width:220px;height:auto;display:block}
 
     /* Pay now / split */
     .paytog{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
@@ -87,7 +88,7 @@
     .segbtn{flex:1;display:grid;place-items:center;gap:2px;padding:10px 12px;border:1px solid transparent;background:#fff;border-radius:10px;cursor:pointer}
     .segbtn[aria-pressed="true"]{border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.12);background:#f0f6ff}
     .segbtn .big{font-weight:600}
-    .segbtn .small{font-size:12px;color:var(--muted)}
+    .segbtn .small{font-size:12px;color:#6b7280}
 
     /* Summary */
     .mini{display:flex;flex-direction:column;gap:10px}
@@ -118,7 +119,7 @@
     .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#111;color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:99999}
     .toast.show{display:block}
 
-    /* --- Modern Uploader (SEPA) --- */
+    /* Uploader (SEPA) */
     .uploader{display:grid;gap:10px}
     .dz{
       position:relative; display:grid; place-items:center; text-align:center; gap:8px;
@@ -134,15 +135,11 @@
     .dz .cta{display:inline-flex;gap:8px;align-items:center;margin-top:6px}
     .dz .cta .btn{padding:8px 12px}
     .hidden{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
-
-    .filecard{
-      display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;
-      box-shadow:0 4px 14px rgba(0,0,0,.04)
-    }
+    .filecard{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 4px 14px rgba(0,0,0,.04)}
     .filebadge{width:36px;height:36px;border-radius:10px;background:#eef2ff;display:grid;place-items:center;border:1px solid #e5e7eb}
     .filemeta{display:grid}
     .filename{font-weight:600;max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .filesub{font-size:12px;color:var(--muted)}
+    .filesub{font-size:12px;color:#6b7280}
     .prog{height:6px;background:#eef2ff;border-radius:999px;overflow:hidden}
     .bar{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#2563eb);transition:width .6s ease}
     .factions{margin-left:auto;display:flex;gap:8px}
@@ -215,7 +212,6 @@
         </div>
 
         <div class="methods" role="tablist">
-          <!-- Crypto -->
           <button class="m" role="tab" aria-selected="true" data-method="crypto">
             <div class="mlabel"><strong>Crypto</strong></div>
             <div class="logos">
@@ -226,7 +222,6 @@
             <span class="bubble">Promo -2%</span>
           </button>
 
-          <!-- SEPA -->
           <button class="m" role="tab" aria-selected="false" data-method="sepa">
             <div class="mlabel"><strong>Virement SEPA</strong></div>
             <div class="logos">
@@ -236,7 +231,6 @@
             <span class="bubble">Promo -1%</span>
           </button>
 
-          <!-- Carte (indispo) -->
           <div class="m disabled" aria-selected="false">
             <div class="mlabel"><strong>Carte bancaire</strong></div>
             <div class="logos">
@@ -247,7 +241,6 @@
             <span class="muted" style="margin-top:6px">Indisponible</span>
           </div>
 
-          <!-- PayPal (indispo) -->
           <div class="m disabled" aria-selected="false">
             <div class="mlabel"><strong>PayPal</strong></div>
             <div class="logos">
@@ -257,11 +250,9 @@
           </div>
         </div>
 
-        <!-- Pay now / split -->
+        <!-- Payer maintenant / Split -->
         <div class="paytog" style="margin-top:12px">
-          <button id="btnOnce" class="pt on" type="button">
-            <strong>Payer maintenant</strong>
-          </button>
+          <button id="btnOnce" class="pt on" type="button"><strong>Payer maintenant</strong></button>
           <button id="btnSplit" class="pt" type="button" aria-haspopup="dialog" aria-controls="splitModal">
             <strong>Payer en plusieurs fois</strong> <small id="splitHint">(désactivé)</small>
           </button>
@@ -273,10 +264,10 @@
             <div>
               <label for="ccy">Monnaie</label>
               <select id="ccy">
-                <option value="USDT-TRC20" selected>USDT (TRC20)</option>
-                <option value="USDT-ERC20">USDT (ERC20)</option>
+                <option value="USDT-BEP20" selected>USDT (BEP20)</option>
+                <option value="USDT-TRC20">USDT (TRC20)</option>
                 <option value="BTC">Bitcoin (BTC)</option>
-                <option value="ETH">Ethereum (ETH)</option>
+                <option value="ETH-ERC20">Ethereum (ERC20)</option>
               </select>
             </div>
             <div>
@@ -306,7 +297,10 @@
             <input id="txid" placeholder="0x… / bc1… / TX123…" required>
           </div>
 
-          <div class="qr" aria-label="QR de paiement">QR CODE</div>
+          <div class="qr" aria-label="QR de paiement">
+            <img id="qrImg" alt="QR code paiement" width="220" height="220" decoding="async">
+          </div>
+
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             <button id="confirmCrypto" class="btn">J’ai envoyé le paiement</button>
           </div>
@@ -324,10 +318,9 @@
               <div><label for="amountNowBank">À virer maintenant (EUR)</label><input id="amountNowBank" readonly value="0"></div>
             </div>
 
-            <!-- Modern uploader -->
+            <!-- Uploader -->
             <div class="uploader" aria-label="Téléverser une preuve de virement">
               <div id="dz" class="dz" tabindex="0" role="button" aria-controls="proofInput">
-                <!-- cloud upload SVG -->
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 0-8h-.26A6 6 0 1 0 7 18Zm5-9v6m0-6-2 2m2-2 2 2" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <div>Glissez-déposez votre preuve (PDF/JPG/PNG)</div>
                 <div class="hint">ou</div>
@@ -437,7 +430,7 @@
 
   <script>
   (async()=>{
-    // --- Icônes (continue/menu/ssl/truck/user/back) ---
+    // Icônes
     const ICONS = {
       user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
       continue:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000',
@@ -447,21 +440,17 @@
       back:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000'
     };
     const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
-    setSrc('icUser',ICONS.user);
-    setSrc('icMenu',ICONS.menu);
-    setSrc('icSSL',ICONS.ssl);
-    setSrc('icTruck',ICONS.truck);
-    setSrc('icBack',ICONS.back);
-    setSrc('icContinue',ICONS.continue);
+    setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('icSSL',ICONS.ssl);
+    setSrc('icTruck',ICONS.truck); setSrc('icBack',ICONS.back); setSrc('icContinue',ICONS.continue);
 
-    // --- Menu (fonctionnel) ---
+    // Menu
     const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
     if(menuBtn&&menuDrop){
       menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
       document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
     }
 
-    // --- Helpers ---
+    // Helpers
     const $=s=>document.querySelector(s); const $$=s=>Array.from(document.querySelectorAll(s));
     const toast=msg=>{const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600);};
     const EUR=v=>Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
@@ -471,7 +460,7 @@
     const orderId=(()=>{const d=new Date(); const y=String(d.getFullYear()).slice(2); const mm=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); const rnd=Math.floor(Math.random()*9000)+1000; return `GF-${y}${mm}${dd}-${rnd}`;})();
     $('#orderId').textContent=orderId; $('#vref').value='GF-'+orderId;
 
-    // --- Panier -> récap ---
+    // Panier -> récap
     function computeSub(cart){ return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0); }
     function renderMini(){
       const wrap=$('#miniCart'); const cart=getCart();
@@ -487,18 +476,46 @@
         </div>`).join('');
     }
 
-    // --- Méthodes / promos ---
+    // Méthodes / promos
     function currentPM(){ return document.querySelector('.m[role="tab"][aria-selected="true"]')?.dataset.method || 'crypto'; }
     function promoRate(){ return currentPM()==='crypto'?0.02 : currentPM()==='sepa'?0.01 : 0; }
 
-    // --- FX mock pour crypto ---
-    const fx={'USDT-TRC20':{symbol:'USDT',rate:1},'USDT-ERC20':{symbol:'USDT',rate:1},'BTC':{symbol:'BTC',rate:60000},'ETH':{symbol:'ETH',rate:3000}};
+    // Taux mock (affichage montant crypto)
+    const fx={
+      'USDT-TRC20':{symbol:'USDT',rate:1},
+      'USDT-BEP20':{symbol:'USDT',rate:1},
+      'BTC':{symbol:'BTC',rate:60000},
+      'ETH-ERC20':{symbol:'ETH',rate:3000}
+    };
+
+    // TES ADRESSES + QR (réels)
+    const WALLET={
+      'USDT-BEP20':{
+        address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b',
+        qr:'https://api.qrcode-monkey.com/tmp/9c2692034c7a6496eb6d7153da52f854.svg?1755861184316'
+      },
+      'USDT-TRC20':{
+        address:'TMdLMTYGEEZAnoVbi482Zr9QSRgWmRUXXq',
+        qr:'https://api.qrcode-monkey.com/tmp/ce476e4409d57ba517ffaf6db6bf25d2.svg?1755861346811'
+      },
+      'BTC':{
+        address:'18npEW9EaKZvVvA9B1z3DcmVEJtuQUdus3',
+        qr:'https://api.qrcode-monkey.com/tmp/578f1d0b0e32feece2ae335bb417c7f8.svg?1755861612113'
+      },
+      'ETH-ERC20':{
+        address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b',
+        qr:'https://api.qrcode-monkey.com/tmp/9c2692034c7a6496eb6d7153da52f854.svg?1755861930363'
+      }
+    };
+
     function setCryptoAddress(ccy){
-      const map={'USDT-TRC20':'TQf3k7s9h2x4y5z6a7b8c9d0e1f2g3h4i','USDT-ERC20':'0x3Fb8b7E6cA9f4D2E1b0C9a8F7e6D5c4B3a2F1E0','BTC':'bc1q9v8w7x6y5z4a3b2c1d0e9f8g7h6j5k4l3m2n','ETH':'0x9eF2B3cD4a5E6f7B8c9D0E1F2A3b4C5d6E7f8A9B'};
-      $('#wallet').value=map[ccy]||''; $('#ccyLabel').textContent=fx[ccy]?.symbol||'';
+      const cfg=WALLET[ccy];
+      $('#wallet').value = cfg?.address || '';
+      $('#ccyLabel').textContent = fx[ccy]?.symbol || (ccy.includes('USDT')?'USDT':'');
+      const img=$('#qrImg'); if(img){ img.src = cfg?.qr || ''; img.alt = 'QR '+ccy; }
     }
 
-    // --- Échéancier ---
+    // Échéancier
     function splitAmounts(total, parts){
       const cents=Math.round(total*100);
       const base=Math.floor(cents/parts);
@@ -508,8 +525,7 @@
     }
     function scheduleLines(total, parts){
       const amts=splitAmounts(total, parts);
-      const today=new Date();
-      const steps=[0,30,60,90];
+      const today=new Date(); const steps=[0,30,60,90];
       return amts.map((amt,i)=>{
         const d=new Date(today); d.setDate(d.getDate()+steps[i]);
         const label = i===0 ? 'Aujourd’hui' : (i===1?'Dans 30 jours': i===2?'Dans 60 jours':'Dans 90 jours');
@@ -517,23 +533,17 @@
       });
     }
 
-    // --- Sélection split (page + modal) ---
-    let selectedSplit=1; // 1 = paiement en une fois
-    let modalParts=4;    // valeur par défaut de la modal
+    // Split
+    let selectedSplit=1; let modalParts=4;
     const modal=$('#splitModal');
     const openModal=()=>{ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); setModalParts(modalParts); updateModalPreview(); };
     const closeModal=()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); };
-
-    function updateSplitHint(){
-      $('#splitHint').textContent = selectedSplit>1 ? `(${selectedSplit}× mensuel)` : '(désactivé)';
-    }
-
+    function updateSplitHint(){ $('#splitHint').textContent = selectedSplit>1 ? `(${selectedSplit}× mensuel)` : '(désactivé)'; }
     function updateModalPreview(){
       const cart=getCart(); const sub=computeSub(cart); const promo=sub*promoRate(); const total=Math.max(0,sub - promo);
       const lines=scheduleLines(total, modalParts);
       $('#modalPrev').innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
     }
-
     function setModalParts(n){
       modalParts=Number(n);
       $$('#segSplit .segbtn').forEach(b=>b.setAttribute('aria-pressed', String(Number(b.dataset.parts)===modalParts)));
@@ -542,36 +552,27 @@
     $$('#segSplit .segbtn').forEach(b=>b.addEventListener('click',()=>setModalParts(b.dataset.parts)));
     $('#closeSplit').addEventListener('click',closeModal);
     $('#cancelSplit').addEventListener('click',closeModal);
-    $('#applySplit').addEventListener('click',()=>{
-      selectedSplit=modalParts;
-      $('#btnSplit').classList.add('on'); $('#btnOnce').classList.remove('on');
-      closeModal(); updateSplitHint(); updateSummary();
-    });
-
-    // --- Pay now / split buttons ---
+    $('#applySplit').addEventListener('click',()=>{ selectedSplit=modalParts; $('#btnSplit').classList.add('on'); $('#btnOnce').classList.remove('on'); closeModal(); updateSplitHint(); updateSummary(); });
     $('#btnOnce').addEventListener('click',()=>{ selectedSplit=1; $('#btnOnce').classList.add('on'); $('#btnSplit').classList.remove('on'); updateSplitHint(); updateSummary(); });
     $('#btnSplit').addEventListener('click',openModal);
     updateSplitHint();
 
-    // --- Mise à jour récap global ---
+    // Récap global
     const SHIPPING=0;
     function updateSummary(){
       const cart=getCart(); if(!cart.length){ renderMini(); return; }
       const sub=computeSub(cart);
       const promo=sub*promoRate();
       const total=Math.max(0, sub + SHIPPING - promo);
-
       const parts = selectedSplit;
       const amts=splitAmounts(total,parts);
       const dueNow=amts[0];
 
-      // Inject
       $('#sub').textContent=EUR(sub);
       $('#benefit').textContent= promo>0 ? '–'+EUR(promo) : '—';
       $('#total').textContent=EUR(total);
       $('#dueNow').textContent=EUR(dueNow);
 
-      // Schedule preview (dans le récap)
       const scheduleBox=$('#schedule');
       if(parts>1){
         const lines=scheduleLines(total, parts);
@@ -581,7 +582,6 @@
         scheduleBox.style.display='none';
       }
 
-      // Panneaux
       if(currentPM()==='crypto'){
         $('#amountNow').value = dueNow.toFixed(2);
         const ccy=$('#ccy').value; const r=fx[ccy]?.rate||1;
@@ -593,13 +593,11 @@
       }
     }
 
-    // --- Initial render ---
+    // Init
     renderMini(); updateSummary();
-    // Set initial crypto address
-    setCryptoAddress($('#ccy').value);
+    setCryptoAddress($('#ccy').value); // adresse & QR init
 
-    // --- Interactions ---
-    // Choix méthode
+    // Interactions
     $$('.m[role="tab"]').forEach(card=>{
       card.addEventListener('click', ()=>{
         $$('.m[role="tab"]').forEach(c=>c.setAttribute('aria-selected', String(c===card)));
@@ -609,7 +607,6 @@
         updateSummary();
       });
     });
-    // Crypto ccy change
     $('#ccy').addEventListener('change', ()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
 
     // Copier
@@ -623,7 +620,7 @@
       return true;
     }
 
-    // --- Modern uploader logic ---
+    // Uploader (SEPA)
     const dz = document.getElementById('dz');
     const input = document.getElementById('proofInput');
     const fileWrap = document.getElementById('fileWrap');
@@ -632,38 +629,32 @@
     const fileBar = document.getElementById('fileBar');
     const fileOk = document.getElementById('fileOk');
     const removeProof = document.getElementById('removeProof');
-    document.getElementById('pickProof').addEventListener('click',()=>input.click());
-    dz.addEventListener('click',()=>input.click());
-    dz.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); input.click(); }});
+    if(document.getElementById('pickProof')) document.getElementById('pickProof').addEventListener('click',()=>input.click());
+    if(dz){
+      dz.addEventListener('click',()=>input.click());
+      dz.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); input.click(); }});
+      ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,(e)=>{e.preventDefault();e.stopPropagation();dz.classList.add('over');}));
+      ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,(e)=>{e.preventDefault();e.stopPropagation();dz.classList.remove('over');}));
+      dz.addEventListener('drop',e=>{
+        const f=e.dataTransfer?.files?.[0]; if(!f) return;
+        if(!/(\.pdf$|image\/)/i.test(f.type) && !/\.pdf$/i.test(f.name)){ toast('Format non supporté'); return; }
+        if(f.size>10*1024*1024){ toast('Fichier trop volumineux (>10Mo)'); return; }
+        showFile(f);
+      });
+    }
     function fmtBytes(b){ if(!b&&b!==0) return ''; const u=['o','Ko','Mo','Go']; let i=0; while(b>=1024 && i<u.length-1){ b/=1024; i++; } return b.toFixed(b<10&&i?1:0)+' '+u[i]; }
-
     let proofFile=null;
-
     function showFile(f){
       proofFile=f;
       fileName.textContent=f.name;
       fileInfo.textContent=`${f.type || 'Fichier'} • ${fmtBytes(f.size)}`;
       fileBar.style.width='0%'; fileOk.style.display='none';
       fileWrap.style.display='flex';
-      // fake progress for smooth feel
-      let p=0;
-      const tick=()=>{ p+=Math.random()*35+20; if(p>=100){p=100; fileBar.style.width='100%'; fileOk.style.display='inline-block'; return;} fileBar.style.width=p+'%'; setTimeout(tick,150);}
-      setTimeout(tick,150);
+      let p=0; const tick=()=>{ p+=Math.random()*35+20; if(p>=100){p=100; fileBar.style.width='100%'; fileOk.style.display='inline-block'; return;} fileBar.style.width=p+'%'; setTimeout(tick,150);} ; setTimeout(tick,150);
     }
-    function clearFile(){
-      proofFile=null; input.value=''; fileWrap.style.display='none';
-    }
-    removeProof.addEventListener('click', clearFile);
-
-    ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,(e)=>{e.preventDefault();e.stopPropagation();dz.classList.add('over');}));
-    ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,(e)=>{e.preventDefault();e.stopPropagation();dz.classList.remove('over');}));
-    dz.addEventListener('drop',e=>{
-      const f=e.dataTransfer?.files?.[0]; if(!f) return;
-      if(!/(\.pdf$|image\/)/i.test(f.type) && !/\.pdf$/i.test(f.name)){ toast('Format non supporté'); return; }
-      if(f.size>10*1024*1024){ toast('Fichier trop volumineux (>10Mo)'); return; }
-      showFile(f);
-    });
-    input.addEventListener('change',e=>{
+    function clearFile(){ proofFile=null; input.value=''; fileWrap.style.display='none'; }
+    if(removeProof) removeProof.addEventListener('click', clearFile);
+    if(input) input.addEventListener('change',e=>{
       const f=e.target.files?.[0]; if(!f) return;
       if(f.size>10*1024*1024){ toast('Fichier trop volumineux (>10Mo)'); input.value=''; return; }
       showFile(f);
@@ -676,23 +667,20 @@
       toast('Paiement crypto enregistré — validation en cours');
     });
 
-    // Confirmer SEPA (preuve obligatoire)
+    // Confirmer SEPA
     document.getElementById('confirmBank').addEventListener('click', ()=>{
       if(!validateAddress()) return;
       if(!proofFile){ dz.scrollIntoView({behavior:'smooth',block:'center'}); toast('Preuve de virement requise.'); return; }
       toast('Preuve envoyée — vérification en cours');
     });
 
-    // Finaliser la commande : règles
+    // Finaliser la commande
     document.getElementById('placeOrder').addEventListener('click', ()=>{
       if(!validateAddress()) return;
       const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
       const pm=currentPM();
-
       if(pm==='crypto' && !document.getElementById('txid').value.trim()){ document.getElementById('txid').focus(); toast('TxID requis pour valider.'); return; }
-      if(pm==='sepa' && !proofFile){ dz.scrollIntoView({behavior:'smooth',block:'center'}); toast('Preuve de virement requise.'); return; }
 
-      // Enregistrer commande
       const sub=computeSub(cart), promo=sub*promoRate(), total=Math.max(0, sub - promo);
       const order={
         id:orderId, date:new Date().toISOString(), status:'En préparation',
@@ -709,15 +697,11 @@
       setCart([]); toast('Commande '+orderId+' créée'); setTimeout(()=>location.replace('compte/index.html'), 900);
     });
 
-    // Focus trap simple pour modal (fermeture hors zone)
+    // Fermer modal en cliquant le fond
     document.getElementById('splitModal').addEventListener('click',e=>{ if(e.target.id==='splitModal') e.currentTarget.classList.remove('show'); });
-
-    // Adresse de référence pour SEPA
-    document.getElementById('vref').value='GF-'+orderId;
 
     // Renders init
     updateSummary();
-
   })();
   </script>
 </body>
