@@ -1,7 +1,7 @@
 /* checkout.js — GF Store
    - Récupère le panier (localStorage 'gf_cart')
    - Calcule promos (SEPA -3%, Crypto -1%), split 2/3/4x
-   - Uploader preuve SEPA (base64) — mobile friendly
+   - Uploader preuve SEPA (base64) — mobile friendly & tolérant
    - Envoi vers Apps Script → Telegram (JSON + alias en query-string pour compat)
    - Empêche l’envoi si des champs requis manquent (évite messages vides)
 */
@@ -13,15 +13,24 @@
   // =========================
   const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbypa62g6lhlchWMayVWYyRh2TGc--bBdqNMag2ro1Ne1SDMVT5bHzy7pvooG3ZnsGAx/exec";
   const MAX_SIZE = 10 * 1024 * 1024; // 10 Mo
+  const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   // =========================
   // UTILITAIRES
   // =========================
   const $  = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
-  const toast = (msg)=>{ const t = $('#toast'); if(!t) return; t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); };
+  const toast = (msg)=>{ const t = $('#toast'); if(!t) return; t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); };
   const EUR  = (v)=> Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
   const two  = (n)=> String(n).padStart(2,'0');
+  const bindClickLike = (el, fn)=>{
+    if(!el) return;
+    el.addEventListener('click', fn, {passive:true});
+    el.addEventListener('touchend', fn, {passive:true});
+    el.addEventListener('pointerup', fn, {passive:true});
+    // iOS parfois ignore click si l’élément vient d’être créé : on force un focus-out
+    if(IS_IOS) el.addEventListener('touchstart', ()=>{}, {passive:true});
+  };
 
   // =========================
   // ICÔNES (optionnel)
@@ -68,7 +77,7 @@
     const rnd=Math.floor(Math.random()*9000)+1000;
     return `GF-${y}${mm}${dd}-${rnd}`;
   })();
-  $('#orderId') && ($('#orderId').textContent = orderId);
+  const orderIdEl = $('#orderId'); if(orderIdEl) orderIdEl.textContent = orderId;
 
   // =========================
   // MINI PANIER
@@ -166,7 +175,7 @@
     const btnOnce = $('#btnOnce');
     const btnSplit= $('#btnSplit');
     if(btnOnce) btnOnce.addEventListener('click',()=>{ selectedSplit=1; btnOnce.classList.add('on'); btnSplit?.classList.remove('on'); updateSplitHint(); updateSummary(); });
-    if(btnSplit) btnSplit.addEventListener('click', open);
+    if(btnSplit) bindClickLike(btnSplit, open);
     $('#closeSplit')?.addEventListener('click', close);
     $('#cancelSplit')?.addEventListener('click', close);
     $('#applySplit')?.addEventListener('click',()=>{ selectedSplit = modalParts; btnSplit?.classList.add('on'); btnOnce?.classList.remove('on'); close(); updateSplitHint(); updateSummary(); });
@@ -326,8 +335,9 @@
   const fileBar   = $('#fileBar');
   const fileOk    = $('#fileOk');
   const removeBtn = $('#removeProof');
-  // Forcer accept = tous formats (au cas où le HTML restreint)
-  if (input) input.setAttribute('accept','*/*');
+
+  // Tolérance max : accepter tout (quel que soit le type déclaré par le navigateur)
+  if (input){ input.setAttribute('accept','*/*'); input.removeAttribute('capture'); }
 
   function fmtBytes(b){
     if(b===0) return '0 o';
@@ -372,14 +382,10 @@
   }
   removeBtn?.addEventListener('click', clearFile);
 
-  // Bouton "Importer" éventuel
-  $('#pickProof')?.addEventListener('click',()=> input?.click());
-
-  // Dropzone interactions (desktop)
+  // Bouton "Importer" + zone cliquable
+  bindClickLike($('#pickProof'), ()=> input?.click());
   if (dz){
-    // tap/click mobile: utilise aussi touchend
-    dz.addEventListener('click', ()=> input?.click(), {passive:true});
-    dz.addEventListener('touchend', ()=> input?.click(), {passive:true});
+    bindClickLike(dz, ()=> input?.click());
     dz.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' ' || e.key==='Spacebar'){ e.preventDefault(); input?.click(); }});
 
     ['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => {
@@ -396,7 +402,6 @@
       if (e.dataTransfer?.items && e.dataTransfer.items.length){
         for (const item of e.dataTransfer.items){
           if(item.kind === 'file'){
-            // évite dossiers
             if (typeof item.webkitGetAsEntry === 'function'){
               const entry = item.webkitGetAsEntry();
               if(entry && entry.isDirectory){ toast('Dossiers non pris en charge. Compressez-le en .zip.'); return; }
@@ -411,7 +416,7 @@
       const reason = reasonForRefusal(file, true);
       if (reason) { toast(reason); return; }
       showFile(file);
-      if (input) input.value = ''; // reselect même fichier possible
+      if (input) input.value = ''; // autorise re-sélection même fichier
     });
   }
 
@@ -421,7 +426,7 @@
     const reason = reasonForRefusal(f, false);
     if (reason) { toast(reason); input.value=''; return; }
     showFile(f);
-    input.value = ''; // autorise re-sélection du même fichier
+    input.value = ''; // iOS/Android : permet de re-choisir le même fichier
   });
 
   // =========================
@@ -478,10 +483,15 @@
     }catch{ return []; }
   }
   async function fileToBase64(file){
-    const buf = await file.arrayBuffer();
-    let binary=''; const bytes=new Uint8Array(buf); const chunk=0x8000;
-    for(let i=0;i<bytes.length;i+=chunk){ binary += String.fromCharCode.apply(null, bytes.subarray(i,i+chunk)); }
-    return btoa(binary);
+    try{
+      const buf = await file.arrayBuffer();
+      let binary=''; const bytes=new Uint8Array(buf); const chunk=0x8000;
+      for(let i=0;i<bytes.length;i+=chunk){ binary += String.fromCharCode.apply(null, bytes.subarray(i,i+chunk)); }
+      return btoa(binary);
+    }catch(e){
+      toast('Erreur de lecture du fichier. Réessayez.');
+      return '';
+    }
   }
   async function sendCryptoToWebhook(dueNow){
     const payload = {
@@ -611,7 +621,6 @@
   // INIT
   // =========================
   function initTabsAndSummary(){
-    // Par défaut : SEPA
     const sepaTab = document.querySelector('.m[role="tab"][data-method="sepa"]');
     if(sepaTab){ sepaTab.setAttribute('aria-selected','true'); }
     $('#pmSEPA')?.classList.add('show');
