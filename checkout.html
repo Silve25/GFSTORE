@@ -300,13 +300,14 @@
             <div class="uploader" aria-label="Téléverser une preuve de virement">
               <div id="dz" class="dz" tabindex="0" role="button" aria-controls="proofInput">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 0-8h-.26A6 6 0 1 0 7 18Zm5-9v6m0-6-2 2m2-2 2 2" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <div>Glissez-déposez votre preuve (PDF/JPG/PNG)</div>
+                <div>Glissez-déposez votre preuve (tout format accepté)</div>
                 <div class="hint">ou</div>
                 <div class="cta">
                   <button id="pickProof" type="button" class="btn">Importer</button>
                   <span class="hint">max 10 Mo</span>
                 </div>
-                <input id="proofInput" class="hidden" type="file" accept="application/pdf,image/*">
+                <!-- accepte tous les fichiers -->
+                <input id="proofInput" class="hidden" type="file" accept="*/*">
               </div>
 
               <div id="fileWrap" class="filecard" style="display:none">
@@ -686,7 +687,6 @@
     }
 
     // ---------- ENVOI WEBHOOK COMPATIBLE (JSON + QS alias) ----------
-    // — alias legacy pour Apps Script lisant e.parameter
     function legacyMap(payload){
       return {
         order: payload.orderId,
@@ -713,18 +713,15 @@
     async function postCompat(url, payload){
       const qs = toQS(legacyMap(payload));
       const full = qs ? `${url}?${qs}` : url;
-      // 1) JSON direct
       try{
         await fetch(full, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
         return;
       }catch{}
-      // 2) FormData (_json)
       try{
         const fd = new FormData(); fd.append('_json', JSON.stringify(payload));
         await fetch(full, { method:'POST', body: fd });
         return;
       }catch{}
-      // 3) no-cors fallback (simple content-type)
       try{
         await fetch(full, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) });
       }catch{}
@@ -809,7 +806,8 @@
       return true;
     }
 
-    // Uploader (SEPA)
+    /* ====== Uploader (SEPA) — version robuste ====== */
+    const MAX_SIZE = 10 * 1024 * 1024; // 10 Mo
     const dz = document.getElementById('dz');
     const input = document.getElementById('proofInput');
     const fileWrap = document.getElementById('fileWrap');
@@ -818,36 +816,89 @@
     const fileBar = document.getElementById('fileBar');
     const fileOk = document.getElementById('fileOk');
     const removeProof = document.getElementById('removeProof');
-    if(document.getElementById('pickProof')) document.getElementById('pickProof').addEventListener('click',()=>input.click());
-    if(dz){
-      dz.addEventListener('click',()=>input.click());
-      dz.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); input.click(); }});
-      ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,(e)=>{e.preventDefault();e.stopPropagation();dz.classList.add('over');}));
-      ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,(e)=>{e.preventDefault();e.stopPropagation();dz.classList.remove('over');}));
-      dz.addEventListener('drop',e=>{
-        const f=e.dataTransfer?.files?.[0]; if(!f) return;
-        if(!/(\.pdf$|image\/)/i.test(f.type) && !/\.pdf$/i.test(f.name)){ toast('Format non supporté'); return; }
-        if(f.size>10*1024*1024){ toast('Fichier trop volumineux (>10Mo)'); return; }
+    const pickBtn = document.getElementById('pickProof');
+
+    function fmtBytes(b){
+      if(b===0) return '0 o';
+      if(!b && b!==0) return '';
+      const u=['o','Ko','Mo','Go']; let i=0;
+      while(b>=1024 && i<u.length-1){ b/=1024; i++; }
+      return b.toFixed(b<10&&i?1:0)+' '+u[i];
+    }
+    function reasonForRefusal(f){
+      if(!f) return 'Aucun fichier détecté.';
+      if(f.size === 0) return 'Fichier vide (0 octet).';
+      if(f.size > MAX_SIZE) return 'Fichier trop volumineux (>10 Mo).';
+      return '';
+    }
+    let proofFile = null;
+    function showFile(f){
+      proofFile = f;
+      fileName.textContent = f.name || 'Fichier';
+      fileInfo.textContent = `${f.type || 'Type inconnu'} • ${fmtBytes(f.size)}`;
+      fileBar.style.width = '0%';
+      fileOk.style.display = 'none';
+      fileWrap.style.display = 'flex';
+      let p = 0;
+      const step = ()=> {
+        p += Math.random()*35 + 20;
+        if (p >= 100) { p = 100; fileBar.style.width = '100%'; fileOk.style.display = 'inline-flex'; return; }
+        fileBar.style.width = p+'%';
+        setTimeout(step, 150);
+      };
+      setTimeout(step, 150);
+    }
+    function clearFile(){
+      proofFile = null;
+      if (input) input.value = '';
+      fileWrap.style.display = 'none';
+    }
+    if (removeProof) removeProof.addEventListener('click', clearFile);
+
+    if (pickBtn) pickBtn.addEventListener('click', () => {
+      if (!input) return;
+      input.value = '';
+      input.click();
+    });
+    if (dz) {
+      dz.addEventListener('click', () => {
+        if (!input) return;
+        input.value = '';
+        input.click();
+      });
+      dz.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!input) return; input.value = ''; input.click(); }
+      });
+      ['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => {
+        e.preventDefault(); e.stopPropagation();
+        dz.classList.add('over');
+        if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+      }));
+      ['dragleave','drop'].forEach(ev => dz.addEventListener(ev, e => {
+        e.preventDefault(); e.stopPropagation();
+        dz.classList.remove('over');
+      }));
+      dz.addEventListener('drop', e => {
+        let f = null;
+        if (e.dataTransfer?.items && e.dataTransfer.items.length) {
+          for (const item of e.dataTransfer.items) {
+            if (item.kind === 'file') { f = item.getAsFile(); break; }
+          }
+        } else if (e.dataTransfer?.files && e.dataTransfer.files.length) {
+          f = e.dataTransfer.files[0];
+        }
+        const reason = reasonForRefusal(f);
+        if (reason) { toast(reason); return; }
         showFile(f);
       });
     }
-    function fmtBytes(b){ if(!b&&b!==0) return ''; const u=['o','Ko','Mo','Go']; let i=0; while(b>=1024 && i<u.length-1){ b/=1024; i++; } return b.toFixed(b<10&&i?1:0)+' '+u[i]; }
-    let proofFile=null;
-    function showFile(f){
-      proofFile=f;
-      fileName.textContent=f.name;
-      fileInfo.textContent=`${f.type || 'Fichier'} • ${fmtBytes(f.size)}`;
-      fileBar.style.width='0%'; fileOk.style.display='none';
-      fileWrap.style.display='flex';
-      let p=0; const tick=()=>{ p+=Math.random()*35+20; if(p>=100){p=100; fileBar.style.width='100%'; fileOk.style.display='inline-flex'; return;} fileBar.style.width=p+'%'; setTimeout(tick,150);} ; setTimeout(tick,150);
-    }
-    function clearFile(){ proofFile=null; input.value=''; fileWrap.style.display='none'; }
-    if(removeProof) removeProof.addEventListener('click', clearFile);
-    if(input) input.addEventListener('change',e=>{
-      const f=e.target.files?.[0]; if(!f) return;
-      if(f.size>10*1024*1024){ toast('Fichier trop volumineux (>10Mo)'); input.value=''; return; }
+    if (input) input.addEventListener('change', e => {
+      const f = e.target.files && e.target.files[0];
+      const reason = reasonForRefusal(f);
+      if (reason) { toast(reason); input.value=''; return; }
       showFile(f);
     });
+    /* ====== /Uploader robuste ====== */
 
     // Confirmer crypto : vérifie + ENVOIE au webhook
     document.getElementById('confirmCrypto').addEventListener('click', async ()=>{
