@@ -90,7 +90,7 @@
     .paytog{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
     .pt{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
     .pt.on{border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.12);background:#f8fbff}
-    .pt small{color:#6b7280}
+    .pt small{color:var(--muted)}
 
     /* Segmented control (modal) */
     .seg{display:flex;gap:8px;background:#f8fafc;border:1px solid var(--line);padding:6px;border-radius:12px}
@@ -158,7 +158,7 @@
       min-width:48px; text-align:center;
     }
 
-    /* Full-screen overlays (verification + success) */
+    /* Full-screen overlays */
     .overlay{
       position:fixed; inset:0; display:none; align-items:center; justify-content:center;
       background:rgba(15,23,42,.28); backdrop-filter:blur(6px);
@@ -404,12 +404,12 @@
         <hr style="border:none;border-top:1px dashed var(--line);margin:10px 0">
         <div class="sum">
           <div class="rowline"><span class="muted">Sous-total</span><span id="sub">—</span></div>
-            <div class="rowline"><span class="muted">Livraison</span><span id="ship">Gratuite</span></div>
-            <div class="rowline"><span class="muted">Promo</span><span id="benefit">—</span></div>
-            <div class="rowline"><span class="muted">Total</span><span id="total">—</span></div>
-            <div class="rowline" id="dueRow"><span class="due">À payer aujourd’hui</span><span class="due" id="dueNow">—</span></div>
-            <div id="schedule" class="schedule" style="display:none"></div>
-            <div class="note">Livraison prioritaire sous 7 jours. Retours sous 14 jours.</div>
+          <div class="rowline"><span class="muted">Livraison</span><span id="ship">Gratuite</span></div>
+          <div class="rowline"><span class="muted">Promo</span><span id="benefit">—</span></div>
+          <div class="rowline"><span class="muted">Total</span><span id="total">—</span></div>
+          <div class="rowline" id="dueRow"><span class="due">À payer aujourd’hui</span><span class="due" id="dueNow">—</span></div>
+          <div id="schedule" class="schedule" style="display:none"></div>
+          <div class="note">Livraison prioritaire sous 7 jours. Retours sous 14 jours.</div>
         </div>
       </div>
     </aside>
@@ -481,18 +481,419 @@
     </div>
   </footer>
 
-  <!-- Ton JS d'interface (inchangé) -->
   <script>
-  (async()=>{
-    // ... (ton script existant inchangé, exactement comme avant)
-    // NOTE: je l'ai laissé tel quel. Il gère l'UI, le panier, les vérifs visuelles, etc.
-    // Les boutons #confirmCrypto et #confirmBank ont déjà des listeners pour l'UI.
-    // checkout.js (chargé juste après) ajoute en plus l'ENVOI au WebApp.
-    // --- COLLE ICI ton script intégral existant si besoin ---
+  (()=>{
+    // ——————————— CONFIG
+    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbypa62g6lhlchWMayVWYyRh2TGc--bBdqNMag2ro1Ne1SDMVT5bHzy7pvooG3ZnsGAx/exec";
+    const CART_KEY = "gf_cart";
+    const ORDERS_KEY = "gf_orders";
+    const SHIPPING = 0;
+
+    // Icônes
+    const ICONS = {
+      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
+      continue:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000',
+      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
+      ssl:'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
+      truck:'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
+      back:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000'
+    };
+
+    // FX + wallets (affichage crypto)
+    const FX={
+      'USDT-TRC20':{symbol:'USDT',rate:1},
+      'USDT-BEP20':{symbol:'USDT',rate:1},
+      'BTC':{symbol:'BTC',rate:60000},
+      'ETH-ERC20':{symbol:'ETH',rate:3000}
+    };
+    const WALLET={
+      'USDT-BEP20':{
+        address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b',
+        qr:'https://api.qrcode-monkey.com/tmp/9c2692034c7a6496eb6d7153da52f854.svg?1755861184316'
+      },
+      'USDT-TRC20':{
+        address:'TMdLMTYGEEZAnoVbi482Zr9QSRgWmRUXXq',
+        qr:'https://api.qrcode-monkey.com/tmp/ce476e4409d57ba517ffaf6db6bf25d2.svg?1755861346811'
+      },
+      'BTC':{
+        address:'18npEW9EaKZvVvA9B1z3DcmVEJtuQUdus3',
+        qr:'https://api.qrcode-monkey.com/tmp/578f1d0b0e32feece2ae335bb417c7f8.svg?1755861612113'
+      },
+      'ETH-ERC20':{
+        address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b',
+        qr:'https://api.qrcode-monkey.com/tmp/9c2692034c7a6496eb6d7153da52f854.svg?1755861930363'
+      }
+    };
+
+    // ——————————— HELPERS
+    const $=s=>document.querySelector(s); const $$=s=>Array.from(document.querySelectorAll(s));
+    const EUR=v=>Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    const toast=msg=>{const t=$('#toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600);};
+    const getCart=()=>{try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]')}catch{return[]}};
+    const setCart=arr=>localStorage.setItem(CART_KEY,JSON.stringify(arr));
+    const getOrders=()=>{try{return JSON.parse(localStorage.getItem(ORDERS_KEY)||'[]')}catch{return[]}};
+    const setOrders=arr=>localStorage.setItem(ORDERS_KEY,JSON.stringify(arr));
+
+    const orderId=(()=>{const d=new Date(); const y=String(d.getFullYear()).slice(2); const mm=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); const rnd=Math.floor(Math.random()*9000)+1000; return `GF-${y}${mm}${dd}-${rnd}`;})();
+    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
+
+    function currentPM(){ return document.querySelector('.m[role="tab"][aria-selected="true"]')?.dataset.method || 'sepa'; }
+    function promoRate(){ return currentPM()==='sepa'?0.03 : currentPM()==='crypto'?0.01 : 0; }
+    function computeSub(cart){ return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0); }
+    function splitAmounts(total, parts){
+      const cents=Math.round(total*100);
+      const base=Math.floor(cents/parts);
+      const first=base + (cents - base*parts);
+      const arr=[first]; for(let i=1;i<parts;i++) arr.push(base);
+      return arr.map(c=>c/100);
+    }
+    function scheduleLines(total, parts){
+      const amts=splitAmounts(total, parts);
+      const today=new Date(); const steps=[0,30,60,90];
+      return amts.map((amt,i)=>{
+        const d=new Date(today); d.setDate(d.getDate()+steps[i]);
+        const label = i===0 ? 'Aujourd’hui' : (i===1?'Dans 30 jours': i===2?'Dans 60 jours':'Dans 90 jours');
+        return {label,date:d.toLocaleDateString('fr-FR'),amt};
+      });
+    }
+    function getShipping(){
+      return {
+        name:$('#name').value, email:$('#email').value, phone:$('#phone').value,
+        address:$('#address').value, city:$('#city').value, zip:$('#zip').value, country:$('#country').value
+      };
+    }
+    function computeTotals(){
+      const cart=getCart();
+      const sub=computeSub(cart);
+      const promo=sub*promoRate();
+      const total=Math.max(0, sub + SHIPPING - promo);
+      return {sub,promo,total};
+    }
+
+    // overlays
+    const overlay = ()=>document.getElementById('checkOverlay');
+    const showOverlay=(title,sub)=>{const t=document.getElementById('ovTitle'); const s=document.getElementById('ovSub'); if(t) t.textContent=title||'Vérification…'; if(s) s.textContent=sub||'Un instant, nous confirmons votre paiement.'; overlay().classList.add('show'); overlay().setAttribute('aria-hidden','false');};
+    const hideOverlay=()=>{overlay().classList.remove('show'); overlay().setAttribute('aria-hidden','true');};
+    const showDone=()=>{const d=document.getElementById('doneOverlay'); d.classList.add('show'); d.setAttribute('aria-hidden','false');};
+
+    // ——————————— STATE
+    let selectedSplit=1, modalParts=4;
+    let bankVerified=false, cryptoVerified=false;
+    let proofFile=null;
+
+    // ——————————— UI init
+    setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('icSSL',ICONS.ssl);
+    setSrc('icTruck',ICONS.truck); setSrc('icBack',ICONS.back); setSrc('icContinue',ICONS.continue);
+    if($('#orderId')) $('#orderId').textContent=orderId;
+
+    // Menu
+    const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
+    if(menuBtn&&menuDrop){
+      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
+      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+    }
+
+    // Rendu mini-cart
+    function renderMini(){
+      const wrap=$('#miniCart'); const cart=getCart();
+      if(!wrap) return;
+      if(!cart.length){ wrap.innerHTML='<div class="muted">Votre panier est vide.</div>'; $('#sub').textContent='—'; $('#benefit').textContent='—'; $('#total').textContent='—'; $('#dueNow').textContent='—'; $('#schedule').style.display='none'; return; }
+      wrap.innerHTML=cart.map(x=>`
+        <div class="ci">
+          <img src="${x.image||''}" alt="${x.name||''}">
+          <div>
+            <div style="font-weight:600">${x.name||''}</div>
+            <div class="muted" style="font-size:12px">${x.brand||''}${x.category?(' • '+x.category):''}</div>
+          </div>
+          <div style="font-weight:600">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
+        </div>`).join('');
+    }
+
+    // Crypto address + QR
+    function setCryptoAddress(ccy){
+      const cfg=WALLET[ccy];
+      $('#wallet').value = cfg?.address || '';
+      $('#ccyLabel').textContent = FX[ccy]?.symbol || (ccy?.includes('USDT')?'USDT':'');
+      const img=$('#qrImg'); if(img){ img.src = cfg?.qr || ''; img.alt = 'QR '+ccy; }
+    }
+
+    // Référence SEPA auto
+    const slugRefFromName = (n)=>{
+      const base=(n||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,'').slice(0,16);
+      if(base) return base;
+      const short=orderId.replace('GF-','').split('-')[0];
+      return 'GF'+short;
+    };
+    const syncRef=()=>{ const name=$('#name')?.value||''; const ref=slugRefFromName(name); const v=$('#vref'); if(v) v.value=ref; };
+
+    // Summary
+    function updateSummary(){
+      const cart=getCart(); if(!cart.length){ renderMini(); return; }
+      const {sub,promo,total}=computeTotals();
+      const parts = selectedSplit;
+      const amts=splitAmounts(total,parts);
+      const dueNow=amts[0];
+
+      $('#sub').textContent=EUR(sub);
+      $('#benefit').textContent= promo>0 ? '–'+EUR(promo) : '—';
+      $('#total').textContent=EUR(total);
+      $('#dueNow').textContent=EUR(dueNow);
+
+      const scheduleBox=$('#schedule');
+      if(parts>1){
+        const lines=scheduleLines(total, parts);
+        scheduleBox.style.display='grid';
+        scheduleBox.innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
+      }else{
+        scheduleBox.style.display='none';
+      }
+
+      if(currentPM()==='crypto'){
+        $('#amountNow').value = dueNow.toFixed(2);
+        const ccy=$('#ccy').value; const r=FX[ccy]?.rate||1;
+        const amt=(dueNow/r);
+        $('#ccyAmt').value = (amt>0?amt:0).toFixed(6).replace(/0+$/,'').replace(/\.$/,'');
+      }
+      if(currentPM()==='sepa'){
+        $('#amountNowBank').value = dueNow.toFixed(2);
+      }
+    }
+    function updateSplitHint(){ $('#splitHint').textContent = selectedSplit>1 ? `(${selectedSplit}× mensuel)` : '(désactivé)'; }
+
+    function updateCTA(){
+      const pm=currentPM();
+      const btn=$('#placeOrder');
+      btn.disabled = (pm==='sepa' ? !bankVerified : pm==='crypto' ? !cryptoVerified : false);
+    }
+
+    // Init affichage
+    renderMini(); updateSummary(); updateSplitHint(); setCryptoAddress($('#ccy').value); syncRef(); updateCTA();
+
+    // Tabs méthodes
+    $$('.m[role="tab"]').forEach(card=>{
+      card.addEventListener('click', ()=>{
+        $$('.m[role="tab"]').forEach(c=>c.setAttribute('aria-selected', String(c===card)));
+        const m=card.dataset.method;
+        $('#pmCrypto').classList.toggle('show', m==='crypto');
+        $('#pmSEPA').classList.toggle('show', m==='sepa');
+        if(m==='sepa'){ cryptoVerified=false; }
+        if(m==='crypto'){ bankVerified=false; }
+        updateSummary();
+        updateCTA();
+      });
+    });
+
+    // Split toggle & modal
+    const modal=$('#splitModal');
+    const openModal=()=>{ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); setModalParts(modalParts); updateModalPreview(); };
+    const closeModal=()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); };
+    function updateModalPreview(){
+      const {sub,promo}=computeTotals();
+      const total=Math.max(0,sub - promo);
+      const lines=scheduleLines(total, modalParts);
+      $('#modalPrev').innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
+    }
+    function setModalParts(n){
+      modalParts=Number(n);
+      $$('#segSplit .segbtn').forEach(b=>b.setAttribute('aria-pressed', String(Number(b.dataset.parts)===modalParts)));
+      updateModalPreview();
+    }
+    $('#btnOnce').addEventListener('click',()=>{ selectedSplit=1; $('#btnOnce').classList.add('on'); $('#btnSplit').classList.remove('on'); updateSplitHint(); updateSummary(); });
+    $('#btnSplit').addEventListener('click',openModal);
+    $('#closeSplit').addEventListener('click',closeModal);
+    $('#cancelSplit').addEventListener('click',closeModal);
+    $('#applySplit').addEventListener('click',()=>{ selectedSplit=modalParts; $('#btnSplit').classList.add('on'); $('#btnOnce').classList.remove('on'); closeModal(); updateSplitHint(); updateSummary(); });
+    $$('#segSplit .segbtn').forEach(b=>b.addEventListener('click',()=>setModalParts(b.dataset.parts)));
+    $('#splitModal').addEventListener('click',e=>{ if(e.target.id==='splitModal') closeModal(); });
+
+    // Crypto change
+    $('#ccy').addEventListener('change', ()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
+
+    // Copier
+    const copySel=sel=>{const el=$(sel); if(!el) return; const txt=el.value||''; if(navigator.clipboard?.writeText){navigator.clipboard.writeText(txt).then(()=>toast('Copié'));} else {el.select(); document.execCommand('copy'); toast('Copié');}};
+    $$('[data-copy]').forEach(b=>b.addEventListener('click',()=>copySel(b.getAttribute('data-copy'))));
+
+    // Validation adresse
+    function validateAddress(){
+      const req=['name','email','address','city','zip'];
+      for(const id of req){ const el=$('#'+id); if(!el || !el.value.trim()){ el?.focus(); toast('Veuillez compléter vos informations.'); return false; } }
+      return true;
+    }
+
+    // Uploader (SEPA)
+    const dz = document.getElementById('dz');
+    const input = document.getElementById('proofInput');
+    const fileWrap = document.getElementById('fileWrap');
+    const fileName = document.getElementById('fileName');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileBar = document.getElementById('fileBar');
+    const fileOk = document.getElementById('fileOk');
+    const removeProof = document.getElementById('removeProof');
+    if(document.getElementById('pickProof')) document.getElementById('pickProof').addEventListener('click',()=>input.click());
+    if(dz){
+      dz.addEventListener('click',()=>input.click());
+      dz.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); input.click(); }});
+      ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,(e)=>{e.preventDefault();e.stopPropagation();dz.classList.add('over');}));
+      ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,(e)=>{e.preventDefault();e.stopPropagation();dz.classList.remove('over');}));
+      dz.addEventListener('drop',e=>{
+        const f=e.dataTransfer?.files?.[0]; if(!f) return;
+        if(!/(\.pdf$|image\/)/i.test(f.type) && !/\.pdf$/i.test(f.name)){ toast('Format non supporté'); return; }
+        if(f.size>10*1024*1024){ toast('Fichier trop volumineux (>10Mo)'); return; }
+        showFile(f);
+      });
+    }
+    function fmtBytes(b){ if(!b&&b!==0) return ''; const u=['o','Ko','Mo','Go']; let i=0; while(b>=1024 && i<u.length-1){ b/=1024; i++; } return b.toFixed(b<10&&i?1:0)+' '+u[i]; }
+    function showFile(f){
+      proofFile=f;
+      fileName.textContent=f.name;
+      fileInfo.textContent=`${f.type || 'Fichier'} • ${fmtBytes(f.size)}`;
+      fileBar.style.width='0%'; fileOk.style.display='none';
+      fileWrap.style.display='flex';
+      let p=0; const tick=()=>{ p+=Math.random()*35+20; if(p>=100){p=100; fileBar.style.width='100%'; fileOk.style.display='inline-flex'; return;} fileBar.style.width=p+'%'; setTimeout(tick,150);} ; setTimeout(tick,150);
+    }
+    function clearFile(){ proofFile=null; input.value=''; fileWrap.style.display='none'; }
+    if(removeProof) removeProof.addEventListener('click', clearFile);
+    if(input) input.addEventListener('change',e=>{
+      const f=e.target.files?.[0]; if(!f) return;
+      if(f.size>10*1024*1024){ toast('Fichier trop volumineux (>10Mo)'); input.value=''; return; }
+      showFile(f);
+    });
+
+    // ——————————— Webhook helpers
+    async function fileToBase64(file){
+      const buf = await file.arrayBuffer();
+      let binary = '';
+      const bytes = new Uint8Array(buf);
+      const chunkSize = 0x8000;
+      for(let i=0;i<bytes.length;i+=chunkSize){
+        const sub = bytes.subarray(i, i+chunkSize);
+        binary += String.fromCharCode.apply(null, sub);
+      }
+      return btoa(binary); // sans préfixe data:
+    }
+    async function postJSON(url, payload){
+      try{
+        const r = await fetch(url, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        // si CORS bloque, on tombera dans catch; sinon on ignore la réponse
+        return true;
+      }catch(e){
+        // fallback no-cors (fire-and-forget)
+        try{
+          await fetch(url, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        }catch(_){}
+        return false;
+      }
+    }
+    function cartForWebhook(){
+      const cart=getCart();
+      return cart.map(x=>({name:x.name, qty:Number(x.qty||1), price:Number(x.price||0)}));
+    }
+    async function sendCryptoToWebhook(dueNow){
+      const payload = {
+        orderId,
+        method:'crypto',
+        ccy: $('#ccy').value,
+        amount: String(dueNow.toFixed(2)),
+        txid: $('#txid').value.trim(),
+        name: $('#name').value, email: $('#email').value, phone: $('#phone').value,
+        address: $('#address').value, city: $('#city').value, zip: $('#zip').value, country: $('#country').value,
+        cart: cartForWebhook()
+      };
+      await postJSON(WEBHOOK_URL, payload);
+    }
+    async function sendSepaToWebhook(dueNow){
+      const payload = {
+        orderId,
+        method:'sepa',
+        amount: String(dueNow.toFixed(2)),
+        ref: $('#vref').value.trim(),
+        name: $('#name').value, email: $('#email').value, phone: $('#phone').value,
+        address: $('#address').value, city: $('#city').value, zip: $('#zip').value, country: $('#country').value,
+        cart: cartForWebhook()
+      };
+      if(proofFile){
+        payload.file_name = proofFile.name;
+        payload.mime_type = proofFile.type || 'application/octet-stream';
+        payload.file_b64 = await fileToBase64(proofFile);
+      }
+      await postJSON(WEBHOOK_URL, payload);
+    }
+
+    // ——————————— Confirmations
+    document.getElementById('confirmCrypto').addEventListener('click', async ()=>{
+      if(!validateAddress()) return;
+      const tx = document.getElementById('txid').value.trim();
+      if(!tx){ document.getElementById('txid').focus(); toast('TxID requis.'); return; }
+      showOverlay('Vérification de la transaction crypto…', 'Nous validons le hash fourni.');
+
+      const {sub,promo}=computeTotals(); const total=Math.max(0,sub - promo);
+      const dueNow = splitAmounts(total, selectedSplit)[0];
+
+      await sendCryptoToWebhook(dueNow);
+
+      setTimeout(()=>{
+        hideOverlay();
+        cryptoVerified=true;
+        updateCTA();
+        toast('Transaction enregistrée — vous pouvez finaliser');
+        $('#placeOrder').focus();
+      }, 1200);
+    });
+
+    document.getElementById('confirmBank').addEventListener('click', async ()=>{
+      if(!validateAddress()) return;
+      if(!$('#vref').value.trim()){ syncRef(); }
+      if(!proofFile){ dz.scrollIntoView({behavior:'smooth',block:'center'}); toast('Preuve de virement requise.'); return; }
+      showOverlay('Vérification du virement…', 'Nous confirmons la réception auprès de la banque.');
+
+      const {sub,promo}=computeTotals(); const total=Math.max(0,sub - promo);
+      const dueNow = splitAmounts(total, selectedSplit)[0];
+
+      await sendSepaToWebhook(dueNow);
+
+      setTimeout(()=>{
+        hideOverlay();
+        bankVerified=true;
+        updateCTA();
+        toast('Virement enregistré — vous pouvez finaliser');
+        $('#placeOrder').focus();
+      }, 1300);
+    });
+
+    // ——————————— Finaliser
+    document.getElementById('placeOrder').addEventListener('click', ()=>{
+      if(!validateAddress()) return;
+      const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
+      const pm=currentPM();
+      if(pm==='crypto' && !cryptoVerified){ toast('Veuillez terminer la vérification crypto.'); return; }
+      if(pm==='sepa' && !bankVerified){ toast('Veuillez terminer la vérification du virement.'); return; }
+
+      const {sub,promo,total}=computeTotals();
+      const order={
+        id:orderId, date:new Date().toISOString(), status:'En préparation',
+        items:cart, pricing:{sub,ship:0,promo,total,currency:'EUR'},
+        shipping:getShipping(),
+        payment:{
+          method:pm, split:selectedSplit,
+          details: pm==='crypto'
+            ? {ccy:$('#ccy').value,address:$('#wallet').value,txid:$('#txid').value,amountNow:$('#amountNow').value}
+            : {iban:$('#iban').value,ref:$('#vref').value,amountNow:$('#amountNowBank').value,proofName:proofFile?.name||''}
+        }
+      };
+      try{ const all=getOrders(); all.push(order); setOrders(all); }catch{}
+      setCart([]);
+      showDone();
+    });
+
+    // ——————————— Events divers
+    $('#name').addEventListener('input', syncRef);
+    $('#ccy').addEventListener('change', ()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
+
   })();
   </script>
-
-  <!-- Nouveau : branche l'envoi vers Apps Script/Telegram -->
-  <script src="./checkout.js"></script>
 </body>
 </html>
