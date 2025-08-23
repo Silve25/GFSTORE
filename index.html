@@ -39,9 +39,9 @@
     @media (min-width:960px){.hero-wrap{grid-template-columns:1.1fr .9fr;align-items:center}}
     .hero h1{margin:0;font-size:28px;line-height:1.2}
     .hero p.lead{margin:6px 0 0;color:#111;font-size:15px}
-    .usp{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0 6px}
+    .usp{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0 6px}
     .usp .pill{display:inline-flex;align-items:center;gap:6px;border:1px dashed #c7d2fe;background:#eef2ff;color:#1e3a8a;border-radius:999px;padding:7px 12px;font-size:12px}
-    .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+    .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
     .cta{display:inline-flex;align-items:center;gap:8px;padding:11px 15px;border-radius:12px;text-decoration:none;font-weight:600}
     .cta.primary{background:linear-gradient(180deg,var(--a),var(--a2));color:#fff;box-shadow:0 8px 22px rgba(30,64,175,.25)}
     .cta.secondary{background:#fff;border:1px solid var(--bd);color:#111}
@@ -80,19 +80,40 @@
     .section{max-width:var(--w);margin:12px auto;padding:0 12px}
     .section-title{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:6px auto 8px;font-weight:700;font-size:16px;letter-spacing:.04em;opacity:.9}
 
-    /* Carrousels & deals */
+    /* Carrousels & deals — version mobile robuste */
     .carousel{position:relative}
-    .track{display:flex;gap:12px;overflow:auto;padding:8px 0;scroll-snap-type:x mandatory}
-    .slide{scroll-snap-align:start;min-width:240px;background:#fff;border:1px solid var(--bd);border-radius:14px;padding:10px}
+    .track{
+      display:flex;gap:12px;overflow:auto;padding:8px 4px 12px;
+      scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+    }
     .navbtn{position:absolute;top:50%;transform:translateY(-50%);border:1px solid var(--bd);background:#fff;border-radius:999px;width:36px;height:36px;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,.08)}
     .navbtn:hover{box-shadow:0 10px 22px rgba(0,0,0,.12)}
     .prev{left:-6px}.next{right:-6px}
-    .deal{display:flex;flex-direction:column;gap:8px}
-    .deal .img{aspect-ratio:1.3/1}
-    .deal .price-row{display:flex;align-items:center;gap:8px}
-    .deal .count{font-size:12px;color:var(--muted)}
-    .deal .top{background:#111;color:#fff;padding:2px 8px;border-radius:999px;font-size:11px}
-    .deal .stock{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:999px;padding:2px 8px}
+
+    /* Carte deal dédiée (évite conflit avec .img) */
+    .deal-card{
+      scroll-snap-align:center;
+      min-width:clamp(260px,78vw,320px);
+      background:#fff;border:1px solid var(--bd);border-radius:14px;padding:10px;
+      display:flex;flex-direction:column;gap:8px;
+    }
+    .deal-img{
+      position:relative;overflow:hidden;border:1px solid var(--bd);border-radius:12px;
+      background:#fff;display:grid;place-items:center;aspect-ratio:4/3;
+    }
+    .deal-img img{width:100%;height:100%;object-fit:contain;display:block}
+    .deal-badge{
+      position:absolute;left:8px;top:8px;background:#111;color:#fff;padding:2px 8px;border-radius:999px;font-size:11px
+    }
+    .deal-title{
+      font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:38px
+    }
+    .deal-meta{font-size:12px;opacity:.7;min-height:16px}
+    .deal-price-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .deal-stock{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:999px;padding:2px 8px}
+    .deal-count{font-size:12px;color:var(--muted)}
+    .deal-actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}
+    .deal-actions .cta{flex:1;justify-content:center}
 
     /* Avis */
     .review{display:flex;flex-direction:column;gap:6px}
@@ -165,7 +186,7 @@
       .paylogos img{height:16px}
       .desktop-only{display:none!important}
       .mobile-only{display:block}
-      .prev{left:2px}.next{right:2px}
+      .prev,.next{display:none} /* navigation tactile sur mobile */
     }
 
     /* SEO intro */
@@ -292,16 +313,16 @@
     <div class="carousel">
       <button class="navbtn prev" aria-label="Précédent" data-target="reviewsTrack">‹</button>
       <div class="track" id="reviewsTrack">
-        <div class="slide review"><div class="stars">★★★★★</div><strong>“Lieferung schneller als erwartet.”</strong><div class="meta">— Anna K., München</div><div>Qualität top, sicher verpackt. Bestelle wieder.</div></div>
-        <div class="slide review"><div class="stars">★★★★★</div><strong>“Preis-Leistung unschlagbar.”</strong><div class="meta">— Jonas R., Berlin</div><div>Promo wie beschrieben, Support sehr freundlich.</div></div>
-        <div class="slide review"><div class="stars">★★★★☆</div><strong>“Alles neu & garantiert.”</strong><div class="meta">— Lara S., Hamburg</div><div>Ratenzahlung easy, Lieferung pünktlich.</div></div>
-        <div class="slide review"><div class="stars">★★★★★</div><strong>“Schneller Versand, top Qualität.”</strong><div class="meta">— Felix M., Köln</div><div>PS5 perfekt verpackt. Empfehlenswert!</div></div>
-        <div class="slide review"><div class="stars">★★★★★</div><strong>“Kundenservice 1A.”</strong><div class="meta">— Mia W., Frankfurt</div><div>Antwort in wenigen Stunden, Problem sofort gelöst.</div></div>
-        <div class="slide review"><div class="stars">★★★★☆</div><strong>“Guter Preis, schnelle Lieferung.”</strong><div class="meta">— Noah H., Stuttgart</div><div>Tracking transparent, kam früher an.</div></div>
-        <div class="slide review"><div class="stars">★★★★★</div><strong>“Sehr zufrieden mit dem Laptop.”</strong><div class="meta">— Emilia P., Düsseldorf</div><div>Neu & versiegelt. Läuft perfekt.</div></div>
-        <div class="slide review"><div class="stars">★★★★★</div><strong>“Top Beratung vor dem Kauf.”</strong><div class="meta">— Leon Z., Nürnberg</div><div>Gute Empfehlungen, keine Upsells.</div></div>
-        <div class="slide review"><div class="stars">★★★★☆</div><strong>“Retour lief unkompliziert.”</strong><div class="meta">— Sophia G., Leipzig</div><div>Schneller Umtausch, freundlicher Kontakt.</div></div>
-        <div class="slide review"><div class="stars">★★★★★</div><strong>“Würde wieder kaufen.”</strong><div class="meta">— Ben L., Hannover</div><div>Fairer Preis, 2-Jahre Garantie. Top.</div></div>
+        <div class="deal-card review"><div class="stars">★★★★★</div><strong>“Lieferung schneller als erwartet.”</strong><div class="meta">— Anna K., München</div><div>Qualität top, sicher verpackt. Bestelle wieder.</div></div>
+        <div class="deal-card review"><div class="stars">★★★★★</div><strong>“Preis-Leistung unschlagbar.”</strong><div class="meta">— Jonas R., Berlin</div><div>Promo wie beschrieben, Support sehr freundlich.</div></div>
+        <div class="deal-card review"><div class="stars">★★★★☆</div><strong>“Alles neu & garantiert.”</strong><div class="meta">— Lara S., Hamburg</div><div>Ratenzahlung easy, Lieferung pünktlich.</div></div>
+        <div class="deal-card review"><div class="stars">★★★★★</div><strong>“Schneller Versand, top Qualität.”</strong><div class="meta">— Felix M., Köln</div><div>PS5 perfekt verpackt. Empfehlenswert!</div></div>
+        <div class="deal-card review"><div class="stars">★★★★★</div><strong>“Kundenservice 1A.”</strong><div class="meta">— Mia W., Frankfurt</div><div>Antwort in wenigen Stunden, Problem sofort gelöst.</div></div>
+        <div class="deal-card review"><div class="stars">★★★★☆</div><strong>“Guter Preis, schnelle Lieferung.”</strong><div class="meta">— Noah H., Stuttgart</div><div>Tracking transparent, kam früher an.</div></div>
+        <div class="deal-card review"><div class="stars">★★★★★</div><strong>“Sehr zufrieden mit dem Laptop.”</strong><div class="meta">— Emilia P., Düsseldorf</div><div>Neu & versiegelt. Läuft perfekt.</div></div>
+        <div class="deal-card review"><div class="stars">★★★★★</div><strong>“Top Beratung vor dem Kauf.”</strong><div class="meta">— Leon Z., Nürnberg</div><div>Gute Empfehlungen, keine Upsells.</div></div>
+        <div class="deal-card review"><div class="stars">★★★★☆</div><strong>“Retour lief unkompliziert.”</strong><div class="meta">— Sophia G., Leipzig</div><div>Schneller Umtausch, freundlicher Kontakt.</div></div>
+        <div class="deal-card review"><div class="stars">★★★★★</div><strong>“Würde wieder kaufen.”</strong><div class="meta">— Ben L., Hannover</div><div>Fairer Preis, 2-Jahre Garantie. Top.</div></div>
       </div>
       <button class="navbtn next" aria-label="Suivant" data-target="reviewsTrack">›</button>
     </div>
@@ -484,9 +505,8 @@
       ssl: 'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
       search: 'https://img.icons8.com/?size=100&id=7964&format=png&color=000000',
       eye: 'https://img.icons8.com/?size=100&id=85073&format=png&color=000000',
-      // Icône promo & support en ligne (demandés)
-      fire: 'https://img.icons8.com/?size=100&id=12089&format=png&color=000000',
-      chat: 'https://img.icons8.com/?size=100&id=11227&format=png&color=000000',
+      fire: 'https://img.icons8.com/?size=100&id=12089&format=png&color=000000', // promo
+      chat: 'https://img.icons8.com/?size=100&id=11227&format=png&color=000000', // support en ligne
       twoYears: 'https://img.icons8.com/?size=100&id=57926&format=png&color=000000'
     };
 
@@ -645,7 +665,7 @@
     // Init
     updateCartCount(); render();
 
-    // ======= Deals du moment =======
+    // ======= Deals du moment (structure stable mobile) =======
     function buildDeals(){
       const dealsTrack=document.getElementById('dealsTrack');
       const dealsChip=document.getElementById('dealsChip');
@@ -659,7 +679,7 @@
         return {p,i,hasPromo,newP,disc};
       }).filter(x=>x.disc>=10).sort((a,b)=>b.disc-a.disc).slice(0,8);
 
-      // 2) Si aucune promo produit, applique la promo rentrée globale -30%
+      // 2) Sinon applique la promo rentrée globale -30%
       if(list.length===0 && GLOBAL_PROMO.active){
         if(dealsChip) dealsChip.textContent = GLOBAL_PROMO.label;
         list = items.slice(0,8).map((p,i)=>{
@@ -671,8 +691,7 @@
       }
 
       if(list.length===0){
-        // garde-fou (si aucun produit)
-        dealsTrack.innerHTML = '<div class="slide">Aucune offre disponible pour le moment.</div>';
+        dealsTrack.innerHTML = '<div class="deal-card">Bientôt disponible.</div>';
         return;
       }
 
@@ -686,19 +705,19 @@
         const stock = p.stockLeft??p.stock??p.quantity;
         const top = p.topSeller || (p.badges && p.badges.includes && p.badges.includes('top'));
         return `
-          <article class="slide deal" data-id="${id}">
-            ${top?`<span class="top">Top vente</span>`: global?`<span class="top">Promo rentrée</span>`:''}
-            <a href="${url}" class="img" aria-label="Voir ${p.name}">
+          <article class="deal-card" data-id="${id}">
+            <a href="${url}" class="deal-img" aria-label="Voir ${p.name}">
+              ${(top||global)?`<span class="deal-badge">${top?'Top vente':'Promo rentrée'}</span>`:''}
               <img loading="lazy" decoding="async" src="${_img(p)}" alt="${p.name}">
             </a>
-            <div><strong>${p.name}</strong></div>
-            <div class="meta">${p.brand||''} • ${p.category||''}</div>
-            <div class="price-row">
+            <div class="deal-title">${p.name}</div>
+            <div class="deal-meta">${p.brand||''} • ${p.category||''}</div>
+            <div class="deal-price-row">
               <div class="price">${formatEUR(newP)} <s>${formatEUR(p.price)}</s> <span class="badge">-${disc}%</span></div>
-              ${Number.isFinite(stock)?`<span class="stock">Restant : ${stock}</span>`:''}
+              ${Number.isFinite(stock)?`<span class="deal-stock">Restant : ${stock}</span>`:''}
             </div>
-            <div class="count">Se termine dans <span class="timer">${document.getElementById('dealsCountdown')?.textContent||''}</span></div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <div class="deal-count">Se termine dans <span class="timer">${document.getElementById('dealsCountdown')?.textContent||''}</span></div>
+            <div class="deal-actions">
               <button class="cta secondary add" data-id="${id}">Ajouter</button>
               <a class="cta primary" href="${url}">Voir l’offre</a>
             </div>
@@ -718,7 +737,7 @@
       if(index>-1) addToCart(items[index], index);
     });
 
-    // Carrousel nav
+    // Carrousel nav (desktop)
     document.querySelectorAll('.navbtn').forEach(btn=>{
       btn.addEventListener('click',()=>{
         const targetId = btn.getAttribute('data-target');
