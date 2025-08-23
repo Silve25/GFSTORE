@@ -1347,13 +1347,13 @@
     "promoPrice": 319.99,
     "stock": 29,
     "images": [
-      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-1.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=699&qlt=100",
-      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-4.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=679&qlt=100",
-      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-5.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=681&qlt=100",
-      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-3.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=547&qlt=100",
-      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-10.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=613&qlt=100"
+      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/9345/media-gallery/touch/gray/notebook-xps-13-9345-t-gray-gallery-2.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=679&qlt=100,1&resMode=sharp2&size=679,402&chrss=full",
+      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/9345/media-gallery/touch/gray/notebook-xps-13-9345-t-gray-gallery-4.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=678&qlt=100,1&resMode=sharp2&size=678,402&chrss=full",
+      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/9345/media-gallery/touch/gray/notebook-xps-13-9345-t-gray-gallery-5.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=678&qlt=100,1&resMode=sharp2&size=678,402&chrss=full",
+      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/9345/media-gallery/touch/gray/notebook-xps-13-9345-t-gray-gallery-6.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=673&qlt=100,1&resMode=sharp2&size=673,402&chrss=full",
+      "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/9345/media-gallery/touch-oled/gray/notebook-xps-13-9345-t-oled-gray-gallery-7.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=673&qlt=100,1&resMode=sharp2&size=673,402&chrss=full"
     ],
-    "imageCover": "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9350/media-gallery/platinum/notebook-xps-13-9350-t-oled-sl-gallery-1.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=699&qlt=100",
+    "imageCover": "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/9345/media-gallery/touch/gray/notebook-xps-13-9345-t-gray-gallery-2.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=679&qlt=100,1&resMode=sharp2&size=679,402&chrss=full",
     "supplier": "Distributeur EU",
     "cost": 349.3,
     "marginPct": -9.16,
