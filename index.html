@@ -4,88 +4,146 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GF Store — Électronique & Jeux vidéos</title>
+  <meta name="description" content="Boutique Électronique : PC, Consoles, Smartphones Neufs. Livraison rapide, garantie 2 ans, paiement en 4x. Promotions, avis clients et FAQ détaillée."/>
   <style>
-    :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
-    *{box-sizing:border-box} body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
+    :root{
+      --w:1200px;--c:#0f172a;--a:#2563eb;--a2:#1e40af;--g:#10b981;--bg:#f5f7fb;--r:16px;
+      --muted:#6b7280;--card:#ffffff;--bd:#e5e7eb;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
     a{color:inherit}
-    header{position:sticky;top:0;z-index:50;background:#fff;backdrop-filter:saturate(140%) blur(4px);border-bottom:1px solid #e5e7eb}
+    header{position:sticky;top:0;z-index:50;background:#fff;backdrop-filter:saturate(140%) blur(4px);border-bottom:1px solid var(--bd)}
     .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
     .brand{display:flex;align-items:center;gap:10px;font-weight:700}
-    .brand b{font-size:20px}
     .brand .logo{height:40px;width:auto;display:block}
-    .nav{display:flex;gap:10px;align-items:center}
-    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;text-decoration:none;color:inherit;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--bd);background:#fff;border-radius:12px;text-decoration:none;color:inherit;box-shadow:0 1px 0 rgba(0,0,0,.02)}
     .nav a:hover,.iconbtn:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
     .iconbtn{cursor:pointer}
     .ic{width:16px;height:16px;display:inline-block}
     .dropdown{position:relative}
-    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid var(--bd);border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
     .menu.show{display:block}
     .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
     .menu a:hover{background:#f3f4f6}
 
+    /* Bandeau promo */
     .banner{background:linear-gradient(90deg,#1e3a8a,#2563eb,#0ea5e9);color:#fff;text-align:center;padding:10px 14px}
     .banner .timer{font-weight:700;border-radius:999px;padding:2px 8px;background:rgba(255,255,255,.15);display:inline-block}
     .banner .sep{opacity:.6;padding:0 6px}
 
-    .policies{max-width:var(--w);margin:12px auto;padding:0 12px;display:grid;gap:10px;grid-template-columns:1fr}
-    @media (min-width:860px){
-      .policies{grid-template-columns:repeat(2,minmax(230px,1fr));grid-template-areas:"a b" "c c"}
-      .policies .p1{grid-area:a}
-      .policies .p2{grid-area:b}
-      .policies .p3{grid-area:c}
-    }
-    .policies div{display:flex;align-items:center;gap:8px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid #e5e7eb;border-radius:14px;padding:10px 12px}
-    .policies .two{flex-direction:column;align-items:flex-start}
-    .payicons{margin-left:8px;display:inline-flex;gap:8px;align-items:center}
-    .payicons img{height:16px;opacity:.95;transition:transform .15s ease, opacity .15s ease}
-    .payicons a:hover img{opacity:1;transform:translateY(-1px)}
-    .payicons svg{width:16px;height:16px;opacity:.95}
+    /* HERO (confiance) */
+    .hero{max-width:var(--w);margin:12px auto;padding:0 12px}
+    .hero-wrap{background:linear-gradient(180deg,#ffffff,#f7fbff);border:1px solid var(--bd);border-radius:20px;padding:18px;display:grid;gap:18px;grid-template-columns:1fr}
+    @media (min-width:960px){.hero-wrap{grid-template-columns:1.1fr .9fr;align-items:center}}
+    .hero h1{margin:0;font-size:28px;line-height:1.2}
+    .hero p.lead{margin:6px 0 0;color:#111;font-size:15px}
+    .usp{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0 6px}
+    .usp .pill{display:inline-flex;align-items:center;gap:6px;border:1px dashed #c7d2fe;background:#eef2ff;color:#1e3a8a;border-radius:999px;padding:7px 12px;font-size:12px}
+    .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+    .cta{display:inline-flex;align-items:center;gap:8px;padding:11px 15px;border-radius:12px;text-decoration:none;font-weight:600}
+    .cta.primary{background:linear-gradient(180deg,var(--a),var(--a2));color:#fff;box-shadow:0 8px 22px rgba(30,64,175,.25)}
+    .cta.secondary{background:#fff;border:1px solid var(--bd);color:#111}
+    .badge-new{display:inline-block;background:var(--g);color:#fff;border-radius:999px;padding:4px 10px;font-size:12px}
 
+    .hero-media{position:relative;isolation:isolate;border-radius:18px;overflow:hidden;box-shadow:0 16px 36px rgba(15,23,42,.15), 0 1px 0 rgba(0,0,0,.04);min-height:240px;background:#eef2ff}
+    .hero-media img{width:100%;height:100%;object-fit:cover;display:block}
+    .hero-trust{position:absolute;right:12px;bottom:12px;background:rgba(255,255,255,.9);backdrop-filter:saturate(140%) blur(2px);border:1px solid var(--bd);border-radius:12px;padding:8px 10px;display:flex;gap:8px;align-items:center;box-shadow:0 10px 24px rgba(0,0,0,.12)}
+
+    /* Policies */
+    .policies{max-width:var(--w);margin:12px auto;padding:0 12px;display:grid;gap:10px;grid-template-columns:1fr}
+    @media (min-width:860px){.policies{grid-template-columns:repeat(2,minmax(230px,1fr));grid-template-areas:"a b" "c c"}.policies .p1{grid-area:a}.policies .p2{grid-area:b}.policies .p3{grid-area:c}}
+    .policies div{display:flex;align-items:center;gap:8px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid var(--bd);border-radius:14px;padding:10px 12px}
+    .policies .two{flex-direction:column;align-items:flex-start}
+
+    /* Contrôles + grilles produits (inchangés) */
     .controls{max-width:var(--w);margin:8px auto;padding:0 12px;display:flex;gap:8px;align-items:center}
-    input[type=search],select{flex:1;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
-    .grid{max-width:var(--w);margin:12px auto 28px;padding:0 12px;display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
-    .card{position:relative;background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    input[type=search],select{flex:1;padding:12px;border:1px solid var(--bd);border-radius:12px;background:#fff}
+    .grid{max-width:var(--w);margin:12px auto 12px;padding:0 12px;display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+    .card{position:relative;background:#fff;border:1px solid var(--bd);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 0 rgba(0,0,0,.02)}
     .card:hover{box-shadow:0 10px 24px rgba(0,0,0,.08);transform:translateY(-1px)}
-    .hit{position:absolute;inset:0}
-    .img{aspect-ratio:1/1;background:#fff;display:grid;place-items:center;padding:10px;border:1px solid #e5e7eb;border-radius:14px}
-    .img img{width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;border:1px solid #e5e7eb;background:#fff}
+    .hit{position:absolute;inset:0;z-index:1}
+    .img{aspect-ratio:1/1;background:#fff;display:grid;place-items:center;padding:10px;border:1px solid var(--bd);border-radius:14px}
+    .img img{width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;border:1px solid var(--bd);background:#fff}
     .card .box{padding:12px}
     h3{font-size:15px;margin:6px 0 6px;min-height:38px}
     .meta{font-size:12px;opacity:.7}
     .price{margin:6px 0 8px;font-weight:700}
     .price s{font-weight:400;opacity:.55;margin-left:6px}
     .badge{background:var(--g);color:#fff;border-radius:999px;padding:2px 8px;margin-left:6px;font-size:12px}
-    .pill{display:inline-grid;place-items:center;border-radius:999px;border:1px solid #e5e7eb;padding:2px 8px;font-size:12px;margin-left:8px}
-    .btn{position:relative;z-index:2;margin-top:auto;display:inline-flex;align-items:center;gap:8px;justify-content:center;width:100%;text-align:center;padding:11px 12px;border:0;border-top:1px solid #e5e7eb;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-radius:0 0 16px 16px;cursor:pointer;box-shadow:0 6px 14px rgba(30,64,175,.25)}
+    .btn{position:relative;z-index:2;margin-top:auto;display:inline-flex;align-items:center;gap:8px;justify-content:center;width:100%;text-align:center;padding:11px 12px;border:0;border-top:1px solid var(--bd);background:linear-gradient(180deg,var(--a),var(--a2));color:#fff;border-radius:0 0 16px 16px;cursor:pointer;box-shadow:0 6px 14px rgba(30,64,175,.25)}
     .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(30,64,175,.28)}
     .btn .ic{filter:invert(1)}
 
+    /* Sections */
+    .section{max-width:var(--w);margin:12px auto;padding:0 12px}
+    .section-title{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:6px auto 8px;font-weight:700;font-size:16px;letter-spacing:.04em;opacity:.9}
+
+    /* Carrousels & deals */
+    .carousel{position:relative}
+    .track{display:flex;gap:12px;overflow:auto;padding:8px 0;scroll-snap-type:x mandatory}
+    .slide{scroll-snap-align:start;min-width:240px;background:#fff;border:1px solid var(--bd);border-radius:14px;padding:10px}
+    .navbtn{position:absolute;top:50%;transform:translateY(-50%);border:1px solid var(--bd);background:#fff;border-radius:999px;width:36px;height:36px;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,.08)}
+    .navbtn:hover{box-shadow:0 10px 22px rgba(0,0,0,.12)}
+    .prev{left:-6px}.next{right:-6px}
+    .deal{display:flex;flex-direction:column;gap:8px}
+    .deal .img{aspect-ratio:1.3/1}
+    .deal .price-row{display:flex;align-items:center;gap:8px}
+    .deal .count{font-size:12px;color:var(--muted)}
+    .deal .top{background:#111;color:#fff;padding:2px 8px;border-radius:999px;font-size:11px}
+    .deal .stock{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:999px;padding:2px 8px}
+
+    /* Avis */
+    .review{display:flex;flex-direction:column;gap:6px}
+    .stars{color:#f59e0b;font-size:14px}
+    .trustbox{margin:8px 0 10px;display:flex;justify-content:flex-start}
+    .trustbox img{width:min(260px,100%);height:auto;border:1px solid var(--bd);border-radius:10px;box-shadow:0 6px 16px rgba(0,0,0,.08);pointer-events:none;user-select:none}
+
+    /* FAQ (sous les avis) */
+    .faq{max-width:var(--w);margin:16px auto;padding:0 12px}
+    .faq .item{background:#fff;border:1px solid var(--bd);border-radius:12px;margin-bottom:8px;overflow:hidden}
+    .faq summary{list-style:none;padding:12px;cursor:pointer;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+    .faq summary::marker{display:none}
+    .faq .ans{padding:0 12px 12px;color:#111}
+    .faq .tip{font-size:12px;color:var(--muted)}
+    .faq code{padding:1px 6px;border:1px solid var(--bd);border-radius:6px;background:#f8fafc}
+
+    /* Services */
+    .services{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+    .svc{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:12px;display:flex;gap:10px;align-items:center}
+
+    /* Panier */
     .panel{position:fixed;inset:0;display:none;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:9999}
     .panel.show{display:block}
-    .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid #e5e7eb;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
+    .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid var(--bd);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
     .panel.show .sheet{transform:translateX(0)}
-    .sheet header{margin:0;padding:12px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center}
+    .sheet header{margin:0;padding:12px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
     .sheet .items{padding:12px;overflow:auto;display:flex;flex-direction:column;gap:10px}
-    .ci{display:grid;grid-template-columns:72px 1fr auto;gap:8px;border:1px solid #e5e7eb;border-radius:12px;padding:8px}
+    .ci{display:grid;grid-template-columns:72px 1fr auto;gap:8px;border:1px solid var(--bd);border-radius:12px;padding:8px}
     .ci img{width:72px;height:72px;object-fit:cover;border-radius:8px;background:#f1f5f9}
     .qty{display:flex;align-items:center;gap:6px}
-    .qty button{border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:2px 6px;cursor:pointer;font-size:12px}
-    .sum{margin-top:auto;border-top:1px solid #e5e7eb;padding:12px;display:flex;justify-content:space-between;align-items:center}
+    .qty button{border:1px solid var(--bd);background:#fff;border-radius:8px;padding:2px 6px;cursor:pointer;font-size:12px}
+    .sum{margin-top:auto;border-top:1px solid var(--bd);padding:12px;display:flex;justify-content:space-between;align-items:center}
     .checkout{display:inline-flex;align-items:center;gap:8px;background:var(--a);color:#fff;text-decoration:none;padding:10px 14px;border-radius:12px}
-    .x{cursor:pointer;border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:6px}
+    .x{cursor:pointer;border:1px solid var(--bd);background:#fff;border-radius:8px;padding:6px}
     .countbadge{min-width:18px;display:inline-grid;place-items:center;font-size:12px;padding:0 6px;margin-left:4px;border-radius:999px;background:#111;color:#fff}
     body.lock{overflow:hidden}
 
-    footer{background:#fff;border-top:1px solid #e5e7eb}
-    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
-    .fwrap a{text-decoration:none;color:inherit;opacity:.9}
-    .fwrap a:hover{text-decoration:underline}
+    /* Footer tech */
+    footer{background:#fff;border-top:1px solid var(--bd)}
+    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:grid;gap:10px;grid-template-columns:1fr}
+    .fcols{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:8px}
+    .fbox{border:1px solid var(--bd);border-radius:12px;padding:12px}
+    .fbox h4{margin:0 0 8px;font-size:13px}
+    .fbox a{text-decoration:none;color:inherit;opacity:.9;display:block;margin:4px 0}
+    .fbox a:hover{text-decoration:underline}
 
+    /* Divers */
     .controls .searchwrap{position:relative;flex:2}
     .controls .searchwrap input{padding-left:36px}
     .controls .searchwrap .ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.55}
-    .fab{position:fixed;right:16px;bottom:16px;z-index:10000;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border:0;border-radius:999px;display:inline-flex;align-items:center;gap:8px;padding:12px 14px;box-shadow:0 12px 28px rgba(30,64,175,.35);cursor:pointer}
+    .fab{position:fixed;right:16px;bottom:16px;z-index:10000;background:linear-gradient(180deg,var(--a),var(--a2));color:#fff;border:0;border-radius:999px;display:inline-flex;align-items:center;gap:8px;padding:12px 14px;box-shadow:0 12px 28px rgba(30,64,175,.35);cursor:pointer}
     .fab .badge{min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px}
     .fab img.ic{filter:invert(1)}
     .chip{display:inline-block;line-height:1;padding:2px 6px;border-radius:999px;background:#f0f9ff;color:#0ea5e9;font-size:11px;border:1px solid #bae6fd}
@@ -94,42 +152,38 @@
     #icSSL{width:28px;height:28px}
     .paylogos{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:6px}
     .paylogos img{height:22px}
-    .pay-carousel{max-width:var(--w);margin:0 auto 8px;padding:0 12px}
-    .pay-carousel .track{display:flex;gap:12px;overflow:auto;padding:8px 0;scroll-snap-type:x mandatory}
-    .pay-carousel .track a{scroll-snap-align:start;display:flex;align-items:center;justify-content:center;min-width:120px;height:56px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
-    .pay-carousel img{height:22px}
-    .section-title{max-width:var(--w);margin:6px auto 0;padding:0 12px;font-weight:700;font-size:16px;letter-spacing:.04em;opacity:.85}
 
     .mobile-only{display:none}
     .desktop-only{display:initial}
+    @media (max-width:640px){
+      .hwrap{flex-direction:column;align-items:center;gap:8px}
+      .brand .logo{height:30px}
+      .nav{order:2;justify-content:center;flex-wrap:wrap}
+      .policies{grid-template-columns:1fr;grid-template-areas:"a" "b" "c"}
+      .policy.p3{padding:6px 8px}
+      .paylogos{flex-wrap:nowrap;overflow-x:auto;gap:10px}
+      .paylogos img{height:16px}
+      .desktop-only{display:none!important}
+      .mobile-only{display:block}
+      .prev{left:2px}.next{right:2px}
+    }
 
-  @media (max-width:640px){
-    .hwrap{flex-direction:column;align-items:center;gap:8px}
-    .brand{justify-content:center}
-    .brand .logo{height:30px}
-    .nav{order:2;justify-content:center;flex-wrap:wrap}
-    .policies{grid-template-columns:1fr;grid-template-areas:"a" "b" "c"}
-    .policy.p3{padding:6px 8px}
-    .paylogos{flex-wrap:nowrap;overflow-x:auto;gap:10px}
-    .paylogos img{height:16px}
-    .desktop-only{display:none!important}
-    .mobile-only{display:block}
-  }
+    /* SEO intro */
+    .seo-intro{max-width:var(--w);margin:12px auto 16px;padding:0 12px;color:var(--muted);font-size:13px}
   </style>
 </head>
 <body>
   <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+
   <header>
     <div class="hwrap">
-      <a href="index.html" class="brand"><img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async"></a>
-      <nav class="nav">
-        <!-- Lien compte mis à jour -->
-        <a href="compte/index.html"><img class="ic" id="icUser" alt=""> Compte</a>
-        <button class="iconbtn" id="cartBtn"><img id="cartIcon" class="ic" alt=""> Panier</button>
+      <a href="index.html" class="brand" aria-label="Accueil GF Store"><img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async"></a>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="compte/index.html"><img class="ic" id="icUser" alt="">Compte</a>
+        <button class="iconbtn" id="cartBtn"><img id="cartIcon" class="ic" alt="">Panier</button>
         <div class="dropdown">
           <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
           <div id="menuDrop" class="menu">
-            <!-- Liens pages déplacés dans /pages/ -->
             <a href="pages/a-propos.html">À propos</a>
             <a href="pages/cgv.html">CGV</a>
             <a href="pages/mentions-legales.html">Mentions légales</a>
@@ -141,20 +195,49 @@
     </div>
   </header>
 
-  <section class="policies">
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-wrap">
+      <div class="hero-copy">
+        <div class="badge-new">Neuf &amp; garanti</div>
+        <h1>Commandez en confiance : <br>livraison rapide, paiement sécurisé.</h1>
+        <p class="lead">Produits neufs, suivi clair, et paiement en 4x : on s’occupe de tout.</p>
+        <div class="usp" aria-label="USP">
+          <span class="pill"><img class="ic" id="icTruck" alt="">Livraison &lt; 1 semaine</span>
+          <span class="pill"><img class="ic" id="ic2yrs" alt="">Garantie 2 ans</span>
+          <span class="pill"><img class="ic" id="ic4x" alt="">Paiement en 4x</span>
+        </div>
+        <div class="cta-row">
+          <a class="cta primary" href="catalogue.html"><img class="ic" id="icEye" alt="">Voir les produits</a>
+          <a class="cta secondary" href="catalogue.html"><img class="ic" id="icFire" alt="">Profiter des promos</a>
+        </div>
+      </div>
+
+      <figure class="hero-media" aria-label="Livraison rapide">
+        <img src="https://www.bmjelec.com/wp-content/uploads/2019/08/livraison.jpg" alt="Livreur en route pour une livraison rapide GF Store" loading="lazy" decoding="async">
+        <figcaption class="hero-trust">
+          <img class="ic" id="icSSL" alt="SSL">
+          <span style="font-size:12px"><strong>Certificat SSL</strong> • Paiement sécurisé</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Policies -->
+  <section class="policies" aria-label="Engagements">
     <div class="policy two p1">
-      <div><img class="ic" id="icTruck" alt=""> Livraison en 1 semaine</div>
+      <div><img class="ic" id="icTruck2" alt=""> Livraison en 1 semaine</div>
       <div><img class="ic" id="icReturn" alt=""> Retours sous 14 jours max</div>
     </div>
     <div class="policy two p2">
       <div><img class="ic" id="icRefund" alt=""> Remboursement garanti sous 14 jours</div>
-      <div><img class="ic" id="ic4x" alt=""> Paiement en 4x possible</div>
+      <div><img class="ic" id="ic4x2" alt=""> Paiement en 4x possible</div>
     </div>
     <div class="policy p3">
-      <img class="ic desktop-only" id="icSSL" alt="Certificat SSL" title="Certificat SSL">
+      <img class="ic desktop-only" id="icSSL2" alt="Certificat SSL" title="Certificat SSL">
       <div>
         <div class="desktop-only"><strong>Certificat SSL</strong></div>
-        <div class="desktop-only">Paiement sécurisé • Crypto acceptés</div>
+        <div class="desktop-only">Paiement sécurisé</div>
         <div class="mobile-only" aria-hidden="false"><strong>Paiement sécurisé</strong></div>
         <div class="paylogos" aria-label="Logos de paiement">
           <img alt="Visa" src="https://cdn.simpleicons.org/visa">
@@ -168,19 +251,147 @@
     </div>
   </section>
 
-  <section class="controls">
+  <!-- Deals du moment -->
+  <section id="deals" class="section">
+    <div class="section-title">
+      <div>🔥 Deals du moment <span class="chip" id="dealsChip">Produits directement sortis d'usine</span></div>
+      <div class="count chip"><span id="dealsCountdown" class="timer"></span></div>
+    </div>
+    <div class="carousel">
+      <button class="navbtn prev" aria-label="Précédent" data-target="dealsTrack">‹</button>
+      <div class="track" id="dealsTrack" aria-live="polite"></div>
+      <button class="navbtn next" aria-label="Suivant" data-target="dealsTrack">›</button>
+    </div>
+  </section>
+
+  <!-- Contrôles + Liste produits -->
+  <section class="controls" aria-label="Recherche et filtres">
     <div class="searchwrap">
       <img class="ic" id="icSearch" alt="">
       <input id="q" type="search" placeholder="Rechercher un produit (nom, marque, modèle)…" />
     </div>
-    <select id="cat"></select>
+    <select id="cat" aria-label="Catégorie"></select>
     <div id="count" title="Produits visibles">0</div>
   </section>
 
   <h2 class="section-title">NOS PRODUITS</h2>
-
   <main id="grid" class="grid" aria-live="polite"></main>
 
+  <!-- Avis + Trustpilot -->
+  <section id="avis" class="section">
+    <div class="section-title">
+      <div>⭐ Avis clients</div>
+    </div>
+
+    <!-- Mini TrustBox AU-DESSUS des avis -->
+    <div class="trustbox" aria-hidden="false">
+      <img src="https://help.trustpilot.com/servlet/rtaImage?eid=ka0Sh0000008Y7l&feoid=00N7U000000O2jv&refid=0EMSh0000055viq"
+           alt="Note moyenne et TrustScore GF Store" draggable="false" decoding="async" loading="lazy">
+    </div>
+
+    <div class="carousel">
+      <button class="navbtn prev" aria-label="Précédent" data-target="reviewsTrack">‹</button>
+      <div class="track" id="reviewsTrack">
+        <div class="slide review"><div class="stars">★★★★★</div><strong>“Lieferung schneller als erwartet.”</strong><div class="meta">— Anna K., München</div><div>Qualität top, sicher verpackt. Bestelle wieder.</div></div>
+        <div class="slide review"><div class="stars">★★★★★</div><strong>“Preis-Leistung unschlagbar.”</strong><div class="meta">— Jonas R., Berlin</div><div>Promo wie beschrieben, Support sehr freundlich.</div></div>
+        <div class="slide review"><div class="stars">★★★★☆</div><strong>“Alles neu & garantiert.”</strong><div class="meta">— Lara S., Hamburg</div><div>Ratenzahlung easy, Lieferung pünktlich.</div></div>
+        <div class="slide review"><div class="stars">★★★★★</div><strong>“Schneller Versand, top Qualität.”</strong><div class="meta">— Felix M., Köln</div><div>PS5 perfekt verpackt. Empfehlenswert!</div></div>
+        <div class="slide review"><div class="stars">★★★★★</div><strong>“Kundenservice 1A.”</strong><div class="meta">— Mia W., Frankfurt</div><div>Antwort in wenigen Stunden, Problem sofort gelöst.</div></div>
+        <div class="slide review"><div class="stars">★★★★☆</div><strong>“Guter Preis, schnelle Lieferung.”</strong><div class="meta">— Noah H., Stuttgart</div><div>Tracking transparent, kam früher an.</div></div>
+        <div class="slide review"><div class="stars">★★★★★</div><strong>“Sehr zufrieden mit dem Laptop.”</strong><div class="meta">— Emilia P., Düsseldorf</div><div>Neu & versiegelt. Läuft perfekt.</div></div>
+        <div class="slide review"><div class="stars">★★★★★</div><strong>“Top Beratung vor dem Kauf.”</strong><div class="meta">— Leon Z., Nürnberg</div><div>Gute Empfehlungen, keine Upsells.</div></div>
+        <div class="slide review"><div class="stars">★★★★☆</div><strong>“Retour lief unkompliziert.”</strong><div class="meta">— Sophia G., Leipzig</div><div>Schneller Umtausch, freundlicher Kontakt.</div></div>
+        <div class="slide review"><div class="stars">★★★★★</div><strong>“Würde wieder kaufen.”</strong><div class="meta">— Ben L., Hannover</div><div>Fairer Preis, 2-Jahre Garantie. Top.</div></div>
+      </div>
+      <button class="navbtn next" aria-label="Suivant" data-target="reviewsTrack">›</button>
+    </div>
+  </section>
+
+  <!-- FAQ Express (sous les avis) -->
+  <section id="faq" class="faq" aria-label="FAQ Express">
+    <h2 class="section-title">❓ FAQ Express <span class="chip">Tout savoir avant d’acheter</span></h2>
+
+    <details class="item" open>
+      <summary>Livraison : quels délais et comment estimer la date ? <span>+</span></summary>
+      <div class="ans">
+        Nous expédions sous 24–48h lorsque le produit est en stock local. Sinon, comptez <b>moins d’une semaine</b>. Vous recevez un e-mail avec le <b>numéro de suivi</b> dès le départ du colis.
+        <div class="tip">Astuce : prévoyez une adresse alternative (travail/voisin) si vous êtes absent.</div>
+      </div>
+    </details>
+
+    <details class="item">
+      <summary>Produits neufs, scellés ? Quelle garantie ? <span>+</span></summary>
+      <div class="ans">
+        Tous nos produits sont <b>neufs</b>, scellés constructeur. La garantie est de <b>2 ans</b> minimum. Vous pouvez passer par notre SAV ou directement par le constructeur.
+      </div>
+    </details>
+
+    <details class="item">
+      <summary>Retours / rétractation (14 jours) : comment procéder ? <span>+</span></summary>
+      <div class="ans">
+        Vous disposez de <b>14 jours</b> pour changer d’avis. Ouvrez une demande dans <a href="compte/index.html">votre compte</a> ou via <a href="pages/contact.html">Contact</a>. Nous vous envoyons l’étiquette si applicable, puis nous procédons au remboursement dès réception/validation.
+      </div>
+    </details>
+
+    <details class="item">
+      <summary>Remboursement : délais & modalités <span>+</span></summary>
+      <div class="ans">
+        Après validation du retour, le <b>remboursement</b> est effectué via le <b>même moyen de paiement</b> : carte (2–5 j ouvrés), virement (24–48h), crypto (une fois la transaction confirmée). Vous recevez un e-mail de confirmation avec le détail du montant remboursé.
+      </div>
+    </details>
+
+    <details class="item">
+      <summary>Paiement : carte, 3/4x, virement SEPA, crypto… c’est sécurisé ? <span>+</span></summary>
+      <div class="ans">
+        Oui : site protégé <b>SSL</b>, prestataires certifiés pour les cartes, options de <b>paiement en 3/4x</b> si éligible. Le <b>virement SEPA</b> et certaines <b>cryptomonnaies</b> sont également acceptés.
+      </div>
+    </details>
+
+    <details class="item">
+      <summary>Comment être sûr du prix final avec les promos ? <span>+</span></summary>
+      <div class="ans">
+        Le panier et la page de paiement récapitulent le <b>prix TTC final</b>, vos <b>avantages</b> (promos/codes) et la <b>livraison</b> (souvent offerte). Aucun frais caché.
+      </div>
+    </details>
+
+    <details class="item">
+      <summary>Facture avec TVA et coordonnées pro ? <span>+</span></summary>
+      <div class="ans">La <b>facture</b> est disponible dans votre <a href="compte/index.html">compte</a>. Pour les entreprises, indiquez le <b>nom de la société</b> et le <b>numéro de TVA</b> au checkout.</div>
+    </details>
+
+    <details class="item">
+      <summary>Compatibilités (claviers/langues, réseaux, chargeurs) <span>+</span></summary>
+      <div class="ans">Sauf mention contraire : clavier <b>FR-ISO</b>, smartphones compatibles réseaux EU, chargeurs adaptés au marché européen.</div>
+    </details>
+
+    <details class="item">
+      <summary>Commandes multiples & cadeaux : emballage, messages, facture sans prix ? <span>+</span></summary>
+      <div class="ans">Possible sur demande : <b>message cadeau</b>, <b>facture sans prix</b>, expéditions séparées si besoin.</div>
+    </details>
+
+    <details class="item">
+      <summary>Où suivre ma commande et mes demandes SAV ? <span>+</span></summary>
+      <div class="ans">Dans <a href="compte/index.html">votre espace compte</a> : suivi, factures, retours, SAV. Réponse moyenne <b>sous 24h ouvrées</b>.</div>
+    </details>
+  </section>
+
+  <!-- Services & garanties -->
+  <section id="services" class="section">
+    <h2 class="section-title">🛡️ Services & garanties <span class="chip">Neuf, garanti, livré vite — c’est tout.</span></h2>
+    <div class="services">
+      <div class="svc"><img class="ic" id="ic2yrsSvc" alt=""><div><strong>Neuf garanti 2 ans</strong><div class="meta">Pièces & main d’œuvre</div></div></div>
+      <div class="svc"><img class="ic" id="icRefund2" alt=""><div><strong>Remboursement facile</strong><div class="meta">Sous 14 jours</div></div></div>
+      <div class="svc"><img class="ic" id="ic4x3" alt=""><div><strong>Paiement en 3/4x</strong><div class="meta">Sous réserve d’éligibilité</div></div></div>
+      <div class="svc"><img class="ic" id="icChat" alt=""><div><strong>Support rapide</strong><div class="meta">Chat, mail & téléphone</div></div></div>
+    </div>
+  </section>
+
+  <!-- Intro SEO -->
+  <section class="seo-intro" aria-label="Introduction SEO">
+    <p>GF Store est votre boutique électronique pour PC, consoles et smartphones neufs. Profitez d’une livraison rapide, d’une garantie 2 ans et d’un paiement en 4x. Nos produits sont sélectionnés auprès de partenaires fiables, et notre FAQ répond à toutes vos questions pour commander en confiance.</p>
+  </section>
+
+  <!-- Panneau panier -->
   <div id="cartPanel" class="panel" aria-hidden="true">
     <div class="sheet">
       <header>
@@ -195,19 +406,44 @@
     </div>
   </div>
 
-  <button id="fabCart" class="fab" aria-label="Ouvrir le panier"><img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span></button>
+  <!-- FAB panier -->
+  <button id="fabCart" class="fab" aria-label="Ouvrir le panier">
+    <img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span>
+  </button>
 
+  <!-- Footer tech -->
   <footer>
     <div class="fwrap">
-      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
-      <nav>
-        <!-- Liens footer mis à jour vers /pages/ -->
-        <a href="pages/a-propos.html">À propos</a> · 
-        <a href="pages/cgv.html">CGV</a> · 
-        <a href="pages/mentions-legales.html">Mentions légales</a> · 
-        <a href="pages/confidentialite.html">Confidentialité</a> · 
-        <a href="pages/contact.html">Contact</a>
-      </nav>
+      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly. <span class="chip">Site 100% sécurisé • Paiement en 4x</span></div>
+      <div class="fcols">
+        <div class="fbox">
+          <h4>Plan du site</h4>
+          <a href="#hero">Accueil</a>
+          <a href="#deals">Promos</a>
+          <a href="catalogue.html">Catalogue</a>
+          <a href="#avis">Avis</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div class="fbox">
+          <h4>Catégories</h4>
+          <div id="footCats"></div>
+        </div>
+        <div class="fbox">
+          <h4>Service client</h4>
+          <a href="pages/contact.html">Nous contacter</a>
+          <a href="pages/cgv.html">CGV</a>
+          <a href="pages/mentions-legales.html">Mentions légales</a>
+          <a href="pages/confidentialite.html">Confidentialité</a>
+          <div class="meta">Lun–Ven 9h–18h • Chat, mail & tel</div>
+        </div>
+        <div class="fbox">
+          <h4>Suivez-nous</h4>
+          <a href="#" rel="nofollow">Instagram</a>
+          <a href="#" rel="nofollow">TikTok</a>
+          <a href="#" rel="nofollow">X / Twitter</a>
+          <a href="#" rel="nofollow">YouTube</a>
+        </div>
+      </div>
     </div>
   </footer>
 
@@ -215,58 +451,71 @@
   (async()=>{
     // --- Compte à rebours promo (48h) ---
     const countdownEl=document.getElementById('countdown');
+    const dealsCountdownEl=document.getElementById('dealsCountdown');
     const SALE_END=new Date(Date.now()+48*60*60*1000);
     const two=n=>String(n).padStart(2,'0');
     function tick(){
-      if(!countdownEl) return;
       const now=new Date();
       let diff=SALE_END-now;
-      if(diff<=0){countdownEl.textContent='Dernières heures !';return}
+      const done=diff<=0;
+      if(diff<0) diff=0;
       const d=Math.floor(diff/86400000); diff%=86400000;
       const h=Math.floor(diff/3600000); diff%=3600000;
       const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
-      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+      const txt=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+      if(countdownEl) countdownEl.textContent=done?'Dernières heures !':txt;
+      if(dealsCountdownEl) dealsCountdownEl.textContent=done?'Dernières heures !':txt;
     }
     tick(); setInterval(tick,1000);
 
-    // --- Icônes ---
+    // --- Icônes (mis à jour) ---
     const ICONS = {
       buy: 'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
       cart: 'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
       cartFull: 'https://img.icons8.com/?size=100&id=K5Jv3BfpxPYa&format=png&color=000000',
       checkout: 'https://img.icons8.com/?size=100&id=qVsd2YOgeizO&format=png&color=000000',
       truck: 'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
+      refund: 'https://img.icons8.com/?size=100&id=15114&format=png&color=000000', // remboursement
       logout: 'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
       user: 'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
       menu: 'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
       trash: 'https://img.icons8.com/?size=100&id=xGanKhWh8MxC&format=png&color=000000',
       fourx: 'https://img.icons8.com/?size=100&id=3c0Tk1f266bf&format=png&color=000000',
       ssl: 'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
-      search: 'https://img.icons8.com/?size=100&id=7964&format=png&color=000000'
+      search: 'https://img.icons8.com/?size=100&id=7964&format=png&color=000000',
+      eye: 'https://img.icons8.com/?size=100&id=85073&format=png&color=000000',
+      // Icône promo & support en ligne (demandés)
+      fire: 'https://img.icons8.com/?size=100&id=12089&format=png&color=000000',
+      chat: 'https://img.icons8.com/?size=100&id=11227&format=png&color=000000',
+      twoYears: 'https://img.icons8.com/?size=100&id=57926&format=png&color=000000'
     };
 
-    // --- Utilitaires ---
+    // ----- PROMO RENTRÉE GLOBALE -----
+    const GLOBAL_PROMO = { active:true, rate:0.30, label:'Promo rentrée -30%' };
+
+    // Utilitaires
     async function loadProducts(){
       const paths=['data/products.json','/data/products.json','products.json'];
       for(const p of paths){try{const r=await fetch(p); if(r.ok) return r.json();}catch{}}
-      throw new Error('Impossible de charger products.json');
+      console.warn('Impossible de charger products.json'); 
+      return [];
     }
     const formatEUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-    // Slug aligné avec les pages produit /produits/slug-id.html (suppression des accents)
     const slug=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 
-    // Peupler les icônes UI
+    // Peupler icônes UI
     const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
-    setSrc('logoCart', ICONS.cart);
-    setSrc('icHome', ICONS.buy);
     setSrc('icUser', ICONS.user);
-    setSrc('icTruck', ICONS.truck);
+    setSrc('icTruck', ICONS.truck); setSrc('icTruck2', ICONS.truck);
     setSrc('icReturn', ICONS.logout);
-    setSrc('icRefund', ICONS.refund);
-    setSrc('icCheckout', ICONS.checkout); setSrc('icSearch', ICONS.search); setSrc('icFabCart', ICONS.cart);
+    setSrc('icRefund', ICONS.refund); setSrc('icRefund2', ICONS.refund);
+    setSrc('icCheckout', ICONS.checkout);
+    setSrc('icSearch', ICONS.search); setSrc('icFabCart', ICONS.cart);
     setSrc('icMenu', ICONS.menu);
-    setSrc('ic4x', ICONS.fourx);
-    setSrc('icSSL', ICONS.ssl);
+    setSrc('ic4x', ICONS.fourx); setSrc('ic4x2', ICONS.fourx); setSrc('ic4x3', ICONS.fourx);
+    setSrc('icSSL', ICONS.ssl); setSrc('icSSL2', ICONS.ssl);
+    setSrc('icEye', ICONS.eye); setSrc('icFire', ICONS.fire);
+    setSrc('icChat', ICONS.chat); setSrc('ic2yrs', ICONS.twoYears); setSrc('ic2yrsSvc', ICONS.twoYears);
 
     // --- Menu déroulant ---
     const menuBtn=document.getElementById('menuBtn');
@@ -274,6 +523,7 @@
     if(menuBtn&&menuDrop){
       menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
       document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+      menuBtn.addEventListener('blur',()=>setTimeout(()=>menuDrop?.classList.remove('show'),150));
     }
 
     // --- Panier (localStorage) ---
@@ -299,7 +549,6 @@
       const fbi=document.getElementById('icFabCart'); if(fbi) fbi.src=count>0?ICONS.cartFull:ICONS.cart;
     };
 
-    // --- Rendu Panier ---
     function renderCart(){
       const wrap=document.getElementById('cartItems');
       const list=getCart();
@@ -321,16 +570,23 @@
       document.getElementById('cartTotal').textContent=formatEUR(cartTotal());
     }
 
-    // --- DOM réfs ---
+    // DOM refs
     const $=s=>document.querySelector(s);
     const q=$('#q'), c=$('#cat'), g=$('#grid'), n=$('#count');
 
     // --- Données Produits ---
     const items=await loadProducts();
+
+    // Catégories (select + footer)
     const cats=['Toutes catégories', ...Array.from(new Set(items.map(p=>p.category))).sort((a,b)=>(''+a).localeCompare(b))];
     c.innerHTML=cats.map(x=>`<option>${x}</option>`).join('');
+    const footCats=document.getElementById('footCats');
+    if(footCats){
+      footCats.innerHTML = cats.filter(x=>x!=='Toutes catégories').slice(0,12).map(cat=>`<a href="catalogue.html?cat=${encodeURIComponent(cat)}">${cat}</a>`).join('');
+    }
     const img=p=>p.imageCover||(p.images&&p.images[0])||'';
 
+    // Rendu produits (logique inchangée)
     function render(){
       const term=(q.value||'').toLowerCase().trim();
       const cat=c.value;
@@ -338,7 +594,6 @@
       n.textContent=list.length;
       g.innerHTML=list.map((p,i)=>{
         const id=findId(p,i);
-        // LIEN PRODUIT MIS À JOUR -> /produits/<slug>-<id>.html
         const url=`produits/${slug(p.name)}-${encodeURIComponent(id)}.html`;
         const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price;
         const newP=hasPromo?p.promoPrice:p.price;
@@ -357,7 +612,7 @@
       }).join('');
     }
 
-    // --- Events ---
+    // Events pour ajouter au panier depuis la grille principale
     g.addEventListener('click',e=>{
       const btn=e.target.closest('.add');
       if(btn){
@@ -389,6 +644,91 @@
 
     // Init
     updateCartCount(); render();
+
+    // ======= Deals du moment =======
+    function buildDeals(){
+      const dealsTrack=document.getElementById('dealsTrack');
+      const dealsChip=document.getElementById('dealsChip');
+      if(!dealsTrack) return;
+
+      // 1) Cherche des promos au niveau produit
+      let list = items.map((p,i)=>{
+        const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price;
+        const newP=hasPromo?p.promoPrice:p.price;
+        const disc=hasPromo?Math.round((1-(newP/p.price))*100):0;
+        return {p,i,hasPromo,newP,disc};
+      }).filter(x=>x.disc>=10).sort((a,b)=>b.disc-a.disc).slice(0,8);
+
+      // 2) Si aucune promo produit, applique la promo rentrée globale -30%
+      if(list.length===0 && GLOBAL_PROMO.active){
+        if(dealsChip) dealsChip.textContent = GLOBAL_PROMO.label;
+        list = items.slice(0,8).map((p,i)=>{
+          const rate = GLOBAL_PROMO.rate;
+          const newP = Math.round(p.price*(1-rate)*100)/100;
+          const disc = Math.round(rate*100);
+          return {p,i,hasPromo:true,newP,disc,global:true};
+        });
+      }
+
+      if(list.length===0){
+        // garde-fou (si aucun produit)
+        dealsTrack.innerHTML = '<div class="slide">Aucune offre disponible pour le moment.</div>';
+        return;
+      }
+
+      const _img = p => p.imageCover || (p.images && p.images[0]) || '';
+      const _findId=(p,i)=>p.id||p.sku||p._id||String(i);
+      const _slug=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+
+      dealsTrack.innerHTML = list.map(({p,i,newP,disc,global})=>{
+        const id=_findId(p,i);
+        const url=`produits/${_slug(p.name)}-${encodeURIComponent(id)}.html`;
+        const stock = p.stockLeft??p.stock??p.quantity;
+        const top = p.topSeller || (p.badges && p.badges.includes && p.badges.includes('top'));
+        return `
+          <article class="slide deal" data-id="${id}">
+            ${top?`<span class="top">Top vente</span>`: global?`<span class="top">Promo rentrée</span>`:''}
+            <a href="${url}" class="img" aria-label="Voir ${p.name}">
+              <img loading="lazy" decoding="async" src="${_img(p)}" alt="${p.name}">
+            </a>
+            <div><strong>${p.name}</strong></div>
+            <div class="meta">${p.brand||''} • ${p.category||''}</div>
+            <div class="price-row">
+              <div class="price">${formatEUR(newP)} <s>${formatEUR(p.price)}</s> <span class="badge">-${disc}%</span></div>
+              ${Number.isFinite(stock)?`<span class="stock">Restant : ${stock}</span>`:''}
+            </div>
+            <div class="count">Se termine dans <span class="timer">${document.getElementById('dealsCountdown')?.textContent||''}</span></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="cta secondary add" data-id="${id}">Ajouter</button>
+              <a class="cta primary" href="${url}">Voir l’offre</a>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+    buildDeals();
+
+    // Ajouter au panier depuis les deals
+    document.getElementById('dealsTrack')?.addEventListener('click',e=>{
+      const btn=e.target.closest('.add');
+      if(!btn) return;
+      const slide=btn.closest('[data-id]');
+      const id=slide?.getAttribute('data-id');
+      const index=items.findIndex((p,i)=> (p.id||p.sku||p._id||String(i))===id );
+      if(index>-1) addToCart(items[index], index);
+    });
+
+    // Carrousel nav
+    document.querySelectorAll('.navbtn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const targetId = btn.getAttribute('data-target');
+        const el = document.getElementById(targetId);
+        if(!el) return;
+        const amount = el.clientWidth*0.9*(btn.classList.contains('next')?1:-1);
+        el.scrollBy({left:amount,behavior:'smooth'});
+      });
+    });
+
   })();
   </script>
 </body>
