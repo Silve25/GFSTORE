@@ -1,7 +1,7 @@
 /* checkout.js — GF Store
    - Récupère le panier (localStorage 'gf_cart')
    - Calcule promos (SEPA -3%, Crypto -1%), split 2/3/4x
-   - Uploader preuve SEPA (base64)
+   - Uploader preuve SEPA (base64) — mobile friendly
    - Envoi vers Apps Script → Telegram (JSON + alias en query-string pour compat)
    - Empêche l’envoi si des champs requis manquent (évite messages vides)
 */
@@ -11,13 +11,13 @@
   // =========================
   // CONFIG
   // =========================
-  // ⚠️ Mets à jour l’URL si tu redéploies l’Apps Script.
   const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbypa62g6lhlchWMayVWYyRh2TGc--bBdqNMag2ro1Ne1SDMVT5bHzy7pvooG3ZnsGAx/exec";
+  const MAX_SIZE = 10 * 1024 * 1024; // 10 Mo
 
   // =========================
-  // UTILITAIRES GÉNÉRAUX
+  // UTILITAIRES
   // =========================
-  const $ = s => document.querySelector(s);
+  const $  = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
   const toast = (msg)=>{ const t = $('#toast'); if(!t) return; t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); };
   const EUR  = (v)=> Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
@@ -46,13 +46,11 @@
     const menuDrop = $('#menuDrop');
     if(!menuBtn || !menuDrop) return;
     menuBtn.addEventListener('click', e=>{ e.stopPropagation(); menuDrop.classList.toggle('show'); });
-    document.addEventListener('click', e=>{
-      if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show');
-    });
+    document.addEventListener('click', e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
   })();
 
   // =========================
-  // PANIER (localStorage)
+  // PANIER
   // =========================
   const KEY = 'gf_cart';
   const getCart = ()=>{ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{ return []; } };
@@ -70,18 +68,17 @@
     const rnd=Math.floor(Math.random()*9000)+1000;
     return `GF-${y}${mm}${dd}-${rnd}`;
   })();
-  const orderIdEl = $('#orderId'); if(orderIdEl) orderIdEl.textContent = orderId;
+  $('#orderId') && ($('#orderId').textContent = orderId);
 
   // =========================
-  // RENDU MINI PANIER (colonne droite)
+  // MINI PANIER
   // =========================
   function renderMini(){
-    const wrap = $('#miniCart');
-    if(!wrap) return;
+    const wrap = $('#miniCart'); if(!wrap) return;
     const cart = getCart();
     if(!cart.length){
       wrap.innerHTML = '<div class="muted">Votre panier est vide.</div>';
-      const ids = ['sub','benefit','total','dueNow']; ids.forEach(id=>{ const el=$('#'+id); if(el) el.textContent='—'; });
+      ['sub','benefit','total','dueNow'].forEach(id=>{ const el=$('#'+id); if(el) el.textContent='—'; });
       const schedule = $('#schedule'); if(schedule) schedule.style.display='none';
       return;
     }
@@ -104,7 +101,7 @@
   function promoRate(){ return currentPM()==='sepa'?0.03 : currentPM()==='crypto'?0.01 : 0; }
 
   // =========================
-  // CRYPTO: Taux mock + adresses
+  // CRYPTO (taux mock + adresses)
   // =========================
   const fx = {
     'USDT-TRC20':{symbol:'USDT',rate:1},
@@ -140,7 +137,7 @@
   if(ccySel){ setCryptoAddress(ccySel.value); ccySel.addEventListener('change',()=>{ setCryptoAddress(ccySel.value); updateSummary(); }); }
 
   // =========================
-  // SPLIT (échéancier)
+  // SPLIT
   // =========================
   function splitAmounts(total, parts){
     const cents = Math.round((Number(total)||0)*100);
@@ -172,11 +169,7 @@
     if(btnSplit) btnSplit.addEventListener('click', open);
     $('#closeSplit')?.addEventListener('click', close);
     $('#cancelSplit')?.addEventListener('click', close);
-    $('#applySplit')?.addEventListener('click',()=>{
-      selectedSplit = modalParts;
-      btnSplit?.classList.add('on'); btnOnce?.classList.remove('on');
-      close(); updateSplitHint(); updateSummary();
-    });
+    $('#applySplit')?.addEventListener('click',()=>{ selectedSplit = modalParts; btnSplit?.classList.add('on'); btnOnce?.classList.remove('on'); close(); updateSplitHint(); updateSummary(); });
     segBtns.forEach(b=> b.addEventListener('click',()=> setModalParts(b.dataset.parts)));
     $('#splitModal')?.addEventListener('click',e=>{ if(e.target.id==='splitModal') close(); });
 
@@ -192,11 +185,11 @@
       prev.innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
     }
     function updateSplitHint(){ const el=$('#splitHint'); if(el) el.textContent = selectedSplit>1 ? `(${selectedSplit}× mensuel)` : '(désactivé)'; }
-    window.updateSplitHint = updateSplitHint; // reuse in init
+    window.updateSplitHint = updateSplitHint;
   })();
 
   // =========================
-  // RÉFÉRENCE SEPA depuis nom
+  // RÉFÉRENCE SEPA
   // =========================
   const slugRefFromName = (n)=>{
     const base=(n||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,'').slice(0,16);
@@ -208,7 +201,7 @@
   $('#name')?.addEventListener('input', syncRef);
 
   // =========================
-  // RÉCAP GLOBAL + DUE NOW
+  // RÉCAP + DUE NOW
   // =========================
   const SHIPPING = 0;
   function updateSummary(){
@@ -220,11 +213,10 @@
     const amts  = splitAmounts(total, parts);
     const dueNow = amts[0] || 0;
 
-    const map = { sub, promo, total, dueNow };
-    $('#sub')?.textContent = EUR(map.sub);
-    $('#benefit')?.textContent = promo>0 ? '–'+EUR(map.promo) : '—';
-    $('#total')?.textContent = EUR(map.total);
-    $('#dueNow')?.textContent = EUR(map.dueNow);
+    $('#sub')?.textContent = EUR(sub);
+    $('#benefit')?.textContent = promo>0 ? '–'+EUR(promo) : '—';
+    $('#total')?.textContent = EUR(total);
+    $('#dueNow')?.textContent = EUR(dueNow);
 
     const scheduleBox = $('#schedule');
     if(scheduleBox){
@@ -324,53 +316,118 @@
   }
 
   // =========================
-  // UPLOADER SEPA
+  // UPLOADER SEPA — robuste mobile
   // =========================
-  const dz = $('#dz');
-  const input = $('#proofInput');
-  const fileWrap = $('#fileWrap');
-  const fileName = $('#fileName');
-  const fileInfo = $('#fileInfo');
-  const fileBar = $('#fileBar');
-  const fileOk = $('#fileOk');
-  const removeProof = $('#removeProof');
+  const dz        = $('#dz');
+  const input     = $('#proofInput');
+  const fileWrap  = $('#fileWrap');
+  const fileName  = $('#fileName');
+  const fileInfo  = $('#fileInfo');
+  const fileBar   = $('#fileBar');
+  const fileOk    = $('#fileOk');
+  const removeBtn = $('#removeProof');
+  // Forcer accept = tous formats (au cas où le HTML restreint)
+  if (input) input.setAttribute('accept','*/*');
+
+  function fmtBytes(b){
+    if(b===0) return '0 o';
+    if(!b && b!==0) return '';
+    const u=['o','Ko','Mo','Go']; let i=0;
+    while(b>=1024 && i<u.length-1){ b/=1024; i++; }
+    return b.toFixed(b<10&&i?1:0)+' '+u[i];
+  }
+  function reasonForRefusal(f, isDrop){
+    if(!f) return isDrop ? 'Aucun fichier détecté dans le glisser-déposer.' : 'Aucun fichier sélectionné.';
+    // Dossiers (drag & drop) non gérés
+    if ('webkitGetAsEntry' in f) {
+      try { const e = f.webkitGetAsEntry(); if(e && e.isDirectory) return 'Dossiers non pris en charge. Compressez-le en .zip.'; } catch {}
+    }
+    if(f.size === 0) return 'Fichier vide (0 octet).';
+    if(f.size > MAX_SIZE) return 'Fichier trop volumineux (>10 Mo).';
+    return '';
+  }
+
+  let proofFile = null;
+  function showFile(f){
+    proofFile = f;
+    if(fileName) fileName.textContent = f.name || 'Fichier';
+    if(fileInfo) fileInfo.textContent = `${f.type || 'Type inconnu'} • ${fmtBytes(f.size)}`;
+    if(fileBar)  fileBar.style.width = '0%';
+    if(fileOk)   fileOk.style.display = 'none';
+    if(fileWrap) fileWrap.style.display = 'flex';
+
+    let p = 0;
+    const step = ()=> {
+      p += Math.random()*35 + 20;
+      if (p >= 100) { p = 100; if(fileBar) fileBar.style.width = '100%'; if(fileOk) fileOk.style.display = 'inline-flex'; return; }
+      if(fileBar) fileBar.style.width = p+'%';
+      setTimeout(step, 150);
+    };
+    setTimeout(step, 150);
+  }
+  function clearFile(){
+    proofFile = null;
+    if (input) input.value = '';
+    if (fileWrap) fileWrap.style.display = 'none';
+  }
+  removeBtn?.addEventListener('click', clearFile);
+
+  // Bouton "Importer" éventuel
   $('#pickProof')?.addEventListener('click',()=> input?.click());
-  if(dz){
-    dz.addEventListener('click',()=> input?.click());
-    dz.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); input?.click(); }});
-    ['dragenter','dragover'].forEach(ev=> dz.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation(); dz.classList.add('over');}));
-    ['dragleave','drop'].forEach(ev=> dz.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation(); dz.classList.remove('over');}));
-    dz.addEventListener('drop',e=>{
-      const f = e.dataTransfer?.files?.[0]; if(!f) return;
-      if(!/(\.pdf$|image\/)/i.test(f.type) && !/\.pdf$/i.test(f.name)){ toast('Format non supporté'); return; }
-      if(f.size>10*1024*1024){ toast('Fichier trop volumineux (>10Mo)'); return; }
-      showFile(f);
+
+  // Dropzone interactions (desktop)
+  if (dz){
+    // tap/click mobile: utilise aussi touchend
+    dz.addEventListener('click', ()=> input?.click(), {passive:true});
+    dz.addEventListener('touchend', ()=> input?.click(), {passive:true});
+    dz.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' ' || e.key==='Spacebar'){ e.preventDefault(); input?.click(); }});
+
+    ['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => {
+      e.preventDefault(); e.stopPropagation();
+      dz.classList.add('over');
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+    }));
+    ['dragleave','drop'].forEach(ev => dz.addEventListener(ev, e => {
+      e.preventDefault(); e.stopPropagation();
+      dz.classList.remove('over');
+    }));
+    dz.addEventListener('drop', e => {
+      let file = null;
+      if (e.dataTransfer?.items && e.dataTransfer.items.length){
+        for (const item of e.dataTransfer.items){
+          if(item.kind === 'file'){
+            // évite dossiers
+            if (typeof item.webkitGetAsEntry === 'function'){
+              const entry = item.webkitGetAsEntry();
+              if(entry && entry.isDirectory){ toast('Dossiers non pris en charge. Compressez-le en .zip.'); return; }
+            }
+            file = item.getAsFile();
+            break;
+          }
+        }
+      } else if (e.dataTransfer?.files && e.dataTransfer.files.length){
+        file = e.dataTransfer.files[0];
+      }
+      const reason = reasonForRefusal(file, true);
+      if (reason) { toast(reason); return; }
+      showFile(file);
+      if (input) input.value = ''; // reselect même fichier possible
     });
   }
-  function fmtBytes(b){ if(!b&&b!==0) return ''; const u=['o','Ko','Mo','Go']; let i=0; while(b>=1024 && i<u.length-1){ b/=1024; i++; } return b.toFixed(b<10&&i?1:0)+' '+u[i]; }
-  let proofFile=null;
-  function showFile(f){
-    proofFile=f;
-    if(fileName) fileName.textContent=f.name;
-    if(fileInfo) fileInfo.textContent=`${f.type || 'Fichier'} • ${fmtBytes(f.size)}`;
-    if(fileBar) fileBar.style.width='0%';
-    if(fileOk)  fileOk.style.display='none';
-    if(fileWrap) fileWrap.style.display='flex';
-    let p=0; const tick=()=>{ p+=Math.random()*35+20; if(p>=100){p=100; if(fileBar) fileBar.style.width='100%'; if(fileOk) fileOk.style.display='inline-flex'; return;} if(fileBar) fileBar.style.width=p+'%'; setTimeout(tick,150); }; setTimeout(tick,150);
-  }
-  function clearFile(){ proofFile=null; if(input) input.value=''; if(fileWrap) fileWrap.style.display='none'; }
-  removeProof?.addEventListener('click', clearFile);
-  input?.addEventListener('change',e=>{
-    const f=e.target.files?.[0]; if(!f) return;
-    if(f.size>10*1024*1024){ toast('Fichier trop volumineux (>10Mo)'); input.value=''; return; }
+
+  // Sélection via picker (mobile & desktop)
+  input?.addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0];
+    const reason = reasonForRefusal(f, false);
+    if (reason) { toast(reason); input.value=''; return; }
     showFile(f);
+    input.value = ''; // autorise re-sélection du même fichier
   });
 
   // =========================
-  // ENVOI WEBHOOK (JSON + QS alias)
+  // ENVOI WEBHOOK
   // =========================
   function legacyMap(payload){
-    // ⚠️ Valeurs minimales pour éviter les "—" côté Apps Script (e.parameter.*)
     return {
       order: payload.orderId,
       mode: payload.method,
@@ -400,21 +457,16 @@
 
     // 1) JSON
     try{
-      await fetch(full, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(payload)
-      });
+      await fetch(full, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
       return;
     }catch{}
     // 2) FormData (_json)
     try{
-      const fd = new FormData();
-      fd.append('_json', JSON.stringify(payload));
+      const fd = new FormData(); fd.append('_json', JSON.stringify(payload));
       await fetch(full, { method:'POST', body: fd });
       return;
     }catch{}
-    // 3) Fallback no-cors (dernière chance)
+    // 3) Fallback no-cors
     try{
       await fetch(full, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) });
     }catch{}
@@ -477,10 +529,9 @@
   }
 
   // =========================
-  // CONFIRMATIONS (CRYPTO / SEPA)
+  // CONFIRMATIONS
   // =========================
   $('#confirmCrypto')?.addEventListener('click', async ()=>{
-    // Garde-fous pour éviter messages vides
     if(!validateAddress()) return;
     const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
     const due = currentDueNow(); if(due<=0){ toast('Montant dû nul.'); return; }
@@ -557,10 +608,10 @@
   });
 
   // =========================
-  // INIT ÉCRAN
+  // INIT
   // =========================
   function initTabsAndSummary(){
-    // Sélection par défaut : SEPA
+    // Par défaut : SEPA
     const sepaTab = document.querySelector('.m[role="tab"][data-method="sepa"]');
     if(sepaTab){ sepaTab.setAttribute('aria-selected','true'); }
     $('#pmSEPA')?.classList.add('show');
@@ -569,7 +620,7 @@
 
   renderMini();
   initTabsAndSummary();
-  updateSplitHint?.();
+  window.updateSplitHint?.();
   syncRef();
   updateSummary();
   updateCTA();
