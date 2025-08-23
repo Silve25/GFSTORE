@@ -3,15 +3,14 @@
    - GET  action=ping | users | exists
    - POST action=register | login | change | update-profile | reset-request | reset
 */
-
 (function () {
   "use strict";
 
   // ======================
   // CONFIG
   // ======================
-  // ⚠️ Remets ton URL de déploiement Web App V5 si besoin
-  const API_BASE = "https://script.google.com/macros/s/AKfycbx5WPfPCBrykCAPBV8AEsDTQCc2o8UFv_9ClBo8wmUyDxtE8wF8h_x-mWpneDK-igZ0/exec";
+  // ✅ URL de ton nouveau déploiement (Version 6 — 23 août 2025, 23:11)
+  const API_BASE = "https://script.google.com/macros/s/AKfycbzrjgRejAbiDSBsi9gN76GpbHypwuv0OCb2bT6O04jGtgEPoloUmGhOGf3RmQvBDfod/exec";
   // Clé identique côté Apps Script
   const API_KEY  = "GFSECRET123";
 
@@ -182,17 +181,15 @@
 
   // -------- Nouveau flux : Vérif email -> puis définir un nouveau mot de passe (sans code)
   function wireResetVerifyAndSet(){
-    // Cette fonction s’adapte à ta page password-reset :
-    // - Si un bouton/forme "resetRequestForm" existe → il est utilisé comme vérif email (sans envoi de code)
-    // - Le formulaire "resetForm" applique le nouveau mot de passe via update-profile
-    const verifyForm = $("#resetRequestForm") || $("#emailVerifyForm"); // compat
-    const verifyMsg  = $("#resetRequestMsg")  || $("#emailVerifyMsg");  // compat
+    // - "resetRequestForm" sert ici à VÉRIFIER l'email (pas d'envoi de code)
+    // - "resetForm" applique le nouveau mot de passe via update-profile
+    const verifyForm = $("#resetRequestForm") || $("#emailVerifyForm");
+    const verifyMsg  = $("#resetRequestMsg")  || $("#emailVerifyMsg");
     const resetForm  = $("#resetForm");
     const resetMsg   = $("#resetMsg");
 
-    if(!resetForm) return; // si la page n'est pas une page de reset, on sort
+    if(!resetForm) return; // pas une page de reset
 
-    // Si l'email est fourni via query (ex: ?email=test@ex.com), on préremplit
     const urlEmail = new URL(location.href).searchParams.get("email");
     const emailInput1 = verifyForm?.email || $("#email");
     const emailInput2 = resetForm.email || $("#email2");
@@ -200,12 +197,11 @@
       if(emailInput1 && !emailInput1.value) emailInput1.value = urlEmail;
       if(emailInput2 && !emailInput2.value) emailInput2.value = urlEmail;
     }
-    // Miroir : si on tape dans le champ de l'étape 1, on copie dans l'étape 2 (si vide)
     if(emailInput1 && emailInput2){
       emailInput1.addEventListener("input", ()=>{ if(!emailInput2.value) emailInput2.value = emailInput1.value; });
     }
 
-    // 1) Vérification d'email (nouveau flux) — aucune génération/lecture de code
+    // 1) Vérification d'email (aucun code généré/nécessaire)
     if(verifyForm){
       verifyForm.addEventListener("submit", async (e)=>{
         e.preventDefault(); setDisabled(verifyForm,true); showMsg(verifyMsg,"");
@@ -217,19 +213,14 @@
           if(!resp.exists){
             throw new Error("Aucun compte trouvé pour cet email.");
           }
-          // OK -> on "débloque" la 2e étape
           showMsg(verifyMsg, "✔️ Email vérifié. Vous pouvez définir un nouveau mot de passe ci-dessous.", true);
-          // Active le formulaire de reset
           setDisabled(resetForm, false);
-          // Copie l'email si besoin
           if(emailInput2 && !emailInput2.value) emailInput2.value = email;
-          // Focus le champ mot de passe
           resetForm.newPassword?.focus?.();
         }catch(err){ showMsg(verifyMsg, err.message || "Erreur."); }
         finally{ setDisabled(verifyForm,false); }
       });
-
-      // Par défaut, bloque la zone "reset" tant que l'email n'est pas vérifié
+      // bloque l’étape 2 tant que l’email n’est pas vérifié
       setDisabled(resetForm, true);
     }
 
@@ -244,7 +235,6 @@
         if(newPassword.length < 6) throw new Error("Mot de passe trop court (≥ 6).");
         if(newPassword2 && newPassword !== newPassword2) throw new Error("Les mots de passe ne correspondent pas.");
 
-        // On utilise update-profile avec updates.password (sans ancien mot de passe)
         const resp = await API.updateProfile({
           email,
           updates: { password: newPassword }
@@ -265,16 +255,14 @@
     });
   }
 
-  // -------- Ancien flux (toujours supporté au cas où ta page legacy est encore en prod)
+  // -------- Ancien flux (toujours supporté)
   function wireResetLegacy(){
-    const form1 = $("#resetRequestForm"); // envoi de code
+    const form1 = $("#resetRequestForm"); // envoi de code (legacy)
     const msg1  = $("#resetRequestMsg");
-    const form2 = $("#resetForm");        // saisie du code + nouveau pass
+    const form2 = $("#resetForm");        // saisie du code + nouveau pass (legacy)
     const msg2  = $("#resetMsg");
 
-    // Si la page est déjà câblée avec le nouveau flux via wireResetVerifyAndSet(),
-    // on ne recâble PAS le legacy (pour éviter double listeners).
-    if (form1 && form1.dataset.__wiredNewFlow) return;
+    if(form1 && form1.dataset.__wiredNewFlow) return;
 
     if(form1){
       form1.addEventListener("submit", async (e)=>{
@@ -285,7 +273,6 @@
           const resp = await API.resetRequest({ email });
           if(!resp || !resp.ok) throw new Error(resp?.error || "Demande impossible.");
           showMsg(msg1, "Si un compte existe pour cet email, un code a été envoyé.", true);
-          // miroir sur étape 2 si vide
           if(form2?.email && !form2.email.value) form2.email.value = email;
         }catch(err){ showMsg(msg1, err.message || "Erreur."); }
         finally{ setDisabled(form1,false); }
@@ -317,17 +304,16 @@
     }
   }
 
-  // -------- Page Profil (edition infos + peut aussi changer le mot de passe via updates.password)
+  // -------- Page Profil
   function wireProfile(){
     const form = $("#profileForm"); if(!form) return;
     const msg  = $("#profileMsg");
     if(!requireAuthOrRedirect()) return;
     const sess = getSession();
 
-    // Pré-remplissage
     (async()=>{
       try{
-        const list = await API.listUsers(); // tableau
+        const list = await API.listUsers();
         if (Array.isArray(list)) {
           const me = list.find(u => (u.email||'').toLowerCase() === (sess.email||'').toLowerCase());
           if(me){
@@ -342,7 +328,6 @@
             return;
           }
         }
-        // fallback
         if(form.email) form.email.value = sess.email || "";
         if(form.name)  form.name.value  = sess.name || "";
       }catch{/* ignore */}
@@ -361,7 +346,6 @@
           role: form.role?.value?.trim() || ""
         };
 
-        // Si un champ mot de passe est présent sur ta page profil (optionnel)
         const pw = form.newPassword?.value || "";
         if (pw) updates.password = pw;
 
@@ -375,14 +359,13 @@
         }
         showMsg(msg, "Profil mis à jour.", true);
         setSession({ ...sess, name: updates.name || sess.name, updatedAt: Date.now() });
-        // Nettoyage éventuel du champ mot de passe
         if (form.newPassword) form.newPassword.value = "";
       }catch(err){ showMsg(msg, err.message || "Erreur."); }
       finally{ setDisabled(form,false); }
     });
   }
 
-  // -------- Changer le mot de passe (avec ancien mdp) — page dédiée
+  // -------- Changer le mot de passe (avec ancien mdp)
   function wireChangePassword(){
     const form = $("#changePasswordForm"); if(!form) return;
     const msg  = $("#changeMsg");
@@ -410,7 +393,7 @@
     });
   }
 
-  // -------- Tableau de bord (affichage session / logout)
+  // -------- Tableau de bord
   function wireDashboard(){
     const who = $("#sessionWho");
     const s = getSession();
