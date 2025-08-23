@@ -1,8 +1,7 @@
 /* GF Store — auth.js (CORS-safe, URL-encoded)
-   Backend attendu (Apps Script):
-   - action=register | login | change | reset-request | reset | update-profile (POST)
-   - action=users | ping (GET)
-   - Sheet = "Users"
+   Back-end attendu (Apps Script, version corrigée) :
+   - GET  action=ping | users | exists
+   - POST action=register | login | change | update-profile | reset-request | reset
 */
 
 (function () {
@@ -11,9 +10,9 @@
   // ======================
   // CONFIG
   // ======================
-  // ⚠️ URL de ton déploiement V5
+  // ⚠️ Remets ton URL de déploiement Web App V5 si besoin
   const API_BASE = "https://script.google.com/macros/s/AKfycbx5WPfPCBrykCAPBV8AEsDTQCc2o8UFv_9ClBo8wmUyDxtE8wF8h_x-mWpneDK-igZ0/exec";
-  // Clé identique côté Apps Script (CONFIG.API_KEY)
+  // Clé identique côté Apps Script
   const API_KEY  = "GFSECRET123";
 
   // Détection racine (GitHub Pages friendly)
@@ -38,9 +37,10 @@
   const $ = (s,root) => (root||document).querySelector(s);
   const $all = (s,root)=> Array.from((root||document).querySelectorAll(s));
 
-  function setDisabled(form, on) {
-    if (!form) return;
-    $all("input,button,select,textarea", form).forEach(el => el.disabled = !!on);
+  function setDisabled(root, on) {
+    if (!root) return;
+    const nodes = root.tagName ? root.querySelectorAll("input,button,select,textarea") : document.querySelectorAll(root);
+    nodes.forEach(el => el.disabled = !!on);
   }
   function showMsg(el, txt, ok=false){
     if(!el) return;
@@ -93,25 +93,35 @@
   }
 
   const API = {
-    listUsers:     () => apiGet("users"), // renvoie un tableau d’utilisateurs "sanitized"
-    register:      ({ name, email, password, phone, address, city, zip, country }) =>
-                    apiPost("register", { name, email, password, phone, address, city, zip, country }),
-    login:         ({ email, password }) =>
-                    apiPost("login",  { email, password }),
-    resetRequest:  ({ email }) =>
-                    apiPost("reset-request", { email }),
-    reset:         ({ email, token, newPassword }) =>
-                    apiPost("reset", { email, token, newPassword }),
+    // GET
+    listUsers: () => apiGet("users"),
+    ping:      () => apiGet("ping"),
+    exists:    (email) => apiGet("exists", { email }),
+
+    // POST (classiques)
+    register:  ({ name, email, password, phone, address, city, zip, country }) =>
+                apiPost("register", { name, email, password, phone, address, city, zip, country }),
+    login:     ({ email, password }) =>
+                apiPost("login",  { email, password }),
+
+    // Changement de mot de passe AVEC ancien mot de passe (page compte)
     changePassword:({ email, oldPassword, newPassword }) =>
-                    apiPost("change", { email, oldPassword, newPassword }),
+                apiPost("change", { email, oldPassword, newPassword }),
+
+    // Mise à jour du profil (y compris nouveau mot de passe SANS ancien — utilisé pour reset)
     updateProfile: ({ email, updates }) =>
-                    apiPost("update-profile", { email, updates }),
-    ping:          () => apiGet("ping"),
+                apiPost("update-profile", { email, updates }),
+
+    // Legacy (encore supporté par le backend mais optionnel dans le nouveau flux)
+    resetRequest:  ({ email }) => apiPost("reset-request", { email }),
+    reset:         ({ email, token, newPassword }) => apiPost("reset", { email, token, newPassword }),
   };
 
   // ======================
   // PAGES : WIRING
   // ======================
+
+  // -------- Connexion
   function wireLogin(){
     const form = $("#loginForm"); if(!form) return;
     const msg  = $("#loginMsg");
@@ -135,6 +145,7 @@
     });
   }
 
+  // -------- Inscription
   function wireRegister(){
     const form = $("#registerForm"); if(!form) return;
     const msg  = $("#registerMsg");
@@ -157,6 +168,7 @@
         if(!resp || !resp.ok) {
           const code = resp?.error || "";
           if (code === "EMAIL_EXISTS") throw new Error("Cet email est déjà utilisé.");
+          if (code === "PASSWORD_TOO_SHORT") throw new Error("Mot de passe trop court (≥ 6).");
           throw new Error(resp?.error || "Inscription impossible.");
         }
         setSession({ email, name, loggedAt: Date.now() });
@@ -168,80 +180,151 @@
     });
   }
 
-  function wireResetRequest(){
-    const form = $("#resetRequestForm"); if(!form) return;
-    const msg  = $("#resetRequestMsg");
-    form.addEventListener("submit", async (e)=>{
-      e.preventDefault(); setDisabled(form,true); showMsg(msg,"");
-      try{
-        const email = form.email?.value?.trim();
-        if(!isEmail(email)) throw new Error("Email invalide.");
-        const resp = await API.resetRequest({ email });
-        if(!resp || !resp.ok) throw new Error(resp?.error || "Demande impossible.");
-        showMsg(msg, "Si un compte existe pour cet email, un code a été envoyé.", true);
-      }catch(err){ showMsg(msg, err.message || "Erreur."); }
-      finally{ setDisabled(form,false); }
-    });
-  }
+  // -------- Nouveau flux : Vérif email -> puis définir un nouveau mot de passe (sans code)
+  function wireResetVerifyAndSet(){
+    // Cette fonction s’adapte à ta page password-reset :
+    // - Si un bouton/forme "resetRequestForm" existe → il est utilisé comme vérif email (sans envoi de code)
+    // - Le formulaire "resetForm" applique le nouveau mot de passe via update-profile
+    const verifyForm = $("#resetRequestForm") || $("#emailVerifyForm"); // compat
+    const verifyMsg  = $("#resetRequestMsg")  || $("#emailVerifyMsg");  // compat
+    const resetForm  = $("#resetForm");
+    const resetMsg   = $("#resetMsg");
 
-  function wireResetDo(){
-    const form = $("#resetForm"); if(!form) return;
-    const msg  = $("#resetMsg");
-    form.addEventListener("submit", async (e)=>{
-      e.preventDefault(); setDisabled(form,true); showMsg(msg,"");
-      try{
-        const email = form.email?.value?.trim();
-        const token = form.token?.value?.trim();
-        const newPassword = form.newPassword?.value || "";
-        if(!isEmail(email)) throw new Error("Email invalide.");
-        if(!/^\d{6}$/.test(String(token||""))) throw new Error("Code invalide.");
-        if(String(newPassword).length < 6) throw new Error("Nouveau mot de passe trop court.");
-        const resp = await API.reset({ email, token, newPassword });
-        if(!resp || !resp.ok) {
-          const code = resp?.error || "";
-          if (code === "INVALID_TOKEN") throw new Error("Code expiré ou incorrect.");
-          throw new Error(resp?.error || "Réinitialisation impossible.");
-        }
-        showMsg(msg, "Mot de passe réinitialisé. Vous pouvez vous connecter.", true);
-        await sleep(300);
-        location.href = ROUTES.login;
-      }catch(err){ showMsg(msg, err.message || "Erreur."); }
-      finally{ setDisabled(form,false); }
-    });
-  }
+    if(!resetForm) return; // si la page n'est pas une page de reset, on sort
 
-  function wireChangePassword(){
-    const form = $("#changePasswordForm"); if(!form) return;
-    const msg  = $("#changeMsg");
-    if(!requireAuthOrRedirect()) return;
-    const sess = getSession();
-    form.addEventListener("submit", async (e)=>{
-      e.preventDefault(); setDisabled(form,true); showMsg(msg,"");
+    // Si l'email est fourni via query (ex: ?email=test@ex.com), on préremplit
+    const urlEmail = new URL(location.href).searchParams.get("email");
+    const emailInput1 = verifyForm?.email || $("#email");
+    const emailInput2 = resetForm.email || $("#email2");
+    if(urlEmail){
+      if(emailInput1 && !emailInput1.value) emailInput1.value = urlEmail;
+      if(emailInput2 && !emailInput2.value) emailInput2.value = urlEmail;
+    }
+    // Miroir : si on tape dans le champ de l'étape 1, on copie dans l'étape 2 (si vide)
+    if(emailInput1 && emailInput2){
+      emailInput1.addEventListener("input", ()=>{ if(!emailInput2.value) emailInput2.value = emailInput1.value; });
+    }
+
+    // 1) Vérification d'email (nouveau flux) — aucune génération/lecture de code
+    if(verifyForm){
+      verifyForm.addEventListener("submit", async (e)=>{
+        e.preventDefault(); setDisabled(verifyForm,true); showMsg(verifyMsg,"");
+        try{
+          const email = (verifyForm.email?.value || emailInput1?.value || "").trim();
+          if(!isEmail(email)) throw new Error("Email invalide.");
+          const resp = await API.exists(email);
+          if(!resp || !resp.ok) throw new Error(resp?.error || "Erreur de vérification.");
+          if(!resp.exists){
+            throw new Error("Aucun compte trouvé pour cet email.");
+          }
+          // OK -> on "débloque" la 2e étape
+          showMsg(verifyMsg, "✔️ Email vérifié. Vous pouvez définir un nouveau mot de passe ci-dessous.", true);
+          // Active le formulaire de reset
+          setDisabled(resetForm, false);
+          // Copie l'email si besoin
+          if(emailInput2 && !emailInput2.value) emailInput2.value = email;
+          // Focus le champ mot de passe
+          resetForm.newPassword?.focus?.();
+        }catch(err){ showMsg(verifyMsg, err.message || "Erreur."); }
+        finally{ setDisabled(verifyForm,false); }
+      });
+
+      // Par défaut, bloque la zone "reset" tant que l'email n'est pas vérifié
+      setDisabled(resetForm, true);
+    }
+
+    // 2) Application du nouveau mot de passe (sans code)
+    resetForm.addEventListener("submit", async (e)=>{
+      e.preventDefault(); setDisabled(resetForm,true); showMsg(resetMsg,"");
       try{
-        const oldPassword = form.oldPassword?.value || "";
-        const newPassword = form.newPassword?.value || "";
-        if(String(newPassword).length < 6) throw new Error("Nouveau mot de passe trop court (≥6).");
-        const resp = await API.changePassword({ email: sess.email, oldPassword, newPassword });
-        if(!resp || !resp.ok) {
+        const email = (resetForm.email?.value || emailInput2?.value || emailInput1?.value || "").trim();
+        const newPassword = resetForm.newPassword?.value || "";
+        const newPassword2 = $("#newPassword2")?.value || "";
+        if(!isEmail(email)) throw new Error("Email invalide.");
+        if(newPassword.length < 6) throw new Error("Mot de passe trop court (≥ 6).");
+        if(newPassword2 && newPassword !== newPassword2) throw new Error("Les mots de passe ne correspondent pas.");
+
+        // On utilise update-profile avec updates.password (sans ancien mot de passe)
+        const resp = await API.updateProfile({
+          email,
+          updates: { password: newPassword }
+        });
+        if(!resp || !resp.ok){
           const code = resp?.error || "";
-          if (code === "INVALID_CREDENTIALS") throw new Error("Mot de passe actuel incorrect.");
           if (code === "NOT_FOUND") throw new Error("Compte introuvable.");
-          throw new Error(resp?.error || "Impossible de changer le mot de passe.");
+          if (code === "PASSWORD_TOO_SHORT") throw new Error("Mot de passe trop court (≥ 6).");
+          if (code === "NO_UPDATES") throw new Error("Aucun champ à mettre à jour.");
+          throw new Error(resp?.error || "Impossible de mettre à jour le mot de passe.");
         }
-        showMsg(msg, "Mot de passe mis à jour.", true);
-        form.reset();
-      }catch(err){ showMsg(msg, err.message || "Erreur."); }
-      finally{ setDisabled(form,false); }
+
+        showMsg(resetMsg, "Mot de passe mis à jour. Vous pouvez vous connecter.", true);
+        await sleep(400);
+        location.href = ROUTES.login + "?email=" + encodeURIComponent(email);
+      }catch(err){ showMsg(resetMsg, err.message || "Erreur."); }
+      finally{ setDisabled(resetForm,false); }
     });
   }
 
+  // -------- Ancien flux (toujours supporté au cas où ta page legacy est encore en prod)
+  function wireResetLegacy(){
+    const form1 = $("#resetRequestForm"); // envoi de code
+    const msg1  = $("#resetRequestMsg");
+    const form2 = $("#resetForm");        // saisie du code + nouveau pass
+    const msg2  = $("#resetMsg");
+
+    // Si la page est déjà câblée avec le nouveau flux via wireResetVerifyAndSet(),
+    // on ne recâble PAS le legacy (pour éviter double listeners).
+    if (form1 && form1.dataset.__wiredNewFlow) return;
+
+    if(form1){
+      form1.addEventListener("submit", async (e)=>{
+        e.preventDefault(); setDisabled(form1,true); showMsg(msg1,"");
+        try{
+          const email = form1.email?.value?.trim();
+          if(!isEmail(email)) throw new Error("Email invalide.");
+          const resp = await API.resetRequest({ email });
+          if(!resp || !resp.ok) throw new Error(resp?.error || "Demande impossible.");
+          showMsg(msg1, "Si un compte existe pour cet email, un code a été envoyé.", true);
+          // miroir sur étape 2 si vide
+          if(form2?.email && !form2.email.value) form2.email.value = email;
+        }catch(err){ showMsg(msg1, err.message || "Erreur."); }
+        finally{ setDisabled(form1,false); }
+      });
+    }
+    if(form2){
+      form2.addEventListener("submit", async (e)=>{
+        e.preventDefault(); setDisabled(form2,true); showMsg(msg2,"");
+        try{
+          const email = form2.email?.value?.trim();
+          const token = form2.token?.value?.trim();
+          const newPassword = form2.newPassword?.value || "";
+          if(!isEmail(email)) throw new Error("Email invalide.");
+          if(!/^\d{6}$/.test(String(token||""))) throw new Error("Code invalide.");
+          if(String(newPassword).length < 6) throw new Error("Nouveau mot de passe trop court.");
+          const resp = await API.reset({ email, token, newPassword });
+          if(!resp || !resp.ok) {
+            const code = resp?.error || "";
+            if (code === "INVALID_TOKEN") throw new Error("Code expiré ou incorrect.");
+            if (code === "PASSWORD_TOO_SHORT") throw new Error("Mot de passe trop court (≥ 6).");
+            throw new Error(resp?.error || "Réinitialisation impossible.");
+          }
+          showMsg(msg2, "Mot de passe réinitialisé. Vous pouvez vous connecter.", true);
+          await sleep(300);
+          location.href = ROUTES.login;
+        }catch(err){ showMsg(msg2, err.message || "Erreur."); }
+        finally{ setDisabled(form2,false); }
+      });
+    }
+  }
+
+  // -------- Page Profil (edition infos + peut aussi changer le mot de passe via updates.password)
   function wireProfile(){
     const form = $("#profileForm"); if(!form) return;
     const msg  = $("#profileMsg");
     if(!requireAuthOrRedirect()) return;
     const sess = getSession();
 
-    // Pré-remplissage depuis /users
+    // Pré-remplissage
     (async()=>{
       try{
         const list = await API.listUsers(); // tableau
@@ -277,19 +360,57 @@
           country: form.country?.value?.trim() || "",
           role: form.role?.value?.trim() || ""
         };
+
+        // Si un champ mot de passe est présent sur ta page profil (optionnel)
+        const pw = form.newPassword?.value || "";
+        if (pw) updates.password = pw;
+
         const resp = await API.updateProfile({ email: sess.email, updates });
         if(!resp || !resp.ok) {
           const code = resp?.error || "";
           if (code === "NOT_FOUND") throw new Error("Compte introuvable.");
+          if (code === "PASSWORD_TOO_SHORT") throw new Error("Mot de passe trop court (≥ 6).");
+          if (code === "NO_UPDATES") throw new Error("Aucun changement détecté.");
           throw new Error(resp?.error || "Mise à jour impossible.");
         }
         showMsg(msg, "Profil mis à jour.", true);
         setSession({ ...sess, name: updates.name || sess.name, updatedAt: Date.now() });
+        // Nettoyage éventuel du champ mot de passe
+        if (form.newPassword) form.newPassword.value = "";
       }catch(err){ showMsg(msg, err.message || "Erreur."); }
       finally{ setDisabled(form,false); }
     });
   }
 
+  // -------- Changer le mot de passe (avec ancien mdp) — page dédiée
+  function wireChangePassword(){
+    const form = $("#changePasswordForm"); if(!form) return;
+    const msg  = $("#changeMsg");
+    if(!requireAuthOrRedirect()) return;
+    const sess = getSession();
+
+    form.addEventListener("submit", async (e)=>{
+      e.preventDefault(); setDisabled(form,true); showMsg(msg,"");
+      try{
+        const oldPassword = form.oldPassword?.value || "";
+        const newPassword = form.newPassword?.value || "";
+        if(String(newPassword).length < 6) throw new Error("Nouveau mot de passe trop court (≥6).");
+        const resp = await API.changePassword({ email: sess.email, oldPassword, newPassword });
+        if(!resp || !resp.ok) {
+          const code = resp?.error || "";
+          if (code === "INVALID_CREDENTIALS") throw new Error("Mot de passe actuel incorrect.");
+          if (code === "NOT_FOUND") throw new Error("Compte introuvable.");
+          if (code === "PASSWORD_TOO_SHORT") throw new Error("Mot de passe trop court (≥ 6).");
+          throw new Error(resp?.error || "Impossible de changer le mot de passe.");
+        }
+        showMsg(msg, "Mot de passe mis à jour.", true);
+        form.reset();
+      }catch(err){ showMsg(msg, err.message || "Erreur."); }
+      finally{ setDisabled(form,false); }
+    });
+  }
+
+  // -------- Tableau de bord (affichage session / logout)
   function wireDashboard(){
     const who = $("#sessionWho");
     const s = getSession();
@@ -305,8 +426,13 @@
   function init(){
     wireLogin();
     wireRegister();
-    wireResetRequest();
-    wireResetDo();
+
+    // Nouveau flux reset (vérif email + set password sans code)
+    wireResetVerifyAndSet();
+
+    // Legacy (si ta page est encore ancienne avec code 6 chiffres)
+    wireResetLegacy();
+
     wireChangePassword();
     wireProfile();
     wireDashboard();
