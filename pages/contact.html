@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — GF Store</title>
+  <meta name="description" content="Contactez GF Store : e-mail et WhatsApp. Support client réactif pour vos commandes, retours et SAV."/>
+  <style>
+    :root{
+      --w:1000px;--c:#0f172a;--a:#2563eb;--a2:#1e40af;--bg:#f8fafc;--bd:#e5e7eb;--card:#fff;--muted:#6b7280;--r:14px
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--c);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu}
+    a{color:var(--a);text-decoration:none} a:hover{text-decoration:underline}
+    header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--bd);z-index:20}
+    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;align-items:center;gap:10px;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand img{height:40px}
+    nav{display:flex;gap:8px;flex-wrap:wrap}
+    nav a{padding:8px 10px;border:1px solid var(--bd);border-radius:12px;background:#fff;color:inherit}
+    main{max-width:var(--w);margin:14px auto;padding:0 12px}
+    .crumbs{font-size:12px;color:var(--muted);margin-bottom:8px}
+    h1{font-size:26px;line-height:1.2;margin:8px 0 12px}
+    .meta{color:var(--muted);font-size:12px;margin-bottom:14px}
+
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:860px){.grid{grid-template-columns:1fr 1fr}}
+
+    .card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:14px}
+    .row{display:flex;align-items:center;gap:10px}
+    .ic{width:22px;height:22px;display:inline-block}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:10px 12px;border-radius:10px;border:1px solid var(--bd);background:#fff}
+    .pill strong{white-space:nowrap}
+    .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:1px solid var(--bd);background:#fff;cursor:pointer;text-decoration:none}
+    .btn.primary{background:linear-gradient(180deg,var(--a),var(--a2));color:#fff;border:none}
+    .btn.copy{background:#f8fafc}
+    .help{font-size:12px;color:var(--muted)}
+
+    form{display:grid;gap:8px;margin-top:10px}
+    input,textarea{width:100%;padding:11px;border:1px solid var(--bd);border-radius:12px;background:#fff;font:inherit}
+    textarea{min-height:120px;resize:vertical}
+
+    .note{margin-top:10px;background:#ecfeff;border:1px solid #a5f3fc;border-radius:10px;padding:10px;color:#155e75}
+    footer{margin-top:20px;border-top:1px solid var(--bd);background:#fff}
+    .fwrap{max-width:var(--w);margin:auto;padding:14px 12px;color:var(--muted);font-size:13px}
+
+    .toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:#111;color:#fff;padding:8px 12px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:99}
+    .toast.show{opacity:1}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="hwrap">
+      <!-- Logo → racine du domaine -->
+      <a class="brand" href="/" aria-label="Accueil GF Store">
+        <img src="/assets/img/logopnggfstore.png" alt="GF Store">
+      </a>
+      <nav aria-label="Navigation principale">
+        <a href="/compte/index.html">Compte</a>
+        <a href="/pages/a-propos.html">À propos</a>
+        <a href="/pages/cgv.html">CGV</a>
+        <a href="/pages/confidentialite.html">Confidentialité</a>
+        <a href="/pages/contact.html" aria-current="page">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="crumbs"><a href="/">Accueil</a> › Contact</div>
+    <h1>Contact</h1>
+    <div class="meta">Support client — réponse rapide via e-mail ou WhatsApp.</div>
+
+    <div class="grid">
+      <!-- Bloc e-mail -->
+      <section class="card" aria-labelledby="emailTitle">
+        <div class="row">
+          <img class="ic" src="https://img.icons8.com/?size=100&id=12580&format=png&color=000000" alt="">
+          <h2 id="emailTitle" style="margin:0;font-size:18px">E-mail</h2>
+        </div>
+        <p class="pill" style="margin-top:8px">
+          <strong>contact@gfstore.store</strong>
+        </p>
+        <div class="actions">
+          <a id="mailtoBtn" class="btn primary" href="mailto:contact@gfstore.store?subject=Contact%20GF%20Store&body=Bonjour%20GF%20Store,%0A%0A(Expliquez%20votre%20demande%20ici)%0A%0AMerci.">Écrire un e-mail</a>
+          <button class="btn copy" type="button" data-copy="contact@gfstore.store">Copier l’adresse</button>
+        </div>
+
+        <form id="quickMail" aria-label="Envoyer un e-mail rapide (ouvre votre messagerie)">
+          <input type="text" id="name" placeholder="Votre nom" autocomplete="name" />
+          <input type="email" id="email" placeholder="Votre e-mail (pour réponse)" autocomplete="email" />
+          <input type="text" id="subject" placeholder="Sujet" />
+          <textarea id="message" placeholder="Votre message…"></textarea>
+          <button class="btn primary" type="submit">Ouvrir dans ma messagerie</button>
+          <div class="help">Ce formulaire n’envoie rien côté serveur : il ouvre votre application e-mail avec le message pré-rempli.</div>
+        </form>
+      </section>
+
+      <!-- Bloc WhatsApp -->
+      <section class="card" aria-labelledby="waTitle">
+        <div class="row">
+          <img class="ic" src="https://img.icons8.com/?size=100&id=16713&format=png&color=25D366" alt="">
+          <h2 id="waTitle" style="margin:0;font-size:18px">WhatsApp</h2>
+        </div>
+        <p class="pill" style="margin-top:8px">
+          <strong>+49 176 124 51309</strong>
+        </p>
+        <div class="actions">
+          <a id="waBtn" class="btn primary" target="_blank" rel="noopener" href="https://wa.me/4917612451309?text=Bonjour%20GF%20Store%2C%20j%E2%80%99ai%20une%20question%20concernant%20ma%20commande.">Écrire sur WhatsApp</a>
+          <button class="btn copy" type="button" data-copy="+4917612451309">Copier le numéro</button>
+        </div>
+
+        <div class="note">
+          Astuce : sur ordinateur, WhatsApp Web s’ouvrira dans le navigateur. Sur mobile, l’application s’ouvrira directement.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="fwrap">
+      © GF Store 2025 — <a href="/pages/cgv.html">CGV</a> • <a href="/pages/mentions-legales.html">Mentions légales</a> • <a href="/pages/confidentialite.html">Confidentialité</a>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite">Copié</div>
+
+  <script>
+    // Copier dans le presse-papiers
+    const toast = (msg) => { const t=document.getElementById('toast'); t.textContent=msg||'Copié'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1400); };
+    document.querySelectorAll('[data-copy]').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const txt = btn.getAttribute('data-copy')||'';
+        try{
+          await navigator.clipboard.writeText(txt);
+          toast('Copié : '+txt);
+        }catch{
+          // Fallback
+          const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+          toast('Copié : '+txt);
+        }
+      });
+    });
+
+    // Formulaire → ouvre mailto:
+    document.getElementById('quickMail').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const from = document.getElementById('email').value.trim();
+      const subj = document.getElementById('subject').value.trim() || 'Contact GF Store';
+      const msg  = document.getElementById('message').value.trim();
+
+      const lines = [];
+      if (name) lines.push('Nom : '+name);
+      if (from) lines.push('E-mail : '+from);
+      if (msg)  lines.push('', msg);
+
+      const body = encodeURIComponent(lines.join('\n'));
+      const href = `mailto:contact@gfstore.store?subject=${encodeURIComponent(subj)}&body=${body}`;
+      window.location.href = href;
+    });
+  </script>
+</body>
+</html>
