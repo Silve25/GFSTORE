@@ -23,17 +23,15 @@
     .iconbtn{cursor:pointer}
     .ic{width:16px;height:16px;display:inline-block}
     .dropdown{position:relative}
-    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid var(--bd);border-radius:12px;padding:6px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid var(--bd);border-radius:12px;padding:6px;min-width:240px;box-shadow:0 10px 24px rgba(0,0,0,.12);display:none;z-index:60}
     .menu.show{display:block}
     .menu a{display:block;padding:8px 10px;border-radius:8px;text-decoration:none}
     .menu a:hover{background:#f3f4f6}
 
-    /* Bandeau promo */
     .banner{background:linear-gradient(90deg,#1e3a8a,#2563eb,#0ea5e9);color:#fff;text-align:center;padding:10px 14px}
     .banner .timer{font-weight:700;border-radius:999px;padding:2px 8px;background:rgba(255,255,255,.15);display:inline-block}
     .banner .sep{opacity:.6;padding:0 6px}
 
-    /* HERO (confiance) */
     .hero{max-width:var(--w);margin:12px auto;padding:0 12px}
     .hero-wrap{background:linear-gradient(180deg,#ffffff,#f7fbff);border:1px solid var(--bd);border-radius:20px;padding:18px;display:grid;gap:18px;grid-template-columns:1fr}
     @media (min-width:960px){.hero-wrap{grid-template-columns:1.1fr .9fr;align-items:center}}
@@ -51,13 +49,11 @@
     .hero-media img{width:100%;height:100%;object-fit:cover;display:block}
     .hero-trust{position:absolute;right:12px;bottom:12px;background:rgba(255,255,255,.9);backdrop-filter:saturate(140%) blur(2px);border:1px solid var(--bd);border-radius:12px;padding:8px 10px;display:flex;gap:8px;align-items:center;box-shadow:0 10px 24px rgba(0,0,0,.12)}
 
-    /* Policies */
     .policies{max-width:var(--w);margin:12px auto;padding:0 12px;display:grid;gap:10px;grid-template-columns:1fr}
     @media (min-width:860px){.policies{grid-template-columns:repeat(2,minmax(230px,1fr));grid-template-areas:"a b" "c c"}.policies .p1{grid-area:a}.policies .p2{grid-area:b}.policies .p3{grid-area:c}}
     .policies div{display:flex;align-items:center;gap:8px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid var(--bd);border-radius:14px;padding:10px 12px}
     .policies .two{flex-direction:column;align-items:flex-start}
 
-    /* Contrôles + grilles produits (inchangés) */
     .controls{max-width:var(--w);margin:8px auto;padding:0 12px;display:flex;gap:8px;align-items:center}
     input[type=search],select{flex:1;padding:12px;border:1px solid var(--bd);border-radius:12px;background:#fff}
     .grid{max-width:var(--w);margin:12px auto 12px;padding:0 12px;display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
@@ -76,38 +72,20 @@
     .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(30,64,175,.28)}
     .btn .ic{filter:invert(1)}
 
-    /* Sections */
     .section{max-width:var(--w);margin:12px auto;padding:0 12px}
     .section-title{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:6px auto 8px;font-weight:700;font-size:16px;letter-spacing:.04em;opacity:.9}
 
-    /* Carrousels & deals — version mobile robuste */
     .carousel{position:relative}
-    .track{
-      display:flex;gap:12px;overflow:auto;padding:8px 4px 12px;
-      scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
-    }
+    .track{display:flex;gap:12px;overflow:auto;padding:8px 4px 12px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
     .navbtn{position:absolute;top:50%;transform:translateY(-50%);border:1px solid var(--bd);background:#fff;border-radius:999px;width:36px;height:36px;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,.08)}
     .navbtn:hover{box-shadow:0 10px 22px rgba(0,0,0,.12)}
     .prev{left:-6px}.next{right:-6px}
 
-    /* Carte deal dédiée (évite conflit avec .img) */
-    .deal-card{
-      scroll-snap-align:center;
-      min-width:clamp(260px,78vw,320px);
-      background:#fff;border:1px solid var(--bd);border-radius:14px;padding:10px;
-      display:flex;flex-direction:column;gap:8px;
-    }
-    .deal-img{
-      position:relative;overflow:hidden;border:1px solid var(--bd);border-radius:12px;
-      background:#fff;display:grid;place-items:center;aspect-ratio:4/3;
-    }
+    .deal-card{scroll-snap-align:center;min-width:clamp(260px,78vw,320px);background:#fff;border:1px solid var(--bd);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px}
+    .deal-img{position:relative;overflow:hidden;border:1px solid var(--bd);border-radius:12px;background:#fff;display:grid;place-items:center;aspect-ratio:4/3}
     .deal-img img{width:100%;height:100%;object-fit:contain;display:block}
-    .deal-badge{
-      position:absolute;left:8px;top:8px;background:#111;color:#fff;padding:2px 8px;border-radius:999px;font-size:11px
-    }
-    .deal-title{
-      font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:38px
-    }
+    .deal-badge{position:absolute;left:8px;top:8px;background:#111;color:#fff;padding:2px 8px;border-radius:999px;font-size:11px}
+    .deal-title{font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:38px}
     .deal-meta{font-size:12px;opacity:.7;min-height:16px}
     .deal-price-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
     .deal-stock{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:999px;padding:2px 8px}
@@ -115,13 +93,11 @@
     .deal-actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}
     .deal-actions .cta{flex:1;justify-content:center}
 
-    /* Avis */
     .review{display:flex;flex-direction:column;gap:6px}
     .stars{color:#f59e0b;font-size:14px}
     .trustbox{margin:8px 0 10px;display:flex;justify-content:flex-start}
     .trustbox img{width:min(260px,100%);height:auto;border:1px solid var(--bd);border-radius:10px;box-shadow:0 6px 16px rgba(0,0,0,.08);pointer-events:none;user-select:none}
 
-    /* FAQ (sous les avis) */
     .faq{max-width:var(--w);margin:16px auto;padding:0 12px}
     .faq .item{background:#fff;border:1px solid var(--bd);border-radius:12px;margin-bottom:8px;overflow:hidden}
     .faq summary{list-style:none;padding:12px;cursor:pointer;font-weight:600;display:flex;justify-content:space-between;align-items:center}
@@ -130,11 +106,9 @@
     .faq .tip{font-size:12px;color:var(--muted)}
     .faq code{padding:1px 6px;border:1px solid var(--bd);border-radius:6px;background:#f8fafc}
 
-    /* Services */
     .services{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
     .svc{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:12px;display:flex;gap:10px;align-items:center}
 
-    /* Panier */
     .panel{position:fixed;inset:0;display:none;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:9999}
     .panel.show{display:block}
     .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid var(--bd);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
@@ -151,7 +125,6 @@
     .countbadge{min-width:18px;display:inline-grid;place-items:center;font-size:12px;padding:0 6px;margin-left:4px;border-radius:999px;background:#111;color:#fff}
     body.lock{overflow:hidden}
 
-    /* Footer tech */
     footer{background:#fff;border-top:1px solid var(--bd)}
     .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:grid;gap:10px;grid-template-columns:1fr}
     .fcols{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:8px}
@@ -160,7 +133,6 @@
     .fbox a{text-decoration:none;color:inherit;opacity:.9;display:block;margin:4px 0}
     .fbox a:hover{text-decoration:underline}
 
-    /* Divers */
     .controls .searchwrap{position:relative;flex:2}
     .controls .searchwrap input{padding-left:36px}
     .controls .searchwrap .ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.55}
@@ -186,10 +158,9 @@
       .paylogos img{height:16px}
       .desktop-only{display:none!important}
       .mobile-only{display:block}
-      .prev,.next{display:none} /* navigation tactile sur mobile */
+      .prev,.next{display:none}
     }
 
-    /* SEO intro */
     .seo-intro{max-width:var(--w);margin:12px auto 16px;padding:0 12px;color:var(--muted);font-size:13px}
   </style>
 </head>
@@ -198,18 +169,21 @@
 
   <header>
     <div class="hwrap">
-      <a href="index.html" class="brand" aria-label="Accueil GF Store"><img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async"></a>
+      <!-- Logo → URL complète -->
+      <a href="https://silve25.github.io/GFSTORE/" class="brand" aria-label="Accueil GF Store">
+        <img src="/GFSTORE/assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
+      </a>
       <nav class="nav" aria-label="Navigation principale">
-        <a href="compte/index.html"><img class="ic" id="icUser" alt="">Compte</a>
+        <a href="/GFSTORE/compte/index.html"><img class="ic" id="icUser" alt="">Compte</a>
         <button class="iconbtn" id="cartBtn"><img id="cartIcon" class="ic" alt="">Panier</button>
         <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
-          <div id="menuDrop" class="menu">
-            <a href="pages/a-propos.html">À propos</a>
-            <a href="pages/cgv.html">CGV</a>
-            <a href="pages/mentions-legales.html">Mentions légales</a>
-            <a href="pages/confidentialite.html">Politique de confidentialité</a>
-            <a href="pages/contact.html">Contact</a>
+          <button class="iconbtn" id="menuBtn" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><img class="ic" id="icMenu" alt=""></button>
+          <div id="menuDrop" class="menu" role="menu">
+            <a href="/GFSTORE/pages/a-propos.html" role="menuitem">À propos</a>
+            <a href="/GFSTORE/pages/cgv.html" role="menuitem">CGV</a>
+            <a href="/GFSTORE/pages/mentions-legales.html" role="menuitem">Mentions légales</a>
+            <a href="/GFSTORE/pages/confidentialite.html" role="menuitem">Politique de confidentialité</a>
+            <a href="/GFSTORE/pages/contact.html" role="menuitem">Contact</a>
           </div>
         </div>
       </nav>
@@ -229,8 +203,8 @@
           <span class="pill"><img class="ic" id="ic4x" alt="">Paiement en 4x</span>
         </div>
         <div class="cta-row">
-          <a class="cta primary" href="catalogue.html"><img class="ic" id="icEye" alt="">Voir les produits</a>
-          <a class="cta secondary" href="catalogue.html"><img class="ic" id="icFire" alt="">Profiter des promos</a>
+          <a class="cta primary" href="/GFSTORE/catalogue.html"><img class="ic" id="icEye" alt="">Voir les produits</a>
+          <a class="cta secondary" href="/GFSTORE/catalogue.html"><img class="ic" id="icFire" alt="">Profiter des promos</a>
         </div>
       </div>
 
@@ -303,7 +277,6 @@
       <div>⭐ Avis clients</div>
     </div>
 
-    <!-- Mini TrustBox AU-DESSUS des avis -->
     <div class="trustbox" aria-hidden="false">
       <img src="https://help.trustpilot.com/servlet/rtaImage?eid=ka0Sh0000008Y7l&feoid=00N7U000000O2jv&refid=0EMSh0000055viq"
            alt="Note moyenne et TrustScore GF Store" draggable="false" decoding="async" loading="lazy">
@@ -327,7 +300,7 @@
     </div>
   </section>
 
-  <!-- FAQ Express (sous les avis) -->
+  <!-- FAQ Express -->
   <section id="faq" class="faq" aria-label="FAQ Express">
     <h2 class="section-title">❓ FAQ Express <span class="chip">Tout savoir avant d’acheter</span></h2>
 
@@ -349,7 +322,7 @@
     <details class="item">
       <summary>Retours / rétractation (14 jours) : comment procéder ? <span>+</span></summary>
       <div class="ans">
-        Vous disposez de <b>14 jours</b> pour changer d’avis. Ouvrez une demande dans <a href="compte/index.html">votre compte</a> ou via <a href="pages/contact.html">Contact</a>. Nous vous envoyons l’étiquette si applicable, puis nous procédons au remboursement dès réception/validation.
+        Vous disposez de <b>14 jours</b> pour changer d’avis. Ouvrez une demande dans <a href="/GFSTORE/compte/index.html">votre compte</a> ou via <a href="/GFSTORE/pages/contact.html">Contact</a>. Nous vous envoyons l’étiquette si applicable, puis nous procédons au remboursement dès réception/validation.
       </div>
     </details>
 
@@ -376,7 +349,7 @@
 
     <details class="item">
       <summary>Facture avec TVA et coordonnées pro ? <span>+</span></summary>
-      <div class="ans">La <b>facture</b> est disponible dans votre <a href="compte/index.html">compte</a>. Pour les entreprises, indiquez le <b>nom de la société</b> et le <b>numéro de TVA</b> au checkout.</div>
+      <div class="ans">La <b>facture</b> est disponible dans votre <a href="/GFSTORE/compte/index.html">compte</a>. Pour les entreprises, indiquez le <b>nom de la société</b> et le <b>numéro de TVA</b> au checkout.</div>
     </details>
 
     <details class="item">
@@ -391,7 +364,7 @@
 
     <details class="item">
       <summary>Où suivre ma commande et mes demandes SAV ? <span>+</span></summary>
-      <div class="ans">Dans <a href="compte/index.html">votre espace compte</a> : suivi, factures, retours, SAV. Réponse moyenne <b>sous 24h ouvrées</b>.</div>
+      <div class="ans">Dans <a href="/GFSTORE/compte/index.html">votre espace compte</a> : suivi, factures, retours, SAV. Réponse moyenne <b>sous 24h ouvrées</b>.</div>
     </details>
   </section>
 
@@ -406,7 +379,6 @@
     </div>
   </section>
 
-  <!-- Intro SEO -->
   <section class="seo-intro" aria-label="Introduction SEO">
     <p>GF Store est votre boutique électronique pour PC, consoles et smartphones neufs. Profitez d’une livraison rapide, d’une garantie 2 ans et d’un paiement en 4x. Nos produits sont sélectionnés auprès de partenaires fiables, et notre FAQ répond à toutes vos questions pour commander en confiance.</p>
   </section>
@@ -421,7 +393,7 @@
       <div id="cartItems" class="items"></div>
       <div class="sum">
         <div>Total <strong id="cartTotal">0 €</strong></div>
-        <a href="checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Effectuer un paiement</a>
+        <a href="/GFSTORE/checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Effectuer un paiement</a>
       </div>
     </div>
   </div>
@@ -431,7 +403,7 @@
     <img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span>
   </button>
 
-  <!-- Footer tech -->
+  <!-- Footer -->
   <footer>
     <div class="fwrap">
       <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly. <span class="chip">Site 100% sécurisé • Paiement en 4x</span></div>
@@ -440,7 +412,7 @@
           <h4>Plan du site</h4>
           <a href="#hero">Accueil</a>
           <a href="#deals">Promos</a>
-          <a href="catalogue.html">Catalogue</a>
+          <a href="/GFSTORE/catalogue.html">Catalogue</a>
           <a href="#avis">Avis</a>
           <a href="#faq">FAQ</a>
         </div>
@@ -450,10 +422,10 @@
         </div>
         <div class="fbox">
           <h4>Service client</h4>
-          <a href="pages/contact.html">Nous contacter</a>
-          <a href="pages/cgv.html">CGV</a>
-          <a href="pages/mentions-legales.html">Mentions légales</a>
-          <a href="pages/confidentialite.html">Confidentialité</a>
+          <a href="/GFSTORE/pages/contact.html">Nous contacter</a>
+          <a href="/GFSTORE/pages/cgv.html">CGV</a>
+          <a href="/GFSTORE/pages/mentions-legales.html">Mentions légales</a>
+          <a href="/GFSTORE/pages/confidentialite.html">Confidentialité</a>
           <div class="meta">Lun–Ven 9h–18h • Chat, mail & tel</div>
         </div>
         <div class="fbox">
@@ -469,7 +441,7 @@
 
   <script>
   (async()=>{
-    // --- Compte à rebours promo (48h) ---
+    // Compte à rebours
     const countdownEl=document.getElementById('countdown');
     const dealsCountdownEl=document.getElementById('dealsCountdown');
     const SALE_END=new Date(Date.now()+48*60*60*1000);
@@ -488,14 +460,14 @@
     }
     tick(); setInterval(tick,1000);
 
-    // --- Icônes (mis à jour) ---
+    // Icônes
     const ICONS = {
       buy: 'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
       cart: 'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
       cartFull: 'https://img.icons8.com/?size=100&id=K5Jv3BfpxPYa&format=png&color=000000',
       checkout: 'https://img.icons8.com/?size=100&id=qVsd2YOgeizO&format=png&color=000000',
       truck: 'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
-      refund: 'https://img.icons8.com/?size=100&id=15114&format=png&color=000000', // remboursement
+      refund: 'https://img.icons8.com/?size=100&id=15114&format=png&color=000000',
       logout: 'https://img.icons8.com/?size=100&id=IKneRwT2PRjz&format=png&color=000000',
       user: 'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
       menu: 'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
@@ -504,25 +476,10 @@
       ssl: 'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
       search: 'https://img.icons8.com/?size=100&id=7964&format=png&color=000000',
       eye: 'https://img.icons8.com/?size=100&id=85073&format=png&color=000000',
-      fire: 'https://img.icons8.com/?size=100&id=12089&format=png&color=000000', // promo
-      chat: 'https://img.icons8.com/?size=100&id=11227&format=png&color=000000', // support en ligne
+      fire: 'https://img.icons8.com/?size=100&id=12089&format=png&color=000000',
+      chat: 'https://img.icons8.com/?size=100&id=11227&format=png&color=000000',
       twoYears: 'https://img.icons8.com/?size=100&id=57926&format=png&color=000000'
     };
-
-    // ----- PROMO RENTRÉE GLOBALE -----
-    const GLOBAL_PROMO = { active:true, rate:0.30, label:'Promo rentrée -30%' };
-
-    // Utilitaires
-    async function loadProducts(){
-      const paths=['data/products.json','/data/products.json','products.json'];
-      for(const p of paths){try{const r=await fetch(p); if(r.ok) return r.json();}catch{}}
-      console.warn('Impossible de charger products.json'); 
-      return [];
-    }
-    const formatEUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-    const slug=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
-
-    // Peupler icônes UI
     const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
     setSrc('icUser', ICONS.user);
     setSrc('icTruck', ICONS.truck); setSrc('icTruck2', ICONS.truck);
@@ -536,20 +493,27 @@
     setSrc('icEye', ICONS.eye); setSrc('icFire', ICONS.fire);
     setSrc('icChat', ICONS.chat); setSrc('ic2yrs', ICONS.twoYears); setSrc('ic2yrsSvc', ICONS.twoYears);
 
-    // --- Menu déroulant ---
+    // Menu déroulant (renforcé)
     const menuBtn=document.getElementById('menuBtn');
     const menuDrop=document.getElementById('menuDrop');
     if(menuBtn&&menuDrop){
-      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
-      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
-      menuBtn.addEventListener('blur',()=>setTimeout(()=>menuDrop?.classList.remove('show'),150));
+      const toggle=()=>{
+        const show=!menuDrop.classList.contains('show');
+        menuDrop.classList.toggle('show', show);
+        menuBtn.setAttribute('aria-expanded', show?'true':'false');
+      };
+      menuBtn.addEventListener('click',(e)=>{e.stopPropagation(); toggle();});
+      menuDrop.addEventListener('click',(e)=>{e.stopPropagation();}); // évite fermeture immédiate
+      document.addEventListener('click',(e)=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn){ menuDrop.classList.remove('show'); menuBtn.setAttribute('aria-expanded','false'); }});
+      menuBtn.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ menuDrop.classList.remove('show'); menuBtn.setAttribute('aria-expanded','false'); menuBtn.blur(); }});
     }
 
-    // --- Panier (localStorage) ---
+    // Panier (localStorage)
     const KEY='gf_cart';
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
     const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount(); renderCart();};
     const findId=(p,i)=>p.id||p.sku||p._id||String(i);
+    const formatEUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
     const addToCart=(p,i)=>{
       const id=findId(p,i); const cart=getCart();
       const idx=cart.findIndex(x=>x.id===id);
@@ -558,7 +522,6 @@
       setCart(cart);
     };
     const removeFromCart=id=>{const c=getCart().filter(x=>x.id!==id); setCart(c)};
-    const setQty=(id,q)=>{const c=getCart(); const it=c.find(x=>x.id===id); if(it){it.qty=Math.max(1,Number(q)||1); setCart(c)}};
     const cartCount=()=>getCart().reduce((s,x)=>s+x.qty,0);
     const cartTotal=()=>getCart().reduce((s,x)=>s+x.qty*x.price,0);
     const updateCartCount=()=>{
@@ -589,31 +552,41 @@
       document.getElementById('cartTotal').textContent=formatEUR(cartTotal());
     }
 
-    // DOM refs
+    // DOM
     const $=s=>document.querySelector(s);
     const q=$('#q'), c=$('#cat'), g=$('#grid'), n=$('#count');
 
-    // --- Données Produits ---
+    // Données produits
+    async function loadProducts(){
+      const paths=[
+        '/GFSTORE/data/products.json',
+        'https://silve25.github.io/GFSTORE/data/products.json',
+        'data/products.json'
+      ];
+      for(const p of paths){try{const r=await fetch(p,{cache:'no-store'}); if(r.ok) return r.json();}catch{}}
+      console.warn('Impossible de charger products.json'); 
+      return [];
+    }
     const items=await loadProducts();
-
-    // Catégories (select + footer)
     const cats=['Toutes catégories', ...Array.from(new Set(items.map(p=>p.category))).sort((a,b)=>(''+a).localeCompare(b))];
     c.innerHTML=cats.map(x=>`<option>${x}</option>`).join('');
     const footCats=document.getElementById('footCats');
     if(footCats){
-      footCats.innerHTML = cats.filter(x=>x!=='Toutes catégories').slice(0,12).map(cat=>`<a href="catalogue.html?cat=${encodeURIComponent(cat)}">${cat}</a>`).join('');
+      footCats.innerHTML = cats.filter(x=>x!=='Toutes catégories').slice(0,12).map(cat=>`<a href="/GFSTORE/catalogue.html?cat=${encodeURIComponent(cat)}">${cat}</a>`).join('');
     }
+
+    const slug=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+    const prodUrl=(p,i)=>`/GFSTORE/produits/${slug(p.name)}-${encodeURIComponent(p.id||p.sku||p._id||String(i))}.html`;
     const img=p=>p.imageCover||(p.images&&p.images[0])||'';
 
-    // Rendu produits (logique inchangée)
     function render(){
       const term=(q.value||'').toLowerCase().trim();
       const cat=c.value;
       const list=items.filter(p=> (cat==='Toutes catégories'||p.category===cat) && (`${p.name} ${p.brand||''} ${p.model||''}`.toLowerCase().includes(term)) );
       n.textContent=list.length;
       g.innerHTML=list.map((p,i)=>{
-        const id=findId(p,i);
-        const url=`produits/${slug(p.name)}-${encodeURIComponent(id)}.html`;
+        const id=p.id||p.sku||p._id||String(i);
+        const url=prodUrl(p,i);
         const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price;
         const newP=hasPromo?p.promoPrice:p.price;
         const disc=hasPromo?Math.round((1-(newP/p.price))*100):0;
@@ -631,7 +604,6 @@
       }).join('');
     }
 
-    // Events pour ajouter au panier depuis la grille principale
     g.addEventListener('click',e=>{
       const btn=e.target.closest('.add');
       if(btn){
@@ -664,13 +636,12 @@
     // Init
     updateCartCount(); render();
 
-    // ======= Deals du moment (structure stable mobile) =======
+    // Deals
     function buildDeals(){
       const dealsTrack=document.getElementById('dealsTrack');
       const dealsChip=document.getElementById('dealsChip');
       if(!dealsTrack) return;
 
-      // 1) Cherche des promos au niveau produit
       let list = items.map((p,i)=>{
         const hasPromo=Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price;
         const newP=hasPromo?p.promoPrice:p.price;
@@ -678,35 +649,20 @@
         return {p,i,hasPromo,newP,disc};
       }).filter(x=>x.disc>=10).sort((a,b)=>b.disc-a.disc).slice(0,8);
 
-      // 2) Sinon applique la promo rentrée globale -30%
-      if(list.length===0 && GLOBAL_PROMO.active){
-        if(dealsChip) dealsChip.textContent = GLOBAL_PROMO.label;
-        list = items.slice(0,8).map((p,i)=>{
-          const rate = GLOBAL_PROMO.rate;
-          const newP = Math.round(p.price*(1-rate)*100)/100;
-          const disc = Math.round(rate*100);
-          return {p,i,hasPromo:true,newP,disc,global:true};
-        });
-      }
-
       if(list.length===0){
         dealsTrack.innerHTML = '<div class="deal-card">Bientôt disponible.</div>';
         return;
       }
 
       const _img = p => p.imageCover || (p.images && p.images[0]) || '';
-      const _findId=(p,i)=>p.id||p.sku||p._id||String(i);
-      const _slug=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
-
-      dealsTrack.innerHTML = list.map(({p,i,newP,disc,global})=>{
-        const id=_findId(p,i);
-        const url=`produits/${_slug(p.name)}-${encodeURIComponent(id)}.html`;
+      dealsTrack.innerHTML = list.map(({p,i,newP,disc})=>{
+        const id=p.id||p.sku||p._id||String(i);
+        const url=prodUrl(p,i);
         const stock = p.stockLeft??p.stock??p.quantity;
-        const top = p.topSeller || (p.badges && p.badges.includes && p.badges.includes('top'));
         return `
           <article class="deal-card" data-id="${id}">
             <a href="${url}" class="deal-img" aria-label="Voir ${p.name}">
-              ${(top||global)?`<span class="deal-badge">${top?'Top vente':'Promo rentrée'}</span>`:''}
+              <span class="deal-badge">Promo</span>
               <img loading="lazy" decoding="async" src="${_img(p)}" alt="${p.name}">
             </a>
             <div class="deal-title">${p.name}</div>
@@ -726,17 +682,6 @@
     }
     buildDeals();
 
-    // Ajouter au panier depuis les deals
-    document.getElementById('dealsTrack')?.addEventListener('click',e=>{
-      const btn=e.target.closest('.add');
-      if(!btn) return;
-      const slide=btn.closest('[data-id]');
-      const id=slide?.getAttribute('data-id');
-      const index=items.findIndex((p,i)=> (p.id||p.sku||p._id||String(i))===id );
-      if(index>-1) addToCart(items[index], index);
-    });
-
-    // Carrousel nav (desktop)
     document.querySelectorAll('.navbtn').forEach(btn=>{
       btn.addEventListener('click',()=>{
         const targetId = btn.getAttribute('data-target');
