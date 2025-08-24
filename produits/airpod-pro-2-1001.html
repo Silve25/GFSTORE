@@ -1,10 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AirPod Pro 2 — GF Store</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>AirPod Pro 2 - __term0__</title>
+<style>
     :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
     *{box-sizing:border-box} body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
     a{color:inherit}
@@ -125,127 +126,115 @@
   </style>
 </head>
 <body>
-  <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
-
-  <header>
-    <div class="hwrap">
-      <!-- Lien logo vers la racine du site -->
-      <a href="https://silve25.github.io/GFSTORE/" class="brand">
-        <img src="https://silve25.github.io/GFSTORE/assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
-      </a>
-      <nav class="nav">
-        <a href="../compte/index.html"><img class="ic" id="icUser" alt=""> Compte</a>
-        <!-- Ajout d'un id pour intercepter le clic sans redirection -->
-        <a id="cartBtn" class="iconbtn" href="../checkout.html"><img id="cartIcon" class="ic" alt=""> Panier</a>
-        <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
-          <div id="menuDrop" class="menu">
-            <a href="../pages/a-propos.html">À propos</a>
-            <a href="../pages/cgv.html">CGV</a>
-            <a href="../pages/mentions-legales.html">Mentions légales</a>
-            <a href="../pages/confidentialite.html">Politique de confidentialité</a>
-            <a href="../pages/contact.html">Contact</a>
-          </div>
-        </div>
-      </nav>
-    </div>
-  </header>
-
-  <!-- (Fil d’Ariane supprimé comme demandé) -->
-
-  <section class="pwrap" id="pwrap" aria-live="polite">
-    <div class="gallery">
-      <div class="gmain"><img id="gMain" alt="AirPod Pro 2" loading="eager" fetchpriority="high"></div>
-      <div class="thumbs" id="thumbs"></div>
-    </div>
-    <aside class="pinfo">
-      <div class="title">
-        <h1 id="pName">AirPod Pro 2</h1>
-        <span class="brandchip" id="pBrand">AirPod</span>
-        <span class="rating"><span class="stars" id="pStars"></span><span id="pRatingText"></span></span>
-      </div>
-
-      <div class="pricebox">
-        <div class="price" id="pPrice">0 €</div>
-        <div class="del" id="pDel"></div>
-        <span class="badge" id="pBadge"></span>
-      </div>
-      <div id="stockInfo" style="font-size:12px"></div>
-
-      <div class="opts">
-        <div class="opt-row" id="colorRow"><strong style="min-width:80px">Couleur</strong><div id="colorWrap"></div></div>
-        <div class="opt-row" id="accRow"><strong style="min-width:80px">Accessoires</strong><div id="accWrap"></div></div>
-      </div>
-
-      <div class="cta">
-        <button id="addBtn" class="btn"><img class="ic" id="icBuy" alt=""> Ajouter au panier</button>
-        <div class="trust">
-          <div class="row">
-            <span><img class="ic" id="icTruck" alt=""> Livraison en 1 semaine</span>
-            <span><img class="ic" id="icReturn" alt=""> Retours 14 jours</span>
-            <span><img class="ic" id="icRefund" alt=""> Remboursement garanti</span>
-            <span><img class="ic" id="ic4x" alt=""> Paiement en 4x</span>
-          </div>
-          <a id="payNowBtn" href="../checkout.html" class="btn paynow"><img class="ic" id="icPayNow" alt=""> Payer maintenant</a>
-        </div>
-      </div>
-    </aside>
-  </section>
-
-  <section class="tabs" id="tabs">
-    <div class="tabheads" role="tablist">
-      <button role="tab" aria-selected="true" aria-controls="tab-desc" id="th-desc">Description</button>
-      <button role="tab" aria-selected="false" aria-controls="tab-spec" id="th-spec">Spécifications</button>
-      <button role="tab" aria-selected="false" aria-controls="tab-rev" id="th-rev">Avis</button>
-    </div>
-    <div class="tab show" id="tab-desc" role="tabpanel" aria-labelledby="th-desc"></div>
-    <div class="tab" id="tab-spec" role="tabpanel" aria-labelledby="th-spec">
-      <div class="specs" id="specs"></div>
-    </div>
-    <div class="tab" id="tab-rev" role="tabpanel" aria-labelledby="th-rev">
-      <div id="reviews"></div>
-    </div>
-  </section>
-
-  <section class="rel" id="rel">
-    <h3>Produits similaires</h3>
-    <div class="grid" id="relGrid"></div>
-  </section>
-
-  <!-- === Mini fenêtre panier === -->
-  <div id="cartPanel" class="panel" aria-hidden="true">
-    <div class="sheet" role="dialog" aria-modal="true" aria-label="Mon panier">
-      <header>
-        <strong>Mon panier</strong>
-        <button id="closeCart" class="x" aria-label="Fermer">✕</button>
-      </header>
-      <div id="cartItems" class="items"></div>
-      <div class="sum">
-        <div>Total <strong id="cartTotal">0 €</strong></div>
-        <a href="../checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Effectuer un paiement</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bulle panier => bouton (plus de lien direct) -->
-  <button id="fabCart" class="fab" type="button" aria-label="Ouvrir le panier">
-    <img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span>
-  </button>
-
-  <footer>
-    <div class="fwrap">
-      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
-      <nav>
-        <a href="../pages/a-propos.html">À propos</a> · 
+<div class="banner">🎉 Sonderrückgabe Promo:<b>-25% bei -30%</b>Auf dem PC, Telefone und Konsolen<span class="sep">•</span> <span aria-live="polite" class="timer" id="countdown"></span></div>
+<header>
+<div class="hwrap">
+<!-- Lien logo vers la racine du site -->
+<a class="brand" href="https://silve25.github.io/GFSTORE/">
+<img alt="__Term0_" class="logo" decoding="async" height="52" src="https://silve25.github.io/GFSTORE/assets/img/logopnggfstore.png" width="180"/>
+</a>
+<nav class="nav">
+<a href="../compte/index.html"><img alt="" class="ic" id="icUser"/>Konto</a>
+<!-- Ajout d'un id pour intercepter le clic sans redirection -->
+<a class="iconbtn" href="../checkout.html" id="cartBtn"><img alt="" class="ic" id="cartIcon"/>Korb</a>
+<div class="dropdown">
+<button aria-label="Speisekarte" class="iconbtn" id="menuBtn"><img alt="" class="ic" id="icMenu"/></button>
+<div class="menu" id="menuDrop">
+<a href="../pages/a-propos.html">Um</a>
+<a href="../pages/cgv.html">CGV</a>
+<a href="../pages/mentions-legales.html">Rechtliche Mitteilungen</a>
+<a href="../pages/confidentialite.html">Datenschutzrichtlinie</a>
+<a href="../pages/contact.html">Kontakt</a>
+</div>
+</div>
+</nav>
+</div>
+</header>
+<!-- (Fil d’Ariane supprimé comme demandé) -->
+<section aria-live="polite" class="pwrap" id="pwrap">
+<div class="gallery">
+<div class="gmain"><img alt="Airpod Pro 2" fetchpriority="high" id="gMain" loading="eager"/></div>
+<div class="thumbs" id="thumbs"></div>
+</div>
+<aside class="pinfo">
+<div class="title">
+<h1 id="pName">Airpod Pro 2</h1>
+<span class="brandchip" id="pBrand">Airpod</span>
+<span class="rating"><span class="stars" id="pStars"></span><span id="pRatingText"></span></span>
+</div>
+<div class="pricebox">
+<div class="price" id="pPrice">0 €</div>
+<div class="del" id="pDel"></div>
+<span class="badge" id="pBadge"></span>
+</div>
+<div id="stockInfo" style="font-size:12px"></div>
+<div class="opts">
+<div class="opt-row" id="colorRow"><strong style="min-width:80px">Farbe</strong><div id="colorWrap"></div></div>
+<div class="opt-row" id="accRow"><strong style="min-width:80px">Zubehör</strong><div id="accWrap"></div></div>
+</div>
+<div class="cta">
+<button class="btn" id="addBtn"><img alt="" class="ic" id="icBuy"/>Zum Korb geben</button>
+<div class="trust">
+<div class="row">
+<span><img alt="" class="ic" id="icTruck"/>1 Woche Lieferung</span>
+<span><img alt="" class="ic" id="icReturn"/>Kehrt 14 Tage zurück</span>
+<span><img alt="" class="ic" id="icRefund"/>Garantierte Rückerstattung</span>
+<span><img alt="" class="ic" id="ic4x"/>4x Zahlung</span>
+</div>
+<a class="btn paynow" href="../checkout.html" id="payNowBtn"><img alt="" class="ic" id="icPayNow"/>Jetzt bezahlen</a>
+</div>
+</div>
+</aside>
+</section>
+<section class="tabs" id="tabs">
+<div class="tabheads" role="tablist">
+<button aria-controls="tab-desc" aria-selected="true" id="th-desc" role="tab">Beschreibung</button>
+<button aria-controls="tab-spec" aria-selected="false" id="th-spec" role="tab">Spezifikationen</button>
+<button aria-controls="tab-rev" aria-selected="false" id="th-rev" role="tab">Beachten</button>
+</div>
+<div aria-labelledby="th-desc" class="tab show" id="tab-desc" role="tabpanel"></div>
+<div aria-labelledby="th-spec" class="tab" id="tab-spec" role="tabpanel">
+<div class="specs" id="specs"></div>
+</div>
+<div aria-labelledby="th-rev" class="tab" id="tab-rev" role="tabpanel">
+<div id="reviews"></div>
+</div>
+</section>
+<section class="rel" id="rel">
+<h3>Ähnliche Produkte</h3>
+<div class="grid" id="relGrid"></div>
+</section>
+<!-- === Mini fenêtre panier === -->
+<div aria-hidden="true" class="panel" id="cartPanel">
+<div aria-label="Mein Korb" aria-modal="true" class="sheet" role="dialog">
+<header>
+<strong>Mein Korb</strong>
+<button aria-label="Schließen" class="x" id="closeCart">✕</button>
+</header>
+<div class="items" id="cartItems"></div>
+<div class="sum">
+<div>Gesamt<strong id="cartTotal">0 €</strong></div>
+<a class="checkout" href="../checkout.html"><img alt="" class="ic" id="icCheckout"/>Eine Zahlung leisten</a>
+</div>
+</div>
+</div>
+<!-- Bulle panier => bouton (plus de lien direct) -->
+<button aria-label="Öffnen Sie den Korb" class="fab" id="fabCart" type="button">
+<img alt="" class="ic" id="icFabCart"/> <span class="badge" id="fabCount">0</span>
+</button>
+<footer>
+<div class="fwrap">
+<div>© __term0_ 2025-Simplicity, Sicherheit, krypto-freundlich.</div>
+<nav>
+<a href="../pages/a-propos.html">Um</a> · 
         <a href="../pages/cgv.html">CGV</a> · 
-        <a href="../pages/mentions-legales.html">Mentions légales</a> · 
-        <a href="../pages/confidentialite.html">Confidentialité</a> · 
-        <a href="../pages/contact.html">Contact</a>
-      </nav>
-    </div>
-  </footer>
-
-  <script>
+        <a href="../pages/mentions-legales.html">Rechtliche Mitteilungen</a> · 
+        <a href="../pages/confidentialite.html">Vertraulichkeit</a> · 
+        <a href="../pages/contact.html">Kontakt</a>
+</nav>
+</div>
+</footer>
+<script>
   (async()=>{
     // ---- Compte à rebours (48h)
     const countdownEl=document.getElementById('countdown');
