@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="fr">
+<html lang="de">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>GF Store — Mes commandes</title>
-  <meta name="description" content="Historique et suivi de vos commandes GF Store. Détails, paiement, échéancier et assistance." />
+  <title>GF Store — Meine Bestellungen</title>
+  <meta name="description" content="Bestellverlauf & Sendungsverfolgung Ihrer GF-Store Bestellungen. Details, Zahlung, Ratenplan und Support." />
   <style>
     :root{
       --w:1200px;
@@ -62,7 +62,7 @@
     .tiny{font-size:12px;color:var(--muted)}
     .tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:4px 8px;background:#fff}
 
-    details.order details{margin-top:0} /* nested safeguard */
+    details.order details{margin-top:0}
     details summary{cursor:pointer;list-style:none}
     details summary::-webkit-details-marker{display:none}
     .sumrow{display:flex;align-items:center;gap:8px;justify-content:flex-end}
@@ -82,14 +82,14 @@
   </style>
 </head>
 <body>
-  <header>
+<header>
   <div class="hwrap">
-    <a href="https://silve25.github.io/GFSTORE/" class="brand" aria-label="Accueil">
+    <a href="https://silve25.github.io/GFSTORE/" class="brand" aria-label="Startseite">
       <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
     </a>
     <nav class="nav">
-      <a href="./index.html" title="Mon compte"><img class="ic" id="icUser" alt=""> <span>Mon compte</span></a>
-      <a href="../index.html" title="Continuer les achats"><img class="ic" id="icContinue" alt=""> <span>Boutique</span></a>
+      <a href="./index.html" title="Mein Konto"><img class="ic" id="icUser" alt=""> <span>Mein Konto</span></a>
+      <a href="../index.html" title="Zum Shop"><img class="ic" id="icContinue" alt=""> <span>Shop</span></a>
     </nav>
   </div>
 </header>
@@ -98,38 +98,38 @@
     <section class="card">
       <div class="hd">
         <div>
-          <div class="title">Mes commandes</div>
-          <div class="muted">Consultez l’historique, les détails et votre échéancier.</div>
+          <div class="title">Meine Bestellungen</div>
+          <div class="muted">Verlauf, Details und Ihr Ratenplan.</div>
         </div>
-        <span class="pill"><img class="ic" id="icTruck" alt=""> Suivi & assistance</span>
+        <span class="pill"><img class="ic" id="icTruck" alt=""> Sendungsverfolgung & Support</span>
       </div>
       <div class="bd">
-        <div class="tools" role="region" aria-label="Filtres commandes">
-          <input id="q" class="grow" placeholder="Rechercher (ID, produit, email, ville, méthode…)" inputmode="search" autocomplete="off">
-          <select id="fStatus" title="Statut">
-            <option value="">Tous statuts</option>
-            <option value="En préparation">En préparation</option>
-            <option value="Vérification">Vérification</option>
-            <option value="Expédiée">Expédiée</option>
-            <option value="Livrée">Livrée</option>
-            <option value="Annulée">Annulée</option>
+        <div class="tools" role="region" aria-label="Bestellungen filtern">
+          <input id="q" class="grow" placeholder="Suchen (ID, Produkt, E-Mail, Stadt, Methode …)" inputmode="search" autocomplete="off">
+          <select id="fStatus" title="Status">
+            <option value="">Alle Status</option>
+            <option value="prep">In Bearbeitung</option>
+            <option value="verif">Prüfung</option>
+            <option value="ship">Versendet</option>
+            <option value="done">Zugestellt</option>
+            <option value="canc">Storniert</option>
           </select>
-          <select id="fMethod" title="Méthode">
-            <option value="">Toutes méthodes</option>
+          <select id="fMethod" title="Methode">
+            <option value="">Alle Methoden</option>
             <option value="sepa">SEPA</option>
-            <option value="crypto">Crypto</option>
+            <option value="crypto">Krypto</option>
           </select>
-          <button id="btnExport" class="btn" type="button" title="Exporter JSON">Exporter JSON</button>
+          <button id="btnExport" class="btn" type="button" title="JSON exportieren">JSON exportieren</button>
         </div>
 
         <div id="orders" class="olist" style="margin-top:10px"></div>
 
         <div id="empty" class="empty" style="display:none">
           <img src="https://img.icons8.com/?size=100&id=21903&format=png&color=94a3b8" width="60" height="60" alt="">
-          <div>Aucune commande trouvée.</div>
-          <div class="tiny">Revenez après un achat ou ajustez vos filtres.</div>
+          <div>Keine Bestellungen gefunden.</div>
+          <div class="tiny">Kehren Sie nach einem Kauf zurück oder passen Sie Ihre Filter an.</div>
           <div style="margin-top:6px">
-            <a class="btn primary" href="../index.html">Découvrir les produits</a>
+            <a class="btn primary" href="../index.html">Produkte entdecken</a>
           </div>
         </div>
       </div>
@@ -138,13 +138,13 @@
 
   <footer>
     <div class="fwrap">
-      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <div>© GF Store 2025 — Einfach, sicher, krypto-freundlich.</div>
       <nav>
-        <a href="../pages/a-propos.html">À propos</a> ·
-        <a href="../pages/cgv.html">CGV</a> ·
-        <a href="../pages/mentions-legales.html">Mentions légales</a> ·
-        <a href="../pages/confidentialite.html">Confidentialité</a> ·
-        <a href="../pages/contact.html">Contact</a>
+        <a href="../pages/a-propos.html">Über uns</a> ·
+        <a href="../pages/cgv.html">AGB</a> ·
+        <a href="../pages/mentions-legales.html">Impressum</a> ·
+        <a href="../pages/confidentialite.html">Datenschutz</a> ·
+        <a href="../pages/contact.html">Kontakt</a>
       </nav>
     </div>
   </footer>
@@ -165,14 +165,45 @@
     // Helpers
     const $ = s => document.querySelector(s);
     const $$ = s => Array.from(document.querySelectorAll(s));
-    const EUR = v => Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    const EUR = v => Number(v||0).toLocaleString('de-DE',{style:'currency',currency:'EUR'});
     const FMTDATE = iso => {
       if(!iso) return '—';
       try{
         const d = new Date(iso);
-        return d.toLocaleString('fr-FR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+        return d.toLocaleString('de-DE',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
       }catch{ return iso; }
     };
+
+    // Normalize status between FR/DE to a code
+    function statusCode(s){
+      const x=(s||'').toLowerCase();
+      if(x.includes('prépa') || x.includes('bearbeit') || x.includes('vorbereit')) return 'prep';
+      if(x.includes('vérif') || x.includes('prüf')) return 'verif';
+      if(x.includes('expédi') || x.includes('versand') || x.includes('verschickt') || x.includes('versendet')) return 'ship';
+      if(x.includes('livr') || x.includes('zugestellt') || x.includes('geliefert')) return 'done';
+      if(x.includes('annul') || x.includes('storni')) return 'canc';
+      return 'prep';
+    }
+    function statusLabelDE(code){
+      switch(code){
+        case 'prep': return 'In Bearbeitung';
+        case 'verif': return 'Prüfung';
+        case 'ship': return 'Versendet';
+        case 'done': return 'Zugestellt';
+        case 'canc': return 'Storniert';
+        default: return 'In Bearbeitung';
+      }
+    }
+    function badgeClassByCode(code){
+      return {
+        prep:'stat s-prep',
+        verif:'stat s-verif',
+        ship:'stat s-ship',
+        done:'stat s-done',
+        canc:'stat s-canc'
+      }[code] || 'stat s-prep';
+    }
+
     const splitAmounts=(total,parts)=>{
       const cents=Math.round((Number(total)||0)*100);
       const base=Math.floor(cents/parts);
@@ -185,8 +216,8 @@
       const today=new Date(); const steps=[0,30,60,90];
       return amts.map((amt,i)=>{
         const d=new Date(today); d.setDate(d.getDate()+steps[i]);
-        const label = i===0?'Aujourd’hui':(i===1?'Dans 30 jours':i===2?'Dans 60 jours':'Dans 90 jours');
-        return {label,date:d.toLocaleDateString('fr-FR'),amt};
+        const label = i===0?'Heute':(i===1?'In 30 Tagen':i===2?'In 60 Tagen':'In 90 Tagen');
+        return {label,date:d.toLocaleDateString('de-DE'),amt};
       });
     };
 
@@ -195,26 +226,14 @@
       try{ return JSON.parse(localStorage.getItem('gf_orders')||'[]'); }catch{ return []; }
     }
 
-    // Status badge class
-    function badgeClass(status){
-      switch((status||'').toLowerCase()){
-        case 'en préparation': return 'stat s-prep';
-        case 'vérification':   return 'stat s-verif';
-        case 'expédiée':       return 'stat s-ship';
-        case 'livrée':         return 'stat s-done';
-        case 'annulée':        return 'stat s-canc';
-        default:               return 'stat s-prep';
-      }
-    }
-
     // Filter logic
-    function matches(o, q, st, meth){
+    function matches(o, q, stCode, meth){
       const hay = [
         o?.id, o?.status, o?.payment?.method, o?.shipping?.name, o?.shipping?.email,
         o?.shipping?.city, ...(o?.items||[]).map(it=>it.name)
       ].join(' ').toLowerCase();
       if(q && !hay.includes(q.toLowerCase())) return false;
-      if(st && String(o?.status||'').toLowerCase()!==st.toLowerCase()) return false;
+      if(stCode && statusCode(o?.status) !== stCode) return false;
       if(meth && String(o?.payment?.method||'').toLowerCase()!==meth.toLowerCase()) return false;
       return true;
     }
@@ -224,14 +243,13 @@
       const list = $('#orders');
       const empty = $('#empty');
       const q = $('#q').value.trim();
-      const st = $('#fStatus').value;
+      const stCode = $('#fStatus').value;
       const meth = $('#fMethod').value;
 
       let orders = loadOrders();
-      // newest first
       orders.sort((a,b)=> new Date(b.date||0) - new Date(a.date||0));
 
-      const filtered = orders.filter(o=>matches(o,q,st,meth));
+      const filtered = orders.filter(o=>matches(o,q,stCode,meth));
 
       if(!filtered.length){
         list.innerHTML = '';
@@ -245,13 +263,14 @@
         const sub   = o?.pricing?.sub   ?? total;
         const promo = o?.pricing?.promo ?? 0;
         const currency = o?.pricing?.currency || 'EUR';
-        const status = o?.status || 'En préparation';
+        const code = statusCode(o?.status);
+        const statusDE = statusLabelDE(code);
         const split  = Number(o?.payment?.split||1);
         const method = (o?.payment?.method||'').toLowerCase();
         const pmDetail = method==='crypto'
-          ? `Crypto ${o.payment?.details?.ccy || ''}`
+          ? `Krypto ${o.payment?.details?.ccy || ''}`
           : method==='sepa'
-            ? `Virement SEPA`
+            ? `SEPA-Überweisung`
             : '—';
 
         const icon = method==='crypto'
@@ -264,14 +283,14 @@
         <details class="order" data-id="${o.id}">
           <summary class="oline">
             <div class="row">
-              <span class="${badgeClass(status)}">${status}</span>
-              <span class="pill">Commande <code>${o.id||'—'}</code></span>
+              <span class="${badgeClassByCode(code)}">${statusDE}</span>
+              <span class="pill">Bestellung <code>${o.id||'—'}</code></span>
               <span class="tag"><img class="ic" src="${icon}" alt="" /> ${pmDetail}${split>1?` • ${split}×`:''}</span>
-              <span class="tiny">passée le ${FMTDATE(o.date)}</span>
+              <span class="tiny">aufgegeben am ${FMTDATE(o.date)}</span>
             </div>
             <div class="sumrow">
               <div class="row">
-                ${promo ? `<span class="tag">Promo –${EUR(promo)}</span>`:''}
+                ${promo ? `<span class="tag">Rabatt –${EUR(promo)}</span>`:''}
                 <span class="price">${Number.isFinite(total)? EUR(total) : (total||0)+' '+currency}</span>
               </div>
             </div>
@@ -280,7 +299,7 @@
           <div class="oline">
             <div class="grid-2" style="width:100%">
               <div>
-                <div style="font-weight:700;margin-bottom:6px">Articles</div>
+                <div style="font-weight:700;margin-bottom:6px">Artikel</div>
                 <div class="items">
                   ${(o.items||[]).map(x=>`
                     <div class="ci">
@@ -288,17 +307,17 @@
                       <div>
                         <div style="font-weight:600">${x.name||''}</div>
                         <div class="tiny">${[x.brand, x.category].filter(Boolean).join(' • ')}</div>
-                        <div class="tiny">Qté: ${Number(x.qty||1)}</div>
+                        <div class="tiny">Menge: ${Number(x.qty||1)}</div>
                       </div>
                       <div style="font-weight:700">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
                     </div>
                   `).join('')}
                 </div>
-                <div class="tiny" style="margin-top:6px">Sous-total: <b>${EUR(sub)}</b>${promo?` • Remise: <b>–${EUR(promo)}</b>`:''}</div>
+                <div class="tiny" style="margin-top:6px">Zwischensumme: <b>${EUR(sub)}</b>${promo?` • Rabatt: <b>–${EUR(promo)}</b>`:''}</div>
               </div>
 
               <div>
-                <div style="font-weight:700;margin-bottom:6px">Livraison & client</div>
+                <div style="font-weight:700;margin-bottom:6px">Lieferung & Kunde</div>
                 <div class="tiny">
                   ${o.shipping?.name || '—'}<br>
                   ${o.shipping?.email || '—'} • ${o.shipping?.phone || '—'}<br>
@@ -308,18 +327,18 @@
 
                 <div style="height:10px"></div>
 
-                <div style="font-weight:700;margin-bottom:6px">Paiement</div>
+                <div style="font-weight:700;margin-bottom:6px">Zahlung</div>
                 <div class="tiny">
-                  Méthode: <b>${method || '—'}</b> ${o.payment?.details?.ccy ? `(${o.payment.details.ccy})` : ''}<br>
+                  Zahlungsart: <b>${method || '—'}</b> ${o.payment?.details?.ccy ? `(${o.payment.details.ccy})` : ''}<br>
                   ${method==='crypto'
                     ? `TxID: <code>${o.payment?.details?.txid || '—'}</code>`
-                    : `Réf: <code>${o.payment?.details?.ref || '—'}</code>`}
-                  <br>À payer aujourd’hui: <b>${EUR(Number(o.payment?.details?.amountNow||0))}</b>
+                    : `Verwendungszweck: <code>${o.payment?.details?.ref || '—'}</code>`}
+                  <br>Heute fällig: <b>${EUR(Number(o.payment?.details?.amountNow||0))}</b>
                 </div>
 
                 ${split>1 ? `
                   <div style="height:10px"></div>
-                  <div style="font-weight:700;margin-bottom:6px">Échéancier (${split}×)</div>
+                  <div style="font-weight:700;margin-bottom:6px">Ratenplan (${split}×)</div>
                   <div class="items" style="gap:6px">
                     ${lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('')}
                   </div>
@@ -327,9 +346,9 @@
 
                 <div style="height:12px"></div>
                 <div class="row">
-                  <a class="btn" href="../pages/contact.html?order=${encodeURIComponent(o.id||'')}" title="Support">Assistance</a>
-                  <button class="btn" type="button" data-copy="${encodeURIComponent(o.id||'')}" title="Copier l’ID">Copier l’ID</button>
-                  <button class="btn" type="button" data-print="${encodeURIComponent(o.id||'')}" title="Imprimer">Imprimer</button>
+                  <a class="btn" href="../pages/contact.html?order=${encodeURIComponent(o.id||'')}" title="Support">Support</a>
+                  <button class="btn" type="button" data-copy="${encodeURIComponent(o.id||'')}" title="ID kopieren">ID kopieren</button>
+                  <button class="btn" type="button" data-print="${encodeURIComponent(o.id||'')}" title="Drucken">Drucken</button>
                 </div>
               </div>
             </div>
@@ -341,17 +360,16 @@
       $$('button[data-copy]').forEach(b=>{
         b.addEventListener('click', ()=>{
           const id = decodeURIComponent(b.getAttribute('data-copy')||'');
-          if(navigator.clipboard?.writeText){ navigator.clipboard.writeText(id); b.textContent='Copié'; setTimeout(()=>b.textContent='Copier l’ID',900); }
+          if(navigator.clipboard?.writeText){ navigator.clipboard.writeText(id); b.textContent='Kopiert'; setTimeout(()=>b.textContent='ID kopieren',900); }
         });
       });
       $$('button[data-print]').forEach(b=>{
         b.addEventListener('click', ()=>{
-          // Simple: ouvre une fenêtre propre avec la section à imprimer
           const id = decodeURIComponent(b.getAttribute('data-print')||'');
           const node = document.querySelector(`details.order[data-id="${CSS.escape(id)}"]`);
           if(!node) return window.print();
           const html = `
-            <html><head><title>Commande ${id}</title>
+            <html><head><title>Bestellung ${id}</title>
             <meta charset="utf-8"><style>
               body{font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;margin:24px;color:#0f172a}
               h1{font-size:18px;margin:0 0 10px}
@@ -361,11 +379,11 @@
               th,td{border:1px solid #e5e7eb;padding:8px;text-align:left}
               th{background:#f8fafc}
             </style></head><body>
-            <h1>GF Store — Commande ${id}</h1>
+            <h1>GF Store — Bestellung ${id}</h1>
             ${node.outerHTML}
             </body></html>`;
           const w = window.open('', '_blank');
-          if(!w){ alert('Veuillez autoriser les fenêtres pour imprimer.'); return; }
+          if(!w){ alert('Bitte Pop-ups zum Drucken erlauben.'); return; }
           w.document.write(html);
           w.document.close();
           w.focus();
@@ -390,16 +408,16 @@
       setTimeout(()=> URL.revokeObjectURL(url), 500);
     });
 
-    // Initial render (small delay so icons set)
+    // Initial render
     render();
 
     // Optional: dev purge with ?dev=1
     if (new URLSearchParams(location.search).get('dev')==='1'){
       const tools = document.querySelector('.tools');
       const purge = document.createElement('button');
-      purge.className='btn'; purge.textContent='Purger commandes (dev)';
+      purge.className='btn'; purge.textContent='Bestellungen löschen (dev)';
       purge.addEventListener('click', ()=>{
-        if(confirm('Supprimer toutes les commandes locales ?')){ localStorage.removeItem('gf_orders'); render(); }
+        if(confirm('Alle lokalen Bestellungen löschen?')){ localStorage.removeItem('gf_orders'); render(); }
       });
       tools.appendChild(purge);
     }
