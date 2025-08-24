@@ -1,1 +1,333 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Mon profil — GF Store</title>
+  <meta name="description" content="Espace compte GF Store : informations personnelles, adresse de livraison, préférences et sécurité."/>
+  <style>
+    :root{
+      --w:1200px;
+      --bg:#f6f8fb; --panel:#ffffff; --line:#e6edf6;
+      --text:#0f172a; --muted:#6b7280;
+      --brand:#2563eb; --ok:#059669; --danger:#dc2626;
+      --r:14px; --shadow:0 6px 18px rgba(15,23,42,.06);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
 
+    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(4px)}
+    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand .logo{height:38px;width:auto}
+    .nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);background:#fff;border-radius:12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .nav a:hover,.iconbtn:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+    .ic{width:16px;height:16px}
+
+    .wrap{max-width:var(--w);margin:16px auto;padding:0 12px;display:grid;gap:16px}
+    @media (min-width:980px){.wrap{grid-template-columns:1.2fr .8fr}}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+    .hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+    .bd{padding:14px 16px}
+    .title{font-weight:700;font-size:18px}
+    .muted{color:var(--muted);font-size:13px}
+
+    form{display:grid;gap:12px}
+    .row{display:grid;gap:10px}
+    .cols-2{grid-template-columns:1fr 1fr}
+    @media(max-width:760px){.cols-2{grid-template-columns:1fr}}
+    label{display:block;margin:4px 0 6px;font-weight:600}
+    input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#fbfdff}
+    input::placeholder{color:#9aa3b2}
+    input:focus,select:focus,textarea:focus{outline:2px solid rgba(37,99,235,.2);box-shadow:0 6px 18px rgba(37,99,235,.08)}
+
+    .avatar{display:flex;align-items:center;gap:10px}
+    .bubble{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#1e40af;background:#eff6ff;border:1px solid #bfdbfe}
+
+    .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:600}
+    .btn.primary{background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-color:#1e40af;box-shadow:0 10px 24px rgba(30,64,175,.25)}
+    .btn.danger{background:#fff;border-color:#fecaca;color:#b91c1c}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .list{display:grid;gap:10px}
+    .order{display:grid;grid-template-columns:1fr auto;gap:6px;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff}
+    .order .meta{font-size:12px;color:var(--muted)}
+    .status{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid #bbf7d0;background:#ecfdf5;color:#065f46}
+    .empty{border:1px dashed var(--line);border-radius:12px;padding:12px;text-align:center;color:var(--muted)}
+
+    .note{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:10px;padding:6px 8px}
+    .dangerzone{border:1px dashed #fecaca;background:#fff7f7;color:#7f1d1d;border-radius:12px;padding:12px;display:grid;gap:8px}
+
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#111;color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:99999}
+    .toast.show{display:block}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hwrap">
+      <a href="../index.html" class="brand" aria-label="Accueil">
+        <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="160" height="48" decoding="async">
+      </a>
+      <nav class="nav">
+        <a href="index.html" title="Tableau de bord"><img class="ic" src="https://img.icons8.com/?size=100&id=Rr2HQt4H9a1X&format=png&color=000000" alt=""> Dashboard</a>
+        <a href="../index.html" title="Boutique"><img class="ic" src="https://img.icons8.com/?size=100&id=26138&format=png&color=000000" alt=""> Boutique</a>
+        <a id="logoutBtn" href="#" title="Déconnexion" class="btn"><img class="ic" src="https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000" alt=""> Déconnexion</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" aria-live="polite">
+    <!-- Colonne gauche : Profil -->
+    <section class="card" aria-labelledby="h-prof">
+      <div class="hd">
+        <div class="title" id="h-prof">Mon profil</div>
+        <span class="muted" id="hello">—</span>
+      </div>
+      <div class="bd">
+        <div class="avatar" style="margin-bottom:10px">
+          <div id="avatar" class="bubble">?</div>
+          <div class="muted">Ces informations sont utilisées pour la facturation et la livraison.</div>
+        </div>
+
+        <form id="profileForm" novalidate>
+          <div class="row cols-2">
+            <div>
+              <label for="name">Nom complet</label>
+              <input id="name" placeholder="Prénom Nom" required>
+            </div>
+            <div>
+              <label for="phone">Téléphone</label>
+              <input id="phone" inputmode="tel" placeholder="+33 6 12 34 56 78">
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="vous@example.com" required>
+            </div>
+            <div>
+              <label for="country">Pays</label>
+              <input id="country" placeholder="France">
+            </div>
+          </div>
+
+          <div class="row cols-2">
+            <div>
+              <label for="address">Adresse</label>
+              <input id="address" placeholder="10 Avenue de l’Europe">
+            </div>
+            <div>
+              <label for="city">Ville</label>
+              <input id="city" placeholder="Paris">
+            </div>
+            <div>
+              <label for="zip">Code postal</label>
+              <input id="zip" inputmode="numeric" placeholder="75008">
+            </div>
+            <div>
+              <label for="notes">Notes de livraison (optionnel)</label>
+              <input id="notes" placeholder="Digicode, étage, etc.">
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+            <button id="saveBtn" class="btn primary" type="submit">Enregistrer</button>
+            <a class="btn" href="password-change.html">Changer le mot de passe</a>
+          </div>
+          <div class="note" style="margin-top:8px">Astuce : tes commandes s’appuient sur ces infos pour l’expédition. Pense à les garder à jour.</div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Colonne droite : Commandes -->
+    <aside class="card" aria-labelledby="h-orders">
+      <div class="hd">
+        <div class="title" id="h-orders">Mes dernières commandes</div>
+        <a class="btn" href="index.html">Tout voir</a>
+      </div>
+      <div class="bd">
+        <div id="orders" class="list"></div>
+        <hr style="border:none;border-top:1px dashed var(--line);margin:12px 0">
+        <div class="dangerzone">
+          <div style="font-weight:700">Zone sensible</div>
+          <div class="muted">Ces actions n’affectent que cet appareil.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="exportBtn" class="btn">Exporter mes données</button>
+            <button id="wipeBtn" class="btn danger">Supprimer mes données locales</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer style="background:#fff;border-top:1px solid var(--line);margin-top:16px">
+    <div class="hwrap" style="justify-content:space-between">
+      <div class="muted">© GF Store 2025 — Compte & Profil</div>
+      <nav class="nav">
+        <a href="../pages/confidentialite.html">Confidentialité</a>
+        <a href="../pages/cgv.html">CGV</a>
+        <a href="../pages/contact.html">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+  (function(){
+    "use strict";
+    const $ = s => document.querySelector(s);
+    const toast = (msg)=>{ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1500); };
+
+    // ---- Soft guard: si pas logué, on redirige vers login
+    // Adapte la logique si ton auth.js stocke autre chose
+    function isLoggedIn(){
+      try{
+        if(localStorage.getItem('auth_token')) return true;
+        const u = JSON.parse(localStorage.getItem('gf_user')||'null');
+        if(u && (u.email || u.uid)) return true;
+      }catch{}
+      return false;
+    }
+    if(!isLoggedIn()){
+      try{ window.location.replace('login.html'); }catch(e){ window.location.href='login.html'; }
+      return;
+    }
+
+    // ---- Avatar initiales
+    function setAvatar(name){
+      const av = $("#avatar");
+      const n = String(name||'').trim();
+      const init = n ? n.split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase() : '?';
+      av.textContent = init || '?';
+    }
+
+    // ---- Chargement données
+    function loadProfile(){
+      let prof = {};
+      try { prof = JSON.parse(localStorage.getItem('gf_profile')||'{}'); } catch {}
+      if(!prof || !prof.email){
+        // fallback depuis gf_user si dispo
+        try {
+          const u = JSON.parse(localStorage.getItem('gf_user')||'{}');
+          prof = Object.assign({},
+            prof,
+            {
+              name: prof.name || u.name || u.displayName || '',
+              email: prof.email || u.email || '',
+              phone: prof.phone || u.phone || ''
+            }
+          );
+        }catch{}
+      }
+      // populate
+      $('#name').value    = prof.name    || '';
+      $('#email').value   = prof.email   || '';
+      $('#phone').value   = prof.phone   || '';
+      $('#address').value = prof.address || '';
+      $('#city').value    = prof.city    || '';
+      $('#zip').value     = prof.zip     || '';
+      $('#country').value = prof.country || '';
+      $('#notes').value   = prof.notes   || '';
+      setAvatar(prof.name);
+      $('#hello').textContent = prof.name ? 'Bonjour, '+prof.name : '—';
+    }
+
+    function saveProfile(e){
+      e && e.preventDefault();
+      const name  = $('#name').value.trim();
+      const email = $('#email').value.trim();
+      if(!name || !email){ toast('Nom et email sont requis.'); return; }
+      const prof = {
+        name,
+        email,
+        phone: $('#phone').value.trim(),
+        address: $('#address').value.trim(),
+        city: $('#city').value.trim(),
+        zip: $('#zip').value.trim(),
+        country: $('#country').value.trim(),
+        notes: $('#notes').value.trim(),
+        ts: new Date().toISOString()
+      };
+      try { localStorage.setItem('gf_profile', JSON.stringify(prof)); } catch {}
+      setAvatar(prof.name);
+      $('#hello').textContent = 'Bonjour, '+prof.name;
+      toast('Profil enregistré ✅');
+    }
+
+    // ---- Commandes récentes
+    function EUR(v){ return Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'}) }
+    function listOrders(){
+      const box = $('#orders');
+      let arr = [];
+      try { arr = JSON.parse(localStorage.getItem('gf_orders')||'[]'); } catch {}
+      if(!arr.length){ box.innerHTML = '<div class="empty">Aucune commande pour le moment.</div>'; return; }
+      // tri récent → ancien
+      arr.sort((a,b)=> String(b.date||'').localeCompare(String(a.date||'')));
+      const take = arr.slice(0,5);
+      box.innerHTML = take.map(o=>{
+        const total = o?.pricing?.total ?? 0;
+        const id = o?.id || '—';
+        const date = o?.date ? new Date(o.date).toLocaleString('fr-FR') : '—';
+        const st = o?.status || '—';
+        return `
+          <div class="order">
+            <div>
+              <div style="font-weight:600">${id}</div>
+              <div class="meta">${date}</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span style="font-weight:700">${EUR(total)}</span>
+              <span class="status">${st}</span>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // ---- Export & suppression locale
+    function download(filename, text){
+      const blob = new Blob([text], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
+    }
+    function exportData(){
+      let profile={}, orders=[];
+      try{ profile = JSON.parse(localStorage.getItem('gf_profile')||'{}'); }catch{}
+      try{ orders  = JSON.parse(localStorage.getItem('gf_orders') ||'[]'); }catch{}
+      const payload = { profile, orders, exported_at: new Date().toISOString() };
+      download('gfstore-donnees.json', JSON.stringify(payload, null, 2));
+    }
+    function wipeLocal(){
+      if(!confirm('Supprimer profil + commandes de cet appareil ?')) return;
+      try{ localStorage.removeItem('gf_profile'); }catch{}
+      try{ localStorage.removeItem('gf_orders'); }catch{}
+      toast('Données locales supprimées.');
+      loadProfile();
+      listOrders();
+    }
+
+    // ---- Logout
+    function logout(e){
+      e && e.preventDefault();
+      // essaie de nettoyer les clés usuelles
+      ['auth_token','gf_user','gf_profile'].forEach(k=>{ try{ localStorage.removeItem(k); }catch{} });
+      toast('Déconnecté.');
+      setTimeout(()=>{ window.location.href = 'login.html'; }, 350);
+    }
+
+    // ---- Bind
+    $('#profileForm').addEventListener('submit', saveProfile);
+    $('#exportBtn').addEventListener('click', exportData);
+    $('#wipeBtn').addEventListener('click', wipeLocal);
+    $('#logoutBtn').addEventListener('click', logout);
+
+    // ---- Init
+    loadProfile();
+    listOrders();
+  })();
+  </script>
+</body>
+</html>
