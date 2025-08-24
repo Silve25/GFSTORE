@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="fr">
+<html lang="de">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
@@ -126,7 +126,7 @@
   </style>
 </head>
 <body>
-<div class="banner">🎉 Sonderrückgabe Promo:<b>-25% bei -30%</b>Auf dem PC, Telefone und Konsolen<span class="sep">•</span> <span aria-live="polite" class="timer" id="countdown"></span></div>
+<div class="banner">🎉 Spezialaktion: <b>-25% bis -30%</b> auf PCs, Telefone und Konsolen <span class="sep">•</span> <span aria-live="polite" class="timer" id="countdown"></span></div>
 <header>
 <div class="hwrap">
 <!-- Lien logo vers la racine du site -->
@@ -136,14 +136,14 @@
 <nav class="nav">
 <a href="../compte/index.html"><img alt="" class="ic" id="icUser"/>Konto</a>
 <!-- Ajout d'un id pour intercepter le clic sans redirection -->
-<a class="iconbtn" href="../checkout.html" id="cartBtn"><img alt="" class="ic" id="cartIcon"/>Korb</a>
+<a class="iconbtn" href="../checkout.html" id="cartBtn"><img alt="" class="ic" id="cartIcon"/>Warenkorb</a>
 <div class="dropdown">
-<button aria-label="Speisekarte" class="iconbtn" id="menuBtn"><img alt="" class="ic" id="icMenu"/></button>
+<button aria-label="Menü" class="iconbtn" id="menuBtn"><img alt="" class="ic" id="icMenu"/></button>
 <div class="menu" id="menuDrop">
-<a href="../pages/a-propos.html">Um</a>
-<a href="../pages/cgv.html">CGV</a>
-<a href="../pages/mentions-legales.html">Rechtliche Mitteilungen</a>
-<a href="../pages/confidentialite.html">Datenschutzrichtlinie</a>
+<a href="../pages/a-propos.html">Über uns</a>
+<a href="../pages/cgv.html">AGB</a>
+<a href="../pages/mentions-legales.html">Rechtliche Hinweise</a>
+<a href="../pages/confidentialite.html">Datenschutz</a>
 <a href="../pages/contact.html">Kontakt</a>
 </div>
 </div>
@@ -153,13 +153,13 @@
 <!-- (Fil d’Ariane supprimé comme demandé) -->
 <section aria-live="polite" class="pwrap" id="pwrap">
 <div class="gallery">
-<div class="gmain"><img alt="Airpod Pro 2" fetchpriority="high" id="gMain" loading="eager"/></div>
+<div class="gmain"><img alt="AirPods Pro 2" fetchpriority="high" id="gMain" loading="eager"/></div>
 <div class="thumbs" id="thumbs"></div>
 </div>
 <aside class="pinfo">
 <div class="title">
-<h1 id="pName">Airpod Pro 2</h1>
-<span class="brandchip" id="pBrand">Airpod</span>
+<h1 id="pName">AirPod Pro 2</h1>
+<span class="brandchip" id="pBrand">AirPod</span>
 <span class="rating"><span class="stars" id="pStars"></span><span id="pRatingText"></span></span>
 </div>
 <div class="pricebox">
@@ -173,13 +173,13 @@
 <div class="opt-row" id="accRow"><strong style="min-width:80px">Zubehör</strong><div id="accWrap"></div></div>
 </div>
 <div class="cta">
-<button class="btn" id="addBtn"><img alt="" class="ic" id="icBuy"/>Zum Korb geben</button>
+<button class="btn" id="addBtn"><img alt="" class="ic" id="icBuy"/>In den Warenkorb</button>
 <div class="trust">
 <div class="row">
-<span><img alt="" class="ic" id="icTruck"/>1 Woche Lieferung</span>
-<span><img alt="" class="ic" id="icReturn"/>Kehrt 14 Tage zurück</span>
-<span><img alt="" class="ic" id="icRefund"/>Garantierte Rückerstattung</span>
-<span><img alt="" class="ic" id="ic4x"/>4x Zahlung</span>
+<span><img alt="" class="ic" id="icTruck"/>Lieferung in 1 Woche</span>
+<span><img alt="" class="ic" id="icReturn"/>14 Tage Rückgabe</span>
+<span><img alt="" class="ic" id="icRefund"/>Geld-zurück-Garantie</span>
+<span><img alt="" class="ic" id="ic4x"/>Zahlung in 4 Raten</span>
 </div>
 <a class="btn paynow" href="../checkout.html" id="payNowBtn"><img alt="" class="ic" id="icPayNow"/>Jetzt bezahlen</a>
 </div>
@@ -190,7 +190,7 @@
 <div class="tabheads" role="tablist">
 <button aria-controls="tab-desc" aria-selected="true" id="th-desc" role="tab">Beschreibung</button>
 <button aria-controls="tab-spec" aria-selected="false" id="th-spec" role="tab">Spezifikationen</button>
-<button aria-controls="tab-rev" aria-selected="false" id="th-rev" role="tab">Beachten</button>
+<button aria-controls="tab-rev" aria-selected="false" id="th-rev" role="tab">Bewertungen</button>
 </div>
 <div aria-labelledby="th-desc" class="tab show" id="tab-desc" role="tabpanel"></div>
 <div aria-labelledby="th-spec" class="tab" id="tab-spec" role="tabpanel">
@@ -206,30 +206,30 @@
 </section>
 <!-- === Mini fenêtre panier === -->
 <div aria-hidden="true" class="panel" id="cartPanel">
-<div aria-label="Mein Korb" aria-modal="true" class="sheet" role="dialog">
+<div aria-label="Mein Warenkorb" aria-modal="true" class="sheet" role="dialog">
 <header>
-<strong>Mein Korb</strong>
+<strong>Mein Warenkorb</strong>
 <button aria-label="Schließen" class="x" id="closeCart">✕</button>
 </header>
 <div class="items" id="cartItems"></div>
 <div class="sum">
-<div>Gesamt<strong id="cartTotal">0 €</strong></div>
-<a class="checkout" href="../checkout.html"><img alt="" class="ic" id="icCheckout"/>Eine Zahlung leisten</a>
+<div>Gesamt <strong id="cartTotal">0 €</strong></div>
+<a class="checkout" href="../checkout.html"><img alt="" class="ic" id="icCheckout"/>Zur Kasse</a>
 </div>
 </div>
 </div>
 <!-- Bulle panier => bouton (plus de lien direct) -->
-<button aria-label="Öffnen Sie den Korb" class="fab" id="fabCart" type="button">
+<button aria-label="Warenkorb öffnen" class="fab" id="fabCart" type="button">
 <img alt="" class="ic" id="icFabCart"/> <span class="badge" id="fabCount">0</span>
 </button>
 <footer>
 <div class="fwrap">
-<div>© __term0_ 2025-Simplicity, Sicherheit, krypto-freundlich.</div>
+<div>© __term0_ 2025 — Einfach, sicher, krypto-freundlich.</div>
 <nav>
-<a href="../pages/a-propos.html">Um</a> · 
-        <a href="../pages/cgv.html">CGV</a> · 
-        <a href="../pages/mentions-legales.html">Rechtliche Mitteilungen</a> · 
-        <a href="../pages/confidentialite.html">Vertraulichkeit</a> · 
+<a href="../pages/a-propos.html">Über uns</a> · 
+        <a href="../pages/cgv.html">AGB</a> · 
+        <a href="../pages/mentions-legales.html">Rechtliche Hinweise</a> · 
+        <a href="../pages/confidentialite.html">Datenschutz</a> · 
         <a href="../pages/contact.html">Kontakt</a>
 </nav>
 </div>
@@ -243,11 +243,11 @@
     function tick(){
       if(!countdownEl) return;
       const now=new Date(); let diff=SALE_END-now;
-      if(diff<=0){countdownEl.textContent='Dernières heures !';return}
+      if(diff<=0){countdownEl.textContent='Letzte Stunden!';return}
       const d=Math.floor(diff/86400000); diff%=86400000;
       const h=Math.floor(diff/3600000); diff%=3600000;
       const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
-      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+      countdownEl.textContent=`${d?d+'T ':''}${two(h)}:${two(m)}:${two(s)} verbleibend`;
     }
     tick(); setInterval(tick,1000);
 
@@ -320,29 +320,29 @@
       return null;
     }
 
-    // ---- Fallback marketing
+    // ---- Fallback marketing (DE)
     const fallback={
       id:"1101",
       sku:"GF-AIRPOD-PRO-000",
       name:"AirPod Pro 2",
-      category:"Casque/Ecouteurs",
+      category:"Kopfhörer/Ohrhörer",
       brand:"AirPod",
       model:"AirPod Pro",
-      description:`🎧 **Conçus pour vos journées intenses, taillés pour la performance.**
-AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et un confort qui se fait oublier.
+      description:`🎧 **Für intensive Tage entwickelt – gemacht für Leistung.**
+AirPod Pro 2 kombiniert präzisen Klang, hocheffektive Geräuschunterdrückung und kaum spürbaren Tragekomfort.
 
-**Vous allez adorer :**
-• ANC avancée pour rester focus, où que vous soyez.  
-• Mode Transparence intelligent pour entendre ce qui compte.  
-• Appels clairs grâce aux micros anti-bruit.  
-• Autonomie longue avec étui USB-C (charge rapide).  
-• Bluetooth stable, appairage en quelques secondes.
+**Highlights:**
+• Fortschrittliches ANC für maximale Konzentration.  
+• Transparenzmodus, um Wichtiges zu hören.  
+• Klare Anrufe dank Geräuschunterdrückungs-Mikros.  
+• Lange Laufzeit mit USB-C-Ladecase (Schnellladen).  
+• Stabiles Bluetooth, Kopplung in Sekunden.
 
-**GF Store, c’est mieux :**
-• Prix de rentrée agressifs.  
-• Livraison 1 semaine, retours 14 jours, remboursement garanti.  
-• Paiement sécurisé (carte, mobile) et crypto acceptée.  
-• Support client réactif.`,
+**Mit GF Store besser:**
+• Starke Aktionspreise.  
+• Lieferung in 1 Woche, 14 Tage Rückgabe, Geld-zurück-Garantie.  
+• Sichere Zahlung & **Krypto** akzeptiert.  
+• Reaktiver Kundensupport.`,
       price:279.0,
       promoPrice:195.3,
       stock:56,
@@ -355,8 +355,8 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
       warrantyMonths:24,
       rating:4.6,
       options:{
-        "Couleur":[{value:"Noir",priceDelta:0},{value:"Blanc",priceDelta:0},{value:"Bleu",priceDelta:0}],
-        "Accessoires":[{value:"Standard",priceDelta:0},{value:"Housse rigide",priceDelta:20},{value:"Câble audio 1.2 m",priceDelta:10}]
+        "Couleur":[{value:"Schwarz",priceDelta:0},{value:"Weiß",priceDelta:0},{value:"Blau",priceDelta:0}],
+        "Accessoires":[{value:"Standard",priceDelta:0},{value:"Hartschale",priceDelta:20},{value:"Audiokabel 1,2 m",priceDelta:10}]
       }
     };
 
@@ -370,7 +370,7 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
     }
 
     // ---- Rendu produit
-    const EUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    const EUR=v=>Number(v).toLocaleString('de-DE',{style:'currency',currency:'EUR'});
     const gMain=document.getElementById('gMain');
     const thumbs=document.getElementById('thumbs');
     const pName=document.getElementById('pName');
@@ -386,23 +386,23 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
     pBrand.textContent=product.brand||'';
     const imgs=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean);
     gMain.src=imgs[0]; gMain.alt=product.name;
-    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Voir image ${i+1}"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
+    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Bild ${i+1} anzeigen"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
     thumbs.addEventListener('click',e=>{
       const b=e.target.closest('button[data-i]'); if(!b) return;
       const i=Number(b.dataset.i); gMain.src=imgs[i];
     });
 
-    // Avis (fictifs)
+    // Avis (DE)
     const stars=document.getElementById('pStars'); const rTxt=document.getElementById('pRatingText');
     const reviews=[
-      {name:'Camille L. — Paris, FR',stars:5,date:'2025-08-14',text:"Audio précis, basses nettes. Achat en BTC sur GF Store : hyper rapide."},
-      {name:'Jonas K. — Berlin, DE',stars:4,date:'2025-08-12',text:"Très bon confort, ANC efficace. Livraison en 5 jours."},
-      {name:'Marta G. — Madrid, ES',stars:5,date:'2025-08-10',text:"Transparence très naturelle. Payé en ETH, super simple."}
+      {name:'Camille L. — Paris, FR',stars:5,date:'2025-08-14',text:"Präziser Sound, klare Bässe. Kauf mit BTC bei GF Store – super schnell."},
+      {name:'Jonas K. — Berlin, DE',stars:4,date:'2025-08-12',text:"Sehr bequem, ANC wirkt top. Lieferung in 5 Tagen."},
+      {name:'Marta G. — Madrid, ES',stars:5,date:'2025-08-10',text:"Transparenzmodus klingt natürlich. Mit ETH bezahlt, sehr einfach."}
     ];
     const avg=reviews.reduce((s,r)=>s+r.stars,0)/reviews.length;
     const full=Math.round(avg);
     stars.innerHTML=Array.from({length:5},(_,i)=>'<i style="opacity:'+(i<full?1:.2)+'"></i>').join('');
-    rTxt.textContent=avg.toFixed(1)+' / 5 ('+reviews.length+' avis)';
+    rTxt.textContent=avg.toFixed(1)+' / 5 ('+reviews.length+' Bewertungen)';
     const reviewsEl=document.getElementById('reviews');
     reviewsEl.innerHTML=reviews.map(r=>`<div class="rev"><div class="rv-head"><strong>${r.name}</strong><span class="rv-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span><span class="rv-date">${r.date}</span></div><p>${r.text}</p></div>`).join('');
 
@@ -415,7 +415,7 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
     pBadge.textContent=hasPromo?`-${disc}%`:'';
 
     // Stock
-    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">En stock</span> • ${product.stock} pièces`:`<span style="color:#dc2626">Rupture</span>`;
+    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">Auf Lager</span> • ${product.stock} Stück`:`<span style="color:#dc2626">Ausverkauft</span>`;
 
     // Options
     let selColor=product.options?.Couleur?.[0]?.value||null;
@@ -437,29 +437,29 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
     function updatePrice(){ const final=base+Number(accDelta||0); pPrice.textContent=EUR(final); }
     renderColors(); renderAcc(); updatePrice();
 
-    // Description marketing
+    // Beschreibung (DE)
     const mkDesc=(product.description||'').split('\n').map(p=>p?`<span>${p}</span>`:'').join('<br>');
     desc.innerHTML = `<p style="margin-top:0">${mkDesc}</p>
     <ul style="margin:8px 0 0 18px;line-height:1.6">
-      <li>Achat simple et sécurisé chez <strong>GF Store</strong> — assistance rapide.</li>
-      <li>Livraison sous 1 semaine • Retours 14 jours • <em>Remboursement garanti</em>.</li>
-      <li>Paiement classique et <strong>crypto</strong> acceptés.</li>
-      <li>Garantie <strong>${product.warrantyMonths||24} mois</strong>.</li>
+      <li>Einfach & sicher bei <strong>GF Store</strong> einkaufen – schneller Support.</li>
+      <li>Lieferung in 1 Woche • 14 Tage Rückgabe • <em>Geld-zurück-Garantie</em>.</li>
+      <li>Klassische Zahlung und <strong>Krypto</strong> akzeptiert.</li>
+      <li>Garantie <strong>${product.warrantyMonths||24} Monate</strong>.</li>
     </ul>`;
 
-    // Spécifications
+    // Spezifikationen (DE)
     const specs=[
-      ['Type','Écouteurs sans fil intra-auriculaires'],
-      ['Réduction de bruit','Active + mode transparence'],
-      ['Audio','Son immersif pour musique, appels, jeux'],
-      ['Connectivité','Bluetooth • appairage rapide et stable'],
-      ['Charge','Rapide via étui USB-C'],
-      ['Compatibilité','iOS / Android / Windows / macOS'],
-      ['Garantie',`${product.warrantyMonths||24} mois chez GF Store`]
+      ['Typ','Kabellose In-Ear-Kopfhörer'],
+      ['Geräuschunterdrückung','Aktiv + Transparenzmodus'],
+      ['Audio','Immersiver Klang für Musik, Anrufe, Gaming'],
+      ['Konnektivität','Bluetooth • schnelles, stabiles Pairing'],
+      ['Laden','Schnellladen über USB-C-Ladecase'],
+      ['Kompatibilität','iOS / Android / Windows / macOS'],
+      ['Garantie',`${product.warrantyMonths||24} Monate bei GF Store`]
     ];
     specsEl.innerHTML=specs.map(([k,v])=>`<div style="opacity:.7">${k}</div><div>${v}</div>`).join('');
 
-    // Produits similaires (même catégorie)
+    // Ähnliche Produkte
     const relGrid=document.getElementById('relGrid');
     if(Array.isArray(dataset)){
       const sims=dataset.filter(p=>p.category===product.category && String(p.id)!==String(product.id)).slice(0,4);
@@ -471,7 +471,7 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
         const url=`./${slug(p.name)}-${encodeURIComponent(p.id||p.sku||p._id)}.html`;
         const img=p.imageCover||(p.images&&p.images[0])||'';
         return `<article class="card">
-          <a class="hit" href="${url}" aria-label="Voir ${p.name}"></a>
+          <a class="hit" href="${url}" aria-label="Produkt ansehen: ${p.name}"></a>
           <div class="img"><img loading="lazy" src="${img}" alt="${p.name}"></div>
           <div class="box">
             <div style="font-weight:600">${p.name}</div>
@@ -482,9 +482,9 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
       }).join('');
     }
 
-    // Ajouter au panier
+    // In den Warenkorb
     document.getElementById('addBtn').addEventListener('click',()=>{
-      const variantParts=[]; if(selColor) variantParts.push(`Couleur: ${selColor}`); if(selAcc) variantParts.push(`Accessoires: ${selAcc}`);
+      const variantParts=[]; if(selColor) variantParts.push(`Farbe: ${selColor}`); if(selAcc) variantParts.push(`Zubehör: ${selAcc}`);
       const nameWithVar= product.name + (variantParts.length? ` (${variantParts.join(', ')})` : '');
       const finalPrice=(hasPromo?product.promoPrice:product.price) + Number(accDelta||0);
       const cart=getCart();
@@ -493,8 +493,7 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
       const image=(product.imageCover||(product.images&&product.images[0])||'');
       if(idx>-1){ cart[idx].qty+=1; } else { cart.push({id,name:nameWithVar,price:finalPrice,qty:1,image,brand:product.brand||'',category:product.category||''}); }
       setCart(cart);
-      // Si tu veux ouvrir automatiquement le mini-panier après ajout :
-      // openCart();
+      // openCart(); // optional
     });
 
     updateCartCount();
@@ -515,15 +514,15 @@ AirPod Pro 2 combine un son précis, une réduction de bruit ultra-efficace et u
             <div style="margin-top:6px">${EUR(x.price||0)}</div>
           </div>
           <div class="qty">
-            <button data-act="dec" aria-label="Diminuer">–</button>
+            <button data-act="dec" aria-label="Verringern">–</button>
             <span>${x.qty}</span>
-            <button data-act="inc" aria-label="Augmenter">+</button>
-            <button data-act="del" title="Retirer" style="margin-left:6px">
-              <img class="ic-sm" src="${ICONS.trash}" alt="Supprimer">
+            <button data-act="inc" aria-label="Erhöhen">+</button>
+            <button data-act="del" title="Entfernen" style="margin-left:6px">
+              <img class="ic-sm" src="${ICONS.trash}" alt="Entfernen">
             </button>
           </div>
         </div>`).join('')
-      : '<div style="opacity:.7">Votre panier est vide.</div>';
+      : '<div style="opacity:.7">Ihr Warenkorb ist leer.</div>';
 
       const totalEl=document.getElementById('cartTotal');
       if(totalEl) totalEl.textContent=EUR(cartTotal());
