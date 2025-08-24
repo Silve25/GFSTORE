@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="fr">
+<html lang="de">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Catalogue — GF Store</title>
-  <meta name="description" content="Parcourez tout le catalogue GF Store : PC, consoles, smartphones neufs. Livraison rapide, garantie 2 ans, paiement en 4x."/>
+  <title>Katalog — GF Store</title>
+  <meta name="description" content="Entdecken Sie den gesamten GF Store Katalog: neue PCs, Konsolen, Smartphones. Schneller Versand, 2 Jahre Garantie, Zahlung in 4 Raten."/>
   <style>
     :root{
       --w:1200px;--c:#0f172a;--a:#2563eb;--a2:#1e40af;--g:#10b981;--bg:#f5f7fb;--r:16px;--bd:#e5e7eb;--muted:#6b7280;
@@ -104,22 +104,22 @@
   </style>
 </head>
 <body>
-  <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+  <div class="banner">🎉 Sonderaktion zum Start: <b>-25% bis -30%</b> auf PCs, Telefone und Konsolen <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
 
   <header>
     <div class="hwrap">
-      <a href="index.html" class="brand" aria-label="Accueil GF Store"><img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async"></a>
-      <nav class="nav" aria-label="Navigation principale">
-        <a href="compte/index.html"><img class="ic" id="icUser" alt="">Compte</a>
-        <button class="iconbtn" id="cartBtn"><img id="cartIcon" class="ic" alt="">Panier</button>
+      <a href="index.html" class="brand" aria-label="Startseite GF Store"><img src="assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async"></a>
+      <nav class="nav" aria-label="Hauptnavigation">
+        <a href="compte/index.html"><img class="ic" id="icUser" alt="">Konto</a>
+        <button class="iconbtn" id="cartBtn"><img id="cartIcon" class="ic" alt="">Warenkorb</button>
         <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
+          <button class="iconbtn" id="menuBtn" aria-label="Menü"><img class="ic" id="icMenu" alt=""></button>
           <div id="menuDrop" class="menu">
-            <a href="pages/a-propos.html">À propos</a>
-            <a href="pages/cgv.html">CGV</a>
-            <a href="pages/mentions-legales.html">Mentions légales</a>
-            <a href="pages/confidentialite.html">Politique de confidentialité</a>
-            <a href="pages/contact.html">Contact</a>
+            <a href="pages/a-propos.html">Über uns</a>
+            <a href="pages/cgv.html">AGB</a>
+            <a href="pages/mentions-legales.html">Impressum</a>
+            <a href="pages/confidentialite.html">Datenschutzerklärung</a>
+            <a href="pages/contact.html">Kontakt</a>
           </div>
         </div>
       </nav>
@@ -127,27 +127,27 @@
   </header>
 
   <main class="wrap">
-    <h1>Catalogue</h1>
+    <h1>Katalog</h1>
 
     <!-- Filtres -->
-    <section class="filters" aria-label="Filtres catalogue">
+    <section class="filters" aria-label="Katalogfilter">
       <div class="searchwrap">
         <img class="ic" id="icSearch" alt="">
-        <input id="q" type="search" placeholder="Rechercher (nom, marque, modèle)…" />
+        <input id="q" type="search" placeholder="Suchen (Name, Marke, Modell)…" />
       </div>
-      <select id="cat" aria-label="Catégorie"></select>
-      <select id="sort" aria-label="Tri">
-        <option value="rel">Pertinence</option>
-        <option value="priceAsc">Prix : croissant</option>
-        <option value="priceDesc">Prix : décroissant</option>
-        <option value="discDesc">Remise : décroissante</option>
-        <option value="nameAsc">Nom : A → Z</option>
+      <select id="cat" aria-label="Kategorie"></select>
+      <select id="sort" aria-label="Sortierung">
+        <option value="rel">Relevanz</option>
+        <option value="priceAsc">Preis: aufsteigend</option>
+        <option value="priceDesc">Preis: absteigend</option>
+        <option value="discDesc">Rabatt: absteigend</option>
+        <option value="nameAsc">Name: A → Z</option>
       </select>
       <input id="min" type="number" inputmode="numeric" placeholder="€ min" />
       <input id="max" type="number" inputmode="numeric" placeholder="€ max" />
       <div class="check">
-        <label><input id="onlyPromo" type="checkbox"> En promo</label>
-        <label><input id="onlyStock" type="checkbox"> En stock</label>
+        <label><input id="onlyPromo" type="checkbox"> Im Angebot</label>
+        <label><input id="onlyStock" type="checkbox"> Auf Lager</label>
       </div>
     </section>
 
@@ -156,45 +156,45 @@
 
     <!-- Compteur -->
     <div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 10px">
-      <div><b id="count">0</b> produits visibles</div>
-      <div class="mobile-only" style="font-size:12px;color:var(--muted)">Glissez pour parcourir</div>
+      <div><b id="count">0</b> sichtbare Produkte</div>
+      <div class="mobile-only" style="font-size:12px;color:var(--muted)">Zum Scrollen wischen</div>
     </div>
 
     <!-- Grille -->
     <section id="grid" class="grid" aria-live="polite"></section>
-    <div class="pager"><button id="moreBtn" class="more">Charger plus</button></div>
+    <div class="pager"><button id="moreBtn" class="more">Mehr laden</button></div>
   </main>
 
   <!-- Panneau panier -->
   <div id="cartPanel" class="panel" aria-hidden="true">
     <div class="sheet">
       <header>
-        <strong>Mon panier</strong>
-        <button id="closeCart" class="x" aria-label="Fermer">✕</button>
+        <strong>Mein Warenkorb</strong>
+        <button id="closeCart" class="x" aria-label="Schließen">✕</button>
       </header>
       <div id="cartItems" class="items"></div>
       <div class="sum">
-        <div>Total <strong id="cartTotal">0 €</strong></div>
-        <a href="checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Effectuer un paiement</a>
+        <div>Gesamt <strong id="cartTotal">0 €</strong></div>
+        <a href="checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Zur Kasse</a>
       </div>
     </div>
   </div>
 
   <!-- FAB panier -->
-  <button id="fabCart" class="fab" aria-label="Ouvrir le panier">
+  <button id="fabCart" class="fab" aria-label="Warenkorb öffnen">
     <img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span>
   </button>
 
   <footer>
     <div class="fwrap">
-      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly. <span class="chip">Site 100% sécurisé • Paiement en 4x</span></div>
+      <div>© GF Store 2025 — Einfach, sicher, krypto-freundlich. <span class="chip">100 % sichere Website • Zahlung in 4 Raten</span></div>
       <nav>
-        <a href="index.html#avis">Avis</a> · 
+        <a href="index.html#avis">Bewertungen</a> · 
         <a href="index.html#faq">FAQ</a> · 
-        <a href="pages/cgv.html">CGV</a> · 
-        <a href="pages/mentions-legales.html">Mentions légales</a> · 
-        <a href="pages/confidentialite.html">Confidentialité</a> · 
-        <a href="pages/contact.html">Contact</a>
+        <a href="pages/cgv.html">AGB</a> · 
+        <a href="pages/mentions-legales.html">Impressum</a> · 
+        <a href="pages/confidentialite.html">Datenschutzerklärung</a> · 
+        <a href="pages/contact.html">Kontakt</a>
       </nav>
     </div>
   </footer>
@@ -211,7 +211,7 @@
       const d=Math.floor(diff/86400000); diff%=86400000;
       const h=Math.floor(diff/3600000); diff%=3600000;
       const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
-      const txt=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+      const txt=`${d?d+'Tg ':''}${two(h)}:${two(m)}:${two(s)} verbleibend`;
       if(countdownEl) countdownEl.textContent=txt;
     }
     tick(); setInterval(tick,1000);
@@ -251,7 +251,7 @@
       console.warn('Impossible de charger products.json'); 
       return [];
     }
-    const formatEUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    const formatEUR=v=>Number(v).toLocaleString('de-DE',{style:'currency',currency:'EUR'});
     const slug=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
     const findId=(p,i)=>p.id||p.sku||p._id||String(i);
     const firstImg=p=>p.imageCover||(p.images&&p.images[0])||'';
@@ -292,9 +292,9 @@
             <button data-act="dec">–</button>
             <span>${x.qty}</span>
             <button data-act="inc">+</button>
-            <button data-act="del" title="Retirer" style="margin-left:6px"><img class="ic" src="${ICONS.trash}" alt="Supprimer" style="width:12px;height:12px"></button>
+            <button data-act="del" title="Entfernen" style="margin-left:6px"><img class="ic" src="${ICONS.trash}" alt="Löschen" style="width:12px;height:12px"></button>
           </div>
-        </div>`).join('') : '<div style="opacity:.7">Votre panier est vide.</div>';
+        </div>`).join('') : '<div style="opacity:.7">Ihr Warenkorb ist leer.</div>';
       document.getElementById('cartTotal').textContent=formatEUR(cartTotal());
     }
     const openCart=()=>{document.getElementById('cartPanel').classList.add('show'); document.body.classList.add('lock'); const fab=document.getElementById('fabCart'); if(fab){fab.style.display='none'}; renderCart();};
@@ -323,7 +323,7 @@
 
     const items=await loadProducts();
     // Build categories
-    const cats=['Toutes catégories', ...Array.from(new Set(items.map(p=>p.category))).sort((a,b)=>(''+a).localeCompare(b))];
+    const cats=['Alle Kategorien', ...Array.from(new Set(items.map(p=>p.category))).sort((a,b)=>(''+a).localeCompare(b))];
     cat.innerHTML=cats.map(c=>`<option>${c}</option>`).join('');
     if(params.get('cat')){ const asked=params.get('cat'); if(cats.includes(asked)){ cat.value=asked; }}
 
@@ -340,7 +340,7 @@
       const minv=Number(min.value||0);
       const maxv=Number(max.value||0);
       let list=items.filter(p=>{
-        if(catv!=='Toutes catégories' && p.category!==catv) return false;
+        if(catv!=='Alle Kategorien' && p.category!==catv) return false;
         if(term && !(`${p.name} ${p.brand||''} ${p.model||''}`.toLowerCase().includes(term))) return false;
         const price=(Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price)?p.promoPrice:p.price;
         if(minv && price<minv) return false;
@@ -381,16 +381,16 @@
         const disc=hasPromo?Math.round((1-(newP/p.price))*100):0;
         return `
         <article class="card" data-id="${id}">
-          <a class="hit" href="${url}" aria-label="Voir ${p.name}"></a>
+          <a class="hit" href="${url}" aria-label="${p.name} ansehen"></a>
           <div class="img"><img loading="lazy" decoding="async" src="${firstImg(p)}" alt="${p.name}"></div>
           <div class="box">
             <h3>${p.name}</h3>
             <div class="meta">${p.brand||''} • ${p.category||''}</div>
             <div class="price">${formatEUR(newP)} ${hasPromo?`<s>${formatEUR(p.price)}</s> <span class="badge">-${disc}%</span>`:''}</div>
-            <button class="btn add" data-idx="${i}" aria-label="Ajouter ${p.name} au panier"><img class="ic" src="${ICONS.buy}" alt=""> Ajouter au panier</button>
+            <button class="btn add" data-idx="${i}" aria-label="${p.name} in den Warenkorb"><img class="ic" src="${ICONS.buy}" alt=""> In den Warenkorb</button>
           </div>
         </article>`;
-      }).join('') : `<div class="empty">Aucun produit ne correspond à vos filtres. Essayez d’élargir votre recherche.</div>`;
+      }).join('') : `<div class="empty">Kein Produkt entspricht Ihren Filtern. Bitte erweitern Sie Ihre Suche.</div>`;
 
       // more button
       moreBtn.style.display = (PAGE_SIZE*page < lastList.length) ? '' : 'none';
@@ -398,16 +398,16 @@
 
     function renderChips(){
       const cs=[];
-      if(cat.value && cat.value!=='Toutes catégories') cs.push(['cat',cat.value]);
+      if(cat.value && cat.value!=='Alle Kategorien') cs.push(['cat',cat.value]);
       if(q.value.trim()) cs.push(['q',`“${q.value.trim()}”`]);
       if(min.value) cs.push(['min',`≥ ${min.value} €`]);
       if(max.value) cs.push(['max',`≤ ${max.value} €`]);
-      if(onlyPromo.checked) cs.push(['promo','En promo']);
-      if(onlyStock.checked) cs.push(['stock','En stock']);
+      if(onlyPromo.checked) cs.push(['promo','Im Angebot']);
+      if(onlyStock.checked) cs.push(['stock','Auf Lager']);
       if(sort.value!=='rel'){
-        const map={priceAsc:'Prix ↑',priceDesc:'Prix ↓',discDesc:'Remise ↓',nameAsc:'Nom A→Z'}; cs.push(['sort',map[sort.value]||'Tri']);
+        const map={priceAsc:'Preis ↑',priceDesc:'Preis ↓',discDesc:'Rabatt ↓',nameAsc:'Name A→Z'}; cs.push(['sort',map[sort.value]||'Sortierung']);
       }
-      chips.innerHTML = cs.map(([k,v])=>`<span class="chip" data-k="${k}">${v} <button aria-label="Retirer">✕</button></span>`).join('');
+      chips.innerHTML = cs.map(([k,v])=>`<span class="chip" data-k="${k}">${v} <button aria-label="Entfernen">✕</button></span>`).join('');
     }
 
     // Events
@@ -422,7 +422,7 @@
     chips.addEventListener('click',e=>{
       const chip=e.target.closest('.chip'); if(!chip) return;
       const k=chip.getAttribute('data-k');
-      if(k==='cat') cat.value='Toutes catégories';
+      if(k==='cat') cat.value='Alle Kategorien';
       if(k==='q') q.value='';
       if(k==='min') min.value='';
       if(k==='max') max.value='';
