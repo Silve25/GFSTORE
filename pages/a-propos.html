@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>À propos — GF Store</title>
+  <meta name="description" content="En savoir plus sur GF Store : notre mission, nos engagements, la livraison sous 7 jours, les retours sous 14 jours et nos moyens de paiement (SEPA & Crypto)."/>
+  <link rel="icon" href="../assets/img/logopnggfstore.png">
+  <style>
+    :root{
+      --w:1100px;
+      --bg:#f6f8fb; --panel:#ffffff; --line:#e6edf6;
+      --text:#0f172a; --muted:#6b7280;
+      --brand:#2563eb; --ok:#059669; --warn:#b45309;
+      --r:14px; --shadow:0 6px 18px rgba(15,23,42,.06);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu}
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+    .muted{color:var(--muted)}
+    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #dbeafe;background:#f5f8ff;color:#2563eb;border-radius:999px;padding:6px 10px;font-size:12px}
+    .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:600}
+    .btn.primary{background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-color:#1e40af;box-shadow:0 10px 24px rgba(30,64,175,.25)}
+    .btn:focus{outline:2px solid rgba(37,99,235,.25)}
+    .grid{display:grid;gap:16px}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(4px)}
+    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand .logo{height:40px;width:auto}
+    .nav{display:flex;gap:10px;align-items:center}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);background:#fff;border-radius:12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .nav a:hover,.iconbtn:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+    .iconbtn{cursor:pointer}
+    .ic{width:16px;height:16px}
+    .dropdown{position:relative}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);display:none;background:#fff;border:1px solid var(--line);border-radius:12px;min-width:220px;padding:6px;box-shadow:0 10px 24px rgba(0,0,0,.12)}
+    .menu a{display:block;padding:8px 10px;border-radius:8px}
+    .menu a:hover{background:#f3f4f6}
+    .menu.show{display:block}
+
+    /* Hero */
+    .hero{background:radial-gradient(1200px 80px at 50% 0,#f7faff 0,#ffffff 60%);border-bottom:1px solid var(--line)}
+    .herowrap{max-width:var(--w);margin:auto;padding:26px 12px;display:grid;gap:14px}
+    .hero h1{margin:0;font-size:28px;line-height:1.2}
+    .hero p{margin:0;color:var(--muted)}
+    .crumb{font-size:12px;color:#64748b}
+    .crumb a{color:#475569;text-decoration:underline dotted}
+
+    /* Content */
+    .wrap{max-width:var(--w);margin:16px auto;padding:0 12px;display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+    @media(max-width:980px){.wrap{grid-template-columns:1fr}}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+    .hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+    .bd{padding:14px 16px}
+    .title{font-weight:700;font-size:18px}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    @media(max-width:640px){.kpis{grid-template-columns:1fr 1fr}}
+    .kpi{border:1px dashed var(--line);border-radius:12px;padding:12px;background:#fbfdff}
+    .kpi .big{font-weight:800;font-size:20px}
+    .list{display:grid;gap:10px}
+    .li{display:flex;gap:10px}
+    .li .dot{width:28px;height:28px;border-radius:8px;background:#eef2ff;border:1px solid #e5e7eb;display:grid;place-items:center;font-weight:700;color:#1e3a8a}
+    .note{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:10px;padding:6px 8px}
+
+    /* Aside */
+    .aside .bd{display:grid;gap:12px}
+    .stack{display:grid;gap:10px}
+    .rowline{display:flex;align-items:center;justify-content:space-between}
+    .badge{font-size:12px;color:#0f766e;background:#ccfbf1;border:1px solid #99f6e4;border-radius:999px;padding:4px 8px}
+
+    /* Footer */
+    footer{background:#fff;border-top:1px solid var(--line);margin-top:16px}
+    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
+  </style>
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Store",
+    "name":"GF Store",
+    "url":"https://silve25.github.io/GFSTORE/",
+    "description":"Boutique en ligne crypto-friendly : livraison prioritaire sous 7 jours, retours sous 14 jours.",
+    "logo":"https://silve25.github.io/GFSTORE/assets/img/logopnggfstore.png",
+    "currenciesAccepted":"EUR, USDT, BTC, ETH",
+    "paymentAccepted":"SEPA, Crypto",
+    "areaServed":"FR"
+  }
+  </script>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="hwrap">
+      <a href="https://silve25.github.io/GFSTORE/" class="brand" aria-label="Accueil">
+        <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
+      </a>
+      <nav class="nav">
+        <a href="../compte/index.html" title="Mon compte"><img class="ic" id="icUser" alt=""> <span>Compte</span></a>
+        <a href="../index.html" title="Boutique"><img class="ic" id="icShop" alt=""> <span>Boutique</span></a>
+        <div class="dropdown">
+          <button class="iconbtn" id="menuBtn" aria-label="Ouvrir le menu"><img class="ic" id="icMenu" alt=""></button>
+          <div id="menuDrop" class="menu" role="menu">
+            <a href="./a-propos.html" aria-current="page">À propos</a>
+            <a href="./cgv.html">CGV</a>
+            <a href="./mentions-legales.html">Mentions légales</a>
+            <a href="./confidentialite.html">Confidentialité</a>
+            <a href="./contact.html">Contact</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="herowrap">
+      <nav class="crumb"> <a href="https://silve25.github.io/GFSTORE/">Accueil</a> · À propos </nav>
+      <h1>À propos de <span class="pill">GF Store</span></h1>
+      <p>Nous rendons l’achat en ligne simple, rapide et crypto-friendly — sans compromis sur la qualité du service.</p>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <main class="wrap" aria-live="polite">
+    <!-- Colonne principale -->
+    <article class="card">
+      <div class="hd">
+        <div class="title">Notre mission</div>
+        <span class="badge">Transparence & sécurité</span>
+      </div>
+      <div class="bd grid">
+        <p>GF Store est une boutique en ligne conçue pour aller droit au but : de bons produits, une expérience claire et un support humain. Nous acceptons les paiements classiques (virement SEPA) et modernes (crypto actifs) tout en maintenant un niveau de sécurité élevé (SSL, vérifications manuelles et anti-fraude).</p>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="big">≤ 7&nbsp;j</div>
+            <div class="muted">Livraison prioritaire</div>
+          </div>
+          <div class="kpi">
+            <div class="big">14&nbsp;j</div>
+            <div class="muted">Retours faciles</div>
+          </div>
+          <div class="kpi">
+            <div class="big">100%</div>
+            <div class="muted">Connexion SSL</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <section class="card">
+      <div class="hd">
+        <div class="title">Nos engagements</div>
+      </div>
+      <div class="bd">
+        <div class="list">
+          <div class="li"><div class="dot">1</div><div><strong>Clarté des prix.</strong> TVA et frais inclus, pas de surcoût caché.</div></div>
+          <div class="li"><div class="dot">2</div><div><strong>Suivi & support.</strong> Assistance réactive par e-mail et depuis votre espace client.</div></div>
+          <div class="li"><div class="dot">3</div><div><strong>Paiements sécurisés.</strong> Virement SEPA et crypto avec vérification avant expédition.</div></div>
+          <div class="li"><div class="dot">4</div><div><strong>Respect de la vie privée.</strong> Données traitées conformément à notre politique de confidentialité.</div></div>
+        </div>
+        <p class="note" style="margin-top:8px">Bon à savoir : en crypto, les montants sont calculés au taux affiché à l’étape de paiement et figés durant la vérification.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="hd"><div class="title">Livraison & retours</div></div>
+      <div class="bd grid">
+        <p>Nous préparons les commandes rapidement après validation du paiement.</p>
+        <ul>
+          <li>Livraison prioritaire sous 7&nbsp;jours ouvrés (indicatif).</li>
+          <li>Retours sous 14&nbsp;jours : produits non utilisés et dans leur emballage d’origine.</li>
+          <li>Un numéro de suivi vous est communiqué dès l’expédition.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Aside / infos pratiques -->
+    <aside class="card aside">
+      <div class="hd"><div class="title">Infos pratiques</div></div>
+      <div class="bd">
+        <div class="stack">
+          <div class="rowline"><span>Moyens de paiement</span><span class="pill">SEPA • Crypto</span></div>
+          <div class="rowline"><span>Support</span><a class="btn" href="./contact.html">Contact</a></div>
+          <div class="rowline"><span>Espace client</span><a class="btn" href="../compte/index.html">Mon compte</a></div>
+          <div class="rowline"><span>Conditions</span><a class="btn" href="./cgv.html">CGV</a></div>
+          <div class="rowline"><span>Confidentialité</span><a class="btn" href="./confidentialite.html">Lire</a></div>
+        </div>
+      </div>
+    </aside>
+
+    <section class="card">
+      <div class="hd"><div class="title">FAQ rapide</div></div>
+      <div class="bd">
+        <details><summary><strong>Comment payer en crypto ?</strong></summary><p>Choisissez “Crypto” au checkout, sélectionnez la devise (USDT, BTC, ETH), envoyez le montant exact vers l’adresse indiquée puis renseignez le hash (TxID). Nous vérifions avant de lancer l’expédition.</p></details>
+        <details><summary><strong>Le virement SEPA est-il plus avantageux ?</strong></summary><p>Oui, une remise dédiée peut s’appliquer. Ajoutez votre nom en référence du virement et importez la preuve pour accélérer la vérification.</p></details>
+        <details><summary><strong>Comment suivre ma commande ?</strong></summary><p>Connectez-vous à votre espace client pour voir le statut et le suivi. Vous recevrez aussi des e-mails d’actualisation.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="fwrap">
+      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <nav>
+        <a href="./a-propos.html">À propos</a> ·
+        <a href="./cgv.html">CGV</a> ·
+        <a href="./mentions-legales.html">Mentions légales</a> ·
+        <a href="./confidentialite.html">Confidentialité</a> ·
+        <a href="./contact.html">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Icônes simples (CDN icons8) — léger et inline
+    const ICONS={
+      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
+      shop:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000',
+      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000'
+    };
+    const set=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src;};
+    set('icUser',ICONS.user); set('icShop',ICONS.shop); set('icMenu',ICONS.menu);
+
+    // Menu déroulant
+    const menuBtn=document.getElementById('menuBtn');
+    const menuDrop=document.getElementById('menuDrop');
+    if(menuBtn&&menuDrop){
+      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show');});
+      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+    }
+  </script>
+</body>
+</html>
