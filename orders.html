@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>GF Store — Mes commandes</title>
+  <meta name="description" content="Historique et suivi de vos commandes GF Store. Détails, paiement, échéancier et assistance." />
+  <style>
+    :root{
+      --w:1200px;
+      --bg:#f6f8fb; --panel:#ffffff; --line:#e6edf6;
+      --text:#0f172a; --muted:#6b7280;
+      --brand:#2563eb; --ok:#059669; --warn:#b45309; --bad:#b91c1c;
+      --r:14px;
+      --shadow:0 6px 18px rgba(15,23,42,.06);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(4px)}
+    .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand .logo{height:40px;width:auto}
+    .nav{display:flex;gap:10px;align-items:center}
+    .nav a,.iconbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);background:#fff;border-radius:12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .nav a:hover,.iconbtn:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+    .ic{width:16px;height:16px}
+
+    /* Layout */
+    .wrap{max-width:var(--w);margin:16px auto;padding:0 12px;display:grid;gap:16px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+    .hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+    .bd{padding:14px 16px}
+    .title{font-weight:700;font-size:18px}
+    .muted{color:var(--muted);font-size:13px}
+
+    /* Toolbar */
+    .tools{display:flex;gap:8px;flex-wrap:wrap}
+    .tools input,.tools select{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fbfdff;min-width:180px}
+    .tools .grow{flex:1 min(240px)}
+    .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:600}
+    .btn.primary{background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-color:#1e40af;box-shadow:0 10px 24px rgba(30,64,175,.25)}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+
+    /* Order list */
+    .olist{display:grid;gap:12px}
+    .order{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
+    .oline{display:grid;grid-template-columns:1fr auto;gap:12px;padding:12px 14px}
+    .oline+.oline{border-top:1px dashed var(--line)}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #dbeafe;background:#f5f8ff;color:#1e40af;border-radius:999px;padding:4px 10px;font-size:12px}
+    .stat{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px;font-size:12px}
+    .s-prep{background:#eef2ff;border:1px solid #e5e7eb;color:#1e3a8a}
+    .s-verif{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+    .s-ship{background:#ecfdf5;border:1px solid #bbf7d0;color:#065f46}
+    .s-done{background:#f0fdf4;border:1px solid #86efac;color:#065f46}
+    .s-canc{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+    .price{font-weight:800}
+    .tiny{font-size:12px;color:var(--muted)}
+    .tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:4px 8px;background:#fff}
+
+    details.order details{margin-top:0} /* nested safeguard */
+    details summary{cursor:pointer;list-style:none}
+    details summary::-webkit-details-marker{display:none}
+    .sumrow{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+
+    .items{display:grid;gap:10px}
+    .ci{display:grid;grid-template-columns:60px 1fr auto;gap:8px}
+    .ci img{width:60px;height:60px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#fff}
+    .sch{display:flex;align-items:center;justify-content:space-between;font-size:13px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+
+    footer{background:#fff;border-top:1px solid var(--line);margin-top:16px}
+    .fwrap{max-width:var(--w);margin:0 auto;padding:16px 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12px}
+
+    /* Empty state */
+    .empty{display:grid;place-items:center;gap:10px;padding:30px;text-align:center;color:#475569}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hwrap">
+      <a href="../index.html" class="brand" aria-label="Accueil">
+        <img src="../assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
+      </a>
+      <nav class="nav">
+        <a href="./index.html" title="Mon compte"><img class="ic" id="icUser" alt=""> <span>Mon compte</span></a>
+        <a href="../index.html" title="Continuer les achats"><img class="ic" id="icContinue" alt=""> <span>Boutique</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" aria-live="polite">
+    <section class="card">
+      <div class="hd">
+        <div>
+          <div class="title">Mes commandes</div>
+          <div class="muted">Consultez l’historique, les détails et votre échéancier.</div>
+        </div>
+        <span class="pill"><img class="ic" id="icTruck" alt=""> Suivi & assistance</span>
+      </div>
+      <div class="bd">
+        <div class="tools" role="region" aria-label="Filtres commandes">
+          <input id="q" class="grow" placeholder="Rechercher (ID, produit, email, ville, méthode…)" inputmode="search" autocomplete="off">
+          <select id="fStatus" title="Statut">
+            <option value="">Tous statuts</option>
+            <option value="En préparation">En préparation</option>
+            <option value="Vérification">Vérification</option>
+            <option value="Expédiée">Expédiée</option>
+            <option value="Livrée">Livrée</option>
+            <option value="Annulée">Annulée</option>
+          </select>
+          <select id="fMethod" title="Méthode">
+            <option value="">Toutes méthodes</option>
+            <option value="sepa">SEPA</option>
+            <option value="crypto">Crypto</option>
+          </select>
+          <button id="btnExport" class="btn" type="button" title="Exporter JSON">Exporter JSON</button>
+        </div>
+
+        <div id="orders" class="olist" style="margin-top:10px"></div>
+
+        <div id="empty" class="empty" style="display:none">
+          <img src="https://img.icons8.com/?size=100&id=21903&format=png&color=94a3b8" width="60" height="60" alt="">
+          <div>Aucune commande trouvée.</div>
+          <div class="tiny">Revenez après un achat ou ajustez vos filtres.</div>
+          <div style="margin-top:6px">
+            <a class="btn primary" href="../index.html">Découvrir les produits</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="fwrap">
+      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <nav>
+        <a href="../pages/a-propos.html">À propos</a> ·
+        <a href="../pages/cgv.html">CGV</a> ·
+        <a href="../pages/mentions-legales.html">Mentions légales</a> ·
+        <a href="../pages/confidentialite.html">Confidentialité</a> ·
+        <a href="../pages/contact.html">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+  (()=>{
+    "use strict";
+
+    // Icons
+    const ICONS = {
+      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
+      continue:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000',
+      truck:'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000'
+    };
+    const setSrc=(id,src)=>{ const el=document.getElementById(id); if(el) el.src=src; };
+    setSrc('icUser',ICONS.user); setSrc('icContinue',ICONS.continue); setSrc('icTruck',ICONS.truck);
+
+    // Helpers
+    const $ = s => document.querySelector(s);
+    const $$ = s => Array.from(document.querySelectorAll(s));
+    const EUR = v => Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    const FMTDATE = iso => {
+      if(!iso) return '—';
+      try{
+        const d = new Date(iso);
+        return d.toLocaleString('fr-FR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+      }catch{ return iso; }
+    };
+    const splitAmounts=(total,parts)=>{
+      const cents=Math.round((Number(total)||0)*100);
+      const base=Math.floor(cents/parts);
+      const first=base+(cents-base*parts);
+      const arr=[first]; for(let i=1;i<parts;i++) arr.push(base);
+      return arr.map(c=>c/100);
+    };
+    const scheduleLines=(total,parts)=>{
+      const amts=splitAmounts(total,parts);
+      const today=new Date(); const steps=[0,30,60,90];
+      return amts.map((amt,i)=>{
+        const d=new Date(today); d.setDate(d.getDate()+steps[i]);
+        const label = i===0?'Aujourd’hui':(i===1?'Dans 30 jours':i===2?'Dans 60 jours':'Dans 90 jours');
+        return {label,date:d.toLocaleDateString('fr-FR'),amt};
+      });
+    };
+
+    // Load orders
+    function loadOrders(){
+      try{ return JSON.parse(localStorage.getItem('gf_orders')||'[]'); }catch{ return []; }
+    }
+
+    // Status badge class
+    function badgeClass(status){
+      switch((status||'').toLowerCase()){
+        case 'en préparation': return 'stat s-prep';
+        case 'vérification':   return 'stat s-verif';
+        case 'expédiée':       return 'stat s-ship';
+        case 'livrée':         return 'stat s-done';
+        case 'annulée':        return 'stat s-canc';
+        default:               return 'stat s-prep';
+      }
+    }
+
+    // Filter logic
+    function matches(o, q, st, meth){
+      const hay = [
+        o?.id, o?.status, o?.payment?.method, o?.shipping?.name, o?.shipping?.email,
+        o?.shipping?.city, ...(o?.items||[]).map(it=>it.name)
+      ].join(' ').toLowerCase();
+      if(q && !hay.includes(q.toLowerCase())) return false;
+      if(st && String(o?.status||'').toLowerCase()!==st.toLowerCase()) return false;
+      if(meth && String(o?.payment?.method||'').toLowerCase()!==meth.toLowerCase()) return false;
+      return true;
+    }
+
+    // Render
+    function render(){
+      const list = $('#orders');
+      const empty = $('#empty');
+      const q = $('#q').value.trim();
+      const st = $('#fStatus').value;
+      const meth = $('#fMethod').value;
+
+      let orders = loadOrders();
+      // newest first
+      orders.sort((a,b)=> new Date(b.date||0) - new Date(a.date||0));
+
+      const filtered = orders.filter(o=>matches(o,q,st,meth));
+
+      if(!filtered.length){
+        list.innerHTML = '';
+        empty.style.display='grid';
+        return;
+      }
+      empty.style.display='none';
+
+      list.innerHTML = filtered.map(o=>{
+        const total = o?.pricing?.total ?? (o?.items||[]).reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0);
+        const sub   = o?.pricing?.sub   ?? total;
+        const promo = o?.pricing?.promo ?? 0;
+        const currency = o?.pricing?.currency || 'EUR';
+        const status = o?.status || 'En préparation';
+        const split  = Number(o?.payment?.split||1);
+        const method = (o?.payment?.method||'').toLowerCase();
+        const pmDetail = method==='crypto'
+          ? `Crypto ${o.payment?.details?.ccy || ''}`
+          : method==='sepa'
+            ? `Virement SEPA`
+            : '—';
+
+        const icon = method==='crypto'
+          ? 'https://cdn.simpleicons.org/bitcoin'
+          : 'https://img.icons8.com/?size=100&id=7IJfqNBSaJ0N&format=png&color=000000';
+
+        const lines = split>1 ? scheduleLines(total, split) : [];
+
+        return `
+        <details class="order" data-id="${o.id}">
+          <summary class="oline">
+            <div class="row">
+              <span class="${badgeClass(status)}">${status}</span>
+              <span class="pill">Commande <code>${o.id||'—'}</code></span>
+              <span class="tag"><img class="ic" src="${icon}" alt="" /> ${pmDetail}${split>1?` • ${split}×`:''}</span>
+              <span class="tiny">passée le ${FMTDATE(o.date)}</span>
+            </div>
+            <div class="sumrow">
+              <div class="row">
+                ${promo ? `<span class="tag">Promo –${EUR(promo)}</span>`:''}
+                <span class="price">${Number.isFinite(total)? EUR(total) : (total||0)+' '+currency}</span>
+              </div>
+            </div>
+          </summary>
+
+          <div class="oline">
+            <div class="grid-2" style="width:100%">
+              <div>
+                <div style="font-weight:700;margin-bottom:6px">Articles</div>
+                <div class="items">
+                  ${(o.items||[]).map(x=>`
+                    <div class="ci">
+                      <img src="${x.image||''}" alt="">
+                      <div>
+                        <div style="font-weight:600">${x.name||''}</div>
+                        <div class="tiny">${[x.brand, x.category].filter(Boolean).join(' • ')}</div>
+                        <div class="tiny">Qté: ${Number(x.qty||1)}</div>
+                      </div>
+                      <div style="font-weight:700">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
+                    </div>
+                  `).join('')}
+                </div>
+                <div class="tiny" style="margin-top:6px">Sous-total: <b>${EUR(sub)}</b>${promo?` • Remise: <b>–${EUR(promo)}</b>`:''}</div>
+              </div>
+
+              <div>
+                <div style="font-weight:700;margin-bottom:6px">Livraison & client</div>
+                <div class="tiny">
+                  ${o.shipping?.name || '—'}<br>
+                  ${o.shipping?.email || '—'} • ${o.shipping?.phone || '—'}<br>
+                  ${o.shipping?.address || '—'}<br>
+                  ${o.shipping?.zip || '—'} ${o.shipping?.city || '—'}, ${o.shipping?.country || '—'}
+                </div>
+
+                <div style="height:10px"></div>
+
+                <div style="font-weight:700;margin-bottom:6px">Paiement</div>
+                <div class="tiny">
+                  Méthode: <b>${method || '—'}</b> ${o.payment?.details?.ccy ? `(${o.payment.details.ccy})` : ''}<br>
+                  ${method==='crypto'
+                    ? `TxID: <code>${o.payment?.details?.txid || '—'}</code>`
+                    : `Réf: <code>${o.payment?.details?.ref || '—'}</code>`}
+                  <br>À payer aujourd’hui: <b>${EUR(Number(o.payment?.details?.amountNow||0))}</b>
+                </div>
+
+                ${split>1 ? `
+                  <div style="height:10px"></div>
+                  <div style="font-weight:700;margin-bottom:6px">Échéancier (${split}×)</div>
+                  <div class="items" style="gap:6px">
+                    ${lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('')}
+                  </div>
+                `:''}
+
+                <div style="height:12px"></div>
+                <div class="row">
+                  <a class="btn" href="../pages/contact.html?order=${encodeURIComponent(o.id||'')}" title="Support">Assistance</a>
+                  <button class="btn" type="button" data-copy="${encodeURIComponent(o.id||'')}" title="Copier l’ID">Copier l’ID</button>
+                  <button class="btn" type="button" data-print="${encodeURIComponent(o.id||'')}" title="Imprimer">Imprimer</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>`;
+      }).join('');
+
+      // Wire buttons
+      $$('button[data-copy]').forEach(b=>{
+        b.addEventListener('click', ()=>{
+          const id = decodeURIComponent(b.getAttribute('data-copy')||'');
+          if(navigator.clipboard?.writeText){ navigator.clipboard.writeText(id); b.textContent='Copié'; setTimeout(()=>b.textContent='Copier l’ID',900); }
+        });
+      });
+      $$('button[data-print]').forEach(b=>{
+        b.addEventListener('click', ()=>{
+          // Simple: ouvre une fenêtre propre avec la section à imprimer
+          const id = decodeURIComponent(b.getAttribute('data-print')||'');
+          const node = document.querySelector(`details.order[data-id="${CSS.escape(id)}"]`);
+          if(!node) return window.print();
+          const html = `
+            <html><head><title>Commande ${id}</title>
+            <meta charset="utf-8"><style>
+              body{font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;margin:24px;color:#0f172a}
+              h1{font-size:18px;margin:0 0 10px}
+              .sec{margin:14px 0}
+              .sch{display:flex;justify-content:space-between}
+              table{border-collapse:collapse;width:100%}
+              th,td{border:1px solid #e5e7eb;padding:8px;text-align:left}
+              th{background:#f8fafc}
+            </style></head><body>
+            <h1>GF Store — Commande ${id}</h1>
+            ${node.outerHTML}
+            </body></html>`;
+          const w = window.open('', '_blank');
+          if(!w){ alert('Veuillez autoriser les fenêtres pour imprimer.'); return; }
+          w.document.write(html);
+          w.document.close();
+          w.focus();
+          setTimeout(()=>w.print(), 200);
+        });
+      });
+    }
+
+    // Bind filters
+    $('#q').addEventListener('input', render);
+    $('#fStatus').addEventListener('change', render);
+    $('#fMethod').addEventListener('change', render);
+
+    // Export JSON
+    $('#btnExport').addEventListener('click', ()=>{
+      const data = loadOrders();
+      const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `gfstore-orders-${Date.now()}.json`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=> URL.revokeObjectURL(url), 500);
+    });
+
+    // Initial render (small delay so icons set)
+    render();
+
+    // Optional: dev purge with ?dev=1
+    if (new URLSearchParams(location.search).get('dev')==='1'){
+      const tools = document.querySelector('.tools');
+      const purge = document.createElement('button');
+      purge.className='btn'; purge.textContent='Purger commandes (dev)';
+      purge.addEventListener('click', ()=>{
+        if(confirm('Supprimer toutes les commandes locales ?')){ localStorage.removeItem('gf_orders'); render(); }
+      });
+      tools.appendChild(purge);
+    }
+  })();
+  </script>
+</body>
+</html>
