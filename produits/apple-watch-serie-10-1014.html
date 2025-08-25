@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="de">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -92,7 +92,7 @@
     .fab .badge{min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px}
     .fab img.ic{filter:invert(1)}
 
-    /* Mini panneau panier */
+    /* Mini-Warenkorb-Panel */
     .panel{position:fixed;inset:0;display:none;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:10010}
     .panel.show{display:block}
     .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid #e5e7eb;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
@@ -126,7 +126,7 @@
   </style>
 </head>
 <body>
-  <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+  <div class="banner">🎉 Sonderaktion zum Schulstart: <b>-25% bis -30%</b> auf PCs, Telefone und Konsolen <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
 
   <header>
     <div class="hwrap">
@@ -134,16 +134,16 @@
         <img src="https://silve25.github.io/GFSTORE/assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
       <nav class="nav">
-        <a href="../compte/index.html"><img class="ic" id="icUser" alt=""> Compte</a>
-        <a id="cartBtn" class="iconbtn" href="../checkout.html"><img id="cartIcon" class="ic" alt=""> Panier</a>
+        <a href="../compte/index.html"><img class="ic" id="icUser" alt=""> Konto</a>
+        <a id="cartBtn" class="iconbtn" href="../checkout.html"><img id="cartIcon" class="ic" alt=""> Warenkorb</a>
         <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
+          <button class="iconbtn" id="menuBtn" aria-label="Menü"><img class="ic" id="icMenu" alt=""></button>
           <div id="menuDrop" class="menu">
-            <a href="../pages/a-propos.html">À propos</a>
-            <a href="../pages/cgv.html">CGV</a>
-            <a href="../pages/mentions-legales.html">Mentions légales</a>
-            <a href="../pages/confidentialite.html">Politique de confidentialité</a>
-            <a href="../pages/contact.html">Contact</a>
+            <a href="../pages/a-propos.html">Über uns</a>
+            <a href="../pages/cgv.html">AGB</a>
+            <a href="../pages/mentions-legales.html">Impressum</a>
+            <a href="../pages/confidentialite.html">Datenschutz</a>
+            <a href="../pages/contact.html">Kontakt</a>
           </div>
         </div>
       </nav>
@@ -172,15 +172,15 @@
       <div class="opts" id="opts"></div>
 
       <div class="cta">
-        <button id="addBtn" class="btn"><img class="ic" id="icBuy" alt=""> Ajouter au panier</button>
+        <button id="addBtn" class="btn"><img class="ic" id="icBuy" alt=""> In den Warenkorb</button>
         <div class="trust">
           <div class="row">
-            <span><img class="ic" id="icTruck" alt=""> Livraison en 1 semaine</span>
-            <span><img class="ic" id="icReturn" alt=""> Retours 14 jours</span>
-            <span><img class="ic" id="icRefund" alt=""> Remboursement garanti</span>
-            <span><img class="ic" id="ic4x" alt=""> Paiement en 4x</span>
+            <span><img class="ic" id="icTruck" alt=""> Lieferung innerhalb von 1&nbsp;Woche</span>
+            <span><img class="ic" id="icReturn" alt=""> 14 Tage Rückgaberecht</span>
+            <span><img class="ic" id="icRefund" alt=""> Geld-zurück-Garantie</span>
+            <span><img class="ic" id="ic4x" alt=""> Zahlung in 4 Raten</span>
           </div>
-          <a id="payNowBtn" href="../checkout.html" class="btn paynow"><img class="ic" id="icPayNow" alt=""> Payer maintenant</a>
+          <a id="payNowBtn" href="../checkout.html" class="btn paynow"><img class="ic" id="icPayNow" alt=""> Jetzt bezahlen</a>
         </div>
       </div>
     </aside>
@@ -188,9 +188,9 @@
 
   <section class="tabs" id="tabs">
     <div class="tabheads" role="tablist">
-      <button role="tab" aria-selected="true" aria-controls="tab-desc" id="th-desc">Description</button>
-      <button role="tab" aria-selected="false" aria-controls="tab-spec" id="th-spec">Spécifications</button>
-      <button role="tab" aria-selected="false" aria-controls="tab-rev" id="th-rev">Avis</button>
+      <button role="tab" aria-selected="true" aria-controls="tab-desc" id="th-desc">Beschreibung</button>
+      <button role="tab" aria-selected="false" aria-controls="tab-spec" id="th-spec">Technische Daten</button>
+      <button role="tab" aria-selected="false" aria-controls="tab-rev" id="th-rev">Bewertungen</button>
     </div>
     <div class="tab show" id="tab-desc" role="tabpanel" aria-labelledby="th-desc"></div>
     <div class="tab" id="tab-spec" role="tabpanel" aria-labelledby="th-spec">
@@ -202,61 +202,61 @@
   </section>
 
   <section class="rel" id="rel">
-    <h3>Produits similaires</h3>
+    <h3>Ähnliche Produkte</h3>
     <div class="grid" id="relGrid"></div>
   </section>
 
-  <!-- Mini fenêtre panier -->
+  <!-- Mini-Warenkorb -->
   <div id="cartPanel" class="panel" aria-hidden="true">
-    <div class="sheet" role="dialog" aria-modal="true" aria-label="Mon panier">
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="Mein Warenkorb">
       <header>
-        <strong>Mon panier</strong>
-        <button id="closeCart" class="x" aria-label="Fermer">✕</button>
+        <strong>Mein Warenkorb</strong>
+        <button id="closeCart" class="x" aria-label="Schließen">✕</button>
       </header>
       <div id="cartItems" class="items"></div>
       <div class="sum">
-        <div>Total <strong id="cartTotal">0 €</strong></div>
-        <a href="../checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Effectuer un paiement</a>
+        <div>Summe <strong id="cartTotal">0 €</strong></div>
+        <a href="../checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Zur Kasse</a>
       </div>
     </div>
   </div>
 
-  <!-- Bulle panier -->
-  <button id="fabCart" class="fab" type="button" aria-label="Ouvrir le panier">
+  <!-- Warenkorb-FAB -->
+  <button id="fabCart" class="fab" type="button" aria-label="Warenkorb öffnen">
     <img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span>
   </button>
 
   <footer>
     <div class="fwrap">
-      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <div>© GF Store 2025 — Einfach, sicher, krypto-freundlich.</div>
       <nav>
-        <a href="../pages/a-propos.html">À propos</a> · 
-        <a href="../pages/cgv.html">CGV</a> · 
-        <a href="../pages/mentions-legales.html">Mentions légales</a> · 
-        <a href="../pages/confidentialite.html">Confidentialité</a> · 
-        <a href="../pages/contact.html">Contact</a>
+        <a href="../pages/a-propos.html">Über uns</a> · 
+        <a href="../pages/cgv.html">AGB</a> · 
+        <a href="../pages/mentions-legales.html">Impressum</a> · 
+        <a href="../pages/confidentialite.html">Datenschutz</a> · 
+        <a href="../pages/contact.html">Kontakt</a>
       </nav>
     </div>
   </footer>
 
   <script>
   (async()=>{
-    // ---- Compte à rebours (48h)
+    // ---- Countdown (48h)
     const countdownEl=document.getElementById('countdown');
     const SALE_END=new Date(Date.now()+48*60*60*1000);
     const two=n=>String(n).padStart(2,'0');
     function tick(){
       if(!countdownEl) return;
       const now=new Date(); let diff=SALE_END-now;
-      if(diff<=0){countdownEl.textContent='Dernières heures !';return}
+      if(diff<=0){countdownEl.textContent='Letzte Stunden!';return}
       const d=Math.floor(diff/86400000); diff%=86400000;
       const h=Math.floor(diff/3600000); diff%=3600000;
       const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
-      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+      countdownEl.textContent=`${d?d+'T ':''}${two(h)}:${two(m)}:${two(s)} verbleibend`;
     }
     tick(); setInterval(tick,1000);
 
-    // ---- Icônes
+    // ---- Icons
     const ICONS = {
       buy:'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
       cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
@@ -277,7 +277,7 @@
     setSrc('icTruck',ICONS.truck); setSrc('icReturn',ICONS.logout); setSrc('icRefund',ICONS.refund); setSrc('ic4x',ICONS.fourx);
     setSrc('icPayNow',ICONS.checkout); setSrc('icFabCart',ICONS.cart); setSrc('icCheckout', ICONS.checkout);
 
-    // ---- Menu
+    // ---- Menü
     const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop');
     if(menuBtn&&menuDrop){
       menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
@@ -313,7 +313,7 @@
     }
     const normalize=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 
-    // ---- Chargement du catalogue
+    // ---- Katalog laden
     async function loadProducts(){
       const urls=[
         '../data/products.json',
@@ -330,7 +330,7 @@
       return null;
     }
 
-    // ---- Fallback (Watch S10)
+    // ---- Fallback (Watch S10) – Backend-Felder/Schlüssel unverändert
     const fallback={
       id:"1014",
       sku:"GF-APPLE-WATCH-SERIE-10-013",
@@ -338,7 +338,7 @@
       category:"Montre",
       brand:"Apple",
       model:"APPLE WATCH Serie 10",
-      description:"APPLE WATCH Serie 10 — Votre coach santé 24/7, directement à votre poignet. Pourquoi vous allez l’adorer : GPS/GLONASS • ECG & suivi santé • écran AMOLED/LTPO • paiement sans contact. Promo spéciale rentrée : -25 % à -30 % sur PC, téléphones et consoles* — Disponible maintenant, expédition 24–48 h. GF Store : paiement sécurisé (CB) + crypto acceptées (rapide, pratique, quasi anonyme) ; livraison sous 1 semaine maximum ; retours acceptés sous 14 jours ; remboursement garanti sur produits neufs. Avantages GF Store : Simplicité et sécurité d’achat • Tarifs compétitifs • Flexibilité des paiements.",
+      description:"APPLE WATCH Serie 10 — Ihr 24/7-Gesundheitscoach direkt am Handgelenk. Gründe zum Lieben: GPS/GLONASS • EKG & Gesundheitsfunktionen • AMOLED/LTPO-Display • kontaktloses Bezahlen. Sonderaktion zum Schulstart: -25 % bis -30 % auf PCs, Telefone und Konsolen* — Jetzt verfügbar, Versand 24–48 h. GF Store: sichere Zahlung (Karte) + Krypto akzeptiert (schnell, praktisch, pseudonym); Lieferung innerhalb von 1 Woche; 14 Tage Rückgaberecht; Geld-zurück-Garantie auf Neuware. Vorteile GF Store: einfacher & sicherer Kauf • faire Preise • flexible Zahlungen.",
       price:449.0,
       promoPrice:287.99,
       stock:52,
@@ -377,7 +377,7 @@
       }
     };
 
-    // ---- Récupération produit
+    // ---- Produkt laden/vereinigen
     const dataset = await loadProducts();
     const pid = getProductId() || fallback.id;
     const fileSlug = getFileBaseSlug();
@@ -395,8 +395,8 @@
       if(found) product={...fallback, ...found};
     }
 
-    // ---- Rendu produit
-    const EUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    // ---- Anzeige rendern
+    const EUR=v=>Number(v).toLocaleString('de-DE',{style:'currency',currency:'EUR'});
     const gMain=document.getElementById('gMain');
     const thumbs=document.getElementById('thumbs');
     const pName=document.getElementById('pName');
@@ -412,26 +412,26 @@
     pBrand.textContent=product.brand||'';
     const imgs=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean);
     gMain.src=imgs[0]; gMain.alt=product.name;
-    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Voir image ${i+1}"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
+    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Bild ${i+1} anzeigen"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
     thumbs.addEventListener('click',e=>{
       const b=e.target.closest('button[data-i]'); if(!b) return;
       const i=Number(b.dataset.i); gMain.src=imgs[i];
     });
 
-    // Avis (fictifs)
+    // ---- Bewertungen (produktbezogen)
     const stars=document.getElementById('pStars'); const rTxt=document.getElementById('pRatingText');
     const reviews=[
-      {name:'Nina R. — Bordeaux, FR',stars:5,date:'2025-08-18',text:"Suivi santé top, interface fluide."},
-      {name:'Paul M. — Genève, CH',stars:4,date:'2025-08-17',text:"Autonomie correcte, GPS précis."},
-      {name:'Hugo T. — Paris, FR',stars:5,date:'2025-08-16',text:"Achat en crypto, expédition rapide."}
+      {name:'Klara J. — Berlin, DE',stars:5,date:'2025-08-18',text:"EKG und Schlaftracking sind sehr zuverlässig. Always-On-Display bleibt gut ablesbar, auch beim Laufen."},
+      {name:'Max R. — Zürich, CH',stars:4,date:'2025-08-17',text:"GPS ist beim Outdoor-Training präzise. Mit LTE kann ich ohne Handy joggen und trotzdem zahlen."},
+      {name:'Élodie P. — Paris, FR',stars:5,date:'2025-08-16',text:"Akkulaufzeit reicht mir für den ganzen Tag + Training. watchOS ist flüssig, Benachrichtigungen top."}
     ];
     const avg=reviews.reduce((s,r)=>s+r.stars,0)/reviews.length;
     const full=Math.round(avg);
     stars.innerHTML=Array.from({length:5},(_,i)=>'<i style="opacity:'+(i<full?1:.2)+'"></i>').join('');
-    rTxt.textContent=avg.toFixed(1)+' / 5 ('+reviews.length+' avis)';
+    rTxt.textContent=avg.toFixed(1)+' / 5 ('+reviews.length+' Bewertungen)';
     document.getElementById('reviews').innerHTML=reviews.map(r=>`<div class="rev"><div class="rv-head"><strong>${r.name}</strong><span class="rv-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span><span class="rv-date">${r.date}</span></div><p>${r.text}</p></div>`).join('');
 
-    // Prix + remise (attention à la redéclaration : unique ici)
+    // ---- Preis + Rabatt
     const hasPromo = Number.isFinite(product.promoPrice)&&product.promoPrice>0&&product.promoPrice<product.price;
     let base = hasPromo ? product.promoPrice : product.price;
     const disc = hasPromo ? Math.round((1-(base/product.price))*100) : 0;
@@ -439,10 +439,12 @@
     pDel.textContent   = hasPromo ? EUR(product.price) : '';
     pBadge.textContent = hasPromo ? `-${disc}%` : '';
 
-    // Stock
-    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">En stock</span> • ${product.stock} pièces`:`<span style="color:#dc2626">Rupture</span>`;
+    // ---- Lagerbestand
+    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">Auf Lager</span> • ${product.stock} Stk`:`<span style="color:#dc2626">Ausverkauft</span>`;
 
-    // Options dynamiques
+    // ---- Optionen (DE-Anzeige, FR-Keys beibehalten)
+    const labelMap = {'Taille boîtier':'Gehäusegröße','Connectivité':'Konnektivität'};
+
     const optsWrap = document.getElementById('opts');
     const selOpts = {};
     function buildOptions(){
@@ -457,6 +459,7 @@
     }
     function renderOptions(){
       optsWrap.innerHTML = Object.entries(product.options).map(([k,arr])=>{
+        const label = labelMap[k] || k;
         const pills = (arr||[]).map(o=>{
           const on = selOpts[k]?.value===o.value;
           const delta = Number(o.priceDelta||0);
@@ -464,7 +467,7 @@
             ${o.value}${delta?` (+${EUR(delta)})`:''}
           </button>`;
         }).join('');
-        return `<div class="opt-row"><strong>${k}</strong><div>${pills}</div></div>`;
+        return `<div class="opt-row"><strong>${label}</strong><div>${pills}</div></div>`;
       }).join('');
     }
     function totalDelta(){ return Object.values(selOpts).reduce((s,o)=>s + Number(o.priceDelta||0), 0); }
@@ -479,29 +482,29 @@
 
     buildOptions(); updatePrice();
 
-    // Description
+    // ---- Beschreibung
     const mkDesc=(product.description||'').split('\n').map(p=>p?`<span>${p}</span>`:'').join('<br>');
     desc.innerHTML = `<p style="margin-top:0">${mkDesc}</p>
     <ul style="margin:8px 0 0 18px;line-height:1.6">
-      <li>Achat simple et sécurisé chez <strong>GF Store</strong> — assistance rapide.</li>
-      <li>Livraison sous 1 semaine • Retours 14 jours • <em>Remboursement garanti</em>.</li>
-      <li>Paiement classique et <strong>crypto</strong> acceptés.</li>
-      <li>Garantie <strong>${product.warrantyMonths||24} mois</strong>.</li>
+      <li>Einfacher & sicherer Einkauf bei <strong>GF Store</strong> — schneller Support.</li>
+      <li>Lieferung innerhalb von 1 Woche • 14 Tage Rückgaberecht • <em>Geld-zurück-Garantie</em>.</li>
+      <li>Klassische Zahlung und <strong>Krypto</strong> akzeptiert.</li>
+      <li>Garantie <strong>${product.warrantyMonths||24} Monate</strong>.</li>
     </ul>`;
 
-    // Spécifications (montre)
+    // ---- Technische Daten (Uhr)
     const specs=[
-      ['Écran','AMOLED / LTPO'],
-      ['Santé','ECG, suivi du sommeil, SpO₂'],
-      ['Positionnement','GPS / GLONASS'],
-      ['Paiement','Sans contact'],
-      ['Connectivité','Bluetooth • (option) Cellular'],
-      ['Compatibilité','iOS'],
-      ['Garantie',`${product.warrantyMonths||24} mois chez GF Store`]
+      ['Display','AMOLED / LTPO'],
+      ['Gesundheit','EKG, Schlaftracking, SpO₂'],
+      ['Positionierung','GPS / GLONASS'],
+      ['Zahlung','Kontaktlos (Apple Pay)'],
+      ['Konnektivität','Bluetooth • optional Cellular'],
+      ['Kompatibilität','iOS'],
+      ['Garantie',`${product.warrantyMonths||24} Monate bei GF Store`]
     ];
     specsEl.innerHTML=specs.map(([k,v])=>`<div style="opacity:.7">${k}</div><div>${v}</div>`).join('');
 
-    // Produits similaires (même catégorie)
+    // ---- Ähnliche Produkte (gleiche Kategorie)
     const relGrid=document.getElementById('relGrid');
     if(Array.isArray(dataset)){
       const sims=dataset.filter(p=>p.category===product.category && String(p.id)!==String(product.id)).slice(0,4);
@@ -513,7 +516,7 @@
         const url=`./${slugify(p.name)}-${encodeURIComponent(p.id||p.sku||p._id)}.html`;
         const img=p.imageCover||(p.images&&p.images[0])||'';
         return `<article class="card">
-          <a class="hit" href="${url}" aria-label="Voir ${p.name}"></a>
+          <a class="hit" href="${url}" aria-label="${p.name} ansehen"></a>
           <div class="img"><img loading="lazy" src="${img}" alt="${p.name}"></div>
           <div class="box">
             <div style="font-weight:600">${p.name}</div>
@@ -524,9 +527,9 @@
       }).join('');
     }
 
-    // Ajouter au panier
+    // ---- In den Warenkorb
     document.getElementById('addBtn').addEventListener('click',()=>{
-      const parts=[]; for(const [k,v] of Object.entries(selOpts)){ if(v?.value) parts.push(`${k}: ${v.value}`); }
+      const parts=[]; for(const [k,v] of Object.entries(selOpts)){ if(v?.value) parts.push(`${labelMap[k]||k}: ${v.value}`); }
       const nameWithVar = product.name + (parts.length? ` (${parts.join(', ')})` : '');
       const finalPrice  = (hasPromo?product.promoPrice:product.price) + totalDelta();
 
@@ -536,12 +539,12 @@
       const image=(product.imageCover||(product.images&&product.images[0])||'');
       if(idx>-1){ cart[idx].qty+=1; } else { cart.push({id,name:nameWithVar,price:finalPrice,qty:1,image,brand:product.brand||'',category:product.category||''}); }
       setCart(cart);
-      // openCart(); // pour ouvrir automatiquement le mini-panier
+      // openCart(); // bei Bedarf automatisch öffnen
     });
 
     updateCartCount();
 
-    // ---- Mini-panneau panier
+    // ---- Mini-Warenkorb-Panel
     function cartTotal(){ return getCart().reduce((s,x)=>s + (x.qty * Number(x.price||0)), 0); }
     function renderCart(){
       const wrap=document.getElementById('cartItems'); if(!wrap) return;
@@ -555,15 +558,15 @@
             <div style="margin-top:6px">${EUR(x.price||0)}</div>
           </div>
           <div class="qty">
-            <button data-act="dec" aria-label="Diminuer">–</button>
+            <button data-act="dec" aria-label="Verringern">–</button>
             <span>${x.qty}</span>
-            <button data-act="inc" aria-label="Augmenter">+</button>
-            <button data-act="del" title="Retirer" style="margin-left:6px">
-              <img class="ic-sm" src="${ICONS.trash}" alt="Supprimer">
+            <button data-act="inc" aria-label="Erhöhen">+</button>
+            <button data-act="del" title="Entfernen" style="margin-left:6px">
+              <img class="ic-sm" src="${ICONS.trash}" alt="Entfernen">
             </button>
           </div>
         </div>`).join('')
-      : '<div style="opacity:.7">Votre panier est vide.</div>';
+      : '<div style="opacity:.7">Ihr Warenkorb ist leer.</div>';
       const totalEl=document.getElementById('cartTotal'); if(totalEl) totalEl.textContent=EUR(cartTotal());
     }
     function openCart(){
@@ -596,7 +599,7 @@
       });
     }
 
-    // Tabs
+    // ---- Tabs
     const tabEls={desc:document.getElementById('tab-desc'), spec:document.getElementById('tab-spec'), rev:document.getElementById('tab-rev')};
     const headEls={desc:document.getElementById('th-desc'), spec:document.getElementById('th-spec'), rev:document.getElementById('th-rev')};
     Object.values(headEls).forEach(h=>h.addEventListener('click',()=>{
@@ -606,7 +609,7 @@
       const id=h.id.split('-')[1]; document.getElementById('tab-'+id).classList.add('show');
     }));
 
-    // JSON-LD SEO
+    // ---- JSON-LD SEO
     const imgsForLd=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean);
     const ld={"@context":"https://schema.org","@type":"Product","name":product.name,"image":imgsForLd,"sku":product.sku||product.id,"brand":{"@type":"Brand","name":product.brand||'GF Store'},"description":(product.description||'').slice(0,500),"offers":{"@type":"Offer","priceCurrency":"EUR","price":(hasPromo?product.promoPrice:product.price),"availability":"https://schema.org/InStock","url":location.href}};
     const s=document.createElement('script'); s.type='application/ld+json'; s.textContent=JSON.stringify(ld); document.head.appendChild(s);
