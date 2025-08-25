@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="de">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -125,7 +125,7 @@
   </style>
 </head>
 <body>
-  <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+  <div class="banner">🎉 Sonderaktion zum Schulstart: <b>-25% bis -30%</b> auf PCs, Telefone & Konsolen <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
 
   <header>
     <div class="hwrap">
@@ -133,16 +133,16 @@
         <img src="https://silve25.github.io/GFSTORE/assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
       <nav class="nav">
-        <a href="../compte/index.html"><img class="ic" id="icUser" alt=""> Compte</a>
-        <a id="cartBtn" class="iconbtn" href="../checkout.html"><img id="cartIcon" class="ic" alt=""> Panier</a>
+        <a href="../compte/index.html"><img class="ic" id="icUser" alt=""> Konto</a>
+        <a id="cartBtn" class="iconbtn" href="../checkout.html"><img id="cartIcon" class="ic" alt=""> Warenkorb</a>
         <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
+          <button class="iconbtn" id="menuBtn" aria-label="Menü"><img class="ic" id="icMenu" alt=""></button>
           <div id="menuDrop" class="menu">
-            <a href="../pages/a-propos.html">À propos</a>
-            <a href="../pages/cgv.html">CGV</a>
-            <a href="../pages/mentions-legales.html">Mentions légales</a>
-            <a href="../pages/confidentialite.html">Politique de confidentialité</a>
-            <a href="../pages/contact.html">Contact</a>
+            <a href="../pages/a-propos.html">Über uns</a>
+            <a href="../pages/cgv.html">AGB</a>
+            <a href="../pages/mentions-legales.html">Impressum</a>
+            <a href="../pages/confidentialite.html">Datenschutz</a>
+            <a href="../pages/contact.html">Kontakt</a>
           </div>
         </div>
       </nav>
@@ -171,15 +171,15 @@
       <div class="opts" id="opts"></div>
 
       <div class="cta">
-        <button id="addBtn" class="btn"><img class="ic" id="icBuy" alt=""> Ajouter au panier</button>
+        <button id="addBtn" class="btn"><img class="ic" id="icBuy" alt=""> In den Warenkorb</button>
         <div class="trust">
           <div class="row">
-            <span><img class="ic" id="icTruck" alt=""> Livraison en 1 semaine</span>
-            <span><img class="ic" id="icReturn" alt=""> Retours 14 jours</span>
-            <span><img class="ic" id="icRefund" alt=""> Remboursement garanti</span>
-            <span><img class="ic" id="ic4x" alt=""> Paiement en 4x</span>
+            <span><img class="ic" id="icTruck" alt=""> Lieferung innerhalb 1 Woche</span>
+            <span><img class="ic" id="icReturn" alt=""> 14 Tage Rückgabe</span>
+            <span><img class="ic" id="icRefund" alt=""> Geld-zurück-Garantie</span>
+            <span><img class="ic" id="ic4x" alt=""> Zahlung in 4 Raten</span>
           </div>
-          <a id="payNowBtn" href="../checkout.html" class="btn paynow"><img class="ic" id="icPayNow" alt=""> Payer maintenant</a>
+          <a id="payNowBtn" href="../checkout.html" class="btn paynow"><img class="ic" id="icPayNow" alt=""> Jetzt bezahlen</a>
         </div>
       </div>
     </aside>
@@ -187,9 +187,9 @@
 
   <section class="tabs" id="tabs">
     <div class="tabheads" role="tablist">
-      <button role="tab" aria-selected="true" aria-controls="tab-desc" id="th-desc">Description</button>
-      <button role="tab" aria-selected="false" aria-controls="tab-spec" id="th-spec">Spécifications</button>
-      <button role="tab" aria-selected="false" aria-controls="tab-rev" id="th-rev">Avis</button>
+      <button role="tab" aria-selected="true" aria-controls="tab-desc" id="th-desc">Beschreibung</button>
+      <button role="tab" aria-selected="false" aria-controls="tab-spec" id="th-spec">Technische Daten</button>
+      <button role="tab" aria-selected="false" aria-controls="tab-rev" id="th-rev">Bewertungen</button>
     </div>
     <div class="tab show" id="tab-desc" role="tabpanel" aria-labelledby="th-desc"></div>
     <div class="tab" id="tab-spec" role="tabpanel" aria-labelledby="th-spec">
@@ -201,61 +201,61 @@
   </section>
 
   <section class="rel" id="rel">
-    <h3>Produits similaires</h3>
+    <h3>Ähnliche Produkte</h3>
     <div class="grid" id="relGrid"></div>
   </section>
 
-  <!-- Mini fenêtre panier -->
+  <!-- Mini-Warenkorb -->
   <div id="cartPanel" class="panel" aria-hidden="true">
-    <div class="sheet" role="dialog" aria-modal="true" aria-label="Mon panier">
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="Mein Warenkorb">
       <header>
-        <strong>Mon panier</strong>
-        <button id="closeCart" class="x" aria-label="Fermer">✕</button>
+        <strong>Mein Warenkorb</strong>
+        <button id="closeCart" class="x" aria-label="Schließen">✕</button>
       </header>
       <div id="cartItems" class="items"></div>
       <div class="sum">
-        <div>Total <strong id="cartTotal">0 €</strong></div>
-        <a href="../checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Effectuer un paiement</a>
+        <div>Gesamt <strong id="cartTotal">0 €</strong></div>
+        <a href="../checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Zur Kasse</a>
       </div>
     </div>
   </div>
 
-  <!-- Bulle panier -->
-  <button id="fabCart" class="fab" type="button" aria-label="Ouvrir le panier">
+  <!-- Warenkorb-Bubbleschaltfläche -->
+  <button id="fabCart" class="fab" type="button" aria-label="Warenkorb öffnen">
     <img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span>
   </button>
 
   <footer>
     <div class="fwrap">
-      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <div>© GF Store 2025 — Einfach, sicher, krypto-freundlich.</div>
       <nav>
-        <a href="../pages/a-propos.html">À propos</a> · 
-        <a href="../pages/cgv.html">CGV</a> · 
-        <a href="../pages/mentions-legales.html">Mentions légales</a> · 
-        <a href="../pages/confidentialite.html">Confidentialité</a> · 
-        <a href="../pages/contact.html">Contact</a>
+        <a href="../pages/a-propos.html">Über uns</a> · 
+        <a href="../pages/cgv.html">AGB</a> · 
+        <a href="../pages/mentions-legales.html">Impressum</a> · 
+        <a href="../pages/confidentialite.html">Datenschutz</a> · 
+        <a href="../pages/contact.html">Kontakt</a>
       </nav>
     </div>
   </footer>
 
   <script>
   (async()=>{
-    // ---- Compte à rebours (48h)
+    // ---- Countdown (48 Std.)
     const countdownEl=document.getElementById('countdown');
     const SALE_END=new Date(Date.now()+48*60*60*1000);
     const two=n=>String(n).padStart(2,'0');
     function tick(){
       if(!countdownEl) return;
       const now=new Date(); let diff=SALE_END-now;
-      if(diff<=0){countdownEl.textContent='Dernières heures !';return}
+      if(diff<=0){countdownEl.textContent='Letzte Stunden!';return}
       const d=Math.floor(diff/86400000); diff%=86400000;
       const h=Math.floor(diff/3600000); diff%=3600000;
       const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
-      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+      countdownEl.textContent=`${d?d+' T ':''}${two(h)}:${two(m)}:${two(s)} verbleibend`;
     }
     tick(); setInterval(tick,1000);
 
-    // ---- Icônes
+    // ---- Icons
     const ICONS = {
       buy:'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
       cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
@@ -276,14 +276,14 @@
     setSrc('icTruck',ICONS.truck); setSrc('icReturn',ICONS.logout); setSrc('icRefund',ICONS.refund); setSrc('ic4x',ICONS.fourx);
     setSrc('icPayNow',ICONS.checkout); setSrc('icFabCart',ICONS.cart); setSrc('icCheckout', ICONS.checkout);
 
-    // ---- Menu
+    // ---- Menü
     const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop');
     if(menuBtn&&menuDrop){
       menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
       document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
     }
 
-    // ---- Panier (localStorage)
+    // ---- Warenkorb (localStorage)
     const KEY='gf_cart';
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
     const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount(); if(typeof renderCart==='function'){renderCart();}};
@@ -295,7 +295,7 @@
       const fbi=document.getElementById('icFabCart'); if(fbi) fbi.src=count>0?ICONS.cartFull:ICONS.cart;
     };
 
-    // ---- Root GitHub Pages + fix images locales
+    // ---- Root GitHub Pages + Fix für lokale Bilder
     const GH_ROOT = (()=>{ const parts = location.pathname.split('/').filter(Boolean); return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/'; })();
     const fixImg=(src)=>src && src.startsWith('assets/') ? (GH_ROOT+src) : src;
 
@@ -309,7 +309,7 @@
     }
     const slugify=str=>String(str||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 
-    // ---- Chargement du catalogue
+    // ---- Katalog laden (Backend unverändert)
     async function loadProducts(){
       const urls=[
         '../data/products.json',
@@ -326,7 +326,7 @@
       return null;
     }
 
-    // ---- Fallback produit (Samsung Smart Monitor M9)
+    // ---- Fallback-Produkt (Samsung Smart Monitor M9)
     const fallback={
       id:"1037",
       sku:"GF-SAMSUNG-SMART-MONITOR-M9-M90SF-036",
@@ -334,7 +334,7 @@
       category:"Moniteur",
       brand:"Samsung",
       model:"Samsung Smart Monitor M9 (M90SF)",
-      description:"Samsung Smart Monitor M9 (M90SF) — Image nette et fluide pour le travail et le jeu. Pourquoi vous allez l’adorer : dalle 4K/OLED • HDR • USB-C 65W • 165–240 Hz. Promo spéciale rentrée : -25 % à -30 % sur PC, téléphones et consoles* — Stock limité : profitez-en tant que c’est disponible. GF Store : paiement sécurisé (CB) + crypto acceptées (rapide, pratique, quasi anonyme) ; livraison sous 1 semaine maximum ; retours acceptés sous 14 jours ; remboursement garanti sur produits neufs. Avantages GF Store : Simplicité et sécurité d’achat • Tarifs compétitifs • Flexibilité des paiements.",
+      description:"Samsung Smart Monitor M9 (M90SF) — Knackscharfes, flüssiges Bild für Arbeit & Entertainment. Warum Sie ihn mögen werden: 4K/OLED-Panel • HDR • USB-C 65 W • 165–240 Hz (je nach Variante). Schulstart-Aktion: −25 % bis −30 % auf PCs, Telefone & Konsolen* — begrenzter Bestand, schnell zugreifen. GF Store: sichere Kartenzahlung + Krypto akzeptiert (schnell, praktisch, quasi anonym); Lieferung innerhalb 1 Woche; 14 Tage Rückgabe; Geld-zurück-Garantie bei Neuware. Vorteile GF Store: Einfach & sicher kaufen • faire Preise • flexible Zahlungen.",
       price:1099.0,
       promoPrice:703.99,
       stock:28,
@@ -371,7 +371,7 @@
       }
     };
 
-    // ---- Récupération produit
+    // ---- Produkt ermitteln
     const dataset = await loadProducts();
     const pid = getProductId() || fallback.id;
     let product = fallback;
@@ -380,8 +380,8 @@
       if(found) product={...fallback,...found};
     }
 
-    // ---- Rendu produit
-    const EUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    // ---- Rendering
+    const EUR=v=>Number(v).toLocaleString('de-DE',{style:'currency',currency:'EUR'});
     const gMain=document.getElementById('gMain');
     const thumbs=document.getElementById('thumbs');
     const pName=document.getElementById('pName');
@@ -396,26 +396,26 @@
 
     const imgs=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean).map(fixImg);
     gMain.src=imgs[0]; gMain.alt=product.name;
-    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Voir image ${i+1}"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
+    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Bild ${i+1} ansehen"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
     thumbs.addEventListener('click',e=>{
       const b=e.target.closest('button[data-i]'); if(!b) return;
       const i=Number(b.dataset.i); gMain.src=imgs[i];
     });
 
-    // Avis (exemple)
+    // Bewertungen (produktbezogen, 2–3 Stück)
     const stars=document.getElementById('pStars'); const rTxt=document.getElementById('pRatingText');
     const reviews=[
-      {name:'Chloé — Paris, FR',stars:5,date:'2025-08-18',text:"Super pratique: USB-C alimente mon laptop, image 4K très nette."},
-      {name:'Romain — Bruxelles, BE',stars:4,date:'2025-08-17',text:"Mode Smart TV utile pour Netflix sans PC. Belles couleurs."},
-      {name:'Sarra — Lyon, FR',stars:5,date:'2025-08-16',text:"Monté en 120 Hz: parfait pour le boulot et un peu de jeu."}
+      {name:'Mara — Berlin, DE',stars:5,date:'2025-08-18',text:"USB-C mit 65 W lädt mein Ultrabook, ein Kabel für Bild + Strom – super cleanes Setup. 4K-Bild ist scharf, die Smart-TV-Apps nutze ich abends ohne PC."},
+      {name:'Timo — Wien, AT',stars:4,date:'2025-08-17',text:"Mit 120 Hz wirkt die Mausbewegung deutlich flüssiger. Farben top, Helligkeit für Büro ausreichend. Fernbedienung & AirPlay praktisch."},
+      {name:'Leonie — Zürich, CH',stars:5,date:'2025-08-16',text:"Konnte vom Homeoffice direkt auf Streaming wechseln. Integrierte Lautsprecher ok, für Musik nutze ich externe. Lieferung nach 6 Tagen, gut verpackt."}
     ];
     const avg=reviews.reduce((s,r)=>s+r.stars,0)/reviews.length;
     const full=Math.round(avg);
     stars.innerHTML=Array.from({length:5},(_,i)=>'<i style="opacity:'+(i<full?1:.2)+'"></i>').join('');
-    rTxt.textContent=avg.toFixed(1)+' / 5 ('+reviews.length+' avis)';
+    rTxt.textContent=avg.toFixed(1)+' / 5 ('+reviews.length+' Bewertungen)';
     document.getElementById('reviews').innerHTML=reviews.map(r=>`<div class="rev"><div class="rv-head"><strong>${r.name}</strong><span class="rv-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span><span class="rv-date">${r.date}</span></div><p>${r.text}</p></div>`).join('');
 
-    // Prix + remise
+    // Preis + Rabatt
     const promoActive = Number.isFinite(product.promoPrice)&&product.promoPrice>0&&product.promoPrice<product.price;
     let base = promoActive ? product.promoPrice : product.price;
     const disc = promoActive ? Math.round((1-(base/product.price))*100) : 0;
@@ -423,10 +423,11 @@
     pDel.textContent   = promoActive ? EUR(product.price) : '';
     pBadge.textContent = promoActive ? `-${disc}%` : '';
 
-    // Stock
-    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">En stock</span> • ${product.stock} pièces`:`<span style="color:#dc2626">Rupture</span>`;
+    // Lagerbestand
+    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">Auf Lager</span> • ${product.stock} Stk`:`<span style="color:#dc2626">Ausverkauft</span>`;
 
-    // ---- Options dynamiques
+    // ---- Optionen (Backend-Keys beibehalten, Labels lokalisieren)
+    const labelMap={ "Diagonale":"Bilddiagonale", "Rafraîchissement":"Bildwiederholrate" };
     const optsWrap = document.getElementById('opts');
     const selOpts = {};
     function buildOptions(){
@@ -447,7 +448,7 @@
             ${o.value}${d?` (+${EUR(d)})`:''}
           </button>`;
         }).join('');
-        return `<div class="opt-row"><strong>${k}</strong><div>${pills}</div></div>`;
+        return `<div class="opt-row"><strong>${labelMap[k]||k}</strong><div>${pills}</div></div>`;
       }).join('');
     }
     function totalDelta(){ return Object.values(selOpts).reduce((s,o)=>s + Number(o.priceDelta||0), 0); }
@@ -462,29 +463,29 @@
 
     buildOptions(); updatePrice();
 
-    // Description
+    // Beschreibung
     const mkDesc=(product.description||'').split('\n').map(p=>p?`<span>${p}</span>`:'').join('<br>');
     document.getElementById('tab-desc').innerHTML = `<p style="margin-top:0">${mkDesc}</p>
     <ul style="margin:8px 0 0 18px;line-height:1.6">
-      <li>Achat simple et sécurisé chez <strong>GF Store</strong> — assistance rapide.</li>
-      <li>Livraison sous 1 semaine • Retours 14 jours • <em>Remboursement garanti</em>.</li>
-      <li>Paiement classique et <strong>crypto</strong> acceptés.</li>
-      <li>Garantie <strong>${product.warrantyMonths||24} mois</strong>.</li>
+      <li>Einkauf einfach & sicher bei <strong>GF Store</strong> — schneller Support.</li>
+      <li>Lieferung innerhalb 1 Woche • 14 Tage Rückgabe • <em>Geld-zurück-Garantie</em>.</li>
+      <li>Klassische Zahlungen und <strong>Krypto</strong> werden akzeptiert.</li>
+      <li>Garantie <strong>${product.warrantyMonths||24} Monate</strong>.</li>
     </ul>`;
 
-    // Spécifications (Moniteur)
+    // Technische Daten (Monitor)
     const specs=[
-      ['Diagonale', selOpts['Diagonale']?.value || '27″'],
-      ['Résolution', '4K UHD (3840×2160)'],
-      ['Technologie', 'HDR, USB-C 65W'],
-      ['Taux de rafraîchissement', (selOpts['Rafraîchissement']?.value || 'Jusqu’à 240 Hz')],
-      ['Fonctions smart', 'Applications intégrées (selon région)'],
-      ['Connectique', 'USB-C (PD), HDMI/DP (selon modèle)'],
-      ['Garantie', `${product.warrantyMonths||24} mois chez GF Store`]
+      ['Bilddiagonale', selOpts['Diagonale']?.value || '27″'],
+      ['Auflösung', '4K UHD (3840×2160)'],
+      ['Technologie', 'HDR, USB-C 65 W'],
+      ['Bildwiederholrate', (selOpts['Rafraîchissement']?.value || 'bis zu 240 Hz')],
+      ['Smart-Funktionen', 'Integrierte Apps (regionabhängig)'],
+      ['Anschlüsse', 'USB-C (PD), HDMI/DP (modellabhängig)'],
+      ['Garantie', `${product.warrantyMonths||24} Monate bei GF Store`]
     ];
     document.getElementById('specs').innerHTML=specs.map(([k,v])=>`<div style="opacity:.7">${k}</div><div>${v}</div>`).join('');
 
-    // Produits similaires
+    // Ähnliche Produkte
     const relGrid=document.getElementById('relGrid');
     if(Array.isArray(dataset)){
       const sims=dataset.filter(p=>p.category===product.category && String(p.id)!==String(product.id)).slice(0,4);
@@ -496,7 +497,7 @@
         const img=(p.imageCover||(p.images&&p.images[0])||'');
         const fixed=fixImg(img);
         return `<article class="card">
-          <a class="hit" href="${url}" aria-label="Voir ${p.name}"></a>
+          <a class="hit" href="${url}" aria-label="${p.name} ansehen"></a>
           <div class="img"><img loading="lazy" src="${fixed}" alt="${p.name}"></div>
           <div class="box">
             <div style="font-weight:600">${p.name}</div>
@@ -507,7 +508,7 @@
       }).join('');
     }
 
-    // Ajouter au panier
+    // In den Warenkorb
     document.getElementById('addBtn').addEventListener('click',()=>{
       const parts=[]; for(const [k,v] of Object.entries(selOpts)){ if(v?.value) parts.push(`${k}: ${v.value}`); }
       const nameWithVar = product.name + (parts.length? ` (${parts.join(', ')})` : '');
@@ -524,7 +525,7 @@
 
     updateCartCount();
 
-    // ---- Mini-panneau panier
+    // ---- Mini-Warenkorb Panel
     function cartTotal(){ return getCart().reduce((s,x)=>s + (x.qty * Number(x.price||0)), 0); }
     function renderCart(){
       const wrap=document.getElementById('cartItems'); if(!wrap) return;
@@ -538,15 +539,15 @@
             <div style="margin-top:6px">${EUR(x.price||0)}</div>
           </div>
           <div class="qty">
-            <button data-act="dec" aria-label="Diminuer">–</button>
+            <button data-act="dec" aria-label="Verringern">–</button>
             <span>${x.qty}</span>
-            <button data-act="inc" aria-label="Augmenter">+</button>
-            <button data-act="del" title="Retirer" style="margin-left:6px">
-              <img class="ic-sm" src="${ICONS.trash}" alt="Supprimer">
+            <button data-act="inc" aria-label="Erhöhen">+</button>
+            <button data-act="del" title="Entfernen" style="margin-left:6px">
+              <img class="ic-sm" src="${ICONS.trash}" alt="Entfernen">
             </button>
           </div>
         </div>`).join('')
-      : '<div style="opacity:.7">Votre panier est vide.</div>';
+      : '<div style="opacity:.7">Ihr Warenkorb ist leer.</div>';
       const totalEl=document.getElementById('cartTotal'); if(totalEl) totalEl.textContent=EUR(cartTotal());
     }
     function openCart(){
