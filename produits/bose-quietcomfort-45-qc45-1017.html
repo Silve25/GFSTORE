@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bose QuietComfort 45 (QC45) — GF Store</title>
+  <title>Bose QuietComfort 45 (QC45) — GF Store (DE)</title>
   <style>
     :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
     *{box-sizing:border-box} body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
@@ -92,7 +92,7 @@
     .fab .badge{min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px}
     .fab img.ic{filter:invert(1)}
 
-    /* Mini panneau panier */
+    /* Mini-Warenkorb Panel */
     .panel{position:fixed;inset:0;display:none;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:10010}
     .panel.show{display:block}
     .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid #e5e7eb;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
@@ -116,7 +116,7 @@
     .desktop-only{display:initial}
     @media (max-width:860px){
       .pwrap{grid-template-columns:1fr}
-      .brand .logo{height:22px} /* logo plus petit sur mobile */
+      .brand .logo{height:22px}
       .thumbs{gap:8px}
       .thumbs img{width:56px;height:56px}
       .gmain img{max-height:380px}
@@ -126,7 +126,7 @@
   </style>
 </head>
 <body>
-  <div class="banner">🎉 Sonderaktion zum Schulstart: <b>-25% bis -30%</b> auf PCs, Telefone & Konsolen <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+  <div class="banner">🎉 Sonderaktion zum Schulstart: <b>-25% bis -30%</b> auf PCs, Telefone und Konsolen <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
 
   <header>
     <div class="hwrap">
@@ -206,7 +206,7 @@
     <div class="grid" id="relGrid"></div>
   </section>
 
-  <!-- Mini fenêtre panier -->
+  <!-- Mini-Warenkorb -->
   <div id="cartPanel" class="panel" aria-hidden="true">
     <div class="sheet" role="dialog" aria-modal="true" aria-label="Mein Warenkorb">
       <header>
@@ -215,13 +215,13 @@
       </header>
       <div id="cartItems" class="items"></div>
       <div class="sum">
-        <div>Gesamt <strong id="cartTotal">0 €</strong></div>
+        <div>Summe <strong id="cartTotal">0 €</strong></div>
         <a href="../checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Zur Kasse</a>
       </div>
     </div>
   </div>
 
-  <!-- Bulle panier -->
+  <!-- Warenkorb-FAB -->
   <button id="fabCart" class="fab" type="button" aria-label="Warenkorb öffnen">
     <img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span>
   </button>
@@ -230,10 +230,10 @@
     <div class="fwrap">
       <div>© GF Store 2025 — Einfach, sicher, krypto-freundlich.</div>
       <nav>
-        <a href="../pages/a-propos.html">Über uns</a> · 
-        <a href="../pages/cgv.html">AGB</a> · 
-        <a href="../pages/mentions-legales.html">Impressum</a> · 
-        <a href="../pages/confidentialite.html">Datenschutz</a> · 
+        <a href="../pages/a-propos.html">Über uns</a> ·
+        <a href="../pages/cgv.html">AGB</a> ·
+        <a href="../pages/mentions-legales.html">Impressum</a> ·
+        <a href="../pages/confidentialite.html">Datenschutz</a> ·
         <a href="../pages/contact.html">Kontakt</a>
       </nav>
     </div>
@@ -241,7 +241,7 @@
 
   <script>
   (async()=>{
-    // ---- Compte à rebours (48h) -> DE
+    // ---- Countdown (48h)
     const countdownEl=document.getElementById('countdown');
     const SALE_END=new Date(Date.now()+48*60*60*1000);
     const two=n=>String(n).padStart(2,'0');
@@ -252,11 +252,11 @@
       const d=Math.floor(diff/86400000); diff%=86400000;
       const h=Math.floor(diff/3600000); diff%=3600000;
       const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
-      countdownEl.textContent=`${d?d+' T ':''}${two(h)}:${two(m)}:${two(s)} verbleibend`;
+      countdownEl.textContent=`${d?d+' Tg ':''}${two(h)}:${two(m)}:${two(s)} verbleibend`;
     }
     tick(); setInterval(tick,1000);
 
-    // ---- Icônes
+    // ---- Icons
     const ICONS = {
       buy:'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
       cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
@@ -277,14 +277,14 @@
     setSrc('icTruck',ICONS.truck); setSrc('icReturn',ICONS.logout); setSrc('icRefund',ICONS.refund); setSrc('ic4x',ICONS.fourx);
     setSrc('icPayNow',ICONS.checkout); setSrc('icFabCart',ICONS.cart); setSrc('icCheckout', ICONS.checkout);
 
-    // ---- Menu
+    // ---- Menü
     const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop');
     if(menuBtn&&menuDrop){
       menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
       document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
     }
 
-    // ---- Panier (localStorage)
+    // ---- Warenkorb (localStorage)
     const KEY='gf_cart';
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
     const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount(); if(typeof renderCart==='function'){renderCart();}};
@@ -296,8 +296,8 @@
       const fbi=document.getElementById('icFabCart'); if(fbi) fbi.src=count>0?ICONS.cartFull:ICONS.cart;
     };
 
-    // ---- Root GitHub Pages
-    const GH_ROOT = (()=>{ const parts = location.pathname split('/').filter(Boolean); return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/'; })();
+    // ---- Root GitHub Pages (unverändert)
+    const GH_ROOT = (()=>{ const parts = location.pathname.split('/').filter(Boolean); return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/'; })();
 
     // Helpers
     function getProductId(){
@@ -309,10 +309,10 @@
     }
     const normalize=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 
-    // Corrige les chemins relatifs éventuels
+    // Relativpfade korrigieren
     const fixImg=(src)=>src && src.startsWith('assets/') ? (GH_ROOT+src) : src;
 
-    // ---- Chargement du catalogue
+    // ---- Produkte laden (unverändert)
     async function loadProducts(){
       const urls=[
         '../data/products.json',
@@ -329,15 +329,15 @@
       return null;
     }
 
-    // ---- Fallback QC45 (structure backend inchangée)
+    // ---- Fallback QC45 (Texte auf DE; Felder/Struktur unverändert)
     const fallback={
       id:"1017",
       sku:"GF-BOSE-QUIETCOMFORT-45-QC45-016",
       name:"Bose QuietComfort 45 (QC45)",
-      category:"Casque/Ecouteurs",
+      category:"Kopfhörer/Ohrhörer",
       brand:"Bose",
       model:"Bose QuietComfort 45 (QC45)",
-      description:"Bose QuietComfort 45 (QC45) — Kabelloser Klang, der die Welt ausblendet. Warum du ihn lieben wirst: sehr bequemer Sitz • moderne Konnektivität (Multipoint) • 24 Monate Garantie. Schulstart-Aktion: −25 % bis −30 % auf PCs, Telefone & Konsolen* — begrenzter Bestand. GF Store: sichere Kartenzahlung + Krypto akzeptiert (schnell, praktisch, quasi anonym); Lieferung innerhalb 1 Woche; 14 Tage Rückgabe; Geld-zurück-Garantie bei Neuware. Vorteile GF Store: Einfach & sicher kaufen • faire Preise • flexible Zahlungen.",
+      description:"Bose QuietComfort 45 (QC45) — Premium-Sound mit starker Geräuschunterdrückung, kabellos und komfortabel. Gründe zum Lieben: hochwertiges Design • moderne Konnektivität • 24 Monate Garantie. Sonderaktion zum Schulstart: -25 % bis -30 % auf PCs, Telefone und Konsolen* — Begrenzter Bestand: jetzt zugreifen, solange verfügbar. GF Store: sichere Zahlung (Karte) + Krypto akzeptiert (schnell, praktisch, nahezu anonym); Lieferung innerhalb von 1 Woche; Rückgabe innerhalb von 14 Tagen; Geld-zurück-Garantie für Neuware. Vorteile bei GF Store: Einfacher & sicherer Einkauf • faire Preise • flexible Zahlungsmöglichkeiten.",
       price:499.0,
       promoPrice:319.99,
       stock:30,
@@ -359,6 +359,7 @@
       warrantyMonths:24,
       rating:4.7,
       ratingCount:0,
+      // Schlüssel/Values wie im bestehenden Backend belassen (FR), Anzeige wird weiter unten übersetzt
       options:{
         "Couleur":[
           {"value":"Noir","priceDelta":0},
@@ -373,7 +374,7 @@
       }
     };
 
-    // ---- Récupération produit
+    // ---- Produkt holen
     const dataset = await loadProducts();
     const pid = getProductId() || fallback.id;
     let product = fallback;
@@ -381,13 +382,29 @@
     if(Array.isArray(dataset)){
       let found = dataset.find(p=>String(p.id||p.sku||p._id)===String(pid));
       if(!found){
-        // en secours via SKU exact
+        // Fallback per exakter SKU
         found = dataset.find(p=> String(p.sku||'').toLowerCase()===fallback.sku.toLowerCase());
       }
       if(found) product={...fallback,...found};
     }
 
-    // ---- Rendu produit
+    // ---- kleine Übersetzungs-Helfer (Anzeige; Backend bleibt unverändert)
+    const LABEL_MAP = {
+      "Couleur":"Farbe",
+      "Accessoires":"Zubehör"
+    };
+    const VALUE_MAP = {
+      "Noir":"Schwarz",
+      "Blanc":"Weiß",
+      "Bleu":"Blau",
+      "Housse rigide":"Hartschalenetui",
+      "Câble audio 1.2 m":"Audiokabel 1,2 m",
+      "Standard":"Standard"
+    };
+    const labelOf = (k)=> LABEL_MAP[k] || k;
+    const valueLabel = (k,v)=> VALUE_MAP[v] || v;
+
+    // ---- Rendering
     const EUR=v=>Number(v).toLocaleString('de-DE',{style:'currency',currency:'EUR'});
     const gMain=document.getElementById('gMain');
     const thumbs=document.getElementById('thumbs');
@@ -405,18 +422,21 @@
 
     const imgs=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean).map(fixImg);
     gMain.src=imgs[0]; gMain.alt=product.name;
-    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Bild ${i+1} ansehen"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
+    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Bild ${i+1} anzeigen"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
     thumbs.addEventListener('click',e=>{
       const b=e.target.closest('button[data-i]'); if(!b) return;
       const i=Number(b.dataset.i); gMain.src=imgs[i];
     });
 
-    // Bewertungen (produktorientiert)
+    // Bewertungen (DE) — 3 ursprüngliche ersetzt + 3 zusätzliche
     const stars=document.getElementById('pStars'); const rTxt=document.getElementById('pRatingText');
     const reviews=[
-      {name:'Mara — Köln, DE',stars:5,date:'2025-08-18',text:"ANC blendet Bürogeräusche fast komplett aus. Sehr bequeme Polster, auch nach 4–5 Stunden kein Druck. Multipoint zwischen Laptop und Handy funktioniert zuverlässig."},
-      {name:'Felix — Wien, AT',stars:5,date:'2025-08-17',text:"Klang warm und ausgewogen, Stimmen klar. USB-C lädt schnell, die mitgelieferte Transporttasche ist praktisch für unterwegs."},
-      {name:'Anja — Hamburg, DE',stars:4,date:'2025-08-16',text:"Gute Sprachqualität bei Calls, Transparenzmodus klingt natürlich. Akku hält bei mir mehrere Tage Pendeln durch. Preis im Angebot sehr fair."}
+      {name:'Lena S. — Berlin, DE',stars:5,date:'2025-08-18',text:"Sehr bequemer Sitz, starke ANC. Multipoint klappt gut zwischen Laptop und Handy. Krypto-Zahlung ohne Probleme."},
+      {name:'Max T. — München, DE',stars:4,date:'2025-08-17',text:"Klarer, ausgewogener Klang, Akku hält locker mehrere Tage. Würde mir noch etwas mehr Basskontrolle wünschen."},
+      {name:'Sara K. — Hamburg, DE',stars:5,date:'2025-08-16',text:"Top Preis im Angebot. Ideal fürs Großraumbüro – Tastatur und Gespräche werden super weggefiltert."},
+      {name:'Jonas R. — Köln, DE',stars:5,date:'2025-08-15',text:"Leicht, sitzt auch mit Brille angenehm. USB-C Schnellladung praktisch, Case kompakt für unterwegs."},
+      {name:'Anna W. — Zürich, CH',stars:4,date:'2025-08-15',text:"Klang warm und entspannt, lange Hörsessions ohne Müdigkeit. Telefonie verständlich, Wind wird gut gefiltert."},
+      {name:'Paul H. — Wien, AT',stars:5,date:'2025-08-14',text:"App schlicht, alles Nötige an Bord. Für Pendeln & Fliegen perfekt – QC45 macht die Strecke ruhiger."}
     ];
     const avg=reviews.reduce((s,r)=>s+r.stars,0)/reviews.length;
     const full=Math.round(avg);
@@ -433,18 +453,11 @@
     pBadge.textContent = promoActive ? `-${disc}%` : '';
 
     // Lagerbestand
-    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">Auf Lager</span> • ${product.stock} Stk`:`<span style="color:#dc2626">Ausverkauft</span>`;
+    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">Auf Lager</span> • ${product.stock} Stück`:`<span style="color:#dc2626">Nicht verfügbar</span>`;
 
-    // Optionen dynamiques (affichage DE, valeurs backend inchangées)
+    // Optionen (Anzeige DE, Daten unverändert)
     const optsWrap = document.getElementById('opts');
     const selOpts = {};
-    const labelMap={ "Couleur":"Farbe", "Accessoires":"Zubehör" };
-    const valueMap={
-      "Couleur": {"Noir":"Schwarz","Blanc":"Weiß","Bleu":"Blau"},
-      "Accessoires": {"Standard":"Standard","Housse rigide":"Hartschalenetui","Câble audio 1.2 m":"Audiokabel 1,2 m"}
-    };
-    const displayVal=(k,v)=> (valueMap[k]&&valueMap[k][v])||v;
-
     function buildOptions(){
       if(!product.options || typeof product.options!=='object'){ optsWrap.innerHTML=''; return; }
       for(const [k,arr] of Object.entries(product.options)){
@@ -460,12 +473,11 @@
         const pills = (arr||[]).map(o=>{
           const on = selOpts[k]?.value===o.value;
           const delta = Number(o.priceDelta||0);
-          const txt = displayVal(k,o.value);
           return `<button class="pill" role="radio" aria-checked="${on}" data-opt="${k}" data-v="${o.value}" data-d="${delta}">
-            ${txt}${delta?` (+${EUR(delta)})`:''}
+            ${valueLabel(k,o.value)}${delta?` (+${EUR(delta)})`:''}
           </button>`;
         }).join('');
-        return `<div class="opt-row"><strong>${labelMap[k]||k}</strong><div>${pills}</div></div>`;
+        return `<div class="opt-row"><strong>${labelOf(k)}</strong><div>${pills}</div></div>`;
       }).join('');
     }
     function totalDelta(){ return Object.values(selOpts).reduce((s,o)=>s + Number(o.priceDelta||0), 0); }
@@ -482,27 +494,27 @@
 
     // Beschreibung
     const mkDesc=(product.description||'').split('\n').map(p=>p?`<span>${p}</span>`:'').join('<br>');
-    document.getElementById('tab-desc').innerHTML = `<p style="margin-top:0">${mkDesc}</p>
+    desc.innerHTML = `<p style="margin-top:0">${mkDesc}</p>
     <ul style="margin:8px 0 0 18px;line-height:1.6">
-      <li>Einkauf einfach & sicher bei <strong>GF Store</strong> — schneller Support.</li>
+      <li>Einfacher & sicherer Einkauf bei <strong>GF Store</strong> — schneller Support.</li>
       <li>Lieferung innerhalb 1 Woche • 14 Tage Rückgabe • <em>Geld-zurück-Garantie</em>.</li>
-      <li>Klassische Zahlungen und <strong>Krypto</strong> werden akzeptiert.</li>
+      <li>Klassische Zahlung und <strong>Krypto</strong> akzeptiert.</li>
       <li>Garantie <strong>${product.warrantyMonths||24} Monate</strong>.</li>
     </ul>`;
 
     // Technische Daten
     const specs=[
-      ['Typ','Over-Ear-Kopfhörer (kabellos)'],
+      ['Typ','Over-Ear Bluetooth-Kopfhörer'],
       ['Geräuschunterdrückung','Aktiv (ANC) + Transparenzmodus'],
-      ['Audio','Ausgewogener Bose-Klang'],
-      ['Konnektivität','Bluetooth Multipoint; 3,5-mm Klinke per Kabel'],
+      ['Klang','Ausgewogener Bose-Sound'],
+      ['Konnektivität','Bluetooth Multipoint, 3,5-mm Klinke per Kabel'],
       ['Laden','USB-C, lange Akkulaufzeit'],
       ['Kompatibilität','iOS / Android / Windows / macOS'],
       ['Garantie',`${product.warrantyMonths||24} Monate bei GF Store`]
     ];
     specsEl.innerHTML=specs.map(([k,v])=>`<div style="opacity:.7">${k}</div><div>${v}</div>`).join('');
 
-    // Ähnliche Produkte (gleiche Kategorie)
+    // Ähnliche Produkte (unverändert, nur Labels)
     const relGrid=document.getElementById('relGrid');
     if(Array.isArray(dataset)){
       const sims=dataset.filter(p=>p.category===product.category && String(p.id)!==String(product.id)).slice(0,4);
@@ -514,7 +526,7 @@
         const url=`./${slugify(p.name)}-${encodeURIComponent(p.id||p.sku||p._id)}.html`;
         const img=(p.imageCover||(p.images&&p.images[0])||'');
         return `<article class="card">
-          <a class="hit" href="${url}" aria-label="${p.name} ansehen"></a>
+          <a class="hit" href="${url}" aria-label="Produkt ${p.name} ansehen"></a>
           <div class="img"><img loading="lazy" src="${img}" alt="${p.name}"></div>
           <div class="box">
             <div style="font-weight:600">${p.name}</div>
@@ -527,7 +539,7 @@
 
     // In den Warenkorb
     document.getElementById('addBtn').addEventListener('click',()=>{
-      const parts=[]; for(const [k,v] of Object.entries(selOpts)){ if(v?.value) parts.push(`${k}: ${v.value}`); }
+      const parts=[]; for(const [k,v] of Object.entries(selOpts)){ if(v?.value) parts.push(`${labelOf(k)}: ${valueLabel(k,v.value)}`); }
       const nameWithVar = product.name + (parts.length? ` (${parts.join(', ')})` : '');
       const finalPrice  = (promoActive?product.promoPrice:product.price) + totalDelta();
 
@@ -537,12 +549,12 @@
       const image=(product.imageCover||(product.images&&product.images[0])||'');
       if(idx>-1){ cart[idx].qty+=1; } else { cart.push({id,name:nameWithVar,price:finalPrice,qty:1,image,brand:product.brand||'',category:product.category||''}); }
       setCart(cart);
-      // openCart(); // décommente pour ouvrir automatiquement le mini-panier après ajout
+      // openCart(); // optional automatisch öffnen
     });
 
     updateCartCount();
 
-    // ---- Mini-panneau panier
+    // ---- Mini-Warenkorb
     function cartTotal(){ return getCart().reduce((s,x)=>s + (x.qty * Number(x.price||0)), 0); }
     function renderCart(){
       const wrap=document.getElementById('cartItems'); if(!wrap) return;
@@ -560,7 +572,7 @@
             <span>${x.qty}</span>
             <button data-act="inc" aria-label="Erhöhen">+</button>
             <button data-act="del" title="Entfernen" style="margin-left:6px">
-              <img class="ic-sm" src="${ICONS.trash}" alt="Entfernen">
+              <img class="ic-sm" src="${ICONS.trash}" alt="Löschen">
             </button>
           </div>
         </div>`).join('')
@@ -607,7 +619,7 @@
       const id=h.id.split('-')[1]; document.getElementById('tab-'+id).classList.add('show');
     }));
 
-    // JSON-LD SEO
+    // JSON-LD SEO (unverändert)
     const imgsForLd=(product.images&&product.images.length?product.images:[product.imageCover]).map(fixImg).filter(Boolean);
     const ld={"@context":"https://schema.org","@type":"Product","name":product.name,"image":imgsForLd,"sku":product.sku||product.id,"brand":{"@type":"Brand","name":product.brand||'GF Store'},"description":(product.description||'').slice(0,500),"offers":{"@type":"Offer","priceCurrency":"EUR","price":(promoActive?product.promoPrice:product.price),"availability":"https://schema.org/InStock","url":location.href}};
     const s=document.createElement('script'); s.type='application/ld+json'; s.textContent=JSON.stringify(ld); document.head.appendChild(s);
