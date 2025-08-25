@@ -92,7 +92,7 @@
     .fab .badge{min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px}
     .fab img.ic{filter:invert(1)}
 
-    /* Mini-Warenkorb-Panel */
+    /* Mini panneau panier */
     .panel{position:fixed;inset:0;display:none;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:10010}
     .panel.show{display:block}
     .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid #e5e7eb;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
@@ -116,7 +116,7 @@
     .desktop-only{display:initial}
     @media (max-width:860px){
       .pwrap{grid-template-columns:1fr}
-      .brand .logo{height:22px} /* kleineres Logo auf Mobilgeräten */
+      .brand .logo{height:22px} /* logo plus petit sur mobile */
       .thumbs{gap:8px}
       .thumbs img{width:56px;height:56px}
       .gmain img{max-height:380px}
@@ -126,7 +126,7 @@
   </style>
 </head>
 <body>
-  <div class="banner">🎉 Sonderaktion zum Schulstart: <b>-25% bis -30%</b> auf PCs, Telefone und Konsolen <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+  <div class="banner">🎉 Sonderaktion zum Schulstart: <b>-25% bis -30%</b> auf PCs, Telefone & Konsolen <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
 
   <header>
     <div class="hwrap">
@@ -206,7 +206,7 @@
     <div class="grid" id="relGrid"></div>
   </section>
 
-  <!-- Mini-Warenkorb -->
+  <!-- Mini fenêtre panier -->
   <div id="cartPanel" class="panel" aria-hidden="true">
     <div class="sheet" role="dialog" aria-modal="true" aria-label="Mein Warenkorb">
       <header>
@@ -221,7 +221,7 @@
     </div>
   </div>
 
-  <!-- Warenkorb-FAB -->
+  <!-- Bulle panier -->
   <button id="fabCart" class="fab" type="button" aria-label="Warenkorb öffnen">
     <img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span>
   </button>
@@ -241,7 +241,7 @@
 
   <script>
   (async()=>{
-    // ---- Countdown (48 Std.)
+    // ---- Compte à rebours (48h) -> DE
     const countdownEl=document.getElementById('countdown');
     const SALE_END=new Date(Date.now()+48*60*60*1000);
     const two=n=>String(n).padStart(2,'0');
@@ -256,7 +256,7 @@
     }
     tick(); setInterval(tick,1000);
 
-    // ---- Icons
+    // ---- Icônes
     const ICONS = {
       buy:'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
       cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
@@ -277,14 +277,14 @@
     setSrc('icTruck',ICONS.truck); setSrc('icReturn',ICONS.logout); setSrc('icRefund',ICONS.refund); setSrc('ic4x',ICONS.fourx);
     setSrc('icPayNow',ICONS.checkout); setSrc('icFabCart',ICONS.cart); setSrc('icCheckout', ICONS.checkout);
 
-    // ---- Menü
+    // ---- Menu
     const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop');
     if(menuBtn&&menuDrop){
       menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
       document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
     }
 
-    // ---- Warenkorb (localStorage)
+    // ---- Panier (localStorage)
     const KEY='gf_cart';
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
     const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount(); if(typeof renderCart==='function'){renderCart();}};
@@ -297,22 +297,22 @@
     };
 
     // ---- Root GitHub Pages
-    const GH_ROOT = (()=>{ const parts = location.pathname.split('/').filter(Boolean); return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/'; })();
+    const GH_ROOT = (()=>{ const parts = location.pathname split('/').filter(Boolean); return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/'; })();
 
     // Helpers
     function getProductId(){
       const q=new URLSearchParams(location.search);
       if(q.get('id')) return String(q.get('id'));
       const fname=(location.pathname.split('/').pop()||'').toLowerCase();
-      const m=fname.match(/-(\\d+)\\.html?$/);
+      const m=fname.match(/-(\d+)\.html?$/);
       return m?m[1]:null;
     }
-    const normalize=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+    const normalize=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 
-    // Bildpfade korrigieren
+    // Corrige les chemins relatifs éventuels
     const fixImg=(src)=>src && src.startsWith('assets/') ? (GH_ROOT+src) : src;
 
-    // ---- Katalog laden
+    // ---- Chargement du catalogue
     async function loadProducts(){
       const urls=[
         '../data/products.json',
@@ -329,15 +329,15 @@
       return null;
     }
 
-    // ---- Fallback QC45
+    // ---- Fallback QC45 (structure backend inchangée)
     const fallback={
       id:"1017",
       sku:"GF-BOSE-QUIETCOMFORT-45-QC45-016",
       name:"Bose QuietComfort 45 (QC45)",
-      category:"Kopfhörer/Headset",
+      category:"Casque/Ecouteurs",
       brand:"Bose",
       model:"Bose QuietComfort 45 (QC45)",
-      description:"Bose QuietComfort 45 (QC45) — Der Klang, der dich von der Welt isoliert – kabellos und kompromisslos. Warum du ihn lieben wirst: Premium-Design • moderne Konnektivität • 24 Monate Garantie. Sonderaktion zum Schulstart: −25 % bis −30 % auf PCs, Telefone und Konsolen* — begrenzter Bestand. GF Store: sichere Zahlung (Karte) + Kryptowährungen akzeptiert (schnell, praktisch, quasi anonym); Versand innerhalb max. 1 Woche; Rückgabe innerhalb von 14 Tagen; Geld-zurück-Garantie bei Neuware. Vorteile bei GF Store: Einfacher & sicherer Einkauf • faire Preise • flexible Zahlungen.",
+      description:"Bose QuietComfort 45 (QC45) — Kabelloser Klang, der die Welt ausblendet. Warum du ihn lieben wirst: sehr bequemer Sitz • moderne Konnektivität (Multipoint) • 24 Monate Garantie. Schulstart-Aktion: −25 % bis −30 % auf PCs, Telefone & Konsolen* — begrenzter Bestand. GF Store: sichere Kartenzahlung + Krypto akzeptiert (schnell, praktisch, quasi anonym); Lieferung innerhalb 1 Woche; 14 Tage Rückgabe; Geld-zurück-Garantie bei Neuware. Vorteile GF Store: Einfach & sicher kaufen • faire Preise • flexible Zahlungen.",
       price:499.0,
       promoPrice:319.99,
       stock:30,
@@ -351,29 +351,29 @@
         "https://assets.bose.com/content/dam/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/images/QC45_PDP_inthebox_1x1.jpg/jcr:content/renditions/cq5dam.web.1000.1000.jpeg"
       ],
       imageCover:"https://assets.bose.com/content/dam/cloudassets/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-W02.png/jcr:content/renditions/cq5dam.web.1000.1000.png",
-      supplier:"EU-Distributor",
+      supplier:"Distributeur EU",
       cost:349.3,
       marginPct:-9.16,
-      status:"Auf Lager",
+      status:"En stock",
       createdAt:"2025-08-16T00:00:00",
       warrantyMonths:24,
       rating:4.7,
       ratingCount:0,
       options:{
-        "Farbe":[
-          {"value":"Schwarz","priceDelta":0},
-          {"value":"Weiß","priceDelta":0},
-          {"value":"Blau","priceDelta":0}
+        "Couleur":[
+          {"value":"Noir","priceDelta":0},
+          {"value":"Blanc","priceDelta":0},
+          {"value":"Bleu","priceDelta":0}
         ],
-        "Zubehör":[
+        "Accessoires":[
           {"value":"Standard","priceDelta":0},
-          {"value":"Hartschalen-Etui","priceDelta":20},
-          {"value":"Audiokabel 1,2 m","priceDelta":10}
+          {"value":"Housse rigide","priceDelta":20},
+          {"value":"Câble audio 1.2 m","priceDelta":10}
         ]
       }
     };
 
-    // ---- Produkt laden
+    // ---- Récupération produit
     const dataset = await loadProducts();
     const pid = getProductId() || fallback.id;
     let product = fallback;
@@ -381,13 +381,13 @@
     if(Array.isArray(dataset)){
       let found = dataset.find(p=>String(p.id||p.sku||p._id)===String(pid));
       if(!found){
-        // Fallback über exakte SKU
+        // en secours via SKU exact
         found = dataset.find(p=> String(p.sku||'').toLowerCase()===fallback.sku.toLowerCase());
       }
       if(found) product={...fallback,...found};
     }
 
-    // ---- Rendering
+    // ---- Rendu produit
     const EUR=v=>Number(v).toLocaleString('de-DE',{style:'currency',currency:'EUR'});
     const gMain=document.getElementById('gMain');
     const thumbs=document.getElementById('thumbs');
@@ -411,15 +411,12 @@
       const i=Number(b.dataset.i); gMain.src=imgs[i];
     });
 
-    // Bewertungen (angereichert)
+    // Bewertungen (produktorientiert)
     const stars=document.getElementById('pStars'); const rTxt=document.getElementById('pRatingText');
     const reviews=[
-      {name:'Camille L. — Paris, FR',stars:5,date:'2025-08-18',text:"Tragekomfort top, ANC sehr effektiv. Krypto-Zahlung lief einwandfrei."},
-      {name:'Ilyes B. — Lyon, FR',stars:4,date:'2025-08-17',text:"Starke Akkulaufzeit, klarer Sound. Lieferung war schnell."},
-      {name:'Nadia G. — Brüssel, BE',stars:5,date:'2025-08-16',text:"Bose-Qualität wie erwartet. Super Angebotspreis."},
-      {name:'Lennard H. — Berlin, DE',stars:5,date:'2025-08-16',text:"Multipoint funktioniert zuverlässig zwischen Laptop und Handy. Sehr gute Mikrofonqualität für Calls."},
-      {name:'Mira S. — München, DE',stars:4,date:'2025-08-15',text:"Ausgewogener Klang, angenehmer Sitz auch nach 4 Stunden. Etui ist robust."},
-      {name:'Jonas K. — Wien, AT',stars:5,date:'2025-08-15',text:"Transparenzmodus wirkt natürlich, kein Druckgefühl. Versand in 5 Tagen da."}
+      {name:'Mara — Köln, DE',stars:5,date:'2025-08-18',text:"ANC blendet Bürogeräusche fast komplett aus. Sehr bequeme Polster, auch nach 4–5 Stunden kein Druck. Multipoint zwischen Laptop und Handy funktioniert zuverlässig."},
+      {name:'Felix — Wien, AT',stars:5,date:'2025-08-17',text:"Klang warm und ausgewogen, Stimmen klar. USB-C lädt schnell, die mitgelieferte Transporttasche ist praktisch für unterwegs."},
+      {name:'Anja — Hamburg, DE',stars:4,date:'2025-08-16',text:"Gute Sprachqualität bei Calls, Transparenzmodus klingt natürlich. Akku hält bei mir mehrere Tage Pendeln durch. Preis im Angebot sehr fair."}
     ];
     const avg=reviews.reduce((s,r)=>s+r.stars,0)/reviews.length;
     const full=Math.round(avg);
@@ -438,9 +435,16 @@
     // Lagerbestand
     stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">Auf Lager</span> • ${product.stock} Stk`:`<span style="color:#dc2626">Ausverkauft</span>`;
 
-    // Dynamische Optionen
+    // Optionen dynamiques (affichage DE, valeurs backend inchangées)
     const optsWrap = document.getElementById('opts');
     const selOpts = {};
+    const labelMap={ "Couleur":"Farbe", "Accessoires":"Zubehör" };
+    const valueMap={
+      "Couleur": {"Noir":"Schwarz","Blanc":"Weiß","Bleu":"Blau"},
+      "Accessoires": {"Standard":"Standard","Housse rigide":"Hartschalenetui","Câble audio 1.2 m":"Audiokabel 1,2 m"}
+    };
+    const displayVal=(k,v)=> (valueMap[k]&&valueMap[k][v])||v;
+
     function buildOptions(){
       if(!product.options || typeof product.options!=='object'){ optsWrap.innerHTML=''; return; }
       for(const [k,arr] of Object.entries(product.options)){
@@ -456,11 +460,12 @@
         const pills = (arr||[]).map(o=>{
           const on = selOpts[k]?.value===o.value;
           const delta = Number(o.priceDelta||0);
+          const txt = displayVal(k,o.value);
           return `<button class="pill" role="radio" aria-checked="${on}" data-opt="${k}" data-v="${o.value}" data-d="${delta}">
-            ${o.value}${delta?` (+${EUR(delta)})`:''}
+            ${txt}${delta?` (+${EUR(delta)})`:''}
           </button>`;
         }).join('');
-        return `<div class="opt-row"><strong>${k}</strong><div>${pills}</div></div>`;
+        return `<div class="opt-row"><strong>${labelMap[k]||k}</strong><div>${pills}</div></div>`;
       }).join('');
     }
     function totalDelta(){ return Object.values(selOpts).reduce((s,o)=>s + Number(o.priceDelta||0), 0); }
@@ -476,33 +481,32 @@
     buildOptions(); updatePrice();
 
     // Beschreibung
-    const mkDesc=(product.description||'').split('\\n').map(p=>p?`<span>${p}</span>`:'').join('<br>');
-    desc.innerHTML = `<p style="margin-top:0">${mkDesc}</p>
+    const mkDesc=(product.description||'').split('\n').map(p=>p?`<span>${p}</span>`:'').join('<br>');
+    document.getElementById('tab-desc').innerHTML = `<p style="margin-top:0">${mkDesc}</p>
     <ul style="margin:8px 0 0 18px;line-height:1.6">
-      <li>Einfacher & sicherer Einkauf bei <strong>GF Store</strong> — schneller Support.</li>
-      <li>Lieferung innerhalb 1 Woche • Rückgabe 14 Tage • <em>Geld-zurück-Garantie</em>.</li>
-      <li>Klassische Zahlungen und <strong>Kryptowährungen</strong> werden akzeptiert.</li>
+      <li>Einkauf einfach & sicher bei <strong>GF Store</strong> — schneller Support.</li>
+      <li>Lieferung innerhalb 1 Woche • 14 Tage Rückgabe • <em>Geld-zurück-Garantie</em>.</li>
+      <li>Klassische Zahlungen und <strong>Krypto</strong> werden akzeptiert.</li>
       <li>Garantie <strong>${product.warrantyMonths||24} Monate</strong>.</li>
     </ul>`;
 
     // Technische Daten
     const specs=[
-      ['Typ','Ohrumschließender, kabelloser Kopfhörer'],
+      ['Typ','Over-Ear-Kopfhörer (kabellos)'],
       ['Geräuschunterdrückung','Aktiv (ANC) + Transparenzmodus'],
       ['Audio','Ausgewogener Bose-Klang'],
-      ['Konnektivität','Bluetooth Multipoint, 3,5-mm Klinke per Kabel'],
+      ['Konnektivität','Bluetooth Multipoint; 3,5-mm Klinke per Kabel'],
       ['Laden','USB-C, lange Akkulaufzeit'],
       ['Kompatibilität','iOS / Android / Windows / macOS'],
       ['Garantie',`${product.warrantyMonths||24} Monate bei GF Store`]
     ];
-    const specsEl=document.getElementById('specs');
     specsEl.innerHTML=specs.map(([k,v])=>`<div style="opacity:.7">${k}</div><div>${v}</div>`).join('');
 
     // Ähnliche Produkte (gleiche Kategorie)
     const relGrid=document.getElementById('relGrid');
     if(Array.isArray(dataset)){
       const sims=dataset.filter(p=>p.category===product.category && String(p.id)!==String(product.id)).slice(0,4);
-      const slugify=str=>String(str||'').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+      const slugify=str=>String(str||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
       relGrid.innerHTML=sims.map(p=>{
         const simPromo = Number.isFinite(p.promoPrice)&&p.promoPrice>0&&p.promoPrice<p.price;
         const newP=simPromo?p.promoPrice:p.price;
@@ -533,12 +537,12 @@
       const image=(product.imageCover||(product.images&&product.images[0])||'');
       if(idx>-1){ cart[idx].qty+=1; } else { cart.push({id,name:nameWithVar,price:finalPrice,qty:1,image,brand:product.brand||'',category:product.category||''}); }
       setCart(cart);
-      // openCart(); // zum automatischen Öffnen des Mini-Warenkorbs aktivieren
+      // openCart(); // décommente pour ouvrir automatiquement le mini-panier après ajout
     });
 
     updateCartCount();
 
-    // ---- Mini-Warenkorb
+    // ---- Mini-panneau panier
     function cartTotal(){ return getCart().reduce((s,x)=>s + (x.qty * Number(x.price||0)), 0); }
     function renderCart(){
       const wrap=document.getElementById('cartItems'); if(!wrap) return;
