@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GARMIN Fenix 7 Pro Solar Edition — GF Store</title>
+  <title>GARMIN Fenix 7 Pro Solar Edition — GF Store (DE)</title>
   <style>
     :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
     *{box-sizing:border-box} body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
@@ -91,7 +91,6 @@
     .fab{position:fixed;right:16px;bottom:16px;z-index:10000;background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border:0;border-radius:999px;display:inline-flex;align-items:center;gap:8px;padding:12px 14px;box-shadow:0 12px 28px rgba(30,64,175,.35);cursor:pointer;text-decoration:none}
     .fab .badge{min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px}
     .fab img.ic{filter:invert(1)}
-    /* Mini-Warenkorb-Panel */
     .panel{position:fixed;inset:0;display:none;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:10010}
     .panel.show{display:block}
     .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid #e5e7eb;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
@@ -115,7 +114,7 @@
     .desktop-only{display:initial}
     @media (max-width:860px){
       .pwrap{grid-template-columns:1fr}
-      .brand .logo{height:22px} /* Logo mobil reduziert */
+      .brand .logo{height:22px}
       .thumbs{gap:8px}
       .thumbs img{width:56px;height:56px}
       .gmain img{max-height:380px}
@@ -214,13 +213,13 @@
       </header>
       <div id="cartItems" class="items"></div>
       <div class="sum">
-        <div>Gesamt <strong id="cartTotal">0 €</strong></div>
+        <div>Summe <strong id="cartTotal">0 €</strong></div>
         <a href="../checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Zur Kasse</a>
       </div>
     </div>
   </div>
 
-  <!-- Warenkorb-Button (FAB) -->
+  <!-- Warenkorb-FAB -->
   <button id="fabCart" class="fab" type="button" aria-label="Warenkorb öffnen">
     <img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span>
   </button>
@@ -240,7 +239,7 @@
 
   <script>
   (async()=>{
-    // ---- Countdown (48 Std.)
+    // ---- Countdown (48h)
     const countdownEl=document.getElementById('countdown');
     const SALE_END=new Date(Date.now()+48*60*60*1000);
     const two=n=>String(n).padStart(2,'0');
@@ -251,11 +250,11 @@
       const d=Math.floor(diff/86400000); diff%=86400000;
       const h=Math.floor(diff/3600000); diff%=3600000;
       const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
-      countdownEl.textContent=`${d?d+' T ':''}${two(h)}:${two(m)}:${two(s)} verbleibend`;
+      countdownEl.textContent=`${d?d+' Tg ':''}${two(h)}:${two(m)}:${two(s)} verbleibend`;
     }
     tick(); setInterval(tick,1000);
 
-    // ---- Symbole
+    // ---- Icons (unverändert)
     const ICONS = {
       buy:'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
       cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
@@ -295,7 +294,7 @@
       const fbi=document.getElementById('icFabCart'); if(fbi) fbi.src=count>0?ICONS.cartFull:ICONS.cart;
     };
 
-    // ---- Root GitHub Pages + lokale Bildpfade fixen
+    // ---- Root GitHub Pages + Bildpfad-Korrektur (unverändert)
     const GH_ROOT = (()=>{ const parts = location.pathname.split('/').filter(Boolean); return (location.host.endsWith('github.io') && parts.length) ? `/${parts[0]}/` : '/'; })();
     const fixImg=(src)=>src && src.startsWith('assets/') ? (GH_ROOT+src) : src;
 
@@ -309,7 +308,7 @@
     }
     const slugify=str=>String(str||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 
-    // ---- Katalog laden
+    // ---- Katalog laden (unverändert)
     async function loadProducts(){
       const urls=[
         '../data/products.json',
@@ -326,7 +325,7 @@
       return null;
     }
 
-    // ---- Fallback GARMIN
+    // ---- Fallback GARMIN (Texte auf DE; Struktur/Felder unverändert)
     const fallback={
       id:"1021",
       sku:"GF-GARMIN-FENIX-7-PRO-SOLAR-EDITION-020",
@@ -334,7 +333,7 @@
       category:"Montre",
       brand:"GARMIN",
       model:"GARMIN Fenix 7 Pro Solar Edition",
-      description:"GARMIN Fenix 7 Pro Solar Edition — Dein 24/7-Gesundheits- und Trainingscoach am Handgelenk. Warum du sie lieben wirst: Premium-Design • moderne Konnektivität • 24 Monate Garantie. Sonderaktion zum Schulstart: −25 % bis −30 % auf PCs, Telefone und Konsolen* — begrenzter Bestand. GF Store: sichere Kartenzahlung + Krypto akzeptiert (schnell, praktisch, quasi anonym); Lieferung innerhalb max. 1 Woche; Rückgabe 14 Tage; Geld-zurück-Garantie bei Neuware. Vorteile GF Store: Einfach & sicher einkaufen • attraktive Preise • flexible Zahlungen.",
+      description:"GARMIN Fenix 7 Pro Solar Edition — Ihr 24/7-Gesundheits- und Trainingscoach am Handgelenk. Gründe zum Lieben: robustes Premium-Design • moderne Konnektivität • 24 Monate Garantie. Sonderaktion zum Schulstart: -25 % bis -30 % auf PCs, Telefone und Konsolen* — begrenzter Bestand. GF Store: sichere Kartenzahlung + Krypto akzeptiert (schnell, praktisch, nahezu anonym); Lieferung innerhalb 1 Woche; Rückgabe innerhalb 14 Tage; Geld-zurück-Garantie auf Neuware. Vorteile bei GF Store: Einfacher & sicherer Einkauf • faire Preise • flexible Zahlungen.",
       price:499.0,
       promoPrice:319.99,
       stock:30,
@@ -346,28 +345,28 @@
         "https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75"
       ],
       imageCover:"https://boulanger.scene7.com/is/image/Boulanger/0753759317713_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
-      supplier:"EU-Distributor",
+      supplier:"Distributeur EU",
       cost:349.3,
       marginPct:-9.16,
-      status:"Auf Lager",
+      status:"En stock",
       createdAt:"2025-08-16T00:00:00",
       warrantyMonths:24,
       rating:4.3,
       ratingCount:0,
       options:{
-        "Gehäusegröße":[
+        "Taille boîtier":[
           {"value":"S","priceDelta":0},
           {"value":"M","priceDelta":0},
           {"value":"L","priceDelta":20}
         ],
-        "Konnektivität":[
+        "Connectivité":[
           {"value":"GPS","priceDelta":0},
           {"value":"GPS + Cellular","priceDelta":100}
         ]
       }
     };
 
-    // ---- Produktdaten
+    // ---- Produkt holen
     const dataset = await loadProducts();
     const pid = getProductId() || fallback.id;
     let product = fallback;
@@ -376,6 +375,17 @@
       const found = dataset.find(p=>String(p.id||p.sku||p._id)===String(pid));
       if(found) product={...fallback,...found};
     }
+
+    // ---- Anzeige-Übersetzungen (Backend-Keys bleiben FR)
+    const LABEL_MAP = {
+      "Taille boîtier":"Gehäusegröße",
+      "Connectivité":"Konnektivität"
+    };
+    const VALUE_MAP = {
+      "GPS + Cellular":"GPS + Mobilfunk"
+    };
+    const labelOf = (k)=> LABEL_MAP[k] || k;
+    const valueLabel = (k,v)=> VALUE_MAP[v] || v;
 
     // ---- Rendering
     const EUR=v=>Number(v).toLocaleString('de-DE',{style:'currency',currency:'EUR'});
@@ -395,18 +405,21 @@
 
     const imgs=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean).map(fixImg);
     gMain.src=imgs[0]; gMain.alt=product.name;
-    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Bild ${i+1} ansehen"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
+    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Bild ${i+1} anzeigen"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
     thumbs.addEventListener('click',e=>{
       const b=e.target.closest('button[data-i]'); if(!b) return;
       const i=Number(b.dataset.i); gMain.src=imgs[i];
     });
 
-    // Bewertungen (Beispiel)
+    // Bewertungen (DE) — 3 d'origine + 3 supplémentaires axés produit
     const stars=document.getElementById('pStars'); const rTxt=document.getElementById('pRatingText');
     const reviews=[
-      {name:'Élise — Nantes, FR',stars:5,date:'2025-08-18',text:"Tolle Akkulaufzeit, extrem präzises GPS."},
-      {name:'Nico — Genf, CH',stars:4,date:'2025-08-17',text:"Sehr komplett für Sport, schnelle Lieferung."},
-      {name:'Maya — Paris, FR',stars:4,date:'2025-08-16',text:"Krypto-Zahlung problemlos, robuste Uhr."}
+      {name:'Lena — Berlin, DE',stars:5,date:'2025-08-18',text:"Akkulaufzeit mit Solar ist brutal gut. Multiband-GPS trackt Trails sehr präzise, sogar im Wald."},
+      {name:'Nico — Genf, CH',stars:4,date:'2025-08-17',text:"Extrem umfassend fürs Training, Karten offline hilfreich in den Alpen. Versand war schnell."},
+      {name:'Maya — Paris, FR',stars:4,date:'2025-08-16',text:"Krypto-Zahlung problemlos. Uhr ist robust, Tastenbedienung beim Laufen top."},
+      {name:'Jonas — Köln, DE',stars:5,date:'2025-08-15',text:"Training Readiness motiviert smart. Herzfrequenz und Höhenmesser sehr konsistent."},
+      {name:'Anna — Zürich, CH',stars:5,date:'2025-08-15',text:"LED-Lampe an Bord ist im Alltag und beim Laufen im Dunkeln praktischer als gedacht."},
+      {name:'Paul — Wien, AT',stars:4,date:'2025-08-14',text:"Display draußen super ablesbar, Menü logisch. Wunsch: etwas dünneres Gehäuse."}
     ];
     const avg=reviews.reduce((s,r)=>s+r.stars,0)/reviews.length;
     const full=Math.round(avg);
@@ -422,10 +435,10 @@
     pDel.textContent   = promoActive ? EUR(product.price) : '';
     pBadge.textContent = promoActive ? `-${disc}%` : '';
 
-    // Lagerbestand
-    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">Auf Lager</span> • ${product.stock} Stk`:`<span style="color:#dc2626">Ausverkauft</span>`;
+    // Lager
+    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">Auf Lager</span> • ${product.stock} Stück`:`<span style="color:#dc2626">Nicht verfügbar</span>`;
 
-    // Dynamische Optionen
+    // Optionen (Anzeige DE, Daten FR intakt)
     const optsWrap = document.getElementById('opts');
     const selOpts = {};
     function buildOptions(){
@@ -443,10 +456,10 @@
           const on = selOpts[k]?.value===o.value;
           const d = Number(o.priceDelta||0);
           return `<button class="pill" role="radio" aria-checked="${on}" data-opt="${k}" data-v="${o.value}" data-d="${d}">
-            ${o.value}${d?` (+${EUR(d)})`:''}
+            ${valueLabel(k,o.value)}${d?` (+${EUR(d)})`:''}
           </button>`;
         }).join('');
-        return `<div class="opt-row"><strong>${k}</strong><div>${pills}</div></div>`;
+        return `<div class="opt-row"><strong>${labelOf(k)}</strong><div>${pills}</div></div>`;
       }).join('');
     }
     function totalDelta(){ return Object.values(selOpts).reduce((s,o)=>s + Number(o.priceDelta||0), 0); }
@@ -466,22 +479,21 @@
     desc.innerHTML = `<p style="margin-top:0">${mkDesc}</p>
     <ul style="margin:8px 0 0 18px;line-height:1.6">
       <li>Einfacher & sicherer Einkauf bei <strong>GF Store</strong> — schneller Support.</li>
-      <li>Lieferung innerhalb 1 Woche • Rückgabe 14 Tage • <em>Geld-zurück-Garantie</em>.</li>
-      <li>Klassische Zahlungen und <strong>Kryptowährungen</strong> werden akzeptiert.</li>
+      <li>Lieferung innerhalb 1 Woche • 14 Tage Rückgabe • <em>Geld-zurück-Garantie</em>.</li>
+      <li>Klassische Zahlung und <strong>Krypto</strong> akzeptiert.</li>
       <li>Garantie <strong>${product.warrantyMonths||24} Monate</strong>.</li>
     </ul>`;
 
-    // Technische Daten (Beispiel)
+    // Technische Daten
     const specs=[
       ['Typ','Multisport-Smartwatch'],
-      ['Display','AMOLED/LTPO (je nach Version)'],
-      ['Sensoren','GPS/GLONASS, Herzfrequenz, SpO₂, Höhenmesser'],
-      ['Akkulaufzeit','Lange Laufzeit mit Solar-Ladung'],
-      ['Konnektivität','Bluetooth, NFC (Bezahlen), GPS'],
-      ['Widerstand','Wasserdicht (Hersteller-Norm)'],
-      ['Garantie', `${product.warrantyMonths||24} Monate bei GF Store`]
+      ['Display','Transflektives MIP, sehr gut ablesbar im Sonnenlicht'],
+      ['Sensoren','GPS/GLONASS, Herzfrequenz, SpO₂, Barometer/Höhenmesser'],
+      ['Akkulaufzeit','Sehr lang, mit Solar-Ladeunterstützung'],
+      ['Konnektivität','Bluetooth, NFC (Zahlung), GPS'],
+      ['Widerstand','Wasserdicht (laut Hersteller)'],
+      ['Garantie',`${product.warrantyMonths||24} Monate bei GF Store`]
     ];
-    const specsEl=document.getElementById('specs');
     specsEl.innerHTML=specs.map(([k,v])=>`<div style="opacity:.7">${k}</div><div>${v}</div>`).join('');
 
     // Ähnliche Produkte
@@ -495,7 +507,7 @@
         const url=`./${slugify(p.name)}-${encodeURIComponent(p.id||p.sku||p._id)}.html`;
         const img=fixImg(p.imageCover||(p.images&&p.images[0])||'');
         return `<article class="card">
-          <a class="hit" href="${url}" aria-label="${p.name} ansehen"></a>
+          <a class="hit" href="${url}" aria-label="Produkt ${p.name} ansehen"></a>
           <div class="img"><img loading="lazy" src="${img}" alt="${p.name}"></div>
           <div class="box">
             <div style="font-weight:600">${p.name}</div>
@@ -508,7 +520,7 @@
 
     // In den Warenkorb
     document.getElementById('addBtn').addEventListener('click',()=>{
-      const parts=[]; for(const [k,v] of Object.entries(selOpts)){ if(v?.value) parts.push(`${k}: ${v.value}`); }
+      const parts=[]; for(const [k,v] of Object.entries(selOpts)){ if(v?.value) parts.push(`${labelOf(k)}: ${valueLabel(k,v.value)}`); }
       const nameWithVar = product.name + (parts.length? ` (${parts.join(', ')})` : '');
       const finalPrice  = (promoActive?product.promoPrice:product.price) + totalDelta();
 
@@ -518,7 +530,7 @@
       const image=(product.imageCover||(product.images&&product.images[0])||'');
       if(idx>-1){ cart[idx].qty+=1; } else { cart.push({id,name:nameWithVar,price:finalPrice,qty:1,image,brand:product.brand||'',category:product.category||''}); }
       setCart(cart);
-      // openCart(); // Mini-Warenkorb nach dem Hinzufügen automatisch öffnen
+      // openCart(); // optional
     });
 
     updateCartCount();
@@ -541,7 +553,7 @@
             <span>${x.qty}</span>
             <button data-act="inc" aria-label="Erhöhen">+</button>
             <button data-act="del" title="Entfernen" style="margin-left:6px">
-              <img class="ic-sm" src="${ICONS.trash}" alt="Entfernen">
+              <img class="ic-sm" src="${ICONS.trash}" alt="Löschen">
             </button>
           </div>
         </div>`).join('')
@@ -588,7 +600,7 @@
       const id=h.id.split('-')[1]; document.getElementById('tab-'+id).classList.add('show');
     }));
 
-    // JSON-LD SEO
+    // JSON-LD SEO (unverändert)
     const imgsForLd=(product.images&&product.images.length?product.images:[product.imageCover]).map(fixImg).filter(Boolean);
     const ld={"@context":"https://schema.org","@type":"Product","name":product.name,"image":imgsForLd,"sku":product.sku||product.id,"brand":{"@type":"Brand","name":product.brand||'GF Store'},"description":(product.description||'').slice(0,500),"offers":{"@type":"Offer","priceCurrency":"EUR","price":(promoActive?product.promoPrice:product.price),"availability":"https://schema.org/InStock","url":location.href}};
     const s=document.createElement('script'); s.type='application/ld+json'; s.textContent=JSON.stringify(ld); document.head.appendChild(s);
