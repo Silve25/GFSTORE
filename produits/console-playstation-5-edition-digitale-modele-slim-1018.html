@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="fr">
+<html lang="de">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Console PlayStation 5 - Edition Digitale (Modèle Slim) — GF Store</title>
+  <title>PlayStation 5 Konsole – Digital Edition (Slim-Modell) — GF Store</title>
   <style>
     :root{--w:1200px;--c:#0f172a;--a:#2563eb;--g:#10b981;--bg:#f5f7fb;--r:16px}
     *{box-sizing:border-box} body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;color:var(--c);background:var(--bg)}
@@ -92,7 +92,7 @@
     .fab .badge{min-width:18px;border-radius:999px;background:#111;color:#fff;padding:2px 6px;font-size:12px}
     .fab img.ic{filter:invert(1)}
 
-    /* Mini panneau panier */
+    /* Mini-Warenkorb-Panel */
     .panel{position:fixed;inset:0;display:none;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:10010}
     .panel.show{display:block}
     .sheet{position:absolute;right:0;top:0;height:100%;width:min(420px,95%);background:#fff;border-left:1px solid #e5e7eb;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
@@ -116,7 +116,7 @@
     .desktop-only{display:initial}
     @media (max-width:860px){
       .pwrap{grid-template-columns:1fr}
-      .brand .logo{height:22px} /* logo sensiblement réduit sur mobile */
+      .brand .logo{height:22px} /* Logo auf Mobil kleiner */
       .thumbs{gap:8px}
       .thumbs img{width:56px;height:56px}
       .gmain img{max-height:380px}
@@ -126,7 +126,7 @@
   </style>
 </head>
 <body>
-  <div class="banner">🎉 Promo spéciale rentrée : <b>-25% à -30%</b> sur PC, téléphones et consoles <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
+  <div class="banner">🎉 Sonderaktion zum Schulstart: <b>-25% bis -30%</b> auf PCs, Telefone und Konsolen <span class="sep">•</span> <span id="countdown" class="timer" aria-live="polite"></span></div>
 
   <header>
     <div class="hwrap">
@@ -134,16 +134,16 @@
         <img src="https://silve25.github.io/GFSTORE/assets/img/logopnggfstore.png" class="logo" alt="GF Store" width="180" height="52" decoding="async">
       </a>
       <nav class="nav">
-        <a href="../compte/index.html"><img class="ic" id="icUser" alt=""> Compte</a>
-        <a id="cartBtn" class="iconbtn" href="../checkout.html"><img id="cartIcon" class="ic" alt=""> Panier</a>
+        <a href="../compte/index.html"><img class="ic" id="icUser" alt=""> Konto</a>
+        <a id="cartBtn" class="iconbtn" href="../checkout.html"><img id="cartIcon" class="ic" alt=""> Warenkorb</a>
         <div class="dropdown">
-          <button class="iconbtn" id="menuBtn" aria-label="Menu"><img class="ic" id="icMenu" alt=""></button>
+          <button class="iconbtn" id="menuBtn" aria-label="Menü"><img class="ic" id="icMenu" alt=""></button>
           <div id="menuDrop" class="menu">
-            <a href="../pages/a-propos.html">À propos</a>
-            <a href="../pages/cgv.html">CGV</a>
-            <a href="../pages/mentions-legales.html">Mentions légales</a>
-            <a href="../pages/confidentialite.html">Politique de confidentialité</a>
-            <a href="../pages/contact.html">Contact</a>
+            <a href="../pages/a-propos.html">Über uns</a>
+            <a href="../pages/cgv.html">AGB</a>
+            <a href="../pages/mentions-legales.html">Impressum</a>
+            <a href="../pages/confidentialite.html">Datenschutz</a>
+            <a href="../pages/contact.html">Kontakt</a>
           </div>
         </div>
       </nav>
@@ -152,13 +152,13 @@
 
   <section class="pwrap" id="pwrap" aria-live="polite">
     <div class="gallery">
-      <div class="gmain"><img id="gMain" alt="Console PlayStation 5 - Edition Digitale (Modèle Slim)" loading="eager" fetchpriority="high"></div>
+      <div class="gmain"><img id="gMain" alt="PlayStation 5 Konsole – Digital Edition (Slim-Modell)" loading="eager" fetchpriority="high"></div>
       <div class="thumbs" id="thumbs"></div>
     </div>
     <aside class="pinfo">
       <div class="title">
-        <h1 id="pName">Console PlayStation 5 - Edition Digitale (Modèle Slim)</h1>
-        <span class="brandchip" id="pBrand">Console</span>
+        <h1 id="pName">PlayStation 5 Konsole – Digital Edition (Slim-Modell)</h1>
+        <span class="brandchip" id="pBrand">Sony</span>
         <span class="rating"><span class="stars" id="pStars"></span><span id="pRatingText"></span></span>
       </div>
 
@@ -172,15 +172,15 @@
       <div class="opts" id="opts"></div>
 
       <div class="cta">
-        <button id="addBtn" class="btn"><img class="ic" id="icBuy" alt=""> Ajouter au panier</button>
+        <button id="addBtn" class="btn"><img class="ic" id="icBuy" alt=""> In den Warenkorb</button>
         <div class="trust">
           <div class="row">
-            <span><img class="ic" id="icTruck" alt=""> Livraison en 1 semaine</span>
-            <span><img class="ic" id="icReturn" alt=""> Retours 14 jours</span>
-            <span><img class="ic" id="icRefund" alt=""> Remboursement garanti</span>
-            <span><img class="ic" id="ic4x" alt=""> Paiement en 4x</span>
+            <span><img class="ic" id="icTruck" alt=""> Lieferung innerhalb 1 Woche</span>
+            <span><img class="ic" id="icReturn" alt=""> 14 Tage Rückgabe</span>
+            <span><img class="ic" id="icRefund" alt=""> Geld-zurück-Garantie</span>
+            <span><img class="ic" id="ic4x" alt=""> Zahlung in 4 Raten</span>
           </div>
-          <a id="payNowBtn" href="../checkout.html" class="btn paynow"><img class="ic" id="icPayNow" alt=""> Payer maintenant</a>
+          <a id="payNowBtn" href="../checkout.html" class="btn paynow"><img class="ic" id="icPayNow" alt=""> Jetzt bezahlen</a>
         </div>
       </div>
     </aside>
@@ -188,9 +188,9 @@
 
   <section class="tabs" id="tabs">
     <div class="tabheads" role="tablist">
-      <button role="tab" aria-selected="true" aria-controls="tab-desc" id="th-desc">Description</button>
-      <button role="tab" aria-selected="false" aria-controls="tab-spec" id="th-spec">Spécifications</button>
-      <button role="tab" aria-selected="false" aria-controls="tab-rev" id="th-rev">Avis</button>
+      <button role="tab" aria-selected="true" aria-controls="tab-desc" id="th-desc">Beschreibung</button>
+      <button role="tab" aria-selected="false" aria-controls="tab-spec" id="th-spec">Technische Daten</button>
+      <button role="tab" aria-selected="false" aria-controls="tab-rev" id="th-rev">Bewertungen</button>
     </div>
     <div class="tab show" id="tab-desc" role="tabpanel" aria-labelledby="th-desc"></div>
     <div class="tab" id="tab-spec" role="tabpanel" aria-labelledby="th-spec">
@@ -202,61 +202,61 @@
   </section>
 
   <section class="rel" id="rel">
-    <h3>Produits similaires</h3>
+    <h3>Ähnliche Produkte</h3>
     <div class="grid" id="relGrid"></div>
   </section>
 
-  <!-- Mini fenêtre panier -->
+  <!-- Mini-Warenkorb -->
   <div id="cartPanel" class="panel" aria-hidden="true">
-    <div class="sheet" role="dialog" aria-modal="true" aria-label="Mon panier">
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="Mein Warenkorb">
       <header>
-        <strong>Mon panier</strong>
-        <button id="closeCart" class="x" aria-label="Fermer">✕</button>
+        <strong>Mein Warenkorb</strong>
+        <button id="closeCart" class="x" aria-label="Schließen">✕</button>
       </header>
       <div id="cartItems" class="items"></div>
       <div class="sum">
-        <div>Total <strong id="cartTotal">0 €</strong></div>
-        <a href="../checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Effectuer un paiement</a>
+        <div>Gesamt <strong id="cartTotal">0 €</strong></div>
+        <a href="../checkout.html" class="checkout"><img class="ic" id="icCheckout" alt=""> Zur Kasse</a>
       </div>
     </div>
   </div>
 
-  <!-- Bulle panier -->
-  <button id="fabCart" class="fab" type="button" aria-label="Ouvrir le panier">
+  <!-- Warenkorb-FAB -->
+  <button id="fabCart" class="fab" type="button" aria-label="Warenkorb öffnen">
     <img class="ic" id="icFabCart" alt=""> <span id="fabCount" class="badge">0</span>
   </button>
 
   <footer>
     <div class="fwrap">
-      <div>© GF Store 2025 — Simplicité, sécurité, crypto-friendly.</div>
+      <div>© GF Store 2025 — Einfach, sicher, krypto-freundlich.</div>
       <nav>
-        <a href="../pages/a-propos.html">À propos</a> · 
-        <a href="../pages/cgv.html">CGV</a> · 
-        <a href="../pages/mentions-legales.html">Mentions légales</a> · 
-        <a href="../pages/confidentialite.html">Confidentialité</a> · 
-        <a href="../pages/contact.html">Contact</a>
+        <a href="../pages/a-propos.html">Über uns</a> · 
+        <a href="../pages/cgv.html">AGB</a> · 
+        <a href="../pages/mentions-legales.html">Impressum</a> · 
+        <a href="../pages/confidentialite.html">Datenschutz</a> · 
+        <a href="../pages/contact.html">Kontakt</a>
       </nav>
     </div>
   </footer>
 
   <script>
   (async()=>{
-    // ---- Compte à rebours (48h)
+    // ---- Countdown (48 Std.)
     const countdownEl=document.getElementById('countdown');
     const SALE_END=new Date(Date.now()+48*60*60*1000);
     const two=n=>String(n).padStart(2,'0');
     function tick(){
       if(!countdownEl) return;
       const now=new Date(); let diff=SALE_END-now;
-      if(diff<=0){countdownEl.textContent='Dernières heures !';return}
+      if(diff<=0){countdownEl.textContent='Letzte Stunden!';return}
       const d=Math.floor(diff/86400000); diff%=86400000;
       const h=Math.floor(diff/3600000); diff%=3600000;
       const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
-      countdownEl.textContent=`${d?d+'j ':''}${two(h)}:${two(m)}:${two(s)} restants`;
+      countdownEl.textContent=`${d?d+' T ':''}${two(h)}:${two(m)}:${two(s)} verbleibend`;
     }
     tick(); setInterval(tick,1000);
 
-    // ---- Icônes
+    // ---- Icons
     const ICONS = {
       buy:'https://img.icons8.com/?size=100&id=ditUhfRlUOQg&format=png&color=000000',
       cart:'https://img.icons8.com/?size=100&id=AaWM1DnCz2bQ&format=png&color=000000',
@@ -277,14 +277,14 @@
     setSrc('icTruck',ICONS.truck); setSrc('icReturn',ICONS.logout); setSrc('icRefund',ICONS.refund); setSrc('ic4x',ICONS.fourx);
     setSrc('icPayNow',ICONS.checkout); setSrc('icFabCart',ICONS.cart); setSrc('icCheckout', ICONS.checkout);
 
-    // ---- Menu
+    // ---- Menü
     const menuBtn=document.getElementById('menuBtn'); const menuDrop=document.getElementById('menuDrop');
     if(menuBtn&&menuDrop){
       menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
       document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
     }
 
-    // ---- Panier (localStorage)
+    // ---- Warenkorb (localStorage)
     const KEY='gf_cart';
     const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
     const setCart=arr=>{localStorage.setItem(KEY,JSON.stringify(arr)); updateCartCount(); if(typeof renderCart==='function'){renderCart();}};
@@ -310,7 +310,7 @@
     const normalize=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
     const fixImg=(src)=>src && src.startsWith('assets/') ? (GH_ROOT+src) : src;
 
-    // ---- Chargement du catalogue
+    // ---- Katalog laden
     async function loadProducts(){
       const urls=[
         '../data/products.json',
@@ -331,11 +331,11 @@
     const fallback={
       id:"1018",
       sku:"GF-CONSOLE-PLAYSTATION-5-EDITION-DIGITALE-M-017",
-      name:"Console PlayStation 5 - Edition Digitale (Modèle Slim)",
+      name:"PlayStation 5 Konsole – Digital Edition (Slim-Modell)",
       category:"Consoles",
-      brand:"Console",
-      model:"Console PlayStation 5 - Edition Digitale (Modèle Slim)",
-      description:"Console PlayStation 5 - Edition Digitale (Modèle Slim) — La nouvelle génération de jeu à la maison. Pourquoi vous allez l’adorer : design premium • connectivité moderne • garantie 24 mois. Promo spéciale rentrée : -25 % à -30 % sur PC, téléphones et consoles* — Stock limité : profitez-en tant que c’est disponible. GF Store : paiement sécurisé (CB) + crypto acceptées (rapide, pratique, quasi anonyme) ; livraison sous 1 semaine maximum ; retours acceptés sous 14 jours ; remboursement garanti sur produits neufs. Avantages GF Store : Simplicité et sécurité d’achat • Tarifs compétitifs • Flexibilité des paiements.",
+      brand:"Sony",
+      model:"PlayStation 5 Konsole – Digital Edition (Slim-Modell)",
+      description:"PlayStation 5 Konsole – Digital Edition (Slim-Modell) — Die neue Generation für Zuhause. Warum du sie lieben wirst: Premium-Design • moderne Konnektivität • 24 Monate Garantie. Sonderaktion zum Schulstart: −25 % bis −30 % auf PCs, Telefone und Konsolen* — begrenzter Bestand. GF Store: sichere Zahlung (Karte) + Kryptowährungen akzeptiert (schnell, praktisch, quasi anonym); Lieferung innerhalb max. 1 Woche; Rückgabe innerhalb von 14 Tagen; Geld-zurück-Garantie bei Neuware. Vorteile bei GF Store: Einfacher & sicherer Einkauf • attraktive Preise • flexible Zahlungen.",
       price:499.0,
       promoPrice:319.99,
       stock:22,
@@ -351,25 +351,25 @@
         "assets/img/console-playstation-5-edition-digitale-modele-slim/image_console_9.webp"
       ],
       imageCover:"https://boulanger.scene7.com/is/image/Boulanger/0711719577294_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75",
-      supplier:"Distributeur EU",
+      supplier:"EU-Distributor",
       cost:349.3,
       marginPct:-9.16,
-      status:"En stock",
+      status:"Auf Lager",
       createdAt:"2025-08-16T00:00:00",
       warrantyMonths:24,
       rating:4.4,
       ratingCount:0,
       options:{
-        "Pack":[
-          {"value":"Console seule","priceDelta":0},
-          {"value":"Avec 2e manette","priceDelta":60},
-          {"value":"Avec 1 To NVMe","priceDelta":120},
-          {"value":"Pack jeu + manette","priceDelta":150}
+        "Paket":[
+          {"value":"Nur Konsole","priceDelta":0},
+          {"value":"Mit 2. Controller","priceDelta":60},
+          {"value":"Mit 1 TB NVMe","priceDelta":120},
+          {"value":"Bundle Spiel + Controller","priceDelta":150}
         ]
       }
     };
 
-    // ---- Récupération produit
+    // ---- Produkt laden
     const dataset = await loadProducts();
     const pid = getProductId() || fallback.id;
     let product = fallback;
@@ -377,14 +377,14 @@
     if(Array.isArray(dataset)){
       let found = dataset.find(p=>String(p.id||p.sku||p._id)===String(pid));
       if(!found){
-        // secours via SKU
+        // Fallback via SKU
         found = dataset.find(p=> String(p.sku||'').toLowerCase()===fallback.sku.toLowerCase());
       }
       if(found) product={...fallback,...found};
     }
 
-    // ---- Rendu produit
-    const EUR=v=>Number(v).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    // ---- Rendering
+    const EUR=v=>Number(v).toLocaleString('de-DE',{style:'currency',currency:'EUR'});
     const gMain=document.getElementById('gMain');
     const thumbs=document.getElementById('thumbs');
     const pName=document.getElementById('pName');
@@ -401,26 +401,29 @@
 
     const imgs=(product.images&&product.images.length?product.images:[product.imageCover]).filter(Boolean).map(fixImg);
     gMain.src=imgs[0]; gMain.alt=product.name;
-    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Voir image ${i+1}"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
+    thumbs.innerHTML=imgs.map((src,i)=>`<button data-i="${i}" aria-label="Bild ${i+1} ansehen"><img loading="lazy" decoding="async" src="${src}" alt="${product.name} ${i+1}"></button>`).join('');
     thumbs.addEventListener('click',e=>{
       const b=e.target.closest('button[data-i]'); if(!b) return;
       const i=Number(b.dataset.i); gMain.src=imgs[i];
     });
 
-    // Avis (ex.)
+    // Bewertungen (angereichert)
     const stars=document.getElementById('pStars'); const rTxt=document.getElementById('pRatingText');
     const reviews=[
-      {name:'Alex M. — Bordeaux, FR',stars:5,date:'2025-08-18',text:"Silencieuse, rapide, format Slim au top. Emballage nickel."},
-      {name:'Sofia P. — Liège, BE',stars:4,date:'2025-08-17',text:"Super pack avec 2e manette. Livraison en 4 jours."},
-      {name:'Yanis T. — Lyon, FR',stars:5,date:'2025-08-16',text:"Prix promo imbattable. Paiement crypto sans souci."}
+      {name:'Alex M. — Bordeaux, FR',stars:5,date:'2025-08-18',text:"Leise, schnell, das Slim-Format ist top. Verpackung einwandfrei."},
+      {name:'Sofia P. — Lüttich, BE',stars:4,date:'2025-08-17',text:"Tolles Paket mit zweitem Controller. Lieferung in 4 Tagen."},
+      {name:'Yanis T. — Lyon, FR',stars:5,date:'2025-08-16',text:"Unschlagbarer Aktionspreis. Krypto-Zahlung ohne Probleme."},
+      {name:'Lena S. — Berlin, DE',stars:5,date:'2025-08-16',text:"NVMe-Erweiterung leicht eingebaut. 4K@120 Hz läuft mit meinem TV hervorragend."},
+      {name:'Marco F. — Zürich, CH',stars:4,date:'2025-08-15',text:"Sehr kompakt im Rack, DualSense-Feedback macht Spaß. Versand war zuverlässig."},
+      {name:'Daniel W. — Wien, AT',stars:5,date:'2025-08-15',text:"Top Performance und flüssige UI. Preis-Leistung stimmt absolut."}
     ];
     const avg=reviews.reduce((s,r)=>s+r.stars,0)/reviews.length;
     const full=Math.round(avg);
     stars.innerHTML=Array.from({length:5},(_,i)=>'<i style="opacity:'+(i<full?1:.2)+'"></i>').join('');
-    rTxt.textContent=avg.toFixed(1)+' / 5 ('+reviews.length+' avis)';
+    rTxt.textContent=avg.toFixed(1)+' / 5 ('+reviews.length+' Bewertungen)';
     document.getElementById('reviews').innerHTML=reviews.map(r=>`<div class="rev"><div class="rv-head"><strong>${r.name}</strong><span class="rv-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span><span class="rv-date">${r.date}</span></div><p>${r.text}</p></div>`).join('');
 
-    // Prix + remise
+    // Preis + Rabatt
     const promoActive = Number.isFinite(product.promoPrice)&&product.promoPrice>0&&product.promoPrice<product.price;
     let base = promoActive ? product.promoPrice : product.price;
     const disc = promoActive ? Math.round((1-(base/product.price))*100) : 0;
@@ -428,10 +431,10 @@
     pDel.textContent   = promoActive ? EUR(product.price) : '';
     pBadge.textContent = promoActive ? `-${disc}%` : '';
 
-    // Stock
-    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">En stock</span> • ${product.stock} pièces`:`<span style="color:#dc2626">Rupture</span>`;
+    // Lagerbestand
+    stockInfo.innerHTML=product.stock>0?`<span style="color:#16a34a">Auf Lager</span> • ${product.stock} Stk`:`<span style="color:#dc2626">Ausverkauft</span>`;
 
-    // Options dynamiques
+    // Optionen
     const optsWrap = document.getElementById('opts');
     const selOpts = {};
     function buildOptions(){
@@ -468,28 +471,28 @@
 
     buildOptions(); updatePrice();
 
-    // Description
+    // Beschreibung
     const mkDesc=(product.description||'').split('\n').map(p=>p?`<span>${p}</span>`:'').join('<br>');
     desc.innerHTML = `<p style="margin-top:0">${mkDesc}</p>
     <ul style="margin:8px 0 0 18px;line-height:1.6">
-      <li>Achat simple et sécurisé chez <strong>GF Store</strong> — assistance rapide.</li>
-      <li>Livraison sous 1 semaine • Retours 14 jours • <em>Remboursement garanti</em>.</li>
-      <li>Paiement classique et <strong>crypto</strong> acceptés.</li>
-      <li>Garantie <strong>${product.warrantyMonths||24} mois</strong>.</li>
+      <li>Einfacher & sicherer Einkauf bei <strong>GF Store</strong> — schneller Support.</li>
+      <li>Lieferung innerhalb 1 Woche • Rückgabe 14 Tage • <em>Geld-zurück-Garantie</em>.</li>
+      <li>Klassische Zahlungen und <strong>Kryptowährungen</strong> werden akzeptiert.</li>
+      <li>Garantie <strong>${product.warrantyMonths||24} Monate</strong>.</li>
     </ul>`;
 
-    // Spécifications (ex.)
+    // Technische Daten (Beispiel)
     const specs=[
-      ['Type','Console de salon — PS5 Slim Édition Digitale'],
-      ['Stockage', 'SSD intégré (extensible NVMe)'],
-      ['Affichage', 'Jusqu’à 4K 120 Hz, VRR selon TV'],
-      ['Connectivité', 'Wi-Fi, Bluetooth, HDMI 2.1, USB-C/USB-A'],
-      ['Audio', 'Tempest 3D AudioTech'],
-      ['Garantie', `${product.warrantyMonths||24} mois chez GF Store`]
+      ['Typ','Heimkonsole — PS5 Slim Digital Edition'],
+      ['Speicher','Integrierter SSD (per NVMe erweiterbar)'],
+      ['Bild','Bis zu 4K 120 Hz, VRR je nach TV'],
+      ['Konnektivität','Wi-Fi, Bluetooth, HDMI 2.1, USB-C/USB-A'],
+      ['Audio','Tempest 3D AudioTech'],
+      ['Garantie',`${product.warrantyMonths||24} Monate bei GF Store`]
     ];
     specsEl.innerHTML=specs.map(([k,v])=>`<div style="opacity:.7">${k}</div><div>${v}</div>`).join('');
 
-    // Produits similaires
+    // Ähnliche Produkte (gleiche Kategorie)
     const relGrid=document.getElementById('relGrid');
     if(Array.isArray(dataset)){
       const sims=dataset.filter(p=>p.category===product.category && String(p.id)!==String(product.id)).slice(0,4);
@@ -501,7 +504,7 @@
         const url=`./${slugify(p.name)}-${encodeURIComponent(p.id||p.sku||p._id)}.html`;
         const img=fixImg(p.imageCover||(p.images&&p.images[0])||'');
         return `<article class="card">
-          <a class="hit" href="${url}" aria-label="Voir ${p.name}"></a>
+          <a class="hit" href="${url}" aria-label="${p.name} ansehen"></a>
           <div class="img"><img loading="lazy" src="${img}" alt="${p.name}"></div>
           <div class="box">
             <div style="font-weight:600">${p.name}</div>
@@ -512,7 +515,7 @@
       }).join('');
     }
 
-    // Ajouter au panier
+    // In den Warenkorb
     document.getElementById('addBtn').addEventListener('click',()=>{
       const parts=[]; for(const [k,v] of Object.entries(selOpts)){ if(v?.value) parts.push(`${k}: ${v.value}`); }
       const nameWithVar = product.name + (parts.length? ` (${parts.join(', ')})` : '');
@@ -524,12 +527,12 @@
       const image=(product.imageCover||(product.images&&product.images[0])||'');
       if(idx>-1){ cart[idx].qty+=1; } else { cart.push({id,name:nameWithVar,price:finalPrice,qty:1,image,brand:product.brand||'',category:product.category||''}); }
       setCart(cart);
-      // openCart(); // décommente pour ouvrir le mini-panier après ajout
+      // openCart(); // zum automatischen Öffnen des Mini-Warenkorbs aktivieren
     });
 
     updateCartCount();
 
-    // ---- Mini-panneau panier
+    // ---- Mini-Warenkorb
     function cartTotal(){ return getCart().reduce((s,x)=>s + (x.qty * Number(x.price||0)), 0); }
     function renderCart(){
       const wrap=document.getElementById('cartItems'); if(!wrap) return;
@@ -543,15 +546,15 @@
             <div style="margin-top:6px">${EUR(x.price||0)}</div>
           </div>
           <div class="qty">
-            <button data-act="dec" aria-label="Diminuer">–</button>
+            <button data-act="dec" aria-label="Verringern">–</button>
             <span>${x.qty}</span>
-            <button data-act="inc" aria-label="Augmenter">+</button>
-            <button data-act="del" title="Retirer" style="margin-left:6px">
-              <img class="ic-sm" src="${ICONS.trash}" alt="Supprimer">
+            <button data-act="inc" aria-label="Erhöhen">+</button>
+            <button data-act="del" title="Entfernen" style="margin-left:6px">
+              <img class="ic-sm" src="${ICONS.trash}" alt="Entfernen">
             </button>
           </div>
         </div>`).join('')
-      : '<div style="opacity:.7">Votre panier est vide.</div>';
+      : '<div style="opacity:.7">Ihr Warenkorb ist leer.</div>';
       const totalEl=document.getElementById('cartTotal'); if(totalEl) totalEl.textContent=EUR(cartTotal());
     }
     function openCart(){
