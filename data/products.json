@@ -2649,5 +2649,101 @@
         }
       ]
     }
+  },
+  {
+    "id": "1035",
+    "sku": "GF-TRILINK-GAME-CONTROLLER-H10-035",
+    "name": "TRILINK Gamepad H10 (USB)",
+    "category": "Gaming-Zubehör",
+    "brand": "TRILINK",
+    "model": "Game Controller H10",
+    "description": "TRILINK Gamepad H10 (USB) — Gaming-Controller für Android & PC. Highlights: USB-Kabel • Touchpad • Kompatibel mit Android/Windows • Ergonomisches Design • Mehrfarbiges Finish. Technische Daten: 16 × 4 × 13 cm • 295 g • Anschluss: USB • Teil-Touch-Eingaben • 2× 9V-Batterien inkl. (Herstellerangabe) • Artikel-Nr.: TQ0-H10 • Plattform: Desktop/Laptop/Android. GF Store: unter dem Marktpreis, Lieferung in 24–48 Std., sichere Zahlung, 24 Monate Garantie. Kaufen Sie TRILINK Gamepad H10 (USB) zum Bestpreis bei GF Store.",
+    "price": 25.0,
+    "promoPrice": 15.0,
+    "stock": 40,
+    "images": [
+      "https://m.media-amazon.com/images/I/71UMxxfKyCL._SX679_.jpg",
+      "https://m.media-amazon.com/images/I/71qBOj87neL._SX679_.jpg",
+      "https://m.media-amazon.com/images/I/715PeAfMoAL._SX679_.jpg",
+      "https://m.media-amazon.com/images/I/71MpNsGPXvL._SX679_.jpg",
+      "https://m.media-amazon.com/images/I/71QZGuXU4-L._SX679_.jpg",
+      "https://m.media-amazon.com/images/I/71sTQK2w1zL._SX679_.jpg",
+      "https://m.media-amazon.com/images/I/71qqAQBn3tL._SL1500_.jpg"
+    ],
+    "imageCover": "https://m.media-amazon.com/images/I/71UMxxfKyCL._SX679_.jpg",
+    "supplier": "EU-Distributor",
+    "cost": 15.0,
+    "marginPct": -10.0,
+    "status": "Auf Lager",
+    "createdAt": "2025-08-27T00:00:00",
+    "warrantyMonths": 24,
+    "rating": 4.1,
+    "ratingCount": 391,
+    "options": {
+      "Farbe": [
+        { "value": "Mehrfarbig", "priceDelta": 0.0 }
+      ],
+      "Plattform": [
+        { "value": "Android", "priceDelta": 0.0 },
+        { "value": "PC", "priceDelta": 0.0 }
+      ],
+      "Zubehör": [
+        { "value": "Standard", "priceDelta": 0.0 },
+        { "value": "USB-C-Kabel 1,5 m", "priceDelta": 5.0 }
+      ]
+    }
+  },
+  {
+    "id": "1036",
+    "sku": "GF-NINTENDO-SWITCH-2-MARIO-KART-WORLD-036",
+    "name": "Nintendo Switch 2 + Mario Kart World",
+    "category": "Konsolen",
+    "brand": "NINTENDO",
+    "model": "Switch 2",
+    "description": "Nintendo Switch 2 + Mario Kart World — Nintendos neue Hybrid-Konsole. Technische Highlights: 7,9″ LCD 120 Hz • 256 GB intern • microSD Express-Slot • Nvidia CPU/GPU • Wi-Fi 6 • Akku 2–6,5 Std. • 3D-Audio & HDR • integriertes Mikro • 4K-kompatibler Dock (HDMI 2.1 ×1, USB-C ×2) • Kompatibel mit Spielen der 1. Generation. Controller: magnetische Technologie, Bewegungssensoren, Lautsprecher, Vibration; Maus-Spielunterstützung. SAR (DAS) Rumpf/Gliedmaßen: 0,663 W/kg (Herstellerangabe). Herkunft: China • Garantie 2 Jahre. GF Store: unter dem Marktpreis, Lieferung in 24–48 Std., sichere Zahlung, 24 Monate Garantie. Kaufen Sie Nintendo Switch 2 zum Bestpreis bei GF Store.",
+    "price": 469.0,
+    "promoPrice": 328.3,
+    "stock": 18,
+    "images": [
+      "https://boulanger.scene7.com/is/image/Boulanger/0045496321529_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
+      "https://boulanger.scene7.com/is/image/Boulanger/0045496321529_h_f_l_1?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
+      "https://boulanger.scene7.com/is/image/Boulanger/0045496321529_h_f_l_2?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
+      "https://boulanger.scene7.com/is/image/Boulanger/0045496321529_h_f_l_3?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
+      "https://boulanger.scene7.com/is/image/Boulanger/0045496321529_h_f_l_4?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
+      "https://boulanger.scene7.com/is/image/Boulanger/0045496321529_h_f_l_5?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
+      "https://boulanger.scene7.com/is/image/Boulanger/0045496321529_h_f_l_6?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
+      "https://boulanger.scene7.com/is/image/Boulanger/0045496321529_h_f_l_7?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
+      "https://boulanger.scene7.com/is/image/Boulanger/0045496321529_h_f_l_8?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
+      "https://boulanger.scene7.com/is/image/Boulanger/0045496321529_h_f_l_9?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha"
+    ],
+    "imageCover": "https://boulanger.scene7.com/is/image/Boulanger/0045496321529_h_f_l_0?wid=1016&hei=1016&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=png-alpha",
+    "supplier": "EU-Distributor",
+    "cost": 328.3,
+    "marginPct": -12.0,
+    "status": "Auf Lager",
+    "createdAt": "2025-08-27T00:00:00",
+    "warrantyMonths": 24,
+    "rating": 0,
+    "ratingCount": 0,
+    "options": {
+      "Bundle": [
+        { "value": "Nur Konsole", "priceDelta": 0.0 },
+        { "value": "Mit Mario Kart World", "priceDelta": 30.99 }
+      ],
+      "Speicher": [
+        { "value": "256 GB", "priceDelta": 0.0 }
+      ],
+      "Farbe": [
+        { "value": "Schwarz", "priceDelta": 0.0 }
+      ],
+      "Controller": [
+        { "value": "1× Magnetisch (Standard)", "priceDelta": 0.0 },
+        { "value": "2× Controller", "priceDelta": 60.0 }
+      ],
+      "Garantie": [
+        { "value": "24 Monate", "priceDelta": 0.0 },
+        { "value": "36 Monate", "priceDelta": 80.0 }
+      ]
+    }
   }
 ]
