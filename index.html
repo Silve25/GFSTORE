@@ -604,16 +604,22 @@
       }).join('');
     }
 
-    g.addEventListener('click',e=>{
-      const btn=e.target.closest('.add');
-      if(btn){
-        e.preventDefault(); e.stopPropagation();
-        const card=btn.closest('.card');
-        const id=card.getAttribute('data-id');
-        const index=items.findIndex((p,i)=> (p.id||p.sku||p._id||String(i))===id );
-        if(index>-1) addToCart(items[index], index);
-      }
-    });
+    // Gestion globale des boutons "Ajouter au panier" (grille + offres)
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('button.add');
+  if (!btn) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  // Récupère l'id soit sur le bouton, soit sur l'élément parent porteur de data-id
+  const id = btn.getAttribute('data-id')
+           || btn.closest('[data-id]')?.getAttribute('data-id');
+  if (!id) return;
+
+  const index = items.findIndex((p,i) => (p.id||p.sku||p._id||String(i)) === id);
+  if (index > -1) addToCart(items[index], index);
+});
 
     const openCart=()=>{document.getElementById('cartPanel').classList.add('show'); document.body.classList.add('lock'); const fab=document.getElementById('fabCart'); if(fab){fab.style.display='none'}; renderCart();};
     const closeCart=()=>{document.getElementById('cartPanel').classList.remove('show'); document.body.classList.remove('lock'); const fab=document.getElementById('fabCart'); if(fab){fab.style.display=''};};
