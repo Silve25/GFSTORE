@@ -1274,7 +1274,7 @@
           "priceDelta": 60.0
         },
         {
-          "value": "Avec 1 TB NVMe",
+          "value": "1 TB NVMe",
           "priceDelta": 120.0
         },
         {
@@ -1325,7 +1325,7 @@
           "priceDelta": 60.0
         },
         {
-          "value": "Avec 1 TB NVMe",
+          "value": "1 TB NVMe",
           "priceDelta": 120.0
         },
         {
@@ -1905,7 +1905,7 @@
           "priceDelta": 60.0
         },
         {
-          "value": "Avec 1 TB NVMe",
+          "value": "1 TB NVMe",
           "priceDelta": 120.0
         },
         {
@@ -2640,7 +2640,7 @@
           "priceDelta": 60.0
         },
         {
-          "value": "Avec 1 TB NVMe",
+          "value": "1 TB NVMe",
           "priceDelta": 120.0
         },
         {
@@ -2685,7 +2685,8 @@
       ],
       "Plattform": [
         { "value": "Android", "priceDelta": 0.0 },
-        { "value": "PC", "priceDelta": 0.0 }
+        { "value": "PC", "priceDelta": 0.0 },
+        { "value": "IPhone", "priceDelta": 0.0 }
       ],
       "Zubehör": [
         { "value": "Standard", "priceDelta": 0.0 },
