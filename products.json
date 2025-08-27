@@ -2685,7 +2685,7 @@
       ],
       "Plattform": [
         { "value": "Android", "priceDelta": 0.0 },
-        { "value": "PC", "priceDelta": 0.0 }
+        { "value": "PC", "priceDelta": 0.0 },
         { "value": "IPhone", "priceDelta": 0.0 }
       ],
       "Zubehör": [
