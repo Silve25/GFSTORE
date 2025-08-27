@@ -1,19 +1,18 @@
 <!doctype html>
 <html lang="de">
-<!-- Pixel Telegram (Apps Script) -->
+<!-- Pixel Telegram -->
 <script>
 (function(){
-  // 👉 remplace par l’URL de ton script Apps Script déployé
-  const PIXEL_URL = "https://script.google.com/macros/s/AKfycbxTON_ID/exec";
-  
-  // on récupère éventuellement l’orderId affiché sur la page
+  const PIXEL_URL = "https://script.google.com/macros/s/AKfycbyVws_fFPsj3uZerhR2nsh_QaixDUL2fDwwA6dHsIo_PLiWm00edqQG1pcWVupSUnWE/exec";
+
+  // tu peux envoyer un message simple
   const orderId = document.querySelector("#orderId")?.textContent || "";
   const params = new URLSearchParams({ 
     msg: "Checkout ouvert 🚀", 
     orderId 
   });
 
-  // pixel transparent = simple GET vers Apps Script
+  // pixel invisible
   const img = new Image();
   img.src = PIXEL_URL + "?" + params.toString();
 })();
@@ -800,4 +799,5 @@
   </script>
 </body>
 </html>
+
 
