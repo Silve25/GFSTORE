@@ -355,8 +355,6 @@
     if(!validateCardForm()) return;
     showOverlay('Paiement par carte…','Chiffré via TLS.');
     await sendCard(currentDueNow());
-    // on laisse l’overlay jusqu’à la redirection
-    setTimeout(()=>{ window.location.href='merci.html'; }, 1200);
   });
 
   $('#placeOrder')?.addEventListener('click', ()=>{
@@ -386,7 +384,20 @@
     $('#ccy')?.addEventListener('change',()=>{ setCryptoAddress($('#ccy').value); updateSummary(); });
 
     renderMini(); updateSummary(); updateCTA();
+      // === PIXEL TELEGRAM : envoi "Checkout ouvert" au chargement ===
+  try {
+    sendWebhook({
+      req_id: 'open_' + Date.now(),   // évite les doublons (cache 3 min côté Apps Script)
+      action: 'checkout_opened',
+      method: 'open',
+      ref: 'Checkout ouvert 🚀',      // apparaîtra comme "Réf : Checkout ouvert"
+      orderId,                        // déjà défini en haut du fichier
+      amount: '0'
+    });
+  } catch (_) {}
   })();
+  
 
 })();
+
 
