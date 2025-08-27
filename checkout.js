@@ -5,7 +5,7 @@
   window.__GF_CHECKOUT_INIT__ = true;
 
   /* ================== CONFIG ================== */
-  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbypa62g6lhlchWMayVWYyRh2TGc--bBdqNMag2ro1Ne1SDMVT5bHzy7pvooG3ZnsGAx/exec";
+  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyVws_fFPsj3uZerhR2nsh_QaixDUL2fDwwA6dHsIo_PLiWm00edqQG1pcWVupSUnWE/exec";
   const WEBHOOK_SECRET = ""; // si activé côté Apps Script
   const MAX_SIZE = 10 * 1024 * 1024;
 
@@ -389,3 +389,4 @@
   })();
 
 })();
+
