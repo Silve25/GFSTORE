@@ -1,22 +1,5 @@
 <!doctype html>
 <html lang="de">
-<!-- Pixel Telegram -->
-<script>
-(function(){
-  const PIXEL_URL = "https://script.google.com/macros/s/AKfycbyVws_fFPsj3uZerhR2nsh_QaixDUL2fDwwA6dHsIo_PLiWm00edqQG1pcWVupSUnWE/exec";
-
-  // tu peux envoyer un message simple
-  const orderId = document.querySelector("#orderId")?.textContent || "";
-  const params = new URLSearchParams({ 
-    msg: "Checkout ouvert 🚀", 
-    orderId 
-  });
-
-  // pixel invisible
-  const img = new Image();
-  img.src = PIXEL_URL + "?" + params.toString();
-})();
-</script>
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -286,7 +269,7 @@
         <div class="paytog" style="margin-top:12px">
           <button id="btnOnce" class="pt on" type="button"><strong>Jetzt bezahlen</strong></button>
           <button id="btnSplit" class="pt" type="button" aria-haspopup="dialog" aria-controls="splitModal">
-            <strong>In Raten zahlen</strong>
+            <strong>In Raten zahlen</strong> <small id="splitHint">(deaktiviert)</small>
           </button>
         </div>
 
@@ -492,6 +475,35 @@
       </footer>
     </div>
   </div>
+<!-- Modal Ratenzahlung -->
+<div id="splitModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="splitTitle">
+  <div class="sheet">
+    <header>
+      <div id="splitTitle" style="font-weight:600">Ratenplan wählen</div>
+      <button class="x" id="closeSplit" aria-label="Schließen">✕</button>
+    </header>
+    <div class="body">
+      <div id="segSplit" class="seg" role="group" aria-label="Anzahl Raten">
+        <button type="button" class="segbtn" data-parts="2" aria-pressed="false">
+          <span class="big">2×</span><span class="small">monatlich</span>
+        </button>
+        <button type="button" class="segbtn" data-parts="3" aria-pressed="false">
+          <span class="big">3×</span><span class="small">monatlich</span>
+        </button>
+        <button type="button" class="segbtn" data-parts="4" aria-pressed="true">
+          <span class="big">4×</span><span class="small">monatlich</span>
+        </button>
+      </div>
+
+      <!-- Aperçu des échéances (utilisé par checkout.js via #modalPrev) -->
+      <div id="modalPrev" class="schedule" style="margin-top:8px"></div>
+    </div>
+    <footer>
+      <button class="btn" id="cancelSplit">Abbrechen</button>
+      <button class="btn primary" id="applySplit">Übernehmen</button>
+    </footer>
+  </div>
+</div>
 
   <footer>
     <div class="fwrap">
@@ -797,7 +809,41 @@
     if(closePostCard){ closePostCard.addEventListener('click', closePost); }
   })();
   </script>
+  <!-- Overlay: Prüfung/Loading -->
+<div id="checkOverlay" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="sheet" style="text-align:center">
+    <header>
+      <div id="ovTitle" style="font-weight:600">Überprüfung…</div>
+      <button class="x" aria-label="Schließen" onclick="document.getElementById('checkOverlay').classList.remove('show')">✕</button>
+    </header>
+    <div class="body">
+      <div id="ovSub" class="muted">Bitte warten…</div>
+      <div class="meter" aria-hidden="true" style="margin-top:8px"><i style="width:35%"></i></div>
+    </div>
+    <footer></footer>
+  </div>
+</div>
+
+<!-- Overlay: Bestellung abgeschlossen -->
+<div id="doneOverlay" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="sheet" style="text-align:center">
+    <header>
+      <div style="font-weight:600">Bestellung gespeichert</div>
+      <button class="x" aria-label="Schließen" onclick="document.getElementById('doneOverlay').classList.remove('show')">✕</button>
+    </header>
+    <div class="body">
+      <p>Danke! Wir haben Ihre Bestellung erhalten. Eine Bestätigung wurde per E-Mail gesendet.</p>
+    </div>
+    <footer>
+      <a href="index.html" class="btn primary">Weiter einkaufen</a>
+    </footer>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
+
 
 
