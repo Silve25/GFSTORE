@@ -129,6 +129,60 @@
     if(currentPM()==='sepa'){ const f=$('#amountNowBank'); if(f) f.value=dueNow.toFixed(2); }
   }
 
+  /* ================== [NOUVEAU] DIRECT BUY DEPUIS PRODUIT ================== */
+  (async function tryPrefillFromReferrer(){
+    try{
+      // Ne rien faire si un panier existe déjà
+      const existing = getCart();
+      if (Array.isArray(existing) && existing.length) return;
+
+      const ref = document.referrer || "";
+      // On détecte une page produit du type ".../produits/xxx-<id>.html"
+      const match = ref.match(/\/produits\/.+-(\d+)\.html?$/i);
+      if(!match) return;
+
+      const pid = match[1];
+
+      // Endroits possibles du dataset
+      const rootSegment = (location.host.endsWith('github.io') ? location.pathname.split('/').filter(Boolean)[0] : '').trim();
+      const GH_ROOT = rootSegment ? `/${rootSegment}/` : '/';
+      const DATA_URLS = [
+        'data/products.json',
+        './data/products.json',
+        '../data/products.json',
+        GH_ROOT + 'data/products.json',
+        'https://silve25.github.io/GFSTORE/data/products.json'
+      ];
+
+      let dataset=null;
+      for(const u of DATA_URLS){
+        try{
+          const r = await fetch(u, {cache:'no-store'});
+          if(r.ok){ dataset = await r.json(); break; }
+        }catch(_){}
+      }
+      if(!Array.isArray(dataset)) return;
+
+      const p = dataset.find(x => String(x.id) === String(pid) || String(x.sku||'').includes(pid));
+      if(!p) return;
+
+      const finalPrice = (p.promoPrice && p.promoPrice > 0 && p.promoPrice < p.price) ? p.promoPrice : p.price;
+      const item = {
+        id: p.id,
+        name: p.name,
+        price: finalPrice,
+        qty: 1,
+        image: p.imageCover || (p.images && p.images[0]) || '',
+        brand: p.brand || '',
+        category: p.category || ''
+      };
+
+      setCart([item]);
+      // Rafraîchit l’UI si l’init a déjà rendu
+      renderMini(); updateSummary(); updateCTA?.();
+    }catch(_){}
+  })();
+
   /* ================== COPY ================== */
   function copySel(sel){
     const el=$(sel); if(!el) return;
@@ -396,7 +450,6 @@
     });
   } catch (_) {}
   })();
-  
+
 
 })();
-
