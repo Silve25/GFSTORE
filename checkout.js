@@ -1,3 +1,15 @@
+<script>
+  function markPurchase(total, orderId) {
+    gtag('event', 'purchase', {
+      'transaction_id': orderId,
+      'value': total,
+      'currency': 'EUR'
+    });
+  }
+
+// Quand la commande est validée :
+markPurchase(559.99, 'ORDER1234');
+</script>
 // checkout.js
 (() => {
   "use strict";
@@ -453,3 +465,4 @@
 
 
 })();
+
