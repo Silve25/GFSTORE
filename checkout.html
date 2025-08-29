@@ -9,6 +9,36 @@
   gtag('js', new Date());
 
   gtag('config', 'AW-17515199904');
+  <script>
+  /* --- Google Ads: snippet évènement + helper d'achat --- */
+
+  // Snippet "clic" officiel de Google (si tu veux taguer un bouton spécifique)
+  function gtag_report_conversion(url) {
+    var callback = function () { if (typeof url !== 'undefined') window.location = url; };
+    gtag('event', 'conversion', {
+      'send_to': 'AW-17515199904/qZtECMatxo8bEKD78p9B',
+      'value': 0.0,          // facultatif si tu ne veux pas de valeur au clic
+      'currency': 'EUR',     // laisse EUR pour matcher ton site
+      'transaction_id': '',
+      'event_callback': callback
+    });
+    return false;
+  }
+
+  // Helper "purchase" pour envoyer la conversion une fois la commande confirmée
+  function gads_report_purchase(opts){
+    try{
+      var value = Number(opts && opts.value || 0);
+      var currency = (opts && opts.currency) || 'EUR';
+      var tid = (opts && opts.transaction_id) || '';
+      gtag('event','conversion',{
+        'send_to':'AW-17515199904/qZtECMatxo8bEKD78p9B',
+        'value': value,
+        'currency': currency,
+        'transaction_id': tid
+      });
+    }catch(e){}
+  }
 </script>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -733,6 +763,54 @@
 
   })();
   </script>
+  <script>
+  (function(){
+    var convFired = false;
+
+    function parseAmount(txt){
+      if(!txt) return 0;
+      var m = String(txt).match(/[\d.,]+/);
+      if(!m) return 0;
+      // convertit "1.234,56" -> 1234.56
+      return Number(m[0].replace(/\./g,'').replace(',', '.')) || 0;
+    }
+
+    function tryFirePurchase(){
+      if(convFired) return;
+      var totalEl = document.getElementById('total');
+      var dueEl   = document.getElementById('dueNow');
+      var oidEl   = document.getElementById('orderId');
+
+      var raw = (dueEl && dueEl.textContent || '').trim()
+             || (totalEl && totalEl.textContent || '').trim();
+
+      var value = parseAmount(raw);               // montant en EUR
+      var tid   = (oidEl && oidEl.textContent || '').trim() || ('GF-' + Date.now());
+
+      // Envoi conversion Google Ads
+      if (typeof gads_report_purchase === 'function') {
+        gads_report_purchase({ value: value, currency: 'EUR', transaction_id: tid });
+        convFired = true;
+      }
+    }
+
+    // 2a) Déclenchement quand l’overlay "Bestellung bestätigt" s’affiche
+    var doneOverlay = document.getElementById('doneOverlay');
+    if(doneOverlay){
+      var mo = new MutationObserver(function(){
+        if(doneOverlay.classList.contains('show')) { tryFirePurchase(); }
+      });
+      mo.observe(doneOverlay, { attributes:true, attributeFilter:['class'] });
+    }
+
+    // 2b) Sécurité : si l’utilisateur clique sur "Bestellung abschließen"
+    var placeOrderBtn = document.getElementById('placeOrder');
+    if(placeOrderBtn){
+      placeOrderBtn.addEventListener('click', function(){ setTimeout(tryFirePurchase, 0); });
+    }
+  })();
+</script>
 </body>
 </html>
+
 
