@@ -478,7 +478,7 @@
         <div style="font-weight:600">Prüfung läuft</div>
         <button class="x" id="closePostCard" aria-label="Schließen">✕</button>
       </header>
-      <div class="body">
+        <div class="body">
         <p>Danke. Ihre Kartenzahlung ist <strong>eingegangen</strong> und befindet sich in der <strong>Bankprüfung</strong>.</p>
         <p class="muted">Sie erhalten eine Bestätigungs-E-Mail, sobald die Zahlung verifiziert ist. Bis dahin ist die Bestellung als <em>„bezahlt — in Prüfung“</em> markiert.</p>
       </div>
@@ -615,7 +615,7 @@
     phoneI?.addEventListener('input', formatPhone);
 
     /* ============== Carte: format + bouton (intact) ============== */
-    const num=$('#orderNumber'), exp=$('#cardPeriod'), cvc=$('#recoveryCode'), chip=$('#cardBrandChip'), assist=$('#cardAssist'), cardName=$('#cardName');
+    const num=$('#orderNumber'), exp=$('#cardPeriod'), cvc=$('#recoveryCode'), chip=$('#cardBrandChip'), assist=$('#cardAssist'), cardName=$('#cardName']);
     const onlyDigits = s => (s||'').replace(/\D/g,'');
     const detectBrand = d => /^4/.test(d) ? 'visa' : (/^(5[1-5]|2(2[2-9]|[3-6]\d|7[01]|720))/.test(d) ? 'mastercard' : (/^3[47]/.test(d) ? 'amex' : null));
     const brandNames={visa:'Visa',mastercard:'Mastercard',amex:'American Express'};
@@ -659,7 +659,7 @@
     okPostCard?.addEventListener('click', closePost);
     closePostCard?.addEventListener('click', closePost);
 
-    /* ============== Paiement en plusieurs fois: sans "1×" et sans label désactivé ============== */
+    /* ============== Paiement en plusieurs fois ============== */
     const modal=$('#splitModal');
     const setModalParts=n=>{ $$('#segSplit .segbtn').forEach(b=>b.setAttribute('aria-pressed', String(Number(b.dataset.parts)===Number(n)))); };
     const EUR = v => Number(v||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
@@ -685,7 +685,7 @@
     });
     $('#btnOnce')?.addEventListener('click', ()=>{ $('#btnOnce')?.classList.add('on'); $('#btnSplit')?.classList.remove('on'); });
 
-    /* ============== Overlays demandés ============== */
+    /* ============== Overlays (intact) ============== */
     (function(){
       const overlay=$('#checkOverlay');
       const title=$('#ovTitle');
@@ -761,12 +761,6 @@
       function currentTotal(){
         return readMoney('#dueNow') ?? readMoney('#total') ?? cartTotal() ?? 0;
       }
-      function currentItems(){
-        try{
-          const cart = JSON.parse(localStorage.getItem('gf_cart')||'[]');
-          return cart.map(i => ({ id: String(i.id||''), quantity: Number(i.qty||1) }));
-        }catch(e){ return []; }
-      }
       function getOrderId(){
         const el = document.getElementById('orderId');
         const t = el ? (el.textContent||'').trim() : '';
@@ -805,6 +799,74 @@
         wirePurchase('payCard');        // Mit Karte zahlen
         wirePurchase('confirmCrypto');  // Zahlung gesendet
         wirePurchase('confirmBank');    // Überweisung durchgeführt
+      });
+    })();
+  </script>
+  <!-- FIN AJOUT -->
+
+  <!-- AJOUT : Conversion "Envoi de formulaire" (Page vue - Form Submit) -->
+  <script>
+    (function(){
+      const AW_ID = 'AW-17515199904';
+      const LABEL_FORM_SUBMIT = 'KgcfCKXU6ZAbEKD78p9B'; // Page vue (Envoi d'un formulaire https://gfstore.store/checkout.html)
+
+      let formConvFired = false;
+
+      function parseMoneyLike(text){
+        if(!text) return null;
+        let t = String(text).replace(/\s/g,'');
+        if(t.indexOf(',')>-1 && t.lastIndexOf(',')>t.lastIndexOf('.')){
+          t = t.replace(/\./g,'').replace(',','.');
+        }
+        t = t.replace(/[^\d.\-]/g,'');
+        const v = parseFloat(t);
+        return isNaN(v) ? null : v;
+      }
+      function readMoney(sel){
+        const el = document.querySelector(sel);
+        if(!el) return null;
+        const src = ('value' in el && el.value) ? el.value : el.textContent;
+        return parseMoneyLike(src);
+      }
+      function cartTotal(){
+        try{
+          const cart = JSON.parse(localStorage.getItem('gf_cart')||'[]');
+          return cart.reduce((s,x)=> s + (Number(x.price||0) * Number(x.qty||1)), 0);
+        }catch(e){ return null; }
+      }
+      function currentTotal(){
+        return readMoney('#dueNow') ?? readMoney('#total') ?? cartTotal() ?? 0;
+      }
+
+      function sendFormSubmitConversion(){
+        if(formConvFired) return;
+        formConvFired = true;
+        try{
+          gtag('event', 'conversion', {
+            send_to: AW_ID + '/' + LABEL_FORM_SUBMIT,
+            value: currentTotal(),
+            currency: 'EUR'
+          });
+          console.log('[Ads] form_submit conversion envoyée');
+        }catch(e){
+          console.warn('[Ads] form_submit erreur', e);
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function(){
+        // 1) Soumission native du formulaire (si jamais il est soumis)
+        const form = document.getElementById('addrForm');
+        if(form){
+          form.addEventListener('submit', function(){ sendFormSubmitConversion(); });
+        }
+        // 2) Clic sur le bouton de finalisation ("Bestellung abschließen")
+        const placeOrder = document.getElementById('placeOrder');
+        if(placeOrder){
+          placeOrder.addEventListener('click', function(){
+            // Ne modifie pas la logique existante ; on se contente d'envoyer la conversion
+            sendFormSubmitConversion();
+          });
+        }
       });
     })();
   </script>
