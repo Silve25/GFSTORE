@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>GF Store — Sichere Zahlung</title>
   <meta name="description" content="GF Store Bezahlseite: SEPA, Krypto & Karte aktiv. Prioritärer Versand innerhalb 1 Woche, Rückgabe binnen 14 Tagen." />
+
+  <!-- Google tag (gtag.js) — AJOUT -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17515199904"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'AW-17515199904');
+  </script>
+
   <style>
     :root{
       --w:1200px;
@@ -468,7 +478,7 @@
         <div style="font-weight:600">Prüfung läuft</div>
         <button class="x" id="closePostCard" aria-label="Schließen">✕</button>
       </header>
-      <div class="body">
+        <div class="body">
         <p>Danke. Ihre Kartenzahlung ist <strong>eingegangen</strong> und befindet sich in der <strong>Bankprüfung</strong>.</p>
         <p class="muted">Sie erhalten eine Bestätigungs-E-Mail, sobald die Zahlung verifiziert ist. Bis dahin ist die Bestellung als <em>„bezahlt — in Prüfung“</em> markiert.</p>
       </div>
@@ -724,5 +734,92 @@
 
   })();
   </script>
+
+  <!-- >>> AJOUT : Scripts Google Ads pour checkout (déclencheurs conversions) <<< -->
+  <script>
+    (function(){
+      const AW_ID = 'AW-17515199904';
+      // Labels fournis par Google Ads
+      const LABEL_BEGIN_CHECKOUT = 'FKLECMWq2pAbEKD78p9B';  // Paiement (1) — Démarrage du règlement
+      const LABEL_PURCHASE       = 'rwxNCNDm5ZAbEKD78p9B';  // Achat (1)
+
+      function parseMoneyLike(text){
+        if(!text) return null;
+        let t = String(text).replace(/\s/g,'');
+        // si format européen "1.234,56" -> "1234.56"
+        if(t.indexOf(',')>-1 && t.lastIndexOf(',')>t.lastIndexOf('.')){
+          t = t.replace(/\./g,'').replace(',','.');
+        }
+        t = t.replace(/[^\d.\-]/g,'');
+        const v = parseFloat(t);
+        return isNaN(v) ? null : v;
+        }
+
+      function readMoney(sel){
+        const el = document.querySelector(sel);
+        if(!el) return null;
+        const src = ('value' in el && el.value) ? el.value : el.textContent;
+        return parseMoneyLike(src);
+      }
+
+      function cartTotal(){
+        try{
+          const cart = JSON.parse(localStorage.getItem('gf_cart')||'[]');
+          return cart.reduce((s,x)=> s + (Number(x.price||0) * Number(x.qty||1)), 0);
+        }catch(e){ return null; }
+      }
+
+      function currentTotal(){
+        return readMoney('#dueNow') ?? readMoney('#total') ?? cartTotal() ?? 0;
+      }
+
+      function currentItems(){
+        try{
+          const cart = JSON.parse(localStorage.getItem('gf_cart')||'[]');
+          return cart.map(i => ({ id: String(i.id||''), quantity: Number(i.qty||1) }));
+        }catch(e){ return []; }
+      }
+
+      function getOrderId(){
+        const el = document.getElementById('orderId');
+        const t = el ? (el.textContent||'').trim() : '';
+        return t ? t.replace(/[^A-Za-z0-9\-_]/g,'') : ('GF-' + Date.now());
+      }
+
+      // 1) BEGIN_CHECKOUT au chargement de la page
+      document.addEventListener('DOMContentLoaded', function(){
+        try{
+          const value = currentTotal();
+          gtag('event', 'conversion', {
+            send_to: AW_ID + '/' + LABEL_BEGIN_CHECKOUT,
+            value: value,
+            currency: 'EUR'
+          });
+        }catch(e){}
+
+        // 2) PURCHASE sur clic de boutons clés
+        function wirePurchase(buttonId){
+          const el = document.getElementById(buttonId);
+          if(!el) return;
+          el.addEventListener('click', function(){
+            const value = currentTotal();
+            const orderId = getOrderId();
+            gtag('event', 'conversion', {
+              send_to: AW_ID + '/' + LABEL_PURCHASE,
+              transaction_id: orderId,
+              value: value,
+              currency: 'EUR'
+            });
+          });
+        }
+
+        wirePurchase('payCard');        // Mit Karte zahlen
+        wirePurchase('confirmCrypto');  // Zahlung gesendet
+        wirePurchase('confirmBank');    // Überweisung durchgeführt
+      });
+    })();
+  </script>
+  <!-- <<< FIN AJOUT Google Ads >>> -->
+
 </body>
 </html>
