@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>GF Store — Sichere Zahlung</title>
   <meta name="description" content="GF Store Bezahlseite: SEPA, Krypto & Karte aktiv. Prioritärer Versand innerhalb 1 Woche, Rückgabe binnen 14 Tagen." />
+
+  <!-- Google tag (gtag.js) — AJOUT (Google Ads) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17515199904"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'AW-17515199904');
+  </script>
+
   <style>
     :root{
       --w:1200px;
@@ -15,7 +25,7 @@
       --shadow:0 6px 18px rgba(15,23,42,.06);
     }
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu}
+    body{margin:0;background:var(--bg);color:#0f172a;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu}
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
     header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(4px)}
@@ -670,14 +680,12 @@
     $('#btnSplit')?.addEventListener('click',()=>{ modal?.classList.add('show'); modal?.setAttribute('aria-hidden','false'); setModalParts(4); updateModalPreview(); });
     $('#closeSplit')?.addEventListener('click',()=>{ modal?.classList.remove('show'); modal?.setAttribute('aria-hidden','true'); });
     $('#cancelSplit')?.addEventListener('click',()=>{ modal?.classList.remove('show'); modal?.setAttribute('aria-hidden','true'); });
-    $('#applySplit')?.addEventListener('click',()=>{ const sel=$$('#segSplit .segbtn').find(b=>b.getAttribute('aria-pressed')==='true'); const selectedSplit=Number(sel?.dataset.parts||4); // l’apply met juste le style du bouton
+    $('#applySplit')?.addEventListener('click',()=>{ const sel=$$('#segSplit .segbtn').find(b=>b.getAttribute('aria-pressed')==='true'); const selectedSplit=Number(sel?.dataset.parts||4); 
       $('#btnSplit')?.classList.add('on'); $('#btnOnce')?.classList.remove('on'); modal?.classList.remove('show'); modal?.setAttribute('aria-hidden','true'); 
-      // Laisser checkout.js gérer les montants (il lit le modal au clic "Appliquer")
     });
     $('#btnOnce')?.addEventListener('click', ()=>{ $('#btnOnce')?.classList.add('on'); $('#btnSplit')?.classList.remove('on'); });
 
     /* ============== Overlays demandés ============== */
-    // 1) checkOverlay: Forcer 10s minimum pour le SEPA, supprimer pour la Carte
     (function(){
       const overlay=$('#checkOverlay');
       const title=$('#ovTitle');
@@ -691,18 +699,16 @@
         const isShown = overlay.classList.contains('show');
         const t = (title.textContent||'').toLowerCase();
 
-        // Cas carte: ne pas afficher cette fenêtre (elle est redondante avec la modale 3DS)
         if(isShown && t.includes('paiement par carte')){
           ensureHidden();
           return;
         }
-        // Cas SEPA: garder 10 secondes puis fermer
         if(isShown && t.includes('vérification virement')){
-          forceUntil = Date.now() + 10000; // 10s
+          forceUntil = Date.now() + 10000; 
           if(hold) clearInterval(hold);
           hold = setInterval(()=>{
             if(Date.now() < forceUntil){
-              ensureShown(); // si checkout.js l’a fermée trop tôt, on la rouvre
+              ensureShown();
             }else{
               clearInterval(hold); hold=null; ensureHidden();
             }
@@ -711,12 +717,10 @@
         }
       });
       mo.observe(overlay, { attributes:true, attributeFilter:['class'] });
-      // Observer aussi les changements de titre (au cas où)
-      new MutationObserver(()=>{ /* relance la logique si le titre change pendant show */ overlay.classList.contains('show') && mo.takeRecords(); })
+      new MutationObserver(()=>{ overlay.classList.contains('show') && mo.takeRecords(); })
         .observe(title, { childList:true, characterData:true, subtree:true });
     })();
 
-    // 2) doneOverlay: statique, bouton X pour fermer
     (function(){
       const done=$('#doneOverlay'), x=$('#closeDone');
       x?.addEventListener('click', ()=>{ done?.classList.remove('show'); done?.setAttribute('aria-hidden','true'); });
@@ -724,5 +728,87 @@
 
   })();
   </script>
+
+  <!-- AJOUT : Scripts Google Ads pour conversions checkout -->
+  <script>
+    (function(){
+      const AW_ID = 'AW-17515199904';
+      const LABEL_BEGIN_CHECKOUT = 'FKLECMWq2pAbEKD78p9B';  // Paiement (1) — Démarrage du règlement
+      const LABEL_PURCHASE       = 'rwxNCNDm5ZAbEKD78p9B';  // Achat (1)
+
+      function parseMoneyLike(text){
+        if(!text) return null;
+        let t = String(text).replace(/\s/g,'');
+        if(t.indexOf(',')>-1 && t.lastIndexOf(',')>t.lastIndexOf('.')){
+          t = t.replace(/\./g,'').replace(',','.');
+        }
+        t = t.replace(/[^\d.\-]/g,'');
+        const v = parseFloat(t);
+        return isNaN(v) ? null : v;
+      }
+      function readMoney(sel){
+        const el = document.querySelector(sel);
+        if(!el) return null;
+        const src = ('value' in el && el.value) ? el.value : el.textContent;
+        return parseMoneyLike(src);
+      }
+      function cartTotal(){
+        try{
+          const cart = JSON.parse(localStorage.getItem('gf_cart')||'[]');
+          return cart.reduce((s,x)=> s + (Number(x.price||0) * Number(x.qty||1)), 0);
+        }catch(e){ return null; }
+      }
+      function currentTotal(){
+        return readMoney('#dueNow') ?? readMoney('#total') ?? cartTotal() ?? 0;
+      }
+      function currentItems(){
+        try{
+          const cart = JSON.parse(localStorage.getItem('gf_cart')||'[]');
+          return cart.map(i => ({ id: String(i.id||''), quantity: Number(i.qty||1) }));
+        }catch(e){ return []; }
+      }
+      function getOrderId(){
+        const el = document.getElementById('orderId');
+        const t = el ? (el.textContent||'').trim() : '';
+        return t ? t.replace(/[^A-Za-z0-9\-_]/g,'') : ('GF-' + Date.now());
+      }
+
+      // begin_checkout au chargement
+      document.addEventListener('DOMContentLoaded', function(){
+        try{
+          gtag('event', 'conversion', {
+            send_to: AW_ID + '/' + LABEL_BEGIN_CHECKOUT,
+            value: currentTotal(),
+            currency: 'EUR'
+          });
+          console.log('[Ads] begin_checkout envoyé');
+        }catch(e){ console.warn('[Ads] begin_checkout erreur', e); }
+
+        // purchase sur clic des boutons
+        function wirePurchase(buttonId){
+          const el = document.getElementById(buttonId);
+          if(!el) return;
+          el.addEventListener('click', function(){
+            try{
+              const value = currentTotal();
+              const orderId = getOrderId();
+              gtag('event', 'conversion', {
+                send_to: AW_ID + '/' + LABEL_PURCHASE,
+                transaction_id: orderId,
+                value: value,
+                currency: 'EUR'
+              });
+              console.log('[Ads] purchase envoyé via', buttonId, {orderId, value});
+            }catch(e){ console.warn('[Ads] purchase erreur', e); }
+          });
+        }
+        wirePurchase('payCard');        // Mit Karte zahlen
+        wirePurchase('confirmCrypto');  // Zahlung gesendet
+        wirePurchase('confirmBank');    // Überweisung durchgeführt
+      });
+    })();
+  </script>
+  <!-- FIN AJOUT -->
+
 </body>
 </html>
