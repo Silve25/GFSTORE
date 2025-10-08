@@ -1,0 +1,109 @@
+{
+  "categories": [
+    {
+      "id": "kids",
+      "label": "Enfants",
+      "cover": "https://pengukids.com/wp-content/uploads/2018/08/Pengu-KIDS-winter-down-parka-daiki-khaki-boy-front-small.jpg"
+    },
+    {
+      "id": "men",
+      "label": "Hommes",
+      "cover": "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/pyvhkj/contents/93cef3c2-9bcb-49f8-a288-8c6a98b40de5/image/93cef3c2-9bcb-49f8-a288-8c6a98b40de5.jpg?q_auto=high&q=90&w=1900&h=2850"
+    },
+    {
+      "id": "women",
+      "label": "Femmes",
+      "cover": "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/pyvhkj/contents/4aa2a70e-1b0b-4315-9cb7-49725fc8bd90/image/4aa2a70e-1b0b-4315-9cb7-49725fc8bd90.jpg?q_auto=high&q=90&w=1900&h=2850"
+    }
+  ],
+  "products": [
+    {
+      "sku": "K29541A00043597Z8",
+      "slug": "doudoune-a-capuche-maire-girl",
+      "title": "Doudoune à capuche Maire",
+      "subtitle": "Modèle emblématique adapté aux plus petites",
+      "brand": "Moncler",
+      "category": "kids",
+      "gender": "girl",
+      "price": 130,
+      "currency": "EUR",
+      "vat_included": true,
+      "made_in": "Armenia",
+      "materials": {
+        "outer": "100% polyamide/nylon",
+        "lining": "100% polyamide/nylon",
+        "fill": "90% duvet, 10% plumes",
+        "fill_details": "100% polyester"
+      },
+      "features": [
+        "Nylon laqué",
+        "Capuche amovible",
+        "Col montant",
+        "Fermeture zippée",
+        "Poches zippées",
+        "Poche manche à pression",
+        "Cordon de serrage taille",
+        "Poignets réglables",
+        "Ourlet élastique",
+        "Patch logo"
+      ],
+      "care": [
+        "Lavage machine 30°C (doux)",
+        "Ne pas javelliser",
+        "Ne pas sécher en machine",
+        "Repassage 110°C sans vapeur",
+        "Pas de nettoyage à sec",
+        "Séchage à plat à l’ombre",
+        "Nettoyage humide professionnel — doux"
+      ],
+      "advice": "Éviter l’emballage excessif et les plis prolongés pour préserver les matières et les finitions.",
+      "colors": [
+        {
+          "code": "white",
+          "label": "Blanc",
+          "images": [
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8070_F/image/maire-hooded-down-jacket-girl-white-moncler-0.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8070_1/image/maire-hooded-down-jacket-girl-white-moncler-1.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8070_2/image/maire-hooded-down-jacket-girl-white-moncler-2.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8070_3/image/maire-hooded-down-jacket-girl-white-moncler-3.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8070_4/image/maire-hooded-down-jacket-girl-white-moncler-4.jpg?w=800&q=80"
+          ]
+        },
+        {
+          "code": "black",
+          "label": "Noir",
+          "images": [
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8999_F/image/maire-hooded-down-jacket-girl-black-moncler-0.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8999_1/image/maire-hooded-down-jacket-girl-black-moncler-1.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8999_2/image/maire-hooded-down-jacket-girl-black-moncler-2.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8999_3/image/maire-hooded-down-jacket-girl-black-moncler-3.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8999_4/image/maire-hooded-down-jacket-girl-black-moncler-4.jpg?w=800&q=80"
+          ]
+        },
+        {
+          "code": "pink",
+          "label": "Rose clair",
+          "images": [
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z850X_F/image/maire-hooded-down-jacket-girl-light-pink-moncler-0.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z850X_1/image/maire-hooded-down-jacket-girl-light-pink-moncler-1.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z850X_2/image/maire-hooded-down-jacket-girl-light-pink-moncler-2.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z850X_3/image/maire-hooded-down-jacket-girl-light-pink-moncler-3.jpg?w=800&q=80"
+          ]
+        },
+        {
+          "code": "lightblue",
+          "label": "Bleu clair",
+          "images": [
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8715_F/image/maire-hooded-down-jacket-girl-light-blue-moncler-0.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8715_1/image/maire-hooded-down-jacket-girl-light-blue-moncler-1.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8715_2/image/maire-hooded-down-jacket-girl-light-blue-moncler-2.jpg?w=800&q=80",
+            "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K29541A00043597Z8715_3/image/maire-hooded-down-jacket-girl-light-blue-moncler-3.jpg?w=800&q=80"
+          ]
+        }
+      ],
+      "sizes": ["2A","4A","6A","8A","10A","12A","14A"],
+      "stock": { "2A": 8, "4A": 12, "6A": 10, "8A": 6, "10A": 4, "12A": 3, "14A": 2 },
+      "tags": ["doudoune","capuche","kids","nylon-laque","nouveauté"]
+    }
+  ]
+}
