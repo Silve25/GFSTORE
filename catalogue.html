@@ -40,6 +40,10 @@
     .filter-chip{display:inline-flex;gap:.5rem;align-items:center;border:1px solid #ddd;border-radius:999px;padding:.25rem .6rem;font-size:.875rem}
     .filter-chip button{border:0;background:transparent;padding:0 .2rem;line-height:1}
     .footer-mini-logo{height:22px;opacity:.8}
+    /* Fiche produit */
+    .p-color-dot{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid #ddd}
+    .thumbs img{height:64px;width:64px;object-fit:cover;border:1px solid #eee;border-radius:6px}
+    .thumbs img.active{outline:2px solid #111}
   </style>
 </head>
 <body class="homepage">
@@ -52,6 +56,7 @@
       <symbol id="heart" viewBox="0 0 24 24"><path fill="currentColor" d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Z"/></symbol>
       <symbol id="trash" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3h6a1 1 0 0 1 1 1v1h4a1 1 0 0 1 0 2h-1v12a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4a1 1 0 0 1 0-2h4V4a1 1 0 0 1 1-1Zm1 3h4V5h-4v1Zm-1 5a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Zm6 0a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Z"/></symbol>
       <symbol id="close" viewBox="0 0 24 24"><path fill="currentColor" d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></symbol>
     </defs>
   </svg>
 
@@ -66,10 +71,10 @@
       </form>
       <h5 class="cat-list-title mt-4">Catégories populaires</h5>
       <ul class="cat-list">
-        <li><a href="#" data-filter="homme">Hommes</a></li>
-        <li><a href="#" data-filter="femme">Femmes</a></li>
-        <li><a href="#" data-filter="enfant">Enfants</a></li>
-        <li><a href="#" data-filter="accessoires">Accessoires</a></li>
+        <li class="cat-list-item"><a href="#" data-filter="homme">Hommes</a></li>
+        <li class="cat-list-item"><a href="#" data-filter="femme">Femmes</a></li>
+        <li class="cat-list-item"><a href="#" data-filter="enfant">Enfants</a></li>
+        <li class="cat-list-item"><a href="#" data-filter="accessoires">Accessoires</a></li>
       </ul>
     </div>
   </div>
@@ -79,14 +84,14 @@
     <div class="container-fluid">
       <a class="navbar-brand" href="index.html">GF Store</a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title">Menu</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
         </div>
         <div class="offcanvas-body">
           <ul class="navbar-nav ms-auto gap-3">
@@ -100,11 +105,11 @@
 
       <ul class="list-unstyled d-flex m-0 ms-3 align-items-center">
         <li class="search-box me-3">
-          <a class="search-button" href="#search"><svg width="24" height="24"><use xlink:href="#search"/></svg></a>
+          <a class="search-button" href="#search" aria-label="Recherche"><svg width="24" height="24"><use xlink:href="#search"/></svg></a>
         </li>
-        <li class="me-3 d-none d-lg-block"><a href="#"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
+        <li class="me-3 d-none d-lg-block"><a href="#" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
         <li class="d-none d-lg-block">
-          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" aria-label="Ouvrir le panier">
             <svg width="24" height="24"><use xlink:href="#cart"/></svg>
             <span class="badge bg-dark ms-1 cart-count align-middle">0</span>
           </a>
@@ -117,7 +122,7 @@
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
     <div class="offcanvas-header justify-content-between">
       <h5 class="m-0">Votre panier</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
     </div>
     <div class="offcanvas-body">
       <ul id="cart-list" class="list-group mb-3 small"></ul>
@@ -128,6 +133,50 @@
       <div class="d-grid gap-2 mt-3">
         <a class="btn btn-dark btn-lg" href="checkout.html">Passer au paiement</a>
         <button class="btn btn-outline-secondary" id="cart-sync">Sauvegarder mon panier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FICHE PRODUIT (OFFCANVAS) -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasProduct" aria-labelledby="offcanvasProductLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasProductLabel">Fiche produit</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="ratio ratio-4x3 border rounded">
+            <img id="p-hero" src="" alt="" class="w-100 h-100" style="object-fit:cover">
+          </div>
+        </div>
+        <div class="col-12">
+          <div id="p-thumbs" class="thumbs d-flex flex-wrap gap-2"></div>
+        </div>
+        <div class="col-12">
+          <h4 id="p-title" class="mb-1"></h4>
+          <div id="p-subtitle" class="text-secondary mb-2"></div>
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div id="p-price" class="fs-5 fw-semibold"></div>
+            <span id="p-cat" class="badge text-bg-light text-uppercase"></span>
+          </div>
+          <div id="p-colors" class="d-flex align-items-center gap-2 mb-3"></div>
+          <div id="p-sizes" class="d-flex align-items-center gap-2 mb-3"></div>
+          <div class="d-grid gap-2">
+            <button id="p-add" class="btn btn-dark text-uppercase">Ajouter au panier</button>
+            <a id="p-deeplink" href="#" class="btn btn-outline-secondary">Ouvrir la fiche dédiée</a>
+          </div>
+          <hr>
+          <div>
+            <h6 class="text-uppercase">Détails</h6>
+            <ul id="p-features" class="small ps-3"></ul>
+          </div>
+          <div>
+            <h6 class="text-uppercase">Entretien</h6>
+            <ul id="p-care" class="small ps-3"></ul>
+          </div>
+          <small id="p-madein" class="text-secondary d-block mt-2"></small>
+        </div>
       </div>
     </div>
   </div>
@@ -243,12 +292,14 @@
   <template id="tpl-card">
     <div class="col-6 col-md-4 col-lg-3">
       <div class="card product-card h-100 border-0 shadow-sm">
-        <div class="position-relative">
-          <span class="position-absolute top-0 start-0 m-2 badge badge-new text-uppercase d-none">Nouveau</span>
-          <div class="ratio ratio-4x3">
-            <img class="w-100 h-100" alt="">
+        <a class="stretched-link text-reset text-decoration-none p-link" href="#">
+          <div class="position-relative">
+            <span class="position-absolute top-0 start-0 m-2 badge badge-new text-uppercase d-none">Nouveau</span>
+            <div class="ratio ratio-4x3">
+              <img class="w-100 h-100" alt="">
+            </div>
           </div>
-        </div>
+        </a>
         <div class="card-body">
           <h6 class="text-uppercase mb-1 name"></h6>
           <div class="small text-secondary mb-2 meta"></div>
@@ -356,28 +407,30 @@
     let view = [];  // produits filtrés
     let page = 1;
 
-    // ---- Utils produits (tolérant aux schémas)
+    // ---- Utils produits (schéma du JSON GFSTORE)
     const getName = p => p.title || p.name || p.product_name || 'Produit';
     const getPrice = p => Number(p.price ?? p.prix ?? p.amount ?? 0);
-    const getImage = p => {
-      if (typeof p.image === 'string') return p.image;
-      if (Array.isArray(p.images) && p.images[0]) return p.images[0];
-      if (p.thumbnail) return p.thumbnail;
-      return 'images/product-item-1.jpg';
+    const getCategory = p => {
+      const cat = (p.category || p.categorie || p.gender || p.genre || '').toString().toLowerCase();
+      const map = { kids:'Enfants', men:'Hommes', women:'Femmes' };
+      return map[cat] || cat || 'Produit';
     };
-    const getCategory = p => (p.category || p.categorie || p.gender || p.genre || '').toString().toLowerCase();
-    const isNew = p => (p.new === true || p.nouveau === true) ||
-                      (Date.now() - new Date(p.created_at || p.date || 0).getTime() < 45*24*3600*1000);
-    const isStock = p => (p.in_stock ?? p.stock ?? p.available ?? true) !== false;
+    const getCatKey = p => (p.category || p.categorie || p.gender || p.genre || '').toString().toLowerCase();
+    const isNew = p => (p.is_new === true) || (p.tags||[]).some(t=>String(t).toLowerCase().includes('nouveau'));
+    const isStock = p => {
+      if (p.stock && typeof p.stock === 'object') return Object.values(p.stock).some(v=>Number(v)>0);
+      if (typeof p.stock === 'number') return p.stock > 0;
+      return true;
+    };
     const formatPrice = n => n ? n.toLocaleString('fr-FR', {style:'currency', currency:'EUR'}) : '—';
     const matchesQuery = (p, text) => {
       if (!text) return true;
-      const hay = (getName(p) + ' ' + (p.description || '') + ' ' + getCategory(p)).toLowerCase();
+      const hay = (getName(p) + ' ' + (p.subtitle || '') + ' ' + (p.brand || '') + ' ' + getCategory(p)).toLowerCase();
       return hay.includes(text.toLowerCase());
     };
     const matchFilter = (p, val) => {
       if (val === 'all') return true;
-      const c = getCategory(p);
+      const c = getCatKey(p);
       const map = {
         'homme': ['homme','hommes','men','man'],
         'femme': ['femme','femmes','women','woman'],
@@ -385,6 +438,15 @@
         'accessoires': ['accessoires','accessory','accessories','cap','hat','gloves','bonnet','echarpe','scarf']
       };
       return (map[val] || [val]).some(k => c.includes(k));
+    };
+    const firstImage = p => {
+      if (Array.isArray(p.colors) && p.colors[0]?.images?.[0]) return p.colors[0].images[0];
+      return 'images/product-item-1.jpg';
+    };
+    const allImages = p => {
+      const arr = [];
+      (p.colors||[]).forEach(c=> (c.images||[]).forEach(u=> arr.push(u)));
+      return arr.length ? arr : [firstImage(p)];
     };
 
     // ---- Panier UI
@@ -425,16 +487,119 @@
       });
       cartTotal.textContent = total.toLocaleString('fr-FR',{style:'currency', currency:'EUR'});
     }
-    function addToCart(p){
-      const id = p.id ?? getName(p)+'|'+getPrice(p);
+    function addToCart(p, sizeOpt){
+      const id = (p.sku || getName(p)) + (sizeOpt?('|'+sizeOpt):'');
       const existing = cart.items.find(i=>i.id===id);
       const payload = { id, name:getName(p), price:getPrice(p), category:getCategory(p) || '', qty:1 };
       if(existing){ existing.qty++; } else { cart.items.push(payload); }
       updateCartUI();
-      window.App?.addToCart?.(payload, 1); // délègue au backend réel
+      window.App?.addToCart?.(payload, 1);
     }
 
-    // ---- Rendu
+    // ---- Fiche produit (offcanvas)
+    const offcanvasEl = document.getElementById('offcanvasProduct');
+    const offcanvas = new bootstrap.Offcanvas(offcanvasEl);
+    const elHero = document.getElementById('p-hero');
+    const elThumbs = document.getElementById('p-thumbs');
+    const elTitle = document.getElementById('p-title');
+    const elSubtitle = document.getElementById('p-subtitle');
+    const elPrice = document.getElementById('p-price');
+    const elCat = document.getElementById('p-cat');
+    const elColors = document.getElementById('p-colors');
+    const elSizes = document.getElementById('p-sizes');
+    const elFeatures = document.getElementById('p-features');
+    const elCare = document.getElementById('p-care');
+    const elMadeIn = document.getElementById('p-madein');
+    const elAdd = document.getElementById('p-add');
+    const elDeep = document.getElementById('p-deeplink');
+
+    let currentProduct = null;
+    let currentSize = null;
+
+    function showProduct(p){
+      currentProduct = p;
+      currentSize = null;
+
+      // visuels
+      const imgs = allImages(p);
+      elHero.src = imgs[0] || '';
+      elHero.alt = getName(p);
+      elThumbs.innerHTML = '';
+      imgs.slice(0,8).forEach((u,i)=>{
+        const im = document.createElement('img');
+        im.src = u; im.alt = getName(p) + ' ' + (i+1);
+        if(i===0) im.classList.add('active');
+        im.addEventListener('click', ()=> {
+          elHero.src = u;
+          elThumbs.querySelectorAll('img').forEach(x=>x.classList.remove('active'));
+          im.classList.add('active');
+        });
+        elThumbs.appendChild(im);
+      });
+
+      // textes
+      elTitle.textContent = getName(p);
+      elSubtitle.textContent = p.subtitle || '';
+      elPrice.textContent = formatPrice(getPrice(p));
+      elCat.textContent = getCategory(p);
+
+      // couleurs
+      elColors.innerHTML = '';
+      (p.colors||[]).forEach(c=>{
+        const dot = document.createElement('span');
+        dot.className = 'p-color-dot';
+        dot.title = c.label || c.code || '';
+        dot.style.background = (c.code==='white'||c.code==='ivory') ? '#fff' :
+                               (c.code==='black') ? '#000' :
+                               (c.code==='navy') ? '#001f3f' :
+                               (c.code==='lightblue') ? '#cde5ff' :
+                               (c.code==='pink') ? '#ffd6e7' : '#eee';
+        dot.addEventListener('click', ()=>{
+          if(c.images?.[0]){ elHero.src = c.images[0]; }
+        });
+        elColors.appendChild(dot);
+      });
+
+      // tailles
+      elSizes.innerHTML = '';
+      if (Array.isArray(p.sizes) && p.sizes.length){
+        elSizes.innerHTML = '<div class="text-secondary small me-2">Tailles :</div>';
+        p.sizes.forEach(s=>{
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'btn btn-sm btn-outline-secondary';
+          btn.textContent = s;
+          btn.addEventListener('click', ()=>{
+            currentSize = s;
+            elSizes.querySelectorAll('button').forEach(b=> b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+          elSizes.appendChild(btn);
+        });
+      }
+
+      // features / care
+      elFeatures.innerHTML = (p.features||[]).map(f=> `<li>${f}</li>`).join('');
+      elCare.innerHTML = (p.care||[]).map(f=> `<li>${f}</li>`).join('');
+      elMadeIn.textContent = p.made_in ? ('Fabriqué en ' + p.made_in) : '';
+
+      // actions
+      elAdd.onclick = ()=> addToCart(p, currentSize);
+      elDeep.href = `catalogue.html?sku=${encodeURIComponent(p.sku||'')}`;
+      history.replaceState({}, '', `?sku=${encodeURIComponent(p.sku||'')}`);
+
+      offcanvas.show();
+    }
+
+    function openIfSkuParam(){
+      const usp = new URLSearchParams(location.search);
+      const sku = usp.get('sku');
+      if (!sku) return;
+      const p = all.find(x => String(x.sku) === sku);
+      if (p) showProduct(p);
+    }
+
+    // ---- Rendu catalogue
     function render() {
       const PAGE_SIZE = Number(window.App?.pageSize || 12);
       const total = view.length;
@@ -450,6 +615,7 @@
       const tpl = document.getElementById('tpl-card');
       slice.forEach(p => {
         const node = tpl.content.cloneNode(true);
+        const link = node.querySelector('.p-link');
         const img = node.querySelector('img');
         const name = node.querySelector('.name');
         const meta = node.querySelector('.meta');
@@ -457,7 +623,13 @@
         const badge = node.querySelector('.badge-new');
         const addBtn = node.querySelector('.add');
 
-        img.src = getImage(p);
+        link.href = `?sku=${encodeURIComponent(p.sku||'')}`;
+        link.addEventListener('click', (e)=> {
+          e.preventDefault();
+          showProduct(p);
+        });
+
+        img.src = firstImage(p);
         img.alt = getName(p);
         name.textContent = getName(p);
         meta.textContent = getCategory(p) || '—';
@@ -508,7 +680,7 @@
       };
       if(q.value) addChip(`Recherche: "${q.value}"`, ()=>{ q.value=''; apply(); });
       if(filter.value!=='all') addChip(`Catégorie: ${filter.options[filter.selectedIndex].text}`, ()=>{ filter.value='all'; apply(); });
-      if(sort.value!=='relevance') addChip(`Tri: ${sort.options[sort.selectedIndex].text}`, ()=>{ sort.value='relevance'; apply(); });
+      if(sort.value!=='relevance') addChip(`Tri: ${sort.options[filter.selectedIndex].text}`, ()=>{ sort.value='relevance'; apply(); });
       if(min.value) addChip(`Min: ${min.value}€`, ()=>{ min.value=''; apply(); });
       if(max.value) addChip(`Max: ${max.value}€`, ()=>{ max.value=''; apply(); });
       if(onlyNew.checked) addChip('Nouveaux', ()=>{ onlyNew.checked=false; apply(); });
@@ -579,12 +751,13 @@
 
     async function loadProducts(){
       try{
-        // Si app.js expose une API, on l’utilise (backend profond)
+        // Préfère l’API App si dispo
         if (window.App?.getProducts) {
           all = await window.App.getProducts();
         } else {
-          const r = await fetch('products.json', {cache:'no-store'});
-          if (!r.ok) throw new Error('products.json introuvable');
+          // <- chemin unifié pour tout le site
+          const r = await fetch('data/products.json', {cache:'no-store'});
+          if (!r.ok) throw new Error('data/products.json introuvable');
           const data = await r.json();
           all = Array.isArray(data) ? data : (data.products || []);
         }
@@ -594,6 +767,7 @@
         all = [];
       }
       apply();
+      openIfSkuParam(); // ouvre la fiche si lien direct
     }
 
     // Init
