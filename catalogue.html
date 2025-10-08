@@ -9,7 +9,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
 
   <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
   <!-- Vendor + Theme CSS -->
   <link rel="stylesheet" href="css/vendor.css">
@@ -49,6 +50,7 @@
       <symbol id="search" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></symbol>
       <symbol id="cart" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.49a3 3 0 0 0 2.89-2.18l1.58-5.55A1 1 0 0 0 19 5H6.74a3 3 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.92l.16.55 1.64 5.74A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Z"/></symbol>
       <symbol id="heart" viewBox="0 0 24 24"><path fill="currentColor" d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Z"/></symbol>
+      <symbol id="trash" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3h6a1 1 0 0 1 1 1v1h4a1 1 0 0 1 0 2h-1v12a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4a1 1 0 0 1 0-2h4V4a1 1 0 0 1 1-1Zm1 3h4V5h-4v1Zm-1 5a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Zm6 0a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Z"/></symbol>
       <symbol id="close" viewBox="0 0 24 24"><path fill="currentColor" d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
     </defs>
   </svg>
@@ -313,28 +315,31 @@
   <script src="js/modernizr.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/SmoothScroll.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 
-  <!-- App + Products helpers -->
-  <script src="app.js"></script>
+  <!-- Data API produits (obligatoire pour ce catalogue) -->
   <script src="data/products.js"></script>
 
-  <!-- App Catalogue (frontend léger, basé sur Products.js) -->
+  <!-- Votre backend/app (optionnel) : expose éventuellement window.App -->
+  <script src="app.js"></script>
+
+  <!-- App Catalogue -->
   <script>
   (function () {
     // ---- DOM
-    const grid = document.getElementById('grid');
-    const pager = document.getElementById('pager');
-    const count = document.getElementById('count');
-    const q = document.getElementById('q');
+    const grid   = document.getElementById('grid');
+    const pager  = document.getElementById('pager');
+    const count  = document.getElementById('count');
+    const q      = document.getElementById('q');
     const filter = document.getElementById('filter');
-    const sort = document.getElementById('sort');
-    const min = document.getElementById('min');
-    const max = document.getElementById('max');
-    const onlyNew = document.getElementById('only-new');
-    const inStock = document.getElementById('in-stock');
+    const sort   = document.getElementById('sort');
+    const min    = document.getElementById('min');
+    const max    = document.getElementById('max');
+    const onlyNew= document.getElementById('only-new');
+    const inStock= document.getElementById('in-stock');
     const resetBtn = document.getElementById('reset');
-    const chips = document.getElementById('chips');
+    const chips  = document.getElementById('chips');
 
     const overlay = document.querySelector('.search-popup');
     document.querySelectorAll('.search-button').forEach(a=>{
@@ -343,36 +348,42 @@
     overlay?.addEventListener('click', (e)=> { if(e.target === overlay) overlay.classList.remove('is-visible'); });
     document.getElementById('overlay-search')?.addEventListener('input',(e)=>{ q.value = e.target.value; apply(); });
 
-    // Panier (minimal local si App.js n’est pas chargé)
-    const cart = { items: [] };
-    const cartCountEls = document.querySelectorAll('.cart-count');
-    const cartList = document.getElementById('cart-list');
-    const cartTotal = document.getElementById('cart-total');
-    document.getElementById('cart-sync')?.addEventListener('click', ()=> { window.App?.syncCart?.(cart.items); });
+    // Fallback panier local (si app.js n’est pas chargé)
+    const localCart = { items: [] };
+    function addToCartFallback(p){
+      if (window.App && window.App.addToCart) return; // backend prendra le relais via évènement ci-dessous
+      const id = p.sku || p.title || 'prod';
+      const ex = localCart.items.find(i=>i.id===id);
+      if (ex) ex.qty++; else localCart.items.push({id, name:p.title, price:Number(p.price||0), qty:1});
+      // mini toast
+      const t = document.createElement('div');
+      t.textContent = (p.title||'Produit') + ' ajouté au panier';
+      t.style.cssText="position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 14px;border-radius:10px;z-index:2000;opacity:0;transition:opacity .25s";
+      document.body.appendChild(t); requestAnimationFrame(()=> t.style.opacity="1"); setTimeout(()=>{t.style.opacity="0"; setTimeout(()=>t.remove(),250)},1200);
+    }
 
     // ---- Config
-    const DETAIL_PAGE = 'produit.html'; // si tu préfères 'products.html', change juste cette ligne
-    const PAGE_SIZE = 12;
     let all = [];   // produits source
     let view = [];  // produits filtrés
     let page = 1;
+    const PAGE_SIZE = 12;
 
-    // ---- Utils produits
-    const getName = p => p.title || p.name || 'Produit';
+    // ---- Utils (basés sur le schéma GFSTORE)
+    const getName = p => p.title || 'Produit';
     const getPrice = p => Number(p.price ?? 0);
-    const getCategory = p => {
-      const raw = (p.category || '').toString().toLowerCase();
-      const map = { kids:'Enfants', men:'Hommes', women:'Femmes', enfant:'Enfants', homme:'Hommes', femme:'Femmes' };
-      return map[raw] || (raw ? raw.charAt(0).toUpperCase()+raw.slice(1) : 'Produit');
-    };
     const getCatKey = p => (p.category || '').toString().toLowerCase();
-    const isNew = p => (p.is_new === true) || (p.tags||[]).some(t=>String(t).toLowerCase().includes('nouveau'));
-    const isStock = p => {
-      if (p.stock && typeof p.stock === 'object') return Object.values(p.stock).some(v=>Number(v)>0);
-      if (typeof p.stock === 'number') return p.stock > 0;
-      return true;
+    const getCategory = p => {
+      const c = getCatKey(p);
+      if (c==='men'||c==='homme') return 'Hommes';
+      if (c==='women'||c==='femme') return 'Femmes';
+      if (c==='kids'||c==='enfant') return 'Enfants';
+      if (!c) return 'Produit';
+      return c.charAt(0).toUpperCase()+c.slice(1);
     };
-    const formatPrice = (n, cur='EUR') => Number(n||0).toLocaleString('fr-FR', {style:'currency', currency:cur});
+    const formatPrice = (n,curr='EUR') => Number(n||0).toLocaleString('fr-FR',{style:'currency',currency:curr});
+    const firstImage = p => (p.colors?.[0]?.images?.[0]) || 'images/product-item-1.jpg';
+    const isNew = p => !!p.is_new || (p.tags||[]).some(t=>String(t).toLowerCase().includes('nouve'));
+
     const matchesQuery = (p, text) => {
       if (!text) return true;
       const hay = (getName(p) + ' ' + (p.subtitle || '') + ' ' + (p.brand || '') + ' ' + getCategory(p)).toLowerCase();
@@ -389,66 +400,14 @@
       };
       return (map[val] || [val]).some(k => c.includes(k));
     };
-    const firstImage = p => (window.Products?.utils.firstImage(p)) || 'images/product-item-1.jpg';
-    const productHref = p => {
-      if (window.Products?.utils?.productUrl) {
-        const color = p.colors?.[0]?.code;
-        const url = window.Products.utils.productUrl(p, { color });
-        return url.replace('produit.html', DETAIL_PAGE);
-      }
-      // Fallback si products.js absent
-      const sku = encodeURIComponent(p.sku || '');
-      return `${DETAIL_PAGE}?sku=${sku}`;
+    const hasStock = p => {
+      if (p.stock && typeof p.stock === 'object') return Object.values(p.stock).some(v=>Number(v)>0);
+      if (typeof p.stock === 'number') return p.stock > 0;
+      return true;
     };
-
-    // ---- Panier UI (fallback local)
-    function updateCartUI(){
-      const totalQty = cart.items.reduce((s,i)=>s+i.qty,0);
-      cartCountEls.forEach(el=> el.textContent = totalQty);
-      cartList.innerHTML = '';
-      if(!cart.items.length){
-        cartList.innerHTML = '<li class="list-group-item d-flex justify-content-between align-items-center">Panier vide</li>';
-        cartTotal.textContent = '—';
-        return;
-      }
-      let total = 0;
-      cart.items.forEach(item=>{
-        total += item.qty * item.price;
-        const li = document.createElement('li');
-        li.className = 'list-group-item d-flex justify-content-between align-items-center';
-        li.innerHTML = `
-          <div class="me-2 flex-fill">
-            <div class="fw-semibold small text-uppercase">${item.name}</div>
-            <div class="text-secondary small">${item.category || ''}</div>
-            <div class="small price-sm">${(item.price).toLocaleString('fr-FR',{style:'currency', currency:'EUR'})} × ${item.qty}</div>
-          </div>
-          <button class="btn btn-sm btn-outline-secondary me-2 minus">–</button>
-          <button class="btn btn-sm btn-outline-secondary me-2 plus">+</button>
-          <button class="btn btn-sm btn-outline-danger" title="Retirer">Supprimer</button>
-        `;
-        li.querySelector('.plus').addEventListener('click', ()=>{ item.qty++; updateCartUI(); window.App?.addToCart?.(item,1); });
-        li.querySelector('.minus').addEventListener('click', ()=>{ item.qty=Math.max(1,item.qty-1); updateCartUI(); window.App?.addToCart?.(item,-1); });
-        li.querySelector('.btn-outline-danger').addEventListener('click', ()=> {
-          cart.items = cart.items.filter(i=>i.id!==item.id);
-          updateCartUI();
-          window.App?.removeFromCart?.(item);
-        });
-        cartList.appendChild(li);
-      });
-      cartTotal.textContent = total.toLocaleString('fr-FR',{style:'currency', currency:'EUR'});
-    }
-    function addToCart(p){
-      const id = (p.sku || getName(p));
-      const existing = cart.items.find(i=>i.id===id);
-      const payload = { id, name:getName(p), price:getPrice(p), category:getCategory(p) || '', qty:1 };
-      if(existing){ existing.qty++; } else { cart.items.push(payload); }
-      updateCartUI();
-      window.App?.addToCart?.(payload, 1);
-    }
 
     // ---- Rendu
     function render() {
-      const PAGE_SIZE = Number(window.App?.pageSize || 12);
       const total = view.length;
       const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
       if (page > pages) page = pages;
@@ -460,6 +419,7 @@
 
       grid.innerHTML = '';
       const tpl = document.getElementById('tpl-card');
+
       slice.forEach(p => {
         const node = tpl.content.cloneNode(true);
         const link = node.querySelector('.p-link');
@@ -470,7 +430,9 @@
         const badge = node.querySelector('.badge-new');
         const addBtn = node.querySelector('.add');
 
-        link.href = productHref(p);
+        const href = Products.utils.productUrl(p); // -> produit.html?sku=...
+        link.href = href;
+
         img.src = firstImage(p);
         img.alt = getName(p);
         name.textContent = getName(p);
@@ -480,9 +442,13 @@
 
         addBtn.addEventListener('click', (e) => {
           e.preventDefault();
+          // Émet un évènement pour app.js (Cart.add), sinon fallback local
+          try { document.dispatchEvent(new CustomEvent('gf:add', { detail:{ product: p } })); }
+          catch(_) {}
+          addToCartFallback(p);
+
           addBtn.textContent = 'Ajouté ✓';
           addBtn.disabled = true;
-          addToCart(p);
           setTimeout(() => { addBtn.textContent = 'Ajouter'; addBtn.disabled = false; }, 900);
         });
 
@@ -523,7 +489,7 @@
       };
       if(q.value) addChip(`Recherche: "${q.value}"`, ()=>{ q.value=''; apply(); });
       if(filter.value!=='all') addChip(`Catégorie: ${filter.options[filter.selectedIndex].text}`, ()=>{ filter.value='all'; apply(); });
-      if(sort.value!=='relevance') addChip(`Tri: ${sort.options[sort.selectedIndex].text}`, ()=>{ sort.value='relevance'; apply(); }); /* ← fix d’index */
+      if(sort.value!=='relevance') addChip(`Tri: ${sort.options[sort.selectedIndex].text}`, ()=>{ sort.value='relevance'; apply(); }); /* <-- FIX ici */
       if(min.value) addChip(`Min: ${min.value}€`, ()=>{ min.value=''; apply(); });
       if(max.value) addChip(`Max: ${max.value}€`, ()=>{ max.value=''; apply(); });
       if(onlyNew.checked) addChip('Nouveaux', ()=>{ onlyNew.checked=false; apply(); });
@@ -531,7 +497,6 @@
     }
 
     function apply() {
-      // filtres
       const text = q.value.trim();
       const f = filter.value;
       const minV = Number(min.value || 0);
@@ -543,7 +508,7 @@
         const price = getPrice(p);
         const okPrice = price >= minV && price <= maxV;
         const okNew = !onlyNew.checked || isNew(p);
-        const okStock = !inStock.checked || isStock(p);
+        const okStock = !inStock.checked || hasStock(p);
         return okQuery && okCat && okPrice && okNew && okStock;
       });
 
@@ -571,4 +536,45 @@
     [q, min, max].forEach(el=> el.addEventListener('input', apply));
     [filter, sort, onlyNew, inStock].forEach(el=> el.addEventListener('change', apply));
     resetBtn.addEventListener('click', () => {
-      q.value
+      q.value = ''; filter.value = 'all'; sort.value = 'relevance';
+      min.value=''; max.value=''; onlyNew.checked=false; inStock.checked=false;
+      apply();
+    });
+    document.querySelectorAll('.cat-list a[data-filter]')?.forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault();
+        filter.value = a.dataset.filter;
+        overlay.classList.remove('is-visible');
+        apply();
+      });
+    });
+
+    // ---- Chargement produits (FIABLE via data/products.js)
+    function showSkeletons(n=8){
+      grid.innerHTML = '';
+      const t = document.getElementById('tpl-skel');
+      for(let i=0;i<n;i++) grid.appendChild(t.content.cloneNode(true));
+    }
+    showSkeletons(8);
+
+    async function loadProducts(){
+      try{
+        all = await Products.all();         // ← source unique fiabilisée
+        if (!Array.isArray(all) || !all.length) throw new Error('Aucun produit');
+      } catch(err){
+        console.error(err);
+        count.textContent = 'Erreur de chargement du catalogue.';
+        grid.innerHTML = '<div class="col-12"><div class="alert alert-warning">Impossible de charger les produits. Vérifiez data/products.json.</div></div>';
+        return;
+      }
+      apply();
+    }
+
+    loadProducts();
+  })();
+  </script>
+
+  <!-- JS global du thème -->
+  <script src="js/script.min.js"></script>
+</body>
+</html>
