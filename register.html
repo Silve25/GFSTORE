@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Créer un compte — GF Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Créez votre compte GF Store pour suivre vos commandes, enregistrer vos adresses et profiter d’offres exclusives." />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+
+  <!-- CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/vendor.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{ --cardW: 680px; }
+    body{ background:#fafafa; }
+    .auth-wrap{ min-height:100vh; display:flex; align-items:center; padding:32px 0; }
+    .brand-mini{ font-family: "Marcellus", serif; letter-spacing:.02em; }
+    .card-auth{ max-width:var(--cardW); margin:0 auto; border:1px solid #eee; box-shadow:0 12px 40px rgba(0,0,0,.06); }
+    .form-text small{opacity:.8}
+    .progress-pwd{ height:8px; background:#eee; border-radius:999px; overflow:hidden }
+    .progress-pwd > div{ height:100%; width:0; background:#ef4444; transition:width .25s ease, background-color .25s ease }
+    .input-icon{ position:relative }
+    .input-icon .toggle-eye{ position:absolute; right:.75rem; top:50%; transform:translateY(-50%); background:none; border:0; padding:0; }
+    .help-hint{ font-size:.9rem; opacity:.85 }
+    .list-check{ padding-left:1.2rem }
+    .list-check li{ margin:.2rem 0 }
+    .toast-container{ z-index:1080 }
+    .link-muted{ color:inherit; opacity:.75; text-decoration:none }
+    .link-muted:hover{ opacity:1; }
+  </style>
+</head>
+<body>
+
+  <!-- Header simple -->
+  <nav class="navbar navbar-expand-lg bg-white border-bottom fixed-top">
+    <div class="container">
+      <a class="navbar-brand brand-mini" href="index.html">GF Store</a>
+      <div class="d-flex gap-2">
+        <a class="btn btn-sm btn-outline-secondary d-none d-md-inline" href="catalogue.html">Catalogue</a>
+        <a class="btn btn-sm btn-dark" href="login.html">Se connecter</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="auth-wrap">
+    <div class="container">
+      <div class="card card-auth rounded-4">
+        <div class="row g-0">
+          <!-- Visuel (masqué en mobile) -->
+          <div class="col-lg-5 d-none d-lg-block">
+            <div class="h-100 w-100" style="background:url('images/single-image-2.jpg') center/cover no-repeat; border-top-left-radius:1rem; border-bottom-left-radius:1rem;"></div>
+          </div>
+
+          <!-- Formulaire -->
+          <div class="col-lg-7">
+            <div class="p-4 p-md-5">
+              <h1 class="h3 mb-1">Créer un compte</h1>
+              <p class="text-secondary mb-4">Suivez vos commandes, enregistrez vos adresses et profitez d’offres privées. <a class="link-muted" href="login.html">Déjà inscrit ?</a></p>
+
+              <form id="registerForm" novalidate>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label" for="firstName">Prénom</label>
+                    <input class="form-control" id="firstName" name="firstName" autocomplete="given-name" required>
+                    <div class="invalid-feedback">Veuillez indiquer votre prénom.</div>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="lastName">Nom</label>
+                    <input class="form-control" id="lastName" name="lastName" autocomplete="family-name" required>
+                    <div class="invalid-feedback">Veuillez indiquer votre nom.</div>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label" for="email">Email</label>
+                    <input class="form-control" id="email" name="email" type="email" autocomplete="email" required>
+                    <div class="invalid-feedback">Adresse email invalide.</div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <label class="form-label mb-1" for="password">Mot de passe</label>
+                      <a href="password-reset.html" class="small link-muted">Mot de passe oublié ?</a>
+                    </div>
+                    <div class="input-icon">
+                      <input class="form-control" id="password" name="password" type="password" minlength="8" required
+                             placeholder="Au moins 8 caractères, 1 majuscule, 1 chiffre">
+                      <button class="toggle-eye" type="button" tabindex="-1" aria-label="Afficher/masquer">
+                        👁️
+                      </button>
+                      <div class="invalid-feedback">Mot de passe trop faible.</div>
+                    </div>
+                    <!-- jauge -->
+                    <div class="progress-pwd mt-2" aria-hidden="true"><div id="pwdBar"></div></div>
+                    <div class="help-hint small mt-1" id="pwdHelp">Force : —</div>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label" for="confirm">Confirmer le mot de passe</label>
+                    <input class="form-control" id="confirm" name="confirm" type="password" required>
+                    <div class="invalid-feedback">Les mots de passe ne correspondent pas.</div>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label mb-1">Préférences</label>
+                    <div class="form-check">
+                      <input class="form-check-input" id="newsletter" type="checkbox" checked>
+                      <label class="form-check-label" for="newsletter">Recevoir nos nouveautés (désinscription 1 clic)</label>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="form-check">
+                      <input class="form-check-input" id="terms" type="checkbox" required>
+                      <label class="form-check-label" for="terms">
+                        J’accepte les <a href="cgu.html" target="_blank">Conditions Générales</a> et la <a href="confidentialite.html" target="_blank">Politique de confidentialité</a>.
+                      </label>
+                      <div class="invalid-feedback">Vous devez accepter pour continuer.</div>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <button class="btn btn-dark w-100" type="submit">Créer mon compte</button>
+                  </div>
+
+                  <div class="col-12">
+                    <p class="text-secondary small mb-0">Pourquoi créer un compte ?</p>
+                    <ul class="small list-check">
+                      <li>Suivi de commandes et factures</li>
+                      <li>Livraison gratuite et retours 30 jours</li>
+                      <li>Support 7j/7, réponse &lt; 1h</li>
+                    </ul>
+                  </div>
+                </div>
+              </form>
+
+              <hr class="my-4">
+              <p class="small text-secondary mb-0">Paiement accepté : <strong>Virement bancaire uniquement</strong>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- toast -->
+    <div class="position-fixed top-0 end-0 p-3 toast-container">
+      <div id="toastOK" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">Compte créé avec succès. Redirection…</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fermer"></button>
+        </div>
+      </div>
+      <div id="toastErr" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">Impossible de créer le compte. Vérifiez vos informations.</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fermer"></button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer mini -->
+  <footer class="py-4 border-top">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <small>© 2025 GF Store</small>
+      <div class="small text-secondary">Besoin d’aide ? <a href="contact.html">Contact</a> · <a href="faq.html">FAQ</a></div>
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    (function(){
+      const f = document.getElementById('registerForm');
+      const pwd = document.getElementById('password');
+      const confirm = document.getElementById('confirm');
+      const email = document.getElementById('email');
+      const first = document.getElementById('firstName');
+      const last = document.getElementById('lastName');
+      const terms = document.getElementById('terms');
+      const bar = document.getElementById('pwdBar');
+      const help = document.getElementById('pwdHelp');
+
+      // Afficher/masquer mot de passe
+      document.querySelectorAll('.toggle-eye').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const type = pwd.type === 'password' ? 'text' : 'password';
+          pwd.type = type; confirm.type = type;
+        });
+      });
+
+      // Force mot de passe simple (client)
+      function scorePass(v){
+        let s = 0;
+        if(v.length >= 8) s+=25;
+        if(/[A-Z]/.test(v)) s+=25;
+        if(/[0-9]/.test(v)) s+=25;
+        if(/[^A-Za-z0-9]/.test(v)) s+=25;
+        return s;
+      }
+      function renderStrength(){
+        const s = scorePass(pwd.value);
+        bar.style.width = s + '%';
+        let txt = 'Faible', col = '#ef4444';
+        if(s>=75){ txt='Fort'; col='#22c55e'; }
+        else if(s>=50){ txt='Moyen'; col='#f59e0b'; }
+        bar.style.backgroundColor = col;
+        help.textContent = 'Force : ' + txt;
+      }
+      pwd.addEventListener('input', renderStrength);
+      renderStrength();
+
+      // Validation bootstrap
+      const toastOK = new bootstrap.Toast(document.getElementById('toastOK'), {delay:1800});
+      const toastErr = new bootstrap.Toast(document.getElementById('toastErr'), {delay:2500});
+
+      function setInvalid(el, cond){
+        if(cond){ el.classList.add('is-invalid'); } else { el.classList.remove('is-invalid'); }
+      }
+
+      f.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+
+        // validations
+        setInvalid(first, !first.value.trim());
+        setInvalid(last, !last.value.trim());
+        setInvalid(email, !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value));
+        setInvalid(pwd, scorePass(pwd.value) < 50);
+        setInvalid(confirm, confirm.value !== pwd.value);
+        setInvalid(terms, !terms.checked);
+
+        if (document.querySelectorAll('.is-invalid').length) { toastErr.show(); return; }
+
+        const payload = {
+          firstName: first.value.trim(),
+          lastName: last.value.trim(),
+          email: email.value.trim().toLowerCase(),
+          password: pwd.value,
+          newsletter: document.getElementById('newsletter').checked
+        };
+
+        try{
+          // Si ton app.js expose App.createAccount → priorité
+          if(window.App && typeof App.createAccount === 'function'){
+            await App.createAccount(payload);
+          } else {
+            // Fallback local minimal : stockage simulé
+            const users = JSON.parse(localStorage.getItem('gf_users') || '[]');
+            if(users.some(u=>u.email===payload.email)) throw new Error('exists');
+            users.push({ ...payload, created_at: new Date().toISOString() });
+            localStorage.setItem('gf_users', JSON.stringify(users));
+            // set “session”
+            localStorage.setItem('gf_session', JSON.stringify({ email: payload.email, firstName: payload.firstName }));
+          }
+
+          toastOK.show();
+          setTimeout(()=>{ window.location.href = 'index.html'; }, 1600);
+        }catch(err){
+          console.error(err);
+          document.querySelector('#toastErr .toast-body').textContent =
+            err && err.message === 'exists'
+              ? 'Un compte existe déjà avec cet email.'
+              : "Impossible de créer le compte pour le moment.";
+          toastErr.show();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

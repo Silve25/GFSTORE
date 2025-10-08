@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>GF Store — Hiver 2025 · Doudounes, Parkas, Maille</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Boutique GF Store : sélections Automne/Hiver 2025 pour Hommes, Femmes et Enfants. Isolation premium, coupes maîtrisées et SAV réactif." />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+
+  <!-- Bootstrap + Swiper CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+
+  <!-- Vendor + Theme CSS -->
+  <link rel="stylesheet" href="css/vendor.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet" />
+
+  <!-- Micro styles/overrides -->
+  <style>
+    :root{
+      --navH: 64px;              /* MAJ en JS */
+      --fomoH: 40px;             /* MAJ en JS */
+      --anchorOffset: calc(var(--navH) + var(--fomoH) + 12px);
+      --radius: 14px;
+    }
+    html{scroll-behavior:smooth}
+    body{background:#fff;color:#111}
+    /* padding de sécurité pour éviter tout recouvrement au scroll */
+    body.has-fixed-nav #content{ padding-top: calc(var(--navH) + 8px) }
+    .anchor-offset{scroll-margin-top: var(--anchorOffset)}
+
+    /* ===== HERO : textes parfaitement blancs */
+    #hero, #hero * { color:#fff !important; }
+    #hero .hero-overlay{background:linear-gradient(0deg, rgba(0,0,0,.55), rgba(0,0,0,.35));}
+    #hero .btn{transition:transform .2s ease, opacity .2s ease}
+    #hero .btn:hover{transform:translateY(-2px);opacity:.95}
+
+    /* ===== Reveal */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease, transform .6s ease}
+    .reveal.show{opacity:1;transform:none}
+
+    /* ===== Header (fix no-jump) */
+    .navbar{min-height:64px} /* verrouille la hauteur → pas de "saut" ghost→solid */
+    .navbar.fixed-top{transition:background-color .25s ease, box-shadow .25s ease}
+    .navbar-ghost{background:transparent !important; box-shadow:none}
+    .navbar-solid{background:#ffffff !important; box-shadow:0 6px 20px rgba(0,0,0,.06)}
+    .navbar a.nav-link, .navbar .navbar-brand{color:#111 !important}
+
+    /* ===== Barre FOMO (au-dessus du header) */
+    .fomo-bar{
+      position:sticky; top:0; z-index:1020; /* < offcanvas(1045), navbar(1030), modal(1055) */
+      background:#111; color:#fff; font-size:.92rem;
+      -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    }
+    .fomo-bar small{opacity:.85}
+    .badge-dot{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#22c55e;margin-right:.5rem}
+
+    /* ===== Grille du header ===== */
+    .nav-grid{display:flex; align-items:center; width:100%;}
+    @media (max-width: 991.98px){
+      .nav-grid{
+        display:grid;
+        grid-template-columns: 1fr auto auto; /* logo | panier | burger */
+        align-items:center;
+        column-gap:.5rem;
+      }
+      .nav-brand{grid-column:1; justify-self:start;}
+      .nav-cart-right{grid-column:2; justify-self:end;}
+      .nav-toggle-right{grid-column:3; justify-self:end;}
+      .nav-desktop-icons{display:none !important;}
+    }
+    @media (min-width: 992px){
+      .nav-cart-right{display:none !important;} /* version mobile uniquement */
+    }
+
+    /* Panier mobile : badge */
+    .nav-cart-right .badge{
+      font-size:.65rem; line-height:1; padding:.25em .35em;
+      transform:translate(15%, -35%);
+    }
+
+    /* ===== Images “libres” (non recadrées, non déformées) */
+    .media-free{display:block;width:100%;height:auto;border-radius:var(--radius)}
+    .card-free{border:1px solid #eee;border-radius:var(--radius);overflow:hidden;background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.04)}
+    .card-free .card-body{padding:1rem 1.1rem}
+    .hover-zoom img{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+    .hover-zoom:hover img{transform:scale(1.03)}
+
+    /* Les cartes catégories acceptent hauteurs variables sans rognage */
+    .category-grid .card-free figure{margin:0}
+    .category-grid .card-free img{width:100%;height:auto;object-fit:contain;background:#fafafa}
+
+    .section-lede{max-width:920px;margin:0 auto 1.25rem;opacity:.8}
+
+    /* ===== Collection overlay title */
+    .collection .title-xlarge{position:absolute;top:-18px;left:0;right:0;z-index:3;pointer-events:none}
+    .collection .hover-zoom{position:relative;z-index:1;overflow:hidden;border-radius:var(--radius)}
+    .collection .bg-white{position:relative;z-index:2}
+
+    /* ===== Testimonials (crédibles) */
+    .testimonials{background:#f7f7f7}
+    .t-card{background:#fff;border:1px solid #eee;border-radius:var(--radius); height:100%}
+    .t-body{padding:1.1rem 1.1rem 1rem}
+    .t-head{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem}
+    .t-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover}
+    .t-name{font-weight:600}
+    .t-verified{font-size:.75rem;background:#eef6ff;color:#1e40af;border-radius:999px;padding:.15rem .5rem}
+    .t-rating{color:#f5b301}
+    .t-meta{font-size:.82rem;opacity:.75}
+    .t-badges .b-pos{background:#e7f9ed;color:#166534}
+    .t-badges .b-neg{background:#fee2e2;color:#991b1b}
+    .t-badges .b-mid{background:#fff7ed;color:#9a3412}
+    .t-badges .badge{border-radius:999px}
+
+    /* ===== Flèches carrousel */
+    .carousel-arrow .btn{width:44px;height:44px}
+    @media (max-width:575.98px){
+      .carousel-arrow .btn{width:48px;height:48px}
+      #hero .lead{font-size:1rem}
+    }
+  </style>
+</head>
+<body class="homepage">
+
+  <!-- SVG icons -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <defs>
+      <symbol id="search" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></symbol>
+      <symbol id="cart" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.49a3 3 0 0 0 2.89-2.18l1.58-5.55A1 1 0 0 0 19 5H6.74a3 3 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.92l.16.55 1.64 5.74A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Z"/></symbol>
+      <symbol id="heart" viewBox="0 0 24 24"><path fill="currentColor" d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Z"/></symbol>
+      <symbol id="arrow-left" viewBox="0 0 24 24"><path fill="currentColor" d="M17 11H9.41l3.3-3.29a1 1 0 1 0-1.42-1.42l-5 5a1 1 0 0 0 0 1.42l5 5a1 1 0 1 0 1.42-1.42L9.41 13H17a1 1 0 0 0 0-2Z"/></symbol>
+      <symbol id="arrow-right" viewBox="0 0 24 24"><path fill="currentColor" d="M17.92 11.62a1 1 0 0 0-.21-.33l-5-5a1 1 0 1 0-1.42 1.42L14.59 11H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1 1 0 1 0 1.42 1.42l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></symbol>
+      <symbol id="bank" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3 3 7v2h18V7l-9-4Zm-7 6v8H3v2h18v-2h-2V9H5Zm2 2h2v6H7v-6Zm4 0h2v6h-2v-6Zm4 0h2v6h-2v-6Z"/></symbol>
+      <symbol id="user" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></symbol>
+      <symbol id="star" viewBox="0 0 24 24"><path fill="currentColor" d="m12 17.27 6.18 3.73-1.64-7.03L21 9.24l-7.19-.62L12 2 10.19 8.62 3 9.24l4.46 4.73-1.64 7.03L12 17.27Z"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="preloader" aria-hidden="true"></div>
+
+  <!-- FOMO bar tout en haut -->
+  <div class="fomo-bar py-2" id="fomoBar">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge-dot"></span>
+        <span><strong id="watching">18</strong> personnes consultent cette page</span>
+      </div>
+      <div>-10% première commande : <strong>GF-FIRST10</strong> · se termine dans <strong id="countdown">00:00:00</strong></div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top navbar-ghost" id="siteNav" style="top: var(--fomoH)">
+    <div class="container-fluid nav-grid">
+      <!-- Logo -->
+      <a class="navbar-brand nav-brand" href="index.html">GF Store</a>
+
+      <!-- Panier mobile (à droite, hors menu) -->
+      <a class="nav-cart-right d-lg-none position-relative" href="#"
+         data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
+        <svg width="26" height="26"><use xlink:href="#cart"/></svg>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark cart-count">0</span>
+      </a>
+
+      <!-- Burger -->
+      <button class="navbar-toggler nav-toggle-right" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menu -->
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title">Menu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav ms-auto gap-3">
+            <li class="nav-item"><a class="nav-link active" href="#nouveautes">Nouveautés</a></li>
+            <li class="nav-item"><a class="nav-link" href="#hommes">Hommes</a></li>
+            <li class="nav-item"><a class="nav-link" href="#femmes">Femmes</a></li>
+            <li class="nav-item"><a class="nav-link" href="#enfants">Enfants</a></li>
+            <li class="nav-item"><a class="nav-link" href="#collections">Collections</a></li>
+            <li class="nav-item"><a class="nav-link" href="catalogue.html">Catalogue</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                <svg width="20" height="20" class="me-1"><use xlink:href="#user"/></svg>Compte
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="login.html">Se connecter</a></li>
+                <li><a class="dropdown-item" href="register.html">Créer un compte</a></li>
+                <li><a class="dropdown-item" href="password-reset.html">Mot de passe oublié</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="commande.html">Suivre ma commande</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Icônes desktop (droite) -->
+      <ul class="list-unstyled d-flex m-0 ms-3 nav-desktop-icons">
+        <li class="me-3 d-none d-lg-block"><a href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
+        <li class="d-none d-lg-block">
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier"><svg width="24" height="24"><use xlink:href="#cart"/></svg></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Panier -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
+    <div class="offcanvas-header justify-content-center">
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+    </div>
+    <div class="offcanvas-body">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-primary">Votre panier</span>
+        <span class="badge bg-primary rounded-pill cart-count">0</span>
+      </h4>
+      <p class="text-body-secondary">Votre panier est vide.</p>
+      <a class="w-100 btn btn-dark btn-lg mt-3" href="checkout.html">Passer au paiement</a>
+    </div>
+  </div>
+
+  <main id="content">
+
+    <!-- HERO -->
+    <section id="hero" class="position-relative d-flex align-items-center justify-content-center text-center"
+      style="min-height:92vh;background:url('https://azure-eu-images.contentstack.com/v3/assets/blt70cb06b4414428cc/blt1d5173b7dcb852de/68d69ef889198c78e568f5bd/MC_FW_2025_DNALOOKBOOK_DS_RGB_150DPI_16X9_8.jpg?branch=prod_1&format=avif&auto=auto&width=100p&quality=90') center/cover no-repeat #111;">
+      <div class="position-absolute top-0 start-0 w-100 h-100 hero-overlay"></div>
+      <div class="container position-relative reveal" style="z-index:2">
+        <p class="text-uppercase mb-2" style="letter-spacing:.18em">GF Store Collection</p>
+        <h1 class="display-3 fw-normal mb-3">Automne / Hiver 2025</h1>
+        <p class="lead mb-4" style="max-width:860px;margin:0 auto;">
+          Isolation premium, tissus techniques certifiés et contrôle qualité en atelier européen. <br class="d-none d-md-inline">
+          <strong>Conçu pour durer</strong> et pensé pour la ville comme la montagne.
+        </p>
+        <div class="d-inline-flex gap-3">
+          <a href="catalogue.html?filter=homme" class="btn btn-dark text-uppercase px-4">Hommes</a>
+          <a href="catalogue.html?filter=femme" class="btn btn-dark text-uppercase px-4">Femmes</a>
+          <a href="catalogue.html?filter=enfant" class="btn btn-dark text-uppercase px-4">Enfants</a>
+        </div>
+        <div class="small mt-3 opacity-75">Expédition 24h · <strong>Livraison gratuite</strong> · Retours 30 jours · Support 7j/7</div>
+      </div>
+    </section>
+
+    <!-- NOS CATÉGORIES -->
+    <section class="py-4 bg-white anchor-offset">
+      <div class="container text-center">
+        <h2 class="mb-2">Nos catégories</h2>
+        <p class="section-lede">Sélectionnez une catégorie pour explorer nos pièces phares.</p>
+      </div>
+    </section>
+
+    <!-- Collections (images libres, non recadrées) -->
+    <section id="collections" class="pb-5 bg-light anchor-offset">
+      <div class="container category-grid">
+        <div class="row g-4">
+          <!-- Hommes -->
+          <div class="col-md-4 reveal anchor-offset" id="hommes">
+            <article class="card-free hover-zoom h-100">
+              <figure><img class="media-free"
+                src="https://moncler-cdn.thron.com/api/v1/content-delivery/shares/pyvhkj/contents/93cef3c2-9bcb-49f8-a288-8c6a98b40de5/image/93cef3c2-9bcb-49f8-a288-8c6a98b40de5.jpg?q_auto=high&q=90&w=1900&h=2850"
+                alt="Collection Hommes"></figure>
+              <div class="card-body text-center">
+                <h5 class="card-title text-uppercase mb-2">Hommes</h5>
+                <p class="card-text">Doudounes courtes, parkas techniques et mailles.</p>
+                <a href="catalogue.html?filter=homme" class="btn btn-dark text-uppercase">Boutique Hommes</a>
+              </div>
+            </article>
+          </div>
+          <!-- Femmes (image MAJ) -->
+          <div class="col-md-4 reveal anchor-offset" id="femmes">
+            <article class="card-free hover-zoom h-100">
+              <figure><img class="media-free"
+                src="https://moncler-cdn.thron.com/api/v1/content-delivery/shares/pyvhkj/contents/4aa2a70e-1b0b-4315-9cb7-49725fc8bd90/image/4aa2a70e-1b0b-4315-9cb7-49725fc8bd90.jpg?q_auto=high&q=90&w=1900&h=2850"
+                alt="Collection Femmes"></figure>
+              <div class="card-body text-center">
+                <h5 class="card-title text-uppercase mb-2">Femmes</h5>
+                <p class="card-text">Coupe couture, isolation premium et laine douce.</p>
+                <a href="catalogue.html?filter=femme" class="btn btn-dark text-uppercase">Boutique Femmes</a>
+              </div>
+            </article>
+          </div>
+          <!-- Enfants (image MAJ) -->
+          <div class="col-md-4 reveal anchor-offset" id="enfants">
+            <article class="card-free hover-zoom h-100">
+              <figure><img class="media-free"
+                src="https://pengukids.com/wp-content/uploads/2018/08/Pengu-KIDS-winter-down-parka-daiki-khaki-boy-front-small.jpg"
+                alt="Collection Enfants"></figure>
+              <div class="card-body text-center">
+                <h5 class="card-title text-uppercase mb-2">Enfants</h5>
+                <p class="card-text">Chaleur, légèreté et liberté de mouvement.</p>
+                <a href="catalogue.html?filter=enfant" class="btn btn-dark text-uppercase">Boutique Enfants</a>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="text-center mt-4 reveal">
+          <a href="catalogue.html" class="btn btn-outline-dark text-uppercase px-4">Tout voir</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOUVEAUTÉS (remplie en JS depuis data/products.json) -->
+    <section id="nouveautes" class="py-5 anchor-offset">
+      <div class="container">
+        <h2 class="display-5 text-center mb-3 reveal">Nouveautés</h2>
+        <p class="section-lede text-center reveal">
+          Dernières sorties : doudounes recyclées, parkas 3-en-1 et mailles techniques.
+        </p>
+
+        <div class="position-relative reveal">
+          <div class="swiper new-swiper">
+            <div class="swiper-wrapper" id="new-products-wrapper">
+              <!-- Slides injectées depuis data/products.json -->
+            </div>
+            <div class="swiper-pagination mt-3"></div>
+          </div>
+
+          <div class="carousel-arrow position-absolute top-50 start-0 translate-middle-y">
+            <button class="btn btn-light rounded-circle shadow-sm new-prev" aria-label="Précédent">
+              <svg width="28" height="28"><use xlink:href="#arrow-left"></use></svg>
+            </button>
+          </div>
+          <div class="carousel-arrow position-absolute top-50 end-0 translate-middle-y">
+            <button class="btn btn-light rounded-circle shadow-sm new-next" aria-label="Suivant">
+              <svg width="28" height="28"><use xlink:href="#arrow-right"></use></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Collection éditoriale -->
+    <section class="collection bg-light position-relative py-5 anchor-offset">
+      <div class="container position-relative">
+        <div class="title-xlarge text-uppercase txt-fx domino text-center mb-4 reveal">Collection</div>
+        <div class="row g-0 align-items-center">
+          <div class="col-md-6 reveal hover-zoom">
+            <img src="https://azure-eu-images.contentstack.com/v3/assets/blt70cb06b4414428cc/bltc781cefaa6a18aed/68c97f3f702609832cf5577f/ASSET-HP-21-09-GENIUS-ASAP-ROCKY-PROMO-MODULE-02-DESK-MOB-APP.jpg?branch=prod_1&format=avif&auto=auto&width=100p&quality=90" alt="Lookbook hiver" class="img-fluid" style="border-radius:var(--radius)">
+          </div>
+          <div class="col-md-6 bg-white reveal">
+            <div class="p-5">
+              <h3 class="element-title text-uppercase">Héros du quotidien</h3>
+              <p class="mb-4">Des silhouettes chaudes et fonctionnelles, travaillées dans des tissus techniques et des coupes précises. Préparez la saison avec nos pièces iconiques.</p>
+              <a href="catalogue.html" class="btn btn-dark text-uppercase">Boutique Automne/Hiver</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÉMOIGNAGES -->
+    <section class="testimonials py-5 anchor-offset" id="temoignages">
+      <div class="container">
+        <div class="text-center reveal">
+          <h3 class="section-title mb-2">Ils nous recommandent</h3>
+          <p class="section-lede mb-3">Plus de 40 000 clients équipés depuis 2018 · <strong>Livraison gratuite</strong> en France.</p>
+          <div class="d-inline-flex align-items-center gap-3 px-3 py-2 rounded-3" style="background:#fff;border:1px solid #eee">
+            <div class="t-rating">
+              <svg width="18" height="18"><use xlink:href="#star"/></svg>
+              <svg width="18" height="18"><use xlink:href="#star"/></svg>
+              <svg width="18" height="18"><use xlink:href="#star"/></svg>
+              <svg width="18" height="18"><use xlink:href="#star"/></svg>
+              <svg width="18" height="18" style="opacity:.5"><use xlink:href="#star"/></svg>
+            </div>
+            <span class="small">Note globale <strong>4,8/5</strong> — majoritairement positive.</span>
+          </div>
+        </div>
+
+        <div class="position-relative mt-4 reveal">
+          <div class="swiper test-swiper">
+            <div class="swiper-wrapper">
+              <!-- cartes authentiques -->
+              <div class="swiper-slide">
+                <article class="t-card">
+                  <div class="t-body">
+                    <div class="t-head">
+                      <img class="t-avatar" src="images/avatars/a1.jpg" alt="">
+                      <div>
+                        <div class="t-name">Gauthier <span class="t-verified">Achat vérifié</span></div>
+                        <div class="t-meta">Doudoune Alpine — M</div>
+                      </div>
+                      <div class="ms-auto t-rating">★★★★☆</div>
+                    </div>
+                    <p>Chaud & léger, parfait pour l’hiver à vélo. Taille conforme, je mesure 1m80.</p>
+                    <div class="t-badges"><span class="badge b-pos">Positif</span></div>
+                  </div>
+                </article>
+              </div>
+
+              <div class="swiper-slide">
+                <article class="t-card">
+                  <div class="t-body">
+                    <div class="t-head">
+                      <img class="t-avatar" src="images/avatars/a2.jpg" alt="">
+                      <div>
+                        <div class="t-name">Amina <span class="t-verified">Achat vérifié</span></div>
+                        <div class="t-meta">Parka 3-en-1 — S</div>
+                      </div>
+                      <div class="ms-auto t-rating">★★★★★</div>
+                    </div>
+                    <p>Finitions très propres. Échange de taille en 48 h. La livraison gratuite est un vrai plus.</p>
+                    <div class="t-badges"><span class="badge b-pos">Positif</span></div>
+                  </div>
+                </article>
+              </div>
+
+              <div class="swiper-slide">
+                <article class="t-card">
+                  <div class="t-body">
+                    <div class="t-head">
+                      <img class="t-avatar" src="images/avatars/a3.jpg" alt="">
+                      <div>
+                        <div class="t-name">Alex <span class="t-verified">Achat vérifié</span></div>
+                        <div class="t-meta">Doudoune Kids — 8 ans</div>
+                      </div>
+                      <div class="ms-auto t-rating">★★★★☆</div>
+                    </div>
+                    <p>Très bonne qualité. Coloris un peu plus chaud que sur mon écran, rien de bloquant.</p>
+                    <div class="t-badges"><span class="badge b-mid">Mitigé</span></div>
+                  </div>
+                </article>
+              </div>
+
+              <div class="swiper-slide">
+                <article class="t-card">
+                  <div class="t-body">
+                    <div class="t-head">
+                      <img class="t-avatar" src="images/avatars/a4.jpg" alt="">
+                      <div>
+                        <div class="t-name">Paul <span class="t-verified">Achat vérifié</span></div>
+                        <div class="t-meta">Parka Nordic — L</div>
+                      </div>
+                      <div class="ms-auto t-rating">★★★☆☆</div>
+                    </div>
+                    <p>Taille un peu petit pour moi. Échange facile, un guide vidéo serait top.</p>
+                    <div class="t-badges"><span class="badge b-neg">Négatif</span></div>
+                  </div>
+                </article>
+              </div>
+
+              <div class="swiper-slide">
+                <article class="t-card">
+                  <div class="t-body">
+                    <div class="t-head">
+                      <img class="t-avatar" src="images/avatars/a5.jpg" alt="">
+                      <div>
+                        <div class="t-name">Camille <span class="t-verified">Achat vérifié</span></div>
+                        <div class="t-meta">Maille Mérinos — XS</div>
+                      </div>
+                      <div class="ms-auto t-rating">★★★★★</div>
+                    </div>
+                    <p>Très doux, ne bouge pas au lavage. Porté sous un manteau à −3 °C, nickel.</p>
+                    <div class="t-badges"><span class="badge b-pos">Positif</span></div>
+                  </div>
+                </article>
+              </div>
+
+              <div class="swiper-slide">
+                <article class="t-card">
+                  <div class="t-body">
+                    <div class="t-head">
+                      <img class="t-avatar" src="images/avatars/a6.jpg" alt="">
+                      <div>
+                        <div class="t-name">Maya <span class="t-verified">Achat vérifié</span></div>
+                        <div class="t-meta">Bonnet Thermo — TU</div>
+                      </div>
+                      <div class="ms-auto t-rating">★★★★★</div>
+                    </div>
+                    <p>Ultra-doux, ne gratte pas. Commandé dimanche, reçu mardi (livraison gratuite).</p>
+                    <div class="t-badges"><span class="badge b-pos">Positif</span></div>
+                  </div>
+                </article>
+              </div>
+            </div>
+            <div class="swiper-pagination mt-3"></div>
+          </div>
+
+          <div class="carousel-arrow position-absolute top-50 start-0 translate-middle-y">
+            <button class="btn btn-light rounded-circle shadow-sm test-prev" aria-label="Précédent">
+              <svg width="28" height="28"><use xlink:href="#arrow-left"/></svg>
+            </button>
+          </div>
+          <div class="carousel-arrow position-absolute top-50 end-0 translate-middle-y">
+            <button class="btn btn-light rounded-circle shadow-sm test-next" aria-label="Suivant">
+              <svg width="28" height="28"><use xlink:href="#arrow-right"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bandeau garanties / réassurance -->
+    <section class="py-4 border-top anchor-offset">
+      <div class="container">
+        <div class="row text-center g-4">
+          <div class="col-6 col-md-3"><strong>Expédition 24h</strong><br><small>Colis suivi depuis nos entrepôts</small></div>
+          <div class="col-6 col-md-3"><strong>Qualité contrôlée</strong><br><small>Vérifiée sur 27 points</small></div>
+          <div class="col-6 col-md-3"><strong>Retours 30 jours</strong><br><small>Étiquette retour incluse</small></div>
+          <div class="col-6 col-md-3"><strong>Support 7j/7</strong><br><small>Réponse moyenne &lt; 1h</small></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter bg-light" style="background:url(images/pattern-bg.png) no-repeat;">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-8 py-5 my-4 text-center reveal">
+            <h3 class="section-title text-uppercase mb-3">Rester en contact</h3>
+            <p>Inscrivez-vous pour recevoir nos sorties et collaborations.</p>
+            <form id="form" class="d-flex flex-wrap gap-2 mt-3" action="register.html">
+              <input type="email" name="email" placeholder="Votre email" class="form-control form-control-lg" required />
+              <button class="btn btn-dark btn-lg w-100">S’inscrire</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer" class="mt-5 border-top">
+    <div class="container">
+      <div class="row py-5">
+        <div class="col-md-3">
+          <h5 class="text-uppercase mb-3">GF Store</h5>
+          <p>Expédition & retours gratuits. Service client dédié.</p>
+        </div>
+        <div class="col-md-3">
+          <h5 class="text-uppercase mb-3">Services</h5>
+          <ul class="list-unstyled">
+            <li><a href="commande.html">Gestion des commandes</a></li>
+            <li><a href="contact.html">Conseils d’achat</a></li>
+            <li><a href="entretien.html">Entretien produit</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5 class="text-uppercase mb-3">Aide</h5>
+          <ul class="list-unstyled">
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="retours.html">Retours & échanges</a></li>
+            <li><a href="livraison.html">Livraison</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5 class="text-uppercase mb-3">Compte</h5>
+          <ul class="list-unstyled">
+            <li><a href="login.html">Connexion</a></li>
+            <li><a href="register.html">Créer un compte</a></li>
+            <li><a href="password-reset.html">Mot de passe oublié</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top">
+        <small>© 2025 GF Store. Tous droits réservés.</small>
+        <div class="d-flex align-items-center gap-2">
+          <svg width="22" height="22"><use xlink:href="#bank"/></svg>
+          <span class="small">Paiement accepté : <strong>Virement bancaire uniquement</strong></span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS base -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/modernizr.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/SmoothScroll.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+  <!-- Animations + Swipers + FOMO + Header/Anchor fixes + Nouveautés JSON -->
+  <script>
+    /* ===== Offsets (hauteurs FOMO + NAV) & padding contenu (FIX HEADER) ===== */
+    function updateOffsets(){
+      const nav = document.getElementById('siteNav');
+      const fomo = document.getElementById('fomoBar');
+      const navH = nav ? nav.offsetHeight : 56;
+      const fomoH = fomo ? fomo.offsetHeight : 0;
+      document.documentElement.style.setProperty('--navH', navH + 'px');
+      document.documentElement.style.setProperty('--fomoH', fomoH + 'px');
+      document.body.classList.add('has-fixed-nav');
+    }
+    window.addEventListener('resize', ()=> requestAnimationFrame(updateOffsets));
+
+    /* ===== Reveal on scroll ===== */
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); }});
+    }, {threshold:.12});
+    window.addEventListener('DOMContentLoaded', ()=>{
+      document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+    });
+
+    /* ===== Header contrast (ghost → solid) ===== */
+    const siteNav = document.getElementById('siteNav');
+    function onScrollHeader(){
+      const y = window.scrollY || document.documentElement.scrollTop;
+      siteNav.classList.toggle('navbar-solid', y > 12);
+      siteNav.classList.toggle('navbar-ghost', y <= 12);
+    }
+    window.addEventListener('scroll', onScrollHeader, {passive:true});
+    onScrollHeader();
+
+    /* ===== FOMO: countdown ===== */
+    function updateCountdown(){
+      const now = new Date();
+      const end = new Date(); end.setHours(23,59,59,999);
+      const diff = Math.max(0, end - now);
+      const h = String(Math.floor(diff/3.6e6)).padStart(2,'0');
+      const m = String(Math.floor((diff%3.6e6)/6e4)).padStart(2,'0');
+      const s = String(Math.floor((diff%6e4)/1000)).padStart(2,'0');
+      document.getElementById('countdown').textContent = `${h}:${m}:${s}`;
+    }
+    setInterval(updateCountdown, 1000);
+
+    /* ===== FOMO : viewers wobble ===== */
+    const watchingEl = document.getElementById('watching');
+    function wobble(){
+      const base = 20; const noise = Math.floor(Math.random()*8) - 3;
+      watchingEl.textContent = base + noise;
+    }
+    setInterval(wobble, 4000);
+
+    /* ===== Fix hash initial + smooth anchors ===== */
+    function fixHashOnLoad(){
+      updateOffsets(); updateCountdown(); wobble();
+      if(location.hash){
+        const el = document.querySelector(location.hash);
+        if(el){ setTimeout(()=> el.scrollIntoView({behavior:'smooth', block:'start'}), 50); }
+      }
+    }
+    window.addEventListener('load', fixHashOnLoad);
+
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const id = a.getAttribute('href');
+        if(id.length > 1){
+          const el = document.querySelector(id);
+          if(el){
+            e.preventDefault();
+            el.scrollIntoView({behavior:'smooth', block:'start'});
+          }
+        }
+      });
+    });
+
+    /* ===== Util: charger le JSON produits ===== */
+    async function loadProducts(){
+      const res = await fetch('data/products.json', {cache:'no-store'});
+      if(!res.ok) throw new Error('Products JSON load error');
+      return res.json();
+    }
+
+    /* ===== Rendu NOUVEAUTÉS depuis JSON ===== */
+    function pickNewProducts(data, limit=12){
+      let arr = Array.isArray(data.products) ? data.products.slice() : [];
+      const tagged = arr.filter(p => (p.tags||[]).some(t => ['new','nouveau','nouveauté','nouveautes'].includes(String(t).toLowerCase())) || p.is_new);
+      const picked = (tagged.length ? tagged : arr).slice(0, limit);
+      return picked;
+    }
+
+    function firstImageOfProduct(p){
+      const imgs = (p.colors?.[0]?.images) || [];
+      return imgs[0] || 'images/product-fallback.jpg';
+    }
+
+    function categoryLabel(data, p){
+      const map = Object.fromEntries((data.categories||[]).map(c => [c.id, c.label]));
+      return map[p.category] || (p.gender ? String(p.gender).charAt(0).toUpperCase()+String(p.gender).slice(1) : 'Produit');
+    }
+
+    function formatPrice(p){
+      const curr = (p.currency || 'EUR').toUpperCase();
+      try{
+        return new Intl.NumberFormat('fr-FR', {style:'currency', currency: curr}).format(p.price || 0);
+      }catch{ return (p.price||0) + ' ' + curr; }
+    }
+
+    function productCardHTML(catLabel, p){
+      const img = firstImageOfProduct(p);
+      const price = formatPrice(p);
+      const href = `catalogue.html?sku=${encodeURIComponent(p.sku)}#${encodeURIComponent(p.slug||p.sku)}`;
+      return `
+        <div class="swiper-slide">
+          <article class="card-free hover-zoom h-100">
+            <img class="media-free" loading="lazy" decoding="async" src="${img}" alt="${(p.title||'Produit').replace(/"/g,'&quot;')}">
+            <div class="card-body text-center">
+              <div class="text-uppercase small text-secondary">${catLabel}</div>
+              <h6 class="mt-1 mb-1">${p.title||'Produit'}</h6>
+              <div class="small mb-2">${price}</div>
+              <a href="${href}" class="btn btn-sm btn-dark text-uppercase">Découvrir</a>
+            </div>
+          </article>
+        </div>`;
+    }
+
+    async function renderNewProductsFromJSON(){
+      try{
+        const data = await loadProducts();
+        const picked = pickNewProducts(data, 12);
+        const wrap = document.getElementById('new-products-wrapper');
+        wrap.innerHTML = picked.map(p => productCardHTML(categoryLabel(data,p), p)).join('');
+
+        // Swiper Nouveautés (init APRÈS injection)
+        new Swiper('.new-swiper', {
+          loop:true,
+          speed:600,
+          spaceBetween:24,
+          slidesPerView:1,
+          preloadImages:false,
+          watchSlidesProgress:true,
+          breakpoints:{576:{slidesPerView:2},992:{slidesPerView:3}},
+          navigation:{ nextEl:'.new-next', prevEl:'.new-prev' },
+          pagination:{ el:'.new-swiper .swiper-pagination', clickable:true }
+        });
+      } catch (err){
+        console.error(err);
+        document.getElementById('new-products-wrapper').innerHTML =
+          `<div class="text-center w-100 py-4">Impossible de charger les nouveautés pour le moment.</div>`;
+      }
+    }
+
+    /* ===== Swiper Témoignages (statique) ===== */
+    new Swiper('.test-swiper', {
+      loop:true,
+      speed:600,
+      autoHeight:true,
+      spaceBetween:20,
+      slidesPerView:1,
+      breakpoints:{576:{slidesPerView:2},992:{slidesPerView:3}},
+      navigation:{ nextEl:'.test-next', prevEl:'.test-prev' },
+      pagination:{ el:'.test-swiper .swiper-pagination', clickable:true },
+      autoplay:{delay:5200, disableOnInteraction:false}
+    });
+
+    // Lancer le rendu Nouveautés
+    renderNewProductsFromJSON();
+  </script>
+
+  <!-- App custom -->
+  <script src="js/script.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

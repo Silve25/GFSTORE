@@ -1,0 +1,345 @@
+/*
+  Winter Fashion Store – Minimal Luxe Theme (MAJ)
+  Palette : neige (#F6F7F8), encre (#111), gris froid (#6C7280), accent bleu nuit (#0E2A47).
+*/
+
+/* ===========================
+   1) VARIABLES & BASE
+=========================== */
+:root{
+  /* brand */
+  --ink:#111;
+  --ink-2:#222;
+  --snow:#F6F7F8;
+  --mist:#E9ECEF;
+  --cold:#6C7280;
+  --accent:#0E2A47;          /* bleu nuit */
+  --accent-2:#153a63;        /* hover */
+
+  /* layout (MAJ pour header/FOMO) */
+  --navH:64px;               /* ajusté en JS */
+  --fomoH:40px;              /* ajusté en JS */
+
+  /* typography */
+  --ff-sans:'Jost', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --ff-serif:'Marcellus', Georgia, serif;
+
+  /* sizing */
+  --radius:0;                /* lignes nettes */
+  --shadow:0 10px 30px rgba(17,17,17,.06);
+
+  /* swiper */
+  --swiper-theme-color: var(--accent);
+}
+
+/* Désactive complètement le préloader pendant le dev */
+.preloader{display:none !important}
+
+/* Body / Type */
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--ff-sans);
+  font-size:18px;
+  line-height:1.6;
+  color:var(--cold);
+  background:#fff;
+  letter-spacing:.015em;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+/* padding de sécurité quand navbar fixed-top + FOMO */
+body.has-fixed-nav #content{padding-top:calc(var(--navH) + 8px)}
+.anchor-offset{scroll-margin-top:calc(var(--navH) + var(--fomoH) + 12px)}
+
+h1,h2,h3,h4,h5,h6{
+  font-family:var(--ff-serif);
+  color:var(--ink);
+  line-height:1.2;
+  margin:24px 0 12px;
+}
+h1{font-size:clamp(2.4rem,3.6vw,4.5rem)}
+h2{font-size:clamp(2rem,2.6vw,3.2rem)}
+h3{font-size:clamp(1.4rem,2vw,2.2rem)}
+h4{font-size:1.4rem}
+h5{font-size:1.1rem; letter-spacing:.06em; text-transform:uppercase}
+h6{font-size:.95rem; letter-spacing:.06em; text-transform:uppercase}
+
+a{color:var(--ink); text-decoration:none}
+a:hover{color:var(--accent)}
+
+/* Container width (plus respiré) */
+.container-fluid{max-width:1600px}
+
+/* ===========================
+   2) HEADER / FOMO
+=========================== */
+/* FOMO au même “niveau” que la navbar mais sous les offcanvas/modales */
+.fomo-bar{
+  position:sticky; top:0; z-index:1020; /* Navbar ~1030, Offcanvas 1045, Modal 1055 */
+  background:#111; color:#fff; font-size:.92rem;
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+.fomo-bar small{opacity:.85}
+.badge-dot{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#22c55e;margin-right:.5rem}
+
+/* Navbar de base + états ghost/solid (contraste au scroll) */
+.navbar{
+  --bs-navbar-padding-y:.6rem;
+  background:#fff;
+  border-bottom:1px solid #eee;
+  min-height:64px;                         /* évite le “saut” quand ghost -> solid */
+  transition:background-color .25s ease, box-shadow .25s ease;
+}
+.navbar-ghost{background:transparent !important; box-shadow:none}
+.navbar-solid{background:#ffffff !important; box-shadow:0 6px 20px rgba(0,0,0,.06)}
+
+.navbar .nav-link{
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-size:.85rem;
+  color:var(--ink);
+}
+.navbar .dropdown-menu{
+  border:0; border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+.navbar .dropdown-item{font-size:.9rem}
+.navbar .list-unstyled a{color:var(--ink)}
+.navbar .list-unstyled a:hover{color:var(--accent)}
+
+/* Grille mobile : logo | panier | burger (rapprochés à droite) */
+.nav-grid{display:flex;align-items:center;width:100%}
+@media (max-width:991.98px){
+  .nav-grid{
+    display:grid;
+    grid-template-columns:1fr auto auto;   /* logo | cart | burger */
+    column-gap:.5rem;
+    align-items:center;
+  }
+  .nav-brand{grid-column:1; justify-self:start}
+  .nav-cart-right{grid-column:2; justify-self:end}
+  .nav-toggle-right{grid-column:3; justify-self:end}
+  .nav-desktop-icons{display:none !important}
+  .navbar-toggler{padding:.25rem .5rem}
+  .nav-cart-right .badge{
+    font-size:.65rem; line-height:1; padding:.25em .35em;
+    transform:translate(15%,-35%);
+  }
+}
+@media (min-width:992px){
+  .nav-cart-right{display:none !important}
+}
+
+/* ===========================
+   3) CTA & BOUTONS
+=========================== */
+.btn{
+  border-radius:var(--radius);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.btn-primary{background:var(--accent); border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent-2); border-color:var(--accent-2)}
+.btn-dark{background:#000; border-color:#000}
+.btn-dark:hover{background:#222}
+
+/* Liens soulignés subtils */
+.btn-link{
+  font-size:.9rem;
+  letter-spacing:.09em;
+  position:relative;
+  text-transform:uppercase;
+}
+.btn-link:before, .btn-link:after{
+  content:''; position:absolute; left:0; bottom:-2px; height:1px; width:100%;
+}
+.btn-link:before{background:#d1d5db; opacity:.6}
+.btn-link:after{background:var(--ink); transform:scaleX(0); transform-origin:left; transition:transform .35s ease}
+.btn-link:hover:after{transform:scaleX(1)}
+
+/* ===========================
+   4) HERO / BILLBOARD
+=========================== */
+#billboard{background:var(--snow)}
+.section-title{text-transform:uppercase; letter-spacing:.12em}
+
+/* ===========================
+   5) EFFETS / CARTES “LIBRES”
+=========================== */
+.media-free{display:block;width:100%;height:auto;border-radius:var(--radius)}
+.card-free{border:1px solid #eee;border-radius:var(--radius);overflow:hidden;background:#fff;box-shadow:var(--shadow)}
+.card-free .card-body{padding:1rem 1.1rem}
+.hover-zoom img{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.hover-zoom:hover img{transform:scale(1.03)}
+
+/* Reveal (animations au défilement) */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease, transform .6s ease}
+.reveal.show{opacity:1;transform:none}
+
+/* ===========================
+   6) CATEGORIES TUILES
+=========================== */
+.image-zoom-effect{display:flex; flex-wrap:wrap}
+.image-zoom-effect .image-holder{
+  width:100%; overflow:hidden; transform:scale(1);
+  transition:transform .35s cubic-bezier(.25,.46,.45,.94)
+}
+.image-zoom-effect:hover .image-holder{transform:scale(.97)}
+.image-zoom-effect img{transition:transform .35s cubic-bezier(.25,.46,.45,.94)}
+.image-zoom-effect:hover img{transform:scale(1.07)}
+
+.category-content{margin-top:14px}
+.btn.btn-common{background:#000; color:#fff; border:0; padding:.75rem 1.25rem}
+.btn.btn-common:hover{background:#222}
+
+/* ===========================
+   7) CAROUSELS PRODUITS / SWIPER
+=========================== */
+.product-item{position:relative}
+.product-item .image-holder{position:relative}
+.product-item .btn-wishlist{
+  position:absolute; top:8px; right:8px; z-index:2;
+  background:#fff; color:var(--ink); padding:8px; border:1px solid #eee;
+  opacity:0; transition:opacity .25s ease;
+}
+.product-item:hover .btn-wishlist{opacity:1}
+.product-item .product-content h5{margin:10px 0 4px}
+.product-item .product-content a span{font-weight:600; color:var(--ink)}
+
+.swiper-pagination-bullet{width:10px; height:10px; margin:0 6px}
+.swiper-pagination-bullet-active{background:var(--accent)}
+
+/* Flèches rondes discrètes (desktop only) */
+.icon-arrow{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:86px; height:86px; border-radius:50%;
+  border:1px solid #d9d9d9; display:flex; align-items:center; justify-content:center;
+  opacity:.45; transition:opacity .25s ease; z-index:8; background:#fff;
+}
+.icon-arrow:hover{opacity:1}
+.icon-arrow-left{left:24px}
+.icon-arrow-right{right:24px}
+@media (max-width:991px){ .icon-arrow{display:none} .swiper-pagination{position:relative} }
+
+/* Effet de soulignement “Moncler-like” sous les liens produits */
+.border-animation-left .item-anchor{position:relative; margin-bottom:14px}
+.border-animation-left .item-anchor:after{
+  content:""; position:absolute; left:0; bottom:0; width:0; height:1px;
+  background:var(--ink); transition:width .35s ease;
+}
+.border-animation-left .item-anchor:hover:after{width:100%}
+
+/* ===========================
+   8) SECTION COLLECTION
+=========================== */
+.collection{background:var(--snow); position:relative}
+.title-xlarge{
+  font-family:var(--ff-serif);
+  font-size:clamp(3rem,10vw,10rem);
+  color:#dfe3e8; position:absolute; top:-36px; left:0; z-index:0; pointer-events:none;
+}
+.collection .column-container{position:relative; z-index:1}
+.collection .image-holder img{border:1px solid #f1f1f1}
+
+/* ===========================
+   9) VIDÉO
+=========================== */
+.video .video-content{position:relative}
+.video .video-bg img{width:100%; display:block}
+.video .video-player{position:absolute; inset:0; display:flex; align-items:center; justify-content:center}
+.video .video-player a{position:relative; display:inline-block}
+.video .video-player svg{color:#fff; position:absolute; inset:0; margin:auto}
+
+/* ===========================
+   10) TÉMOIGNAGES
+=========================== */
+.testimonials{background:var(--snow)}
+.testimonials .section-title{font-size:.95rem; font-weight:700; letter-spacing:.12em}
+.testimonial-swiper .testimonial-item blockquote{font-size:clamp(1.1rem,2.4vw,2rem); color:var(--ink)}
+.testimonial-swiper .swiper-slide{opacity:.25; width:42% !important}
+.testimonial-swiper .swiper-slide-active{opacity:1}
+.testimonials .review-title{font-size:.85rem; color:var(--cold)}
+
+/* ===========================
+   11) INSTAGRAM STRIP
+=========================== */
+.instagram .insta-item{position:relative; margin-bottom:20px}
+.instagram .insta-item a:after{
+  content:""; position:absolute; inset:0; background:rgba(0,0,0,.35);
+  opacity:0; transition:.35s ease;
+}
+.instagram .insta-item a:hover:after{opacity:1}
+
+/* ===========================
+   12) NEWSLETTER
+=========================== */
+.newsletter{background:var(--snow) url('images/pattern-bg.png') no-repeat}
+.newsletter .form-control{height:56px; border-radius:var(--radius); border:1px solid #dfe3e8}
+.newsletter .btn{height:56px}
+
+/* ===========================
+   13) LOGO BAR
+=========================== */
+.logo-bar .logo-image{max-height:38px; opacity:.75; filter:grayscale(100%); transition:opacity .25s ease, filter .25s ease}
+.logo-bar .logo-image:hover{opacity:1; filter:none}
+
+/* ===========================
+   14) FOOTER
+=========================== */
+#footer .footer-intro img{max-height:34px}
+#footer p, #footer a{color:var(--cold)}
+#footer a:hover{color:var(--accent)}
+#footer .shipping img, #footer .payment-option img{height:20px; margin-left:8px; opacity:.8}
+#footer .border-top{border-top:1px solid #eee !important}
+
+/* ===========================
+   15) POPUP RECHERCHE (conservé si besoin)
+=========================== */
+.search-popup{
+  position:fixed; inset:0; background:#fff; opacity:0; visibility:hidden; z-index:9999;
+  transition:opacity .25s, visibility 0s .25s;
+}
+.search-popup.is-visible{opacity:1; visibility:visible; transition:opacity .25s}
+.search-popup-container{position:relative; top:50%; transform:translateY(-50%); width:90%; max-width:820px; margin:0 auto; text-align:center}
+.search-popup .form-control{border:0; border-bottom:1px solid #111; border-radius:0; font-size:2rem; padding:0 0 .25em 0}
+.search-popup input[type="search"]{height:64px}
+.search-popup .cat-list-title{margin:32px 0 8px; font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--cold)}
+.search-popup .cat-list{list-style:none; padding:0}
+.search-popup .cat-list-item{display:inline-block; font-size:1.6rem; margin:0 .25em}
+.search-popup .cat-list-item a{position:relative}
+.search-popup .cat-list-item a:after{content:""; position:absolute; left:0; bottom:-2px; width:0; height:1px; background:#111; transition:width .3s ease}
+.search-popup .cat-list-item a:hover:after{width:100%}
+.search-popup .cat-list-item:after{content:"/"; color:#bbb; padding:0 .35em}
+.search-popup .cat-list-item:last-child:after{display:none}
+
+/* ===========================
+   16) FORMS / MISC
+=========================== */
+.form-control:focus{border-color:#cdd6df; box-shadow:0 0 0 .2rem rgba(14,42,71,.08)}
+.list-group-item{border:0; padding-left:0}
+.dropdown-item.active, .dropdown-item:active{background:#000; color:#fff}
+.pagination{--bs-pagination-border-width:0; --bs-pagination-border-radius:0}
+.breadcrumb{--bs-breadcrumb-item-padding-x:1em}
+
+/* ===========================
+   17) DARK MODE (optionnel)
+=========================== */
+[data-bs-theme="dark"] body{background:#111; color:#d1d1d1}
+[data-bs-theme="dark"]{--ink:#fff; --ink-2:#fff; --cold:#bdbfc6; --snow:#151515; --mist:#1b1b1b}
+[data-bs-theme="dark"] .navbar{background:#111; border-color:#222}
+[data-bs-theme="dark"] .icon-arrow{background:#151515; border-color:#2a2a2a}
+[data-bs-theme="dark"] .collection, [data-bs-theme="dark"] .testimonials, [data-bs-theme="dark"] #billboard{background:#0f0f0f}
+
+/* ===========================
+   18) UTILITAIRES
+=========================== */
+.background{position:absolute; inset:auto 0 0 0; height:560px}
+.background.pattern-bg{background:url(images/pattern-bg.png) no-repeat}
+.text-rotate{animation:rotation 50s linear infinite}
+@keyframes rotation{to{transform:rotate(360deg)}}
+
+/* Petits affinages responsive */
+@media (max-width:767px){
+  .newsletter .form-control,.newsletter .btn{height:52px}
+  .title-xlarge{top:-20px}
+}
