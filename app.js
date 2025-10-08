@@ -115,14 +115,40 @@
       let products = Store.get(cacheKey, null);
 
       if (!products || now - stamp > ttl) {
-        const res = await fetch("products.json", { cache: "no-store" });
-        if (!res.ok) throw new Error("products.json introuvable");
-        const data = await res.json();
-        products = Array.isArray(data) ? data : (data.products || []);
+        try {
+          // 1) data/products.js -> window.Products.all()
+          if (window.Products?.all) {
+            products = await window.Products.all();
+          } else {
+            // 2) Fallback JSON (fonctionne en local et sur GitHub Pages)
+            const candidates = [
+              new URL("data/products.json", location.href).href,
+              new URL("products.json", location.href).href,
+            ];
+
+            let loaded = null;
+            for (const url of candidates) {
+              try {
+                const r = await fetch(url, { cache: "no-store" });
+                if (!r.ok) continue;
+                const data = await r.json();
+                loaded = Array.isArray(data) ? data : (data.products || []);
+                if (Array.isArray(loaded) && loaded.length) break;
+              } catch (_) {
+                // on tente l'URL suivante
+              }
+            }
+            products = loaded || [];
+          }
+        } catch (e) {
+          console.warn("fetchProducts() error:", e);
+          products = [];
+        }
+
         Store.set(cacheKey, products);
         Store.set(stampKey, now);
       }
-      return products;
+      return Array.isArray(products) ? products : [];
     },
 
     // Auth basique en localStorage
@@ -463,7 +489,6 @@
     init() {
       // Liens de raccourci pour ouvrir le catalogue pré-filtré
       U.delegate(document, "click", '[href="catalogue.html?filter=homme"], [data-nav="homme"]', (e) => {
-        // si l’attribut est utilisé sans href
         if (!e.target.closest("a[href]")) {
           e.preventDefault();
           location.href = "catalogue.html?filter=homme";
