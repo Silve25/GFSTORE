@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <!-- Meta et CSS restés inchangés -->
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Catalogue — GF Store</title>
@@ -22,7 +21,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet" />
 
   <style>
-    /* Les ajouts et modifications de style sont ci-dessous */
     :root{
       --navH: 64px;
       --fomoH: 40px;
@@ -34,70 +32,153 @@
     body.has-fixed-nav #content{ padding-top: calc(var(--navH) + 8px) }
 
     /* NAV */
-    .navbar{min-height:64px; transition: background-color 0.3s ease;}
-    .navbar.fixed-top{transition:background-color .25s ease, box-shadow .25s ease}
+    .navbar{min-height:64px; transition: all 0.3s ease;}
+    .navbar.fixed-top{position: fixed !important; top: var(--fomoH) !important; transition: background-color .25s ease, box-shadow .25s ease;}
     .navbar-ghost{background:transparent !important; box-shadow:none}
     .navbar-solid{background:#ffffff !important; box-shadow:0 6px 20px rgba(0,0,0,.06)}
 
-    /* Cards */
-    .product-card img {
-      object-fit: contain;
-      width: 100%;
-      height: 100%;
-    }
+    /* FOMO bar */
+    .fomo-bar{position:fixed; top:0; z-index:1030; background:#111; color:#fff; font-size:.92rem; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); width:100%;}
+    .badge-dot{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#22c55e;margin-right:.5rem}
 
-    /* Hero */
-    .catalog-hero {
-      background-image: url('https://azure-eu-images.contentstack.com/v3/assets/blt70cb06b4414428cc/blt70e742eb576b00d4/68d2a81416d9319f7a72e26f/ASSET-HERO-HP-PRESS-RELEASE-SECONDHERO-ENFANT-DESK.jpg?branch=prod_1&format=avif&auto=auto&width=100p&quality=90');
-      background-size: cover;
-      background-position: center;
-      color: #fff;
-      padding: 92px 0 56px;
-      margin-top: 56px;
-      position: relative;
+    /* Grid header layout (mobile like index) */
+    .nav-grid{display:flex; align-items:center; width:100%;}
+    @media (max-width: 991.98px){
+      .nav-grid{display:grid; grid-template-columns: 1fr auto auto; column-gap:.5rem;}
+      .nav-brand{grid-column:1}
+      .nav-cart-right{grid-column:2; justify-self:end}
+      .nav-toggle-right{grid-column:3; justify-self:end}
+      .nav-desktop-icons{display:none !important;}
     }
-    .catalog-hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.35);
-    }
-    .catalog-hero .container {
-      position: relative;
-      z-index: 2;
-    }
-    .catalog-hero h1, .catalog-hero p {
-      color: #fff;
-    }
+    @media (min-width: 992px){ .nav-cart-right{display:none !important;} }
+    .nav-cart-right .badge{font-size:.65rem; line-height:1; padding:.25em .35em; transform:translate(15%, -35%); }
+
+    /* HERO */
+    .catalog-hero{background:#0f0f10 url('https://azure-eu-images.contentstack.com/v3/assets/blt70cb06b4414428cc/blt70e742eb576b00d4/68d2a81416d9319f7a72e26f/ASSET-HERO-HP-PRESS-RELEASE-SECONDHERO-ENFANT-DESK.jpg?branch=prod_1&format=avif&auto=auto&width=100p&quality=90') center/cover no-repeat; color:#fff; padding:92px 0 56px; margin-top: calc(var(--navH) + var(--fomoH)); position:relative;}
+    .catalog-hero::after{content:""; position:absolute; inset:0; background:rgba(0,0,0,.35)}
+    .catalog-hero .container{position:relative; z-index:2}
+
+    /* Cards / placeholders */
+    .product-card .ratio img{object-fit: contain; width: 100%; height: 100%;}
+    .badge-new{background:#111}
+    .cursor-pointer{cursor:pointer}
+    .skeleton{background:linear-gradient(90deg,#eee 25%,#f6f6f6 37%,#eee 63%); background-size:400% 100%; animation:shimmer 1.1s infinite linear}
+    @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+
+    /* Offcanvas fiche produit quick-view */
+    .p-color-dot{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid #ddd}
+    .thumbs img{height:64px;width:64px;object-fit:cover;border:1px solid #eee;border-radius:6px}
+    .thumbs img.active{outline:2px solid #111}
+
+    .footer-mini-logo{height:22px;opacity:.8}
+    
+    /* Fix scroll position */
+    #content {position: relative; z-index: 100;}
   </style>
 </head>
 <body class="homepage">
 
-  <!-- Le reste du HTML reste inchangé jusqu'à la section Hero -->
   <!-- SVG icons -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-    <!-- ... -->
+    <defs>
+      <symbol id="search" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></symbol>
+      <symbol id="cart" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.49a3 3 0 0 0 2.89-2.18l1.58-5.55A1 1 0 0 0 19 5H6.74a3 3 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.92l.16.55 1.64 5.74A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Z"/></symbol>
+      <symbol id="heart" viewBox="0 0 24 24"><path fill="currentColor" d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Z"/></symbol>
+      <symbol id="trash" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3h6a1 1 0 0 1 1 1v1h4a1 1 0 0 1 0 2h-1v12a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4a1 1 0 0 1 0-2h4V4a1 1 0 0 1 1-1Zm1 3h4V5h-4v1Zm-1 5a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Zm6 0a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Z"/></symbol>
+      <symbol id="close" viewBox="0 0 24 24"><path fill="currentColor" d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></symbol>
+      <symbol id="user" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></symbol>
+    </defs>
   </svg>
 
   <!-- FOMO bar -->
   <div class="fomo-bar py-2" id="fomoBar">
-    <!-- ... -->
+    <div class="container d-flex flex-wrap justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge-dot"></span>
+        <span><strong id="watching">18</strong> personnes consultent cette page</span>
+      </div>
+      <div>-10% première commande : <strong>GF-FIRST10</strong> · se termine dans <strong id="countdown">00:00:00</strong></div>
+    </div>
   </div>
 
   <!-- HEADER -->
-  <nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top navbar-ghost" id="siteNav" style="top: var(--fomoH)">
-    <!-- ... -->
+  <nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top navbar-ghost" id="siteNav">
+    <div class="container-fluid nav-grid">
+      <!-- Logo -->
+      <a class="navbar-brand nav-brand" href="index.html">GF Store</a>
+
+      <!-- Panier mobile -->
+      <a class="nav-cart-right d-lg-none position-relative" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
+        <svg width="26" height="26"><use xlink:href="#cart"/></svg>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark cart-count">0</span>
+      </a>
+
+      <!-- Burger -->
+      <button class="navbar-toggler nav-toggle-right" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menu -->
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title">Menu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav ms-auto gap-3">
+            <li class="nav-item"><a class="nav-link" href="index.html#hommes">Hommes</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#femmes">Femmes</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#enfants">Enfants</a></li>
+            <li class="nav-item"><a class="nav-link active" href="catalogue.html">Catalogue</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                <svg width="20" height="20" class="me-1"><use xlink:href="#user"/></svg>Compte
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="login.html">Se connecter</a></li>
+                <li><a class="dropdown-item" href="register.html">Créer un compte</a></li>
+                <li><a class="dropdown-item" href="password-reset.html">Mot de passe oublié</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="commande.html">Suivre ma commande</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Icônes desktop -->
+      <ul class="list-unstyled d-flex m-0 ms-3 nav-desktop-icons">
+        <li class="me-3 d-none d-lg-block"><a href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
+        <li class="d-none d-lg-block">
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier"><svg width="24" height="24"><use xlink:href="#cart"/></svg></a>
+        </li>
+      </ul>
+    </div>
   </nav>
 
-  <!-- Panier et autres Offcanvas -->
-  <!-- ... -->
+  <!-- Panier -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
+    <div class="offcanvas-header justify-content-center">
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+    </div>
+    <div class="offcanvas-body">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-primary">Votre panier</span>
+        <span class="badge bg-primary rounded-pill cart-count">0</span>
+      </h4>
+      <p class="text-body-secondary">Votre panier est vide.</p>
+      <a class="w-100 btn btn-dark btn-lg mt-3" href="checkout.html">Passer au paiement</a>
+    </div>
+  </div>
 
   <!-- HERO + Fil d'Ariane -->
   <header class="catalog-hero text-center">
     <div class="container">
       <nav aria-label="breadcrumb" class="mb-2">
         <ol class="breadcrumb justify-content-center">
-          <!-- ... -->
+          <li class="breadcrumb-item"><a class="link-light text-decoration-none" href="index.html">Accueil</a></li>
+          <li class="breadcrumb-item active text-white-50" aria-current="page">Catalogue</li>
         </ol>
       </nav>
       <h1 class="display-5 mb-1">Catalogue Hiver 2025</h1>
@@ -105,12 +186,104 @@
     </div>
   </header>
 
-  <!-- Main content -->
   <main id="content">
-    <!-- ... -->
+
+    <!-- Filtres -->
+    <section class="py-4">
+      <div class="container">
+        <div class="row g-3 align-items-end">
+          <div class="col-lg-4">
+            <label class="form-label" for="q">Recherche</label>
+            <input id="q" type="search" class="form-control" placeholder="Doudoune, parka, bonnet…">
+          </div>
+          <div class="col-6 col-lg-2">
+            <label class="form-label" for="filter">Catégorie</label>
+            <select id="filter" class="form-select">
+              <option value="all">Tout</option>
+              <option value="homme">Hommes</option>
+              <option value="femme">Femmes</option>
+              <option value="enfant">Enfants</option>
+              <option value="accessoires">Accessoires</option>
+            </select>
+          </div>
+          <div class="col-6 col-lg-2">
+            <label class="form-label" for="sort">Tri</label>
+            <select id="sort" class="form-select">
+              <option value="relevance">Pertinence</option>
+              <option value="price-asc">Prix : croissant</option>
+              <option value="price-desc">Prix : décroissant</option>
+              <option value="newest">Nouveautés</option>
+            </select>
+          </div>
+          <div class="col-6 col-lg-2">
+            <label class="form-label" for="min">Prix min (€)</label>
+            <input type="number" id="min" class="form-control" placeholder="0" min="0" step="1">
+          </div>
+          <div class="col-6 col-lg-2">
+            <label class="form-label" for="max">Prix max (€)</label>
+            <input type="number" id="max" class="form-control" placeholder="2000" min="0" step="1">
+          </div>
+
+          <div class="col-6 col-lg-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="only-new">
+              <label class="form-check-label" for="only-new">Nouveaux</label>
+            </div>
+          </div>
+          <div class="col-6 col-lg-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="in-stock">
+              <label class="form-check-label" for="in-stock">En stock</label>
+            </div>
+          </div>
+
+          <div class="col-lg-2 ms-auto d-grid">
+            <button id="reset" class="btn btn-outline-secondary" type="button">Réinitialiser</button>
+          </div>
+        </div>
+
+        <!-- chips actifs -->
+        <div id="chips" class="d-flex flex-wrap gap-2 mt-3"></div>
+      </div>
+    </section>
+
+    <!-- Résultats -->
+    <section class="pb-5">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div id="count" class="small text-secondary">Chargement…</div>
+          <div class="small text-secondary">Livraison & retours gratuits</div>
+        </div>
+
+        <div id="grid" class="row g-4">
+          <!-- Skeleton template -->
+          <template id="tpl-skel">
+            <div class="col-6 col-md-4 col-lg-3">
+              <div class="card h-100 border-0">
+                <div class="ratio ratio-4x3 skeleton rounded"></div>
+                <div class="card-body">
+                  <div class="skeleton" style="height:16px;width:70%;border-radius:6px"></div>
+                  <div class="skeleton mt-2" style="height:12px;width:40%;border-radius:6px"></div>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <div class="col-12">
+            <div id="empty" class="alert alert-warning d-none mt-2">Aucun article à afficher.</div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav class="d-flex justify-content-center mt-4" aria-label="Pagination catalogue">
+          <ul id="pager" class="pagination m-0"></ul>
+        </nav>
+      </div>
+    </section>
+
   </main>
 
-  <!-- Template carte produit -->
+  <!-- Template carte produit (rempli par catalogue.js) -->
   <template id="tpl-card">
     <div class="col-6 col-md-4 col-lg-3">
       <div class="card product-card h-100 border-0 shadow-sm">
@@ -118,40 +291,143 @@
           <div class="position-relative">
             <span class="position-absolute top-0 start-0 m-2 badge badge-new text-uppercase d-none">Nouveau</span>
             <div class="ratio ratio-4x3">
-              <img class="w-100 h-100 object-fit-contain" alt="">
+              <img class="w-100 h-100" alt="">
             </div>
           </div>
         </a>
-        <!-- ... -->
+        <div class="card-body">
+          <h6 class="text-uppercase mb-1 name">Produit</h6>
+          <div class="small text-secondary mb-2 meta">—</div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="fw-semibold price">—</div>
+            <button class="btn btn-sm btn-dark text-uppercase add cursor-pointer" type="button">Ajouter</button>
+          </div>
+        </div>
       </div>
     </div>
   </template>
 
-  <!-- Offcanvas Quick-view produit -->
-  <!-- ... -->
+  <!-- Offcanvas Quick-view produit (utilisé par catalogue.js si tu l’actives) -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasProduct" aria-labelledby="offcanvasProductLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasProductLabel">Fiche produit</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="ratio ratio-4x3 border rounded">
+            <img id="p-hero" src="" alt="" class="w-100 h-100" style="object-fit:cover">
+          </div>
+        </div>
+        <div class="col-12">
+          <div id="p-thumbs" class="thumbs d-flex flex-wrap gap-2"></div>
+        </div>
+        <div class="col-12">
+          <h4 id="p-title" class="mb-1"></h4>
+          <div id="p-subtitle" class="text-secondary mb-2"></div>
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div id="p-price" class="fs-5 fw-semibold"></div>
+            <span id="p-cat" class="badge text-bg-light text-uppercase"></span>
+          </div>
+          <div id="p-colors" class="d-flex align-items-center gap-2 mb-3"></div>
+          <div id="p-sizes" class="d-flex align-items-center gap-2 mb-3"></div>
+          <div class="d-grid gap-2">
+            <button id="p-add" class="btn btn-dark text-uppercase" type="button">Ajouter au panier</button>
+            <a id="p-deeplink" href="products.html" class="btn btn-outline-secondary">Ouvrir la fiche dédiée</a>
+          </div>
+          <hr>
+          <div>
+            <h6 class="text-uppercase">Détails</h6>
+            <ul id="p-features" class="small ps-3"></ul>
+          </div>
+          <div>
+            <h6 class="text-uppercase">Entretien</h6>
+            <ul id="p-care" class="small ps-3"></ul>
+          </div>
+          <small id="p-madein" class="text-secondary d-block mt-2"></small>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <footer class="border-top">
-    <!-- ... -->
+    <div class="container">
+      <div class="row py-5">
+        <div class="col-md-4">
+          <h5 class="text-uppercase mb-3">GF Store</h5>
+          <p>Expédition & retours gratuits. Service client dédié.</p>
+          <div class="d-flex gap-3">
+            <img src="images/visa-card.png" class="footer-mini-logo" alt="Visa">
+            <img src="images/paypal-card.png" class="footer-mini-logo" alt="PayPal">
+            <img src="images/master-card.png" class="footer-mini-logo" alt="Mastercard">
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <h6 class="text-uppercase mb-3">Boutique</h6>
+          <ul class="list-unstyled">
+            <li><a href="index.html#hommes">Hommes</a></li>
+            <li><a href="index.html#femmes">Femmes</a></li>
+            <li><a href="index.html#enfants">Enfants</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3">
+          <h6 class="text-uppercase mb-3">Aide</h6>
+          <ul class="list-unstyled">
+            <li><a href="livraison.html">Livraison</a></li>
+            <li><a href="retours.html">Retours & échanges</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h6 class="text-uppercase mb-3">Newsletter</h6>
+          <form class="d-flex gap-2">
+            <input type="email" class="form-control" placeholder="Votre email" required>
+            <button class="btn btn-dark" type="submit">OK</button>
+          </form>
+          <small class="text-secondary d-block mt-2">En vous inscrivant, vous acceptez notre politique de confidentialité.</small>
+        </div>
+      </div>
+      <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top small">
+        <span>© 2025 GF Store. Tous droits réservés.</span>
+        <span>Livraison & retours gratuits • Service client dédié</span>
+      </div>
+    </div>
   </footer>
 
-  <!-- JS -->
+  <!-- JS (Bootstrap + tes apps). Le peu de JS d’ambiance (FOMO/header) vit dans app.js si tu préfères -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-  <script src="data/products.js"></script>
-  <script src="catalogue.js"></script>
-  <script src="js/app.js"></script>
 
+  <!-- Data helpers (facultatif si déjà inclus ailleurs) -->
+  <script src="data/products.js"></script>
+
+  <!-- Catalogue logic (remplira la grille + quick-view + pagination) -->
+  <script src="catalogue.js"></script>
+
+  <!-- App globale (panier, auth, etc.) -->
+  <script src="js/app.js"></script>
+  
   <script>
-    // Ajout d'un événement pour changer la classe du header lors du défilement
-    window.addEventListener('scroll', function() {
+    // Fix header behavior on scroll
+    document.addEventListener('DOMContentLoaded', function() {
       const navbar = document.getElementById('siteNav');
-      if (window.scrollY > 50) {
-        navbar.classList.remove('navbar-ghost');
-        navbar.classList.add('navbar-solid');
-      } else {
-        navbar.classList.remove('navbar-solid');
-        navbar.classList.add('navbar-ghost');
-      }
+      const fomoBar = document.getElementById('fomoBar');
+      
+      // Set initial position
+      navbar.style.top = fomoBar.offsetHeight + 'px';
+      
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 10) {
+          navbar.classList.remove('navbar-ghost');
+          navbar.classList.add('navbar-solid');
+        } else {
+          navbar.classList.remove('navbar-solid');
+          navbar.classList.add('navbar-ghost');
+        }
+      });
     });
   </script>
 </body>
