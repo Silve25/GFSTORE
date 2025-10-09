@@ -8,11 +8,10 @@
   <meta name="format-detection" content="telephone=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
 
-  <!-- Bootstrap CSS (OK sans JS) -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-  <!-- Vendor + Theme CSS (si présents) -->
+  <!-- Vendor + Theme CSS -->
   <link rel="stylesheet" href="css/vendor.css">
   <link rel="stylesheet" href="style.css">
 
@@ -22,33 +21,62 @@
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet" />
 
   <style>
-    /* Ajustements spécifiques catalogue */
-    body{scroll-behavior:smooth}
-    .navbar.fixed-top{backdrop-filter:saturate(1.8) blur(6px)}
-    .catalog-hero{
-      background:#0f0f10 url('images/banner-image-6.jpg') center/cover no-repeat;
-      color:#fff; padding:92px 0 56px; margin-top:56px; position:relative;
+    :root{
+      --navH: 64px;
+      --fomoH: 40px;
+      --anchorOffset: calc(var(--navH) + var(--fomoH) + 12px);
+      --radius: 14px;
     }
+    html{scroll-behavior:smooth}
+    body{background:#fff;color:#111}
+    body.has-fixed-nav #content{ padding-top: calc(var(--navH) + 8px) }
+
+    /* NAV */
+    .navbar{min-height:64px}
+    .navbar.fixed-top{transition:background-color .25s ease, box-shadow .25s ease}
+    .navbar-ghost{background:transparent !important; box-shadow:none}
+    .navbar-solid{background:#ffffff !important; box-shadow:0 6px 20px rgba(0,0,0,.06)}
+
+    /* FOMO bar */
+    .fomo-bar{position:sticky; top:0; z-index:1020; background:#111; color:#fff; font-size:.92rem; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);}
+    .fomo-bar small{opacity:.85}
+    .badge-dot{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#22c55e;margin-right:.5rem}
+
+    /* Grid header layout (mobile like index) */
+    .nav-grid{display:flex; align-items:center; width:100%;}
+    @media (max-width: 991.98px){
+      .nav-grid{display:grid; grid-template-columns: 1fr auto auto; column-gap:.5rem;}
+      .nav-brand{grid-column:1}
+      .nav-cart-right{grid-column:2; justify-self:end}
+      .nav-toggle-right{grid-column:3; justify-self:end}
+      .nav-desktop-icons{display:none !important;}
+    }
+    @media (min-width: 992px){ .nav-cart-right{display:none !important;} }
+    .nav-cart-right .badge{font-size:.65rem; line-height:1; padding:.25em .35em; transform:translate(15%, -35%); }
+
+    /* HERO */
+    .catalog-hero{background:#0f0f10 url('images/banner-image-6.jpg') center/cover no-repeat; color:#fff; padding:92px 0 56px; margin-top:56px; position:relative;}
     .catalog-hero::after{content:""; position:absolute; inset:0; background:rgba(0,0,0,.35)}
     .catalog-hero .container{position:relative; z-index:2}
+
+    /* Cards / placeholders */
     .product-card .ratio img{object-fit:cover}
     .badge-new{background:#111}
     .cursor-pointer{cursor:pointer}
     .skeleton{background:linear-gradient(90deg,#eee 25%,#f6f6f6 37%,#eee 63%); background-size:400% 100%; animation:shimmer 1.1s infinite linear}
     @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
-    .offcanvas .price-sm{font-variant-numeric:tabular-nums}
-    .filter-chip{display:inline-flex;gap:.5rem;align-items:center;border:1px solid #ddd;border-radius:999px;padding:.25rem .6rem;font-size:.875rem}
-    .filter-chip button{border:0;background:transparent;padding:0 .2rem;line-height:1}
-    .footer-mini-logo{height:22px;opacity:.8}
-    /* Fiche produit (offcanvas) */
+
+    /* Offcanvas fiche produit quick-view */
     .p-color-dot{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid #ddd}
     .thumbs img{height:64px;width:64px;object-fit:cover;border:1px solid #eee;border-radius:6px}
     .thumbs img.active{outline:2px solid #111}
+
+    .footer-mini-logo{height:22px;opacity:.8}
   </style>
 </head>
 <body class="homepage">
 
-  <!-- Icônes SVG -->
+  <!-- SVG icons -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     <defs>
       <symbol id="search" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></symbol>
@@ -57,40 +85,42 @@
       <symbol id="trash" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3h6a1 1 0 0 1 1 1v1h4a1 1 0 0 1 0 2h-1v12a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4a1 1 0 0 1 0-2h4V4a1 1 0 0 1 1-1Zm1 3h4V5h-4v1Zm-1 5a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Zm6 0a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Z"/></symbol>
       <symbol id="close" viewBox="0 0 24 24"><path fill="currentColor" d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
       <symbol id="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></symbol>
+      <symbol id="user" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></symbol>
     </defs>
   </svg>
 
-  <!-- Overlay Recherche (statique, JS à brancher plus tard) -->
-  <div class="search-popup" aria-hidden="true">
-    <div class="search-popup-container">
-      <form role="search" class="form-group" action="">
-        <input type="search" id="overlay-search" class="form-control border-0 border-bottom" placeholder="Rechercher un article…"/>
-        <button type="submit" class="search-submit border-0 position-absolute bg-white" style="top:15px;right:15px;">
-          <svg width="24" height="24"><use xlink:href="#search"/></svg>
-        </button>
-      </form>
-      <h5 class="cat-list-title mt-4">Catégories populaires</h5>
-      <ul class="cat-list">
-        <li class="cat-list-item"><a href="#" data-filter="homme">Hommes</a></li>
-        <li class="cat-list-item"><a href="#" data-filter="femme">Femmes</a></li>
-        <li class="cat-list-item"><a href="#" data-filter="enfant">Enfants</a></li>
-        <li class="cat-list-item"><a href="#" data-filter="accessoires">Accessoires</a></li>
-      </ul>
+  <!-- FOMO bar -->
+  <div class="fomo-bar py-2" id="fomoBar">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge-dot"></span>
+        <span><strong id="watching">18</strong> personnes consultent cette page</span>
+      </div>
+      <div>-10% première commande : <strong>GF-FIRST10</strong> · se termine dans <strong id="countdown">00:00:00</strong></div>
     </div>
   </div>
 
   <!-- HEADER -->
-  <nav class="navbar navbar-expand-lg bg-light text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="index.html">GF Store</a>
+  <nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top navbar-ghost" id="siteNav" style="top: var(--fomoH)">
+    <div class="container-fluid nav-grid">
+      <!-- Logo -->
+      <a class="navbar-brand nav-brand" href="index.html">GF Store</a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
+      <!-- Panier mobile -->
+      <a class="nav-cart-right d-lg-none position-relative" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
+        <svg width="26" height="26"><use xlink:href="#cart"/></svg>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark cart-count">0</span>
+      </a>
+
+      <!-- Burger -->
+      <button class="navbar-toggler nav-toggle-right" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <!-- Menu -->
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
         <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+          <h5 class="offcanvas-title">Menu</h5>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
         </div>
         <div class="offcanvas-body">
@@ -99,87 +129,44 @@
             <li class="nav-item"><a class="nav-link" href="index.html#femmes">Femmes</a></li>
             <li class="nav-item"><a class="nav-link" href="index.html#enfants">Enfants</a></li>
             <li class="nav-item"><a class="nav-link active" href="catalogue.html">Catalogue</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                <svg width="20" height="20" class="me-1"><use xlink:href="#user"/></svg>Compte
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="login.html">Se connecter</a></li>
+                <li><a class="dropdown-item" href="register.html">Créer un compte</a></li>
+                <li><a class="dropdown-item" href="password-reset.html">Mot de passe oublié</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="commande.html">Suivre ma commande</a></li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>
 
-      <ul class="list-unstyled d-flex m-0 ms-3 align-items-center">
-        <li class="search-box me-3">
-          <a class="search-button" href="#search" aria-label="Recherche"><svg width="24" height="24"><use xlink:href="#search"/></svg></a>
-        </li>
-        <li class="me-3 d-none d-lg-block"><a href="#" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
+      <!-- Icônes desktop -->
+      <ul class="list-unstyled d-flex m-0 ms-3 nav-desktop-icons">
+        <li class="me-3 d-none d-lg-block"><a href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
         <li class="d-none d-lg-block">
-          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" aria-label="Ouvrir le panier">
-            <svg width="24" height="24"><use xlink:href="#cart"/></svg>
-            <span class="badge bg-dark ms-1 cart-count align-middle">0</span>
-          </a>
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier"><svg width="24" height="24"><use xlink:href="#cart"/></svg></a>
         </li>
       </ul>
     </div>
   </nav>
 
-  <!-- Panier (structure statique ; actions branchées plus tard) -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
-    <div class="offcanvas-header justify-content-between">
-      <h5 class="m-0" id="offcanvasCartLabel">Votre panier</h5>
+  <!-- Panier -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
+    <div class="offcanvas-header justify-content-center">
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
     </div>
     <div class="offcanvas-body">
-      <ul id="cart-list" class="list-group mb-3 small">
-        <li class="list-group-item d-flex justify-content-between align-items-center">Panier vide</li>
-      </ul>
-      <div class="d-flex justify-content-between align-items-center">
-        <strong>Total</strong>
-        <strong class="price-sm" id="cart-total">—</strong>
-      </div>
-      <div class="d-grid gap-2 mt-3">
-        <a class="btn btn-dark btn-lg" href="checkout.html">Passer au paiement</a>
-        <button class="btn btn-outline-secondary" id="cart-sync" type="button">Sauvegarder mon panier</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- FICHE PRODUIT (OFFCANVAS) : affichage rapide depuis le catalogue -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasProduct" aria-labelledby="offcanvasProductLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasProductLabel">Fiche produit</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
-    </div>
-    <div class="offcanvas-body">
-      <div class="row g-3">
-        <div class="col-12">
-          <div class="ratio ratio-4x3 border rounded">
-            <img id="p-hero" src="" alt="" class="w-100 h-100" style="object-fit:cover">
-          </div>
-        </div>
-        <div class="col-12">
-          <div id="p-thumbs" class="thumbs d-flex flex-wrap gap-2"></div>
-        </div>
-        <div class="col-12">
-          <h4 id="p-title" class="mb-1"></h4>
-          <div id="p-subtitle" class="text-secondary mb-2"></div>
-          <div class="d-flex align-items-center gap-3 mb-3">
-            <div id="p-price" class="fs-5 fw-semibold"></div>
-            <span id="p-cat" class="badge text-bg-light text-uppercase"></span>
-          </div>
-          <div id="p-colors" class="d-flex align-items-center gap-2 mb-3"></div>
-          <div id="p-sizes" class="d-flex align-items-center gap-2 mb-3"></div>
-          <div class="d-grid gap-2">
-            <button id="p-add" class="btn btn-dark text-uppercase" type="button">Ajouter au panier</button>
-            <a id="p-deeplink" href="products.html" class="btn btn-outline-secondary">Ouvrir la fiche dédiée</a>
-          </div>
-          <hr>
-          <div>
-            <h6 class="text-uppercase">Détails</h6>
-            <ul id="p-features" class="small ps-3"></ul>
-          </div>
-          <div>
-            <h6 class="text-uppercase">Entretien</h6>
-            <ul id="p-care" class="small ps-3"></ul>
-          </div>
-          <small id="p-madein" class="text-secondary d-block mt-2"></small>
-        </div>
-      </div>
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-primary">Votre panier</span>
+        <span class="badge bg-primary rounded-pill cart-count">0</span>
+      </h4>
+      <p class="text-body-secondary">Votre panier est vide.</p>
+      <a class="w-100 btn btn-dark btn-lg mt-3" href="checkout.html">Passer au paiement</a>
     </div>
   </div>
 
@@ -199,7 +186,7 @@
 
   <main id="content">
 
-    <!-- Filtres / Recherche / Tri -->
+    <!-- Filtres -->
     <section class="py-4">
       <div class="container">
         <div class="row g-3 align-items-end">
@@ -253,7 +240,7 @@
           </div>
         </div>
 
-        <!-- chips de filtres actifs (remplies par JS plus tard) -->
+        <!-- chips actifs -->
         <div id="chips" class="d-flex flex-wrap gap-2 mt-3"></div>
       </div>
     </section>
@@ -267,7 +254,7 @@
         </div>
 
         <div id="grid" class="row g-4">
-          <!-- skeletons d’attente (dupliqués/retirés par JS plus tard) -->
+          <!-- Skeleton template -->
           <template id="tpl-skel">
             <div class="col-6 col-md-4 col-lg-3">
               <div class="card h-100 border-0">
@@ -280,11 +267,8 @@
             </div>
           </template>
 
-          <!-- Optionnel : un message vide par défaut -->
           <div class="col-12">
-            <div id="empty" class="alert alert-warning d-none mt-2">
-              Aucun article à afficher.
-            </div>
+            <div id="empty" class="alert alert-warning d-none mt-2">Aucun article à afficher.</div>
           </div>
         </div>
 
@@ -297,7 +281,7 @@
 
   </main>
 
-  <!-- Template carte produit (rempli par catalogue.js plus tard) -->
+  <!-- Template carte produit (rempli par catalogue.js) -->
   <template id="tpl-card">
     <div class="col-6 col-md-4 col-lg-3">
       <div class="card product-card h-100 border-0 shadow-sm">
@@ -321,13 +305,57 @@
     </div>
   </template>
 
+  <!-- Offcanvas Quick-view produit (utilisé par catalogue.js si tu l’actives) -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasProduct" aria-labelledby="offcanvasProductLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasProductLabel">Fiche produit</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="ratio ratio-4x3 border rounded">
+            <img id="p-hero" src="" alt="" class="w-100 h-100" style="object-fit:cover">
+          </div>
+        </div>
+        <div class="col-12">
+          <div id="p-thumbs" class="thumbs d-flex flex-wrap gap-2"></div>
+        </div>
+        <div class="col-12">
+          <h4 id="p-title" class="mb-1"></h4>
+          <div id="p-subtitle" class="text-secondary mb-2"></div>
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div id="p-price" class="fs-5 fw-semibold"></div>
+            <span id="p-cat" class="badge text-bg-light text-uppercase"></span>
+          </div>
+          <div id="p-colors" class="d-flex align-items-center gap-2 mb-3"></div>
+          <div id="p-sizes" class="d-flex align-items-center gap-2 mb-3"></div>
+          <div class="d-grid gap-2">
+            <button id="p-add" class="btn btn-dark text-uppercase" type="button">Ajouter au panier</button>
+            <a id="p-deeplink" href="products.html" class="btn btn-outline-secondary">Ouvrir la fiche dédiée</a>
+          </div>
+          <hr>
+          <div>
+            <h6 class="text-uppercase">Détails</h6>
+            <ul id="p-features" class="small ps-3"></ul>
+          </div>
+          <div>
+            <h6 class="text-uppercase">Entretien</h6>
+            <ul id="p-care" class="small ps-3"></ul>
+          </div>
+          <small id="p-madein" class="text-secondary d-block mt-2"></small>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer class="border-top">
     <div class="container">
       <div class="row py-5">
         <div class="col-md-4">
           <h5 class="text-uppercase mb-3">GF Store</h5>
-          <p>Du suivi expert aux rendez-vous sur mesure : une expérience entièrement dédiée à l’hiver.</p>
+          <p>Expédition & retours gratuits. Service client dédié.</p>
           <div class="d-flex gap-3">
             <img src="images/visa-card.png" class="footer-mini-logo" alt="Visa">
             <img src="images/paypal-card.png" class="footer-mini-logo" alt="PayPal">
@@ -346,9 +374,9 @@
         <div class="col-6 col-md-3">
           <h6 class="text-uppercase mb-3">Aide</h6>
           <ul class="list-unstyled">
-            <li><a href="#">Livraison</a></li>
-            <li><a href="#">Retours & échanges</a></li>
-            <li><a href="#">FAQ</a></li>
+            <li><a href="livraison.html">Livraison</a></li>
+            <li><a href="retours.html">Retours & échanges</a></li>
+            <li><a href="faq.html">FAQ</a></li>
             <li><a href="contact.html">Contact</a></li>
           </ul>
         </div>
@@ -368,11 +396,16 @@
     </div>
   </footer>
 
-  <!-- ❌ AUCUN JS ICI — tu ajouteras plus tard: -->
-  <!-- <script src="catalogue.js"></script> -->
-  <!--  -->
+  <!-- JS (Bootstrap + tes apps). Le peu de JS d’ambiance (FOMO/header) vit dans app.js si tu préfères -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<script src="catalogue.js"></script>
-<script src="app.js"></script>
+
+  <!-- Data helpers (facultatif si déjà inclus ailleurs) -->
+  <script src="data/products.js"></script>
+
+  <!-- Catalogue logic (remplira la grille + quick-view + pagination) -->
+  <script src="catalogue.js"></script>
+
+  <!-- App globale (panier, auth, etc.) -->
+  <script src="js/app.js"></script>
 </body>
 </html>
