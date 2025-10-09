@@ -8,7 +8,7 @@
   <meta name="format-detection" content="telephone=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
 
-  <!-- SEO par défaut (remplacés dynamiquement par js/products.js) -->
+  <!-- SEO par défaut (remplacés dynamiquement par data/products.js) -->
   <meta name="description" content="Découvrez nos doudounes et parkas techniques. Livraison & retours gratuits." />
   <meta property="og:title" content="GF Store — Produit" />
   <meta property="og:description" content="Isolation premium, tissus techniques, SAV réactif." />
@@ -67,14 +67,15 @@
     .promo-chip small{opacity:.75}
   </style>
 
-  <!-- Fallback auto: si pas de sku/slug dans l'URL, redirige vers un produit par défaut -->
+  <!-- Fallback auto: si pas de sku/slug dans l’URL, redirige vers un produit par défaut -->
   <script>
     (function () {
       try {
         var url = new URL(location.href);
         if (!url.searchParams.get('sku') && !url.searchParams.get('slug')) {
-          url.searchParams.set('slug', 'doudoune-a-capuche-maire-girl'); /* premier produit */
-          location.replace(url.toString()); /* évite le retour arrière infini */
+          // Change ce slug par celui que tu veux en défaut
+          url.searchParams.set('slug', 'doudoune-a-capuche-maire-girl');
+          location.replace(url.toString());
         }
       } catch (e) { /* no-op */ }
     })();
@@ -275,7 +276,7 @@
               <a class="btn btn-outline-secondary btn-sm" id="p-deeplink" href="#">Copier le lien de cette configuration</a>
             </div>
 
-            <!-- Avantages -->
+            <!-- Avantages (paiement supprimé) -->
             <ul class="small text-secondary mt-3 mb-0">
               <li>Expédition 24h (jours ouvrés)</li>
               <li>Retours faciles sous 30 jours</li>
@@ -331,7 +332,7 @@
         </div>
       </section>
 
-      <!-- Cross-sell (placeholder — optionnellement rempli par products.js) -->
+      <!-- Cross-sell -->
       <section class="x-sell mt-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h3 class="h5 m-0">Compléter le look</h3>
@@ -340,7 +341,7 @@
         <div class="row g-3" id="p-cross"></div>
       </section>
 
-      <!-- Avis (markup prêt) -->
+      <!-- Avis -->
       <section class="mt-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h3 class="h5 m-0">Avis clients</h3>
@@ -368,7 +369,7 @@
     </div>
   </div>
 
-  <!-- FOOTER (infos de paiement supprimées) -->
+  <!-- FOOTER (toutes infos de paiement supprimées) -->
   <footer class="border-top mt-5">
     <div class="container">
       <div class="row py-5">
@@ -413,8 +414,8 @@
   <!-- JS vendor -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-  <!-- IMPORTANT : Products avant App (pour exposer window.Products aux autres scripts) -->
-  <script src="js/products.js"></script>
+  <!-- IMPORTANT : charger data/products.js AVANT app.js -->
+  <script src="data/products.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
