@@ -43,7 +43,6 @@
     .p-size .btn{min-width:44px}
     .sticky-col{position:sticky;top:96px}
     .reassure .icon{width:22px;height:22px}
-    .pay-badge{border:1px dashed #bcc7d4;background:#f7fbff}
     .sec-title{text-transform:uppercase;letter-spacing:.12em;font-size:.85rem}
     .specs td{padding:.4rem .5rem;border-bottom:1px solid #eee}
     .review-stars{color:#f5b301}
@@ -67,6 +66,19 @@
     .promo-chip{display:inline-flex;align-items:center;gap:.4rem;border:1px solid #111;border-radius:999px;padding:.18rem .6rem;font-size:.8rem}
     .promo-chip small{opacity:.75}
   </style>
+
+  <!-- Fallback auto: si pas de sku/slug dans l'URL, redirige vers un produit par défaut -->
+  <script>
+    (function () {
+      try {
+        var url = new URL(location.href);
+        if (!url.searchParams.get('sku') && !url.searchParams.get('slug')) {
+          url.searchParams.set('slug', 'doudoune-a-capuche-maire-girl'); /* premier produit */
+          location.replace(url.toString()); /* évite le retour arrière infini */
+        }
+      } catch (e) { /* no-op */ }
+    })();
+  </script>
 </head>
 <body>
 
@@ -144,7 +156,6 @@
   <!-- Fil d’Ariane + Badge confiance -->
   <header class="product-hero">
     <div class="container">
-      <!-- nav/breadcrumb rempli par products.js si tu préfères (on garde aussi des spans ciblables) -->
       <nav aria-label="breadcrumb" class="mb-2" id="p-breadcrumbs">
         <ol class="breadcrumb small mb-1">
           <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
@@ -156,7 +167,6 @@
 
       <div class="d-flex flex-wrap align-items-center gap-2">
         <span class="promo-chip"><strong>-10%</strong> <small>avec code <b>GF-FIRST10</b></small></span>
-        <!-- id “p-badge-new” attendu par products.js -->
         <span class="badge text-bg-light p-badge text-uppercase d-none" id="p-badge-new">Nouveauté</span>
         <small class="text-secondary">Livraison & retours gratuits</small>
       </div>
@@ -174,9 +184,7 @@
               <img id="p-hero" src="images/product-item-1.jpg" alt="Visuel produit">
             </div>
           </div>
-          <div class="thumbs mt-2" id="p-thumbs">
-            <!-- vignettes (remplies par products.js) -->
-          </div>
+          <div class="thumbs mt-2" id="p-thumbs"></div>
 
           <!-- Réassurance sous galerie -->
           <section class="reassure mt-4">
@@ -237,9 +245,7 @@
             <!-- Couleurs -->
             <div class="mt-3">
               <div class="sec-title mb-2">Couleur</div>
-              <div class="d-flex align-items-center gap-2" id="p-colors">
-                <!-- boutons couleurs injectés -->
-              </div>
+              <div class="d-flex align-items-center gap-2" id="p-colors"></div>
             </div>
 
             <!-- Tailles -->
@@ -248,9 +254,7 @@
                 <div class="sec-title mb-2">Taille</div>
                 <a href="#" class="small">Guide des tailles</a>
               </div>
-              <div class="d-flex flex-wrap gap-2" id="p-sizes">
-                <!-- boutons tailles injectés -->
-              </div>
+              <div class="d-flex flex-wrap gap-2" id="p-sizes"></div>
               <div class="small text-secondary mt-2" id="p-stock">—</div>
             </div>
 
@@ -268,17 +272,7 @@
             <div class="d-grid gap-2 mt-4 desktop-only">
               <button class="btn btn-dark btn-lg text-uppercase" id="p-add">Ajouter au panier</button>
               <a class="btn btn-outline-dark btn-lg text-uppercase" href="checkout.html" id="p-buy">Acheter maintenant</a>
-              <!-- Lien direct vers cette fiche avec paramètres courants -->
               <a class="btn btn-outline-secondary btn-sm" id="p-deeplink" href="#">Copier le lien de cette configuration</a>
-            </div>
-
-            <!-- Paiement accepté -->
-            <div class="pay-badge border rounded-3 p-3 mt-3">
-              <div class="d-flex align-items-center gap-2">
-                <svg width="20" height="20"><use xlink:href="#bank"/></svg>
-                <strong>Paiement accepté :</strong> <span class="ms-1">Virement SEPA instant</span>
-              </div>
-              <small class="text-secondary d-block mt-1">Traitement prioritaire à réception du virement.</small>
             </div>
 
             <!-- Avantages -->
@@ -303,15 +297,11 @@
             <div class="row">
               <div class="col-md-6">
                 <h4 class="h6 sec-title">Points forts</h4>
-                <ul id="p-features" class="mb-4">
-                  <!-- features injectées -->
-                </ul>
+                <ul id="p-features" class="mb-4"></ul>
               </div>
               <div class="col-md-6">
                 <h4 class="h6 sec-title">Entretien</h4>
-                <ul id="p-care" class="mb-4">
-                  <!-- care injecté -->
-                </ul>
+                <ul id="p-care" class="mb-4"></ul>
               </div>
             </div>
 
@@ -337,12 +327,6 @@
                 <li>Livraison et retours gratuits en France</li>
               </ul>
             </div>
-
-            <div class="p-4 border rounded-3 mt-3">
-              <h4 class="h6 sec-title">Virement SEPA instant</h4>
-              <p class="mb-1">RIB : <strong>GF STORE</strong> — <strong>FR76 1234 5678 9012 3456 7890 123</strong></p>
-              <p class="mb-0">BIC : <strong>GFSTFRPPXXX</strong><br><small class="text-secondary">La commande est validée dès réception du virement.</small></p>
-            </div>
           </div>
         </div>
       </section>
@@ -353,9 +337,7 @@
           <h3 class="h5 m-0">Compléter le look</h3>
           <a class="btn btn-sm btn-outline-dark text-uppercase" href="catalogue.html">Tout voir</a>
         </div>
-        <div class="row g-3" id="p-cross">
-          <!-- cartes suggestions optionnelles -->
-        </div>
+        <div class="row g-3" id="p-cross"></div>
       </section>
 
       <!-- Avis (markup prêt) -->
@@ -364,9 +346,7 @@
           <h3 class="h5 m-0">Avis clients</h3>
           <span class="small text-secondary">Note moyenne : <strong>4,8/5</strong></span>
         </div>
-        <div class="row g-3" id="p-reviews">
-          <!-- avis statiques / ou à brancher plus tard -->
-        </div>
+        <div class="row g-3" id="p-reviews"></div>
         <div class="text-center mt-3">
           <a href="#" class="btn btn-outline-dark btn-sm text-uppercase">Voir tous les avis</a>
         </div>
@@ -388,17 +368,13 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
+  <!-- FOOTER (infos de paiement supprimées) -->
   <footer class="border-top mt-5">
     <div class="container">
       <div class="row py-5">
         <div class="col-md-4">
           <h5 class="text-uppercase mb-3">GF Store</h5>
           <p>Du suivi expert aux rendez-vous sur mesure : une expérience dédiée à l’hiver.</p>
-          <div class="d-flex align-items-center gap-2">
-            <svg width="22" height="22"><use xlink:href="#bank"/></svg>
-            <span class="small">Paiement accepté : <strong>Virement SEPA instant</strong></span>
-          </div>
         </div>
         <div class="col-6 col-md-2">
           <h6 class="text-uppercase mb-3">Boutique</h6>
