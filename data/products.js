@@ -1,411 +1,478 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Catalogue — GF Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="format-detection" content="telephone=no" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
+/*!
+ * GF Store — products.js
+ * Page Produit: chargement data, rendu, interactions (couleurs/tailles), ajout panier.
+ * - Aucune dépendance (Vanilla JS)
+ * - Coopère avec app.js (évènement 'gf:add' + data-* sur le bouton)
+ * - Fallbacks de chargement JSON robustes (local → racine → domaine prod)
+ * - Cache localStorage 5 min (clé gf:data:products*)
+ */
+(function (global, doc) {
+  "use strict";
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  /* -----------------------------------------------------------------------
+   * Mini utils
+   * --------------------------------------------------------------------- */
+  const U = {
+    qs: (sel, root = doc) => root.querySelector(sel),
+    qsa: (sel, root = doc) => Array.from(root.querySelectorAll(sel)),
+    on: (el, evt, cb, opt) => el && el.addEventListener(evt, cb, opt),
+    fmtPrice(n, currency = "EUR", locale = "fr-FR") {
+      try {
+        return Number(n || 0).toLocaleString(locale, { style: "currency", currency });
+      } catch {
+        return (n || 0) + " " + currency;
+      }
+    },
+    slug(s) {
+      return String(s || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+    },
+    getParam(name, def = "") {
+      const url = new URL(global.location.href);
+      return url.searchParams.get(name) || def;
+    },
+    setParams(obj, push = true) {
+      const url = new URL(global.location.href);
+      Object.entries(obj).forEach(([k, v]) => {
+        if (v === null || v === undefined || v === "") url.searchParams.delete(k);
+        else url.searchParams.set(k, v);
+      });
+      if (push) history.pushState({}, "", url);
+      else history.replaceState({}, "", url);
+    },
+    clamp(n, a, b) {
+      return Math.max(a, Math.min(b, n));
+    },
+  };
 
-  <!-- Vendor + Theme CSS -->
-  <link rel="stylesheet" href="css/vendor.css">
-  <link rel="stylesheet" href="style.css">
+  /* -----------------------------------------------------------------------
+   * Cache localStorage
+   * --------------------------------------------------------------------- */
+  const LS = {
+    get(k, def) {
+      try {
+        const v = localStorage.getItem(k);
+        return v ? JSON.parse(v) : def;
+      } catch {
+        return def;
+      }
+    },
+    set(k, val) {
+      try {
+        localStorage.setItem(k, JSON.stringify(val));
+      } catch {}
+    },
+    remove(k) {
+      try {
+        localStorage.removeItem(k);
+      } catch {}
+    },
+  };
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet" />
+  /* -----------------------------------------------------------------------
+   * Normalisation produit
+   * --------------------------------------------------------------------- */
+  function normalizeProduct(p) {
+    const n = JSON.parse(JSON.stringify(p || {}));
 
-  <style>
-    :root{
-      --navH: 64px;
-      --fomoH: 40px;
-      --anchorOffset: calc(var(--navH) + var(--fomoH) + 12px);
-      --radius: 14px;
+    // Identifiants
+    n.sku = n.sku || n.id || n.SKU || n.code || U.slug(n.title || n.name || "prod");
+    n.slug = n.slug || U.slug(n.title || n.name || n.sku);
+
+    // Libellés/prix
+    n.title = n.title || n.name || "Produit";
+    n.subtitle = n.subtitle || n.tagline || "";
+    n.currency = (n.currency || "EUR").toUpperCase();
+    n.price = Number(n.price ?? n.prix ?? 0);
+    n.vat_included = n.vat_included ?? true;
+
+    // Catégorie/gender
+    const rawCat = (n.category || n.categorie || n.gender || n.genre || "").toString().toLowerCase();
+    const map = {
+      homme: "homme",
+      men: "homme",
+      man: "homme",
+      femmes: "femme",
+      femme: "femme",
+      women: "femme",
+      woman: "femme",
+      enfants: "enfant",
+      enfant: "enfant",
+      kids: "enfant",
+      kid: "enfant",
+      boy: "enfant",
+      girl: "enfant",
+      accessoires: "accessoires",
+      accessories: "accessoires",
+    };
+    n.category = map[rawCat] || rawCat || "autre";
+
+    // Couleurs/images
+    if (!Array.isArray(n.colors) || !n.colors.length) {
+      const img =
+        n.image ||
+        (Array.isArray(n.images) && n.images[0]) ||
+        (n.thumbnail ? n.thumbnail : "images/product-fallback.jpg");
+      n.colors = [{ code: "default", label: "Par défaut", images: [img].filter(Boolean) }];
     }
-    html{scroll-behavior:smooth}
-    body{background:#fff;color:#111}
-    body.has-fixed-nav #content{ padding-top: calc(var(--navH) + 8px) }
+    n.colors = n.colors.map((c, i) => {
+      const images = Array.from(new Set((c.images || []).filter(Boolean)));
+      return {
+        code: c.code || `c${i + 1}`,
+        label: c.label || `Couleur ${i + 1}`,
+        images: images.length ? images : ["images/product-fallback.jpg"],
+      };
+    });
 
-    /* NAV */
-    .navbar{min-height:64px}
-    .navbar.fixed-top{transition:background-color .25s ease, box-shadow .25s ease}
-    .navbar-ghost{background:transparent !important; box-shadow:none}
-    .navbar-solid{background:#ffffff !important; box-shadow:0 6px 20px rgba(0,0,0,.06)}
+    // Tailles / stock
+    if (!Array.isArray(n.sizes)) n.sizes = [];
+    n.stock = n.stock || {};
+    n.sizes.forEach((sz) => {
+      if (typeof n.stock[sz] !== "number") n.stock[sz] = 10;
+    });
 
-    /* FOMO bar */
-    .fomo-bar{position:sticky; top:0; z-index:1020; background:#111; color:#fff; font-size:.92rem; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);}
-    .fomo-bar small{opacity:.85}
-    .badge-dot{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#22c55e;margin-right:.5rem}
+    // Tags / nouveauté
+    n.tags = Array.isArray(n.tags) ? n.tags : [];
+    n.is_new =
+      !!n.is_new ||
+      n.tags.some((t) => ["new", "nouveau", "nouveauté", "nouveautes"].includes(String(t).toLowerCase()));
 
-    /* Grid header layout (mobile like index) */
-    .nav-grid{display:flex; align-items:center; width:100%;}
-    @media (max-width: 991.98px){
-      .nav-grid{display:grid; grid-template-columns: 1fr auto auto; column-gap:.5rem;}
-      .nav-brand{grid-column:1}
-      .nav-cart-right{grid-column:2; justify-self:end}
-      .nav-toggle-right{grid-column:3; justify-self:end}
-      .nav-desktop-icons{display:none !important;}
+    return n;
+  }
+
+  /* -----------------------------------------------------------------------
+   * Chargement produits — robustifier le fetch (et exposer window.Products)
+   * --------------------------------------------------------------------- */
+  const CACHE_KEY = "gf:data:products";
+  const STAMP_KEY = "gf:data:products:ts";
+  const TTL = 5 * 60 * 1000;
+
+  async function fetchCandidates() {
+    // Ordre: data/ → racine → domaine prod
+    return [
+      new URL("data/products.json", location.href).href,
+      new URL("products.json", location.href).href,
+      "https://gfstore.store/data/products.json",
+    ];
+  }
+
+  async function loadAllInternal() {
+    // 0) Si une implémentation existe déjà (ex: data/products.js), utilise-la.
+    if (global.Products && typeof global.Products.all === "function" && !global.__GF_FORCE_LOCAL_LOAD__) {
+      try {
+        const pre = await global.Products.all();
+        if (Array.isArray(pre) && pre.length) return pre.map(normalizeProduct);
+      } catch {
+        // on bascule sur notre chargeur
+      }
     }
-    @media (min-width: 992px){ .nav-cart-right{display:none !important;} }
-    .nav-cart-right .badge{font-size:.65rem; line-height:1; padding:.25em .35em; transform:translate(15%, -35%); }
 
-    /* HERO */
-    .catalog-hero{background:#0f0f10 url('images/banner-image-6.jpg') center/cover no-repeat; color:#fff; padding:92px 0 56px; margin-top:56px; position:relative;}
-    .catalog-hero::after{content:""; position:absolute; inset:0; background:rgba(0,0,0,.35)}
-    .catalog-hero .container{position:relative; z-index:2}
+    // 1) Cache
+    const now = Date.now();
+    const stamp = LS.get(STAMP_KEY, 0);
+    let list = LS.get(CACHE_KEY, null);
+    if (Array.isArray(list) && list.length && now - stamp <= TTL) {
+      return list;
+    }
 
-    /* Cards / placeholders */
-    .product-card .ratio img{object-fit:cover}
-    .badge-new{background:#111}
-    .cursor-pointer{cursor:pointer}
-    .skeleton{background:linear-gradient(90deg,#eee 25%,#f6f6f6 37%,#eee 63%); background-size:400% 100%; animation:shimmer 1.1s infinite linear}
-    @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+    // 2) Fallbacks
+    const urls = await fetchCandidates();
+    for (const url of urls) {
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) continue;
+        const data = await res.json();
+        const raw = Array.isArray(data) ? data : data.products || [];
+        if (Array.isArray(raw) && raw.length) {
+          list = raw.map(normalizeProduct);
+          LS.set(CACHE_KEY, list);
+          LS.set(STAMP_KEY, now);
+          return list;
+        }
+      } catch {
+        // essayer url suivante
+      }
+    }
+    return [];
+  }
 
-    /* Offcanvas fiche produit quick-view */
-    .p-color-dot{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid #ddd}
-    .thumbs img{height:64px;width:64px;object-fit:cover;border:1px solid #eee;border-radius:6px}
-    .thumbs img.active{outline:2px solid #111}
+  // On expose/complète window.Products (API stable utilisée par app.js)
+  if (!global.Products) global.Products = {};
+  const API = {
+    async all() {
+      const list = await loadAllInternal();
+      return list;
+    },
+    async currentFromURL() {
+      const list = await loadAllInternal();
+      const sku = U.getParam("sku", "");
+      const slug = U.getParam("slug", "");
+      const color = U.getParam("color", "");
+      const size = U.getParam("size", "");
 
-    .footer-mini-logo{height:22px;opacity:.8}
-  </style>
-</head>
-<body class="homepage">
+      let product = null;
+      if (sku) product = list.find((p) => String(p.sku) === sku) || null;
+      if (!product && slug) product = list.find((p) => String(p.slug) === slug) || null;
 
-  <!-- SVG icons -->
-  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-    <defs>
-      <symbol id="search" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></symbol>
-      <symbol id="cart" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.49a3 3 0 0 0 2.89-2.18l1.58-5.55A1 1 0 0 0 19 5H6.74a3 3 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.92l.16.55 1.64 5.74A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Z"/></symbol>
-      <symbol id="heart" viewBox="0 0 24 24"><path fill="currentColor" d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Z"/></symbol>
-      <symbol id="trash" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3h6a1 1 0 0 1 1 1v1h4a1 1 0 0 1 0 2h-1v12a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4a1 1 0 0 1 0-2h4V4a1 1 0 0 1 1-1Zm1 3h4V5h-4v1Zm-1 5a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Zm6 0a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Z"/></symbol>
-      <symbol id="close" viewBox="0 0 24 24"><path fill="currentColor" d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
-      <symbol id="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></symbol>
-      <symbol id="user" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></symbol>
-    </defs>
-  </svg>
+      return { product, color: color || null, size: size || null };
+    },
+    async find(query) {
+      const list = await loadAllInternal();
+      if (typeof query === "function") return list.find(query) || null;
+      return list.find((p) => p.sku === query || p.slug === query) || null;
+    },
+    async filter(predicate) {
+      const list = await loadAllInternal();
+      if (typeof predicate !== "function") return list;
+      return list.filter(predicate);
+    },
+    utils: {
+      fmtPrice: U.fmtPrice,
+      setParams: U.setParams,
+      getParam: U.getParam,
+      slug: U.slug,
+      clamp: U.clamp,
+      firstImage(product, colorCode) {
+        const c =
+          (product.colors || []).find((x) => x.code === colorCode) ||
+          (product.colors || [])[0] ||
+          { images: [] };
+        return c.images[0] || "images/product-fallback.jpg";
+      },
+      getColor(product, colorCode) {
+        const colors = product.colors || [];
+        if (!colors.length) return null;
+        return colors.find((c) => c.code === colorCode) || colors[0];
+      },
+      inStock(product, size) {
+        if (!size) return true;
+        const stock = product.stock || {};
+        const n = Number(stock[size] ?? 0);
+        return n > 0;
+      },
+    },
+  };
+  // Merge (sans écraser une autre implémentation complète)
+  global.Products.all = API.all;
+  global.Products.currentFromURL = API.currentFromURL;
+  global.Products.find = API.find;
+  global.Products.filter = API.filter;
+  global.Products.utils = { ...(global.Products.utils || {}), ...API.utils };
 
-  <!-- FOMO bar -->
-  <div class="fomo-bar py-2" id="fomoBar">
-    <div class="container d-flex flex-wrap justify-content-between align-items-center">
-      <div class="d-flex align-items-center gap-2">
-        <span class="badge-dot"></span>
-        <span><strong id="watching">18</strong> personnes consultent cette page</span>
-      </div>
-      <div>-10% première commande : <strong>GF-FIRST10</strong> · se termine dans <strong id="countdown">00:00:00</strong></div>
-    </div>
-  </div>
+  /* -----------------------------------------------------------------------
+   * Rendu page produit (optionnel, s’active si les éléments existent)
+   * --------------------------------------------------------------------- */
+  async function bootProductPage() {
+    // Détecte si on est sur la page produit (ou si des hooks existent)
+    const hasRoot =
+      U.qs('[data-product-root]') ||
+      U.qs("#product-root") ||
+      U.qs("#p-title") ||
+      U.qs(".product-title") ||
+      /produit\.html|product\.html|products\.html/i.test(location.pathname);
 
-  <!-- HEADER -->
-  <nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top navbar-ghost" id="siteNav" style="top: var(--fomoH)">
-    <div class="container-fluid nav-grid">
-      <!-- Logo -->
-      <a class="navbar-brand nav-brand" href="index.html">GF Store</a>
+    if (!hasRoot) return;
 
-      <!-- Panier mobile -->
-      <a class="nav-cart-right d-lg-none position-relative" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
-        <svg width="26" height="26"><use xlink:href="#cart"/></svg>
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark cart-count">0</span>
-      </a>
+    // Résout produit
+    const { product, color: colorQS, size: sizeQS } = await API.currentFromURL();
 
-      <!-- Burger -->
-      <button class="navbar-toggler nav-toggle-right" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    const $title = U.qs("#p-title") || U.qs(".product-title");
+    const $subtitle = U.qs("#p-subtitle") || U.qs(".product-subtitle");
+    const $price = U.qs("#p-price") || U.qs(".product-price");
+    const $cat = U.qs("#p-cat") || U.qs(".product-cat");
+    const $madein = U.qs("#p-madein") || U.qs(".product-madein");
+    const $features = U.qs("#p-features");
+    const $care = U.qs("#p-care");
+    const $colors = U.qs("#p-colors") || U.qs(".product-colors");
+    const $sizes = U.qs("#p-sizes") || U.qs(".product-sizes");
+    const $hero = U.qs("#p-hero") || U.qs(".product-hero img") || U.qs(".product-hero");
+    const $thumbs = U.qs("#p-thumbs") || U.qs(".product-thumbs");
+    const $add = U.qs("#p-add") || U.qs('[data-action="add-to-cart"]') || U.qs(".btn-add");
+    const $link = U.qs("#p-deeplink") || U.qs(".product-deeplink");
+    const $crumbs = U.qs("#p-breadcrumbs") || U.qs(".product-breadcrumbs");
+    const $stock = U.qs("#p-stock") || U.qs(".product-stock");
 
-      <!-- Menu -->
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title">Menu</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
-        </div>
-        <div class="offcanvas-body">
-          <ul class="navbar-nav ms-auto gap-3">
-            <li class="nav-item"><a class="nav-link" href="index.html#hommes">Hommes</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#femmes">Femmes</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#enfants">Enfants</a></li>
-            <li class="nav-item"><a class="nav-link active" href="catalogue.html">Catalogue</a></li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                <svg width="20" height="20" class="me-1"><use xlink:href="#user"/></svg>Compte
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="login.html">Se connecter</a></li>
-                <li><a class="dropdown-item" href="register.html">Créer un compte</a></li>
-                <li><a class="dropdown-item" href="password-reset.html">Mot de passe oublié</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="commande.html">Suivre ma commande</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
+    // Si produit introuvable
+    if (!product) {
+      if ($title) $title.textContent = "Produit introuvable";
+      if ($price) $price.textContent = "—";
+      if ($hero && $hero.setAttribute) $hero.setAttribute("src", "images/product-fallback.jpg");
+      const $msg = U.qs("#product-mount") || U.qs("#product-root");
+      if ($msg) $msg.innerHTML = `<div class="alert alert-warning">Aucun produit trouvé pour ces paramètres d’URL.</div>`;
+      return;
+    }
 
-      <!-- Icônes desktop -->
-      <ul class="list-unstyled d-flex m-0 ms-3 nav-desktop-icons">
-        <li class="me-3 d-none d-lg-block"><a href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
-        <li class="d-none d-lg-block">
-          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier"><svg width="24" height="24"><use xlink:href="#cart"/></svg></a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+    // État courant sélection
+    let current = {
+      color: global.Products.utils.getColor(product, colorQS)?.code || product.colors[0].code,
+      size: sizeQS || (product.sizes[0] || null),
+      image: null,
+    };
 
-  <!-- Panier -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
-    <div class="offcanvas-header justify-content-center">
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
-    </div>
-    <div class="offcanvas-body">
-      <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-primary">Votre panier</span>
-        <span class="badge bg-primary rounded-pill cart-count">0</span>
-      </h4>
-      <p class="text-body-secondary">Votre panier est vide.</p>
-      <a class="w-100 btn btn-dark btn-lg mt-3" href="checkout.html">Passer au paiement</a>
-    </div>
-  </div>
+    // Helpers UI
+    function refreshHero(imgUrl) {
+      const url = imgUrl || global.Products.utils.firstImage(product, current.color);
+      current.image = url;
+      if ($hero) {
+        if ($hero.tagName === "IMG") $hero.src = url;
+        else $hero.style.backgroundImage = `url("${url}")`;
+      }
+      if ($thumbs) {
+        U.qsa("img", $thumbs).forEach((im) => im.classList.toggle("active", im.src === url));
+      }
+    }
 
-  <!-- HERO + Fil d'Ariane -->
-  <header class="catalog-hero text-center">
-    <div class="container">
-      <nav aria-label="breadcrumb" class="mb-2">
-        <ol class="breadcrumb justify-content-center">
-          <li class="breadcrumb-item"><a class="link-light text-decoration-none" href="index.html">Accueil</a></li>
-          <li class="breadcrumb-item active text-white-50" aria-current="page">Catalogue</li>
-        </ol>
-      </nav>
-      <h1 class="display-5 mb-1">Catalogue Hiver 2025</h1>
-      <p class="mb-0">Doudounes, parkas, mailles & accessoires</p>
-    </div>
-  </header>
+    function renderThumbs() {
+      if (!$thumbs) return;
+      const c = global.Products.utils.getColor(product, current.color);
+      const imgs = (c?.images || []).slice(0, 8);
+      $thumbs.innerHTML = imgs
+        .map((src, i) => `<img src="${src}" alt="" class="${i === 0 ? "active" : ""}" loading="lazy">`)
+        .join("");
+      U.qsa("img", $thumbs).forEach((im) =>
+        U.on(im, "click", () => {
+          refreshHero(im.src);
+        })
+      );
+    }
 
-  <main id="content">
+    function renderColors() {
+      if (!$colors) return;
+      const html = (product.colors || [])
+        .map((c) => {
+          const label = c.label || c.code;
+          return `
+          <button class="btn btn-sm ${c.code === current.color ? "btn-dark" : "btn-outline-secondary"} me-1 mb-1"
+                  data-color="${c.code}" type="button">${label}</button>`;
+        })
+        .join("");
+      $colors.innerHTML = html;
+      U.qsa("[data-color]", $colors).forEach((btn) =>
+        U.on(btn, "click", () => {
+          current.color = btn.getAttribute("data-color");
+          U.setParams({ color: current.color }, false);
+          renderColors(); // re-highlight
+          renderThumbs();
+          refreshHero();
+        })
+      );
+    }
 
-    <!-- Filtres -->
-    <section class="py-4">
-      <div class="container">
-        <div class="row g-3 align-items-end">
-          <div class="col-lg-4">
-            <label class="form-label" for="q">Recherche</label>
-            <input id="q" type="search" class="form-control" placeholder="Doudoune, parka, bonnet…">
-          </div>
-          <div class="col-6 col-lg-2">
-            <label class="form-label" for="filter">Catégorie</label>
-            <select id="filter" class="form-select">
-              <option value="all">Tout</option>
-              <option value="homme">Hommes</option>
-              <option value="femme">Femmes</option>
-              <option value="enfant">Enfants</option>
-              <option value="accessoires">Accessoires</option>
-            </select>
-          </div>
-          <div class="col-6 col-lg-2">
-            <label class="form-label" for="sort">Tri</label>
-            <select id="sort" class="form-select">
-              <option value="relevance">Pertinence</option>
-              <option value="price-asc">Prix : croissant</option>
-              <option value="price-desc">Prix : décroissant</option>
-              <option value="newest">Nouveautés</option>
-            </select>
-          </div>
-          <div class="col-6 col-lg-2">
-            <label class="form-label" for="min">Prix min (€)</label>
-            <input type="number" id="min" class="form-control" placeholder="0" min="0" step="1">
-          </div>
-          <div class="col-6 col-lg-2">
-            <label class="form-label" for="max">Prix max (€)</label>
-            <input type="number" id="max" class="form-control" placeholder="2000" min="0" step="1">
-          </div>
+    function renderSizes() {
+      if (!$sizes) return;
+      const html = (product.sizes || [])
+        .map((s) => {
+          const instock = global.Products.utils.inStock(product, s);
+          const active = s === current.size;
+          return `
+          <button class="btn btn-sm ${active ? "btn-dark" : "btn-outline-secondary"} me-1 mb-1"
+                  data-size="${s}" type="button" ${instock ? "" : "disabled"}>${s}</button>`;
+        })
+        .join("");
+      $sizes.innerHTML = html;
+      U.qsa("[data-size]", $sizes).forEach((btn) =>
+        U.on(btn, "click", () => {
+          current.size = btn.getAttribute("data-size");
+          U.setParams({ size: current.size }, false);
+          updateStockState();
+          renderSizes(); // re-highlight
+        })
+      );
+    }
 
-          <div class="col-6 col-lg-2">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="only-new">
-              <label class="form-check-label" for="only-new">Nouveaux</label>
-            </div>
-          </div>
-          <div class="col-6 col-lg-2">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="in-stock">
-              <label class="form-check-label" for="in-stock">En stock</label>
-            </div>
-          </div>
+    function updateStockState() {
+      if (!$stock && !$add) return;
+      const ok = current.size ? global.Products.utils.inStock(product, current.size) : true;
+      if ($stock) $stock.textContent = ok ? "En stock" : "Indisponible";
+      if ($add) $add.disabled = !ok;
+    }
 
-          <div class="col-lg-2 ms-auto d-grid">
-            <button id="reset" class="btn btn-outline-secondary" type="button">Réinitialiser</button>
-          </div>
-        </div>
+    // Rendu statique
+    if ($title) $title.textContent = product.title;
+    if ($subtitle) $subtitle.textContent = product.subtitle || "";
+    if ($price) $price.textContent = U.fmtPrice(product.price, product.currency);
+    if ($cat)
+      $cat.textContent =
+        product.category === "homme"
+          ? "Hommes"
+          : product.category === "femme"
+          ? "Femmes"
+          : product.category === "enfant"
+          ? "Enfants"
+          : "Produit";
+    if ($madein && product.made_in) $madein.textContent = "Fabriqué en " + product.made_in;
 
-        <!-- chips actifs -->
-        <div id="chips" class="d-flex flex-wrap gap-2 mt-3"></div>
-      </div>
-    </section>
+    if ($features && Array.isArray(product.features)) {
+      $features.innerHTML = product.features.map((f) => `<li>${f}</li>`).join("");
+    }
+    if ($care && Array.isArray(product.care)) {
+      $care.innerHTML = product.care.map((f) => `<li>${f}</li>`).join("");
+    }
+    if ($crumbs) {
+      $crumbs.innerHTML = `
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
+          <li class="breadcrumb-item"><a href="catalogue.html">Catalogue</a></li>
+          <li class="breadcrumb-item active" aria-current="page">${product.title}</li>
+        </ol>`;
+    }
 
-    <!-- Résultats -->
-    <section class="pb-5">
-      <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <div id="count" class="small text-secondary">Chargement…</div>
-          <div class="small text-secondary">Livraison & retours gratuits</div>
-        </div>
+    // Galerie & sélecteurs
+    renderColors();
+    renderSizes();
+    renderThumbs();
+    refreshHero();
 
-        <div id="grid" class="row g-4">
-          <!-- Skeleton template -->
-          <template id="tpl-skel">
-            <div class="col-6 col-md-4 col-lg-3">
-              <div class="card h-100 border-0">
-                <div class="ratio ratio-4x3 skeleton rounded"></div>
-                <div class="card-body">
-                  <div class="skeleton" style="height:16px;width:70%;border-radius:6px"></div>
-                  <div class="skeleton mt-2" style="height:12px;width:40%;border-radius:6px"></div>
-                </div>
-              </div>
-            </div>
-          </template>
+    // Lien "ouvrir la fiche dédiée" si tu utilises plusieurs pages
+    if ($link) {
+      const params = new URLSearchParams();
+      params.set("sku", product.sku);
+      params.set("color", current.color || "");
+      if (current.size) params.set("size", current.size);
+      $link.href = `products.html?${params.toString()}`;
+    }
 
-          <div class="col-12">
-            <div id="empty" class="alert alert-warning d-none mt-2">Aucun article à afficher.</div>
-          </div>
-        </div>
+    // Bouton Ajouter au panier — double intégration
+    if ($add) {
+      // Data-* pour que app.js intercepte automatiquement
+      $add.setAttribute("data-add", "");
+      $add.setAttribute("data-id", product.sku);
+      $add.setAttribute("data-name", product.title);
+      $add.setAttribute("data-price", String(product.price));
+      $add.setAttribute(
+        "data-image",
+        current.image || global.Products.utils.firstImage(product, current.color)
+      );
 
-        <!-- Pagination -->
-        <nav class="d-flex justify-content-center mt-4" aria-label="Pagination catalogue">
-          <ul id="pager" class="pagination m-0"></ul>
-        </nav>
-      </div>
-    </section>
+      U.on($add, "click", (e) => {
+        e.preventDefault();
+        // Évènement custom pour app.js (Cart.add via listener 'gf:add')
+        const payload = {
+          id: product.sku,
+          sku: product.sku,
+          title: product.title,
+          name: product.title,
+          price: product.price,
+          currency: product.currency,
+          image: current.image || global.Products.utils.firstImage(product, current.color),
+          images: (global.Products.utils.getColor(product, current.color)?.images || []).slice(0, 4),
+          size: current.size || null,
+          color: current.color || null,
+        };
+        doc.dispatchEvent(new CustomEvent("gf:add", { detail: { product: payload } }));
+        // NB: le délégué data-add d’app.js capte aussi le clic, donc double sécurité.
+      });
+    }
 
-  </main>
+    // Met à jour l’état “stock” initial
+    updateStockState();
+  }
 
-  <!-- Template carte produit (rempli par catalogue.js) -->
-  <template id="tpl-card">
-    <div class="col-6 col-md-4 col-lg-3">
-      <div class="card product-card h-100 border-0 shadow-sm">
-        <a class="stretched-link text-reset text-decoration-none p-link" href="products.html">
-          <div class="position-relative">
-            <span class="position-absolute top-0 start-0 m-2 badge badge-new text-uppercase d-none">Nouveau</span>
-            <div class="ratio ratio-4x3">
-              <img class="w-100 h-100" alt="">
-            </div>
-          </div>
-        </a>
-        <div class="card-body">
-          <h6 class="text-uppercase mb-1 name">Produit</h6>
-          <div class="small text-secondary mb-2 meta">—</div>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="fw-semibold price">—</div>
-            <button class="btn btn-sm btn-dark text-uppercase add cursor-pointer" type="button">Ajouter</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </template>
-
-  <!-- Offcanvas Quick-view produit (utilisé par catalogue.js si tu l’actives) -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasProduct" aria-labelledby="offcanvasProductLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasProductLabel">Fiche produit</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
-    </div>
-    <div class="offcanvas-body">
-      <div class="row g-3">
-        <div class="col-12">
-          <div class="ratio ratio-4x3 border rounded">
-            <img id="p-hero" src="" alt="" class="w-100 h-100" style="object-fit:cover">
-          </div>
-        </div>
-        <div class="col-12">
-          <div id="p-thumbs" class="thumbs d-flex flex-wrap gap-2"></div>
-        </div>
-        <div class="col-12">
-          <h4 id="p-title" class="mb-1"></h4>
-          <div id="p-subtitle" class="text-secondary mb-2"></div>
-          <div class="d-flex align-items-center gap-3 mb-3">
-            <div id="p-price" class="fs-5 fw-semibold"></div>
-            <span id="p-cat" class="badge text-bg-light text-uppercase"></span>
-          </div>
-          <div id="p-colors" class="d-flex align-items-center gap-2 mb-3"></div>
-          <div id="p-sizes" class="d-flex align-items-center gap-2 mb-3"></div>
-          <div class="d-grid gap-2">
-            <button id="p-add" class="btn btn-dark text-uppercase" type="button">Ajouter au panier</button>
-            <a id="p-deeplink" href="products.html" class="btn btn-outline-secondary">Ouvrir la fiche dédiée</a>
-          </div>
-          <hr>
-          <div>
-            <h6 class="text-uppercase">Détails</h6>
-            <ul id="p-features" class="small ps-3"></ul>
-          </div>
-          <div>
-            <h6 class="text-uppercase">Entretien</h6>
-            <ul id="p-care" class="small ps-3"></ul>
-          </div>
-          <small id="p-madein" class="text-secondary d-block mt-2"></small>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="border-top">
-    <div class="container">
-      <div class="row py-5">
-        <div class="col-md-4">
-          <h5 class="text-uppercase mb-3">GF Store</h5>
-          <p>Expédition & retours gratuits. Service client dédié.</p>
-          <div class="d-flex gap-3">
-            <img src="images/visa-card.png" class="footer-mini-logo" alt="Visa">
-            <img src="images/paypal-card.png" class="footer-mini-logo" alt="PayPal">
-            <img src="images/master-card.png" class="footer-mini-logo" alt="Mastercard">
-          </div>
-        </div>
-        <div class="col-6 col-md-2">
-          <h6 class="text-uppercase mb-3">Boutique</h6>
-          <ul class="list-unstyled">
-            <li><a href="index.html#hommes">Hommes</a></li>
-            <li><a href="index.html#femmes">Femmes</a></li>
-            <li><a href="index.html#enfants">Enfants</a></li>
-            <li><a href="catalogue.html">Catalogue</a></li>
-          </ul>
-        </div>
-        <div class="col-6 col-md-3">
-          <h6 class="text-uppercase mb-3">Aide</h6>
-          <ul class="list-unstyled">
-            <li><a href="livraison.html">Livraison</a></li>
-            <li><a href="retours.html">Retours & échanges</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </div>
-        <div class="col-md-3">
-          <h6 class="text-uppercase mb-3">Newsletter</h6>
-          <form class="d-flex gap-2">
-            <input type="email" class="form-control" placeholder="Votre email" required>
-            <button class="btn btn-dark" type="submit">OK</button>
-          </form>
-          <small class="text-secondary d-block mt-2">En vous inscrivant, vous acceptez notre politique de confidentialité.</small>
-        </div>
-      </div>
-      <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top small">
-        <span>© 2025 GF Store. Tous droits réservés.</span>
-        <span>Livraison & retours gratuits • Service client dédié</span>
-      </div>
-    </div>
-  </footer>
-
-  <!-- JS (Bootstrap + tes apps). Le peu de JS d’ambiance (FOMO/header) vit dans app.js si tu préfères -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-
-  <!-- Data helpers (facultatif si déjà inclus ailleurs) -->
-  <script src="data/products.js"></script>
-
-  <!-- Catalogue logic (remplira la grille + quick-view + pagination) -->
-  <script src="catalogue.js"></script>
-
-  <!-- App globale (panier, auth, etc.) -->
-  <script src="js/app.js"></script>
-</body>
-</html>
+  // DOM Ready
+  if (doc.readyState !== "loading") bootProductPage();
+  else doc.addEventListener("DOMContentLoaded", bootProductPage);
+})(window, document);
