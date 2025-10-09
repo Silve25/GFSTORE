@@ -32,13 +32,13 @@
     body.has-fixed-nav #content{ padding-top: calc(var(--navH) + 8px) }
 
     /* NAV */
-    .navbar{min-height:64px; transition: all 0.3s ease;}
+    .navbar{min-height:64px; transition: all 0.3s ease; z-index: 1025; background-color: transparent;}
     .navbar.fixed-top{position: fixed !important; top: var(--fomoH) !important; transition: background-color .25s ease, box-shadow .25s ease;}
     .navbar-ghost{background:transparent !important; box-shadow:none}
     .navbar-solid{background:#ffffff !important; box-shadow:0 6px 20px rgba(0,0,0,.06)}
 
     /* FOMO bar */
-    .fomo-bar{position:fixed; top:0; z-index:1030; background:#111; color:#fff; font-size:.92rem; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); width:100%;}
+    .fomo-bar{position:fixed; top:0; left: 0; right: 0; z-index:1030; background:#111; color:#fff; font-size:.92rem; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);}
     .badge-dot{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#22c55e;margin-right:.5rem}
 
     /* Grid header layout (mobile like index) */
@@ -54,12 +54,13 @@
     .nav-cart-right .badge{font-size:.65rem; line-height:1; padding:.25em .35em; transform:translate(15%, -35%); }
 
     /* HERO */
-    .catalog-hero{background:#0f0f10 url('https://azure-eu-images.contentstack.com/v3/assets/blt70cb06b4414428cc/blt70e742eb576b00d4/68d2a81416d9319f7a72e26f/ASSET-HERO-HP-PRESS-RELEASE-SECONDHERO-ENFANT-DESK.jpg?branch=prod_1&format=avif&auto=auto&width=100p&quality=90') center/cover no-repeat; color:#fff; padding:92px 0 56px; margin-top: calc(var(--navH) + var(--fomoH)); position:relative;}
+    .catalog-hero{background:#0f0f10 url('https://azure-eu-images.contentstack.com/v3/assets/blt70cb06b4414428cc/blt70e742eb576b00d4/68d2a81416d9319f7a72e26f/ASSET-HERO-HP-PRESS-RELEASE-SECONDHERO-ENFANT-DESK.jpg?branch=prod_1&format=avif&auto=auto&width=100p&quality=90') center/cover no-repeat; color:#fff; padding:92px 0 56px; position:relative; margin-top: calc(var(--fomoH) + var(--navH));}
     .catalog-hero::after{content:""; position:absolute; inset:0; background:rgba(0,0,0,.35)}
     .catalog-hero .container{position:relative; z-index:2}
+    .catalog-hero *{color: white !important;}
 
     /* Cards / placeholders */
-    .product-card .ratio img{object-fit: contain; width: 100%; height: 100%;}
+    .product-card .ratio img{object-fit: contain; width: 100%; height: 100%; padding: 10px;}
     .badge-new{background:#111}
     .cursor-pointer{cursor:pointer}
     .skeleton{background:linear-gradient(90deg,#eee 25%,#f6f6f6 37%,#eee 63%); background-size:400% 100%; animation:shimmer 1.1s infinite linear}
@@ -74,6 +75,9 @@
     
     /* Fix scroll position */
     #content {position: relative; z-index: 100;}
+    
+    /* Breadcrumb */
+    .breadcrumb-item+.breadcrumb-item::before{color: white !important;}
   </style>
 </head>
 <body class="homepage">
@@ -416,17 +420,41 @@
       const navbar = document.getElementById('siteNav');
       const fomoBar = document.getElementById('fomoBar');
       
-      // Set initial position
+      // Set initial styles
+      navbar.style.position = 'fixed';
       navbar.style.top = fomoBar.offsetHeight + 'px';
+      navbar.style.width = '100%';
       
-      window.addEventListener('scroll', function() {
-        if (window.scrollY > 10) {
+      let lastScrollTop = 0;
+      let ticking = false;
+      
+      function updateHeader() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > 10) {
           navbar.classList.remove('navbar-ghost');
           navbar.classList.add('navbar-solid');
         } else {
           navbar.classList.remove('navbar-solid');
           navbar.classList.add('navbar-ghost');
         }
+        
+        lastScrollTop = scrollTop;
+        ticking = false;
+      }
+      
+      function requestTick() {
+        if (!ticking) {
+          requestAnimationFrame(updateHeader);
+          ticking = true;
+        }
+      }
+      
+      window.addEventListener('scroll', requestTick);
+      
+      // Handle resize events
+      window.addEventListener('resize', function() {
+        navbar.style.top = fomoBar.offsetHeight + 'px';
       });
     });
   </script>
