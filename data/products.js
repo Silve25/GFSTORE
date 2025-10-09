@@ -1,4 +1,4 @@
-/*!
+ /*!
  * GF Store — products.js
  * Page Produit: chargement data, rendu, interactions (couleurs/tailles), ajout panier.
  * - Aucune dépendance (Vanilla JS)
