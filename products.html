@@ -28,38 +28,36 @@
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet" />
 
   <style>
-    /* === Spécifiques page produit === */
     :root{
-      --gap: .5rem;
-      --shadow: 0 6px 18px rgba(0,0,0,.06);
-      --pbar-h: 8px;
+      --gap:.5rem;
+      --shadow:0 6px 18px rgba(0,0,0,.06);
+      --pbar-h:8px;
+      --bg:#f7f8f3;
+      --blue:#0d6efd;
     }
-    body{scroll-behavior:smooth}
+    html,body{height:100%}
+    body{scroll-behavior:smooth;background:var(--bg)}
+
     .product-hero{margin-top:64px}
     .breadcrumb a{text-decoration:none}
 
-    /* Galerie – images HD, non-croppées */
+    /* Header - icônes visibles et alignées */
+    .nav-ic{display:flex;gap:.6rem;align-items:center}
+    .nav-ic a{display:inline-flex;align-items:center}
+    .cart-count.badge{border-radius:.5rem;padding:.2rem .4rem}
+
+    /* Galerie — images HD non-croppées + swipe */
     .gallery-main{border:1px solid #eee;border-radius:10px;overflow:hidden;background:#fafafa}
     .gallery-main .media{
-      width:100%;
-      background:#fafafa;
-      display:flex;align-items:center;justify-content:center;
-      min-height: 280px;
+      width:100%;display:flex;align-items:center;justify-content:center;min-height:300px;background:#fafafa;touch-action:pan-y;
     }
-    @media (min-width: 992px){
-      .gallery-main .media{min-height:520px}
-    }
-    .gallery-main img{
-      max-width:100%;
-      max-height:80vh;
-      height:auto;width:auto;
-      object-fit:contain; /* pas de crop */
-      image-rendering:auto;
-    }
-    .thumbs{display:flex;gap:var(--gap);flex-wrap:wrap}
+    @media (min-width: 992px){ .gallery-main .media{min-height:560px} }
+    .gallery-main img{max-width:100%;max-height:80vh;height:auto;width:auto;object-fit:contain;image-rendering:auto}
+
+    .thumbs{display:flex;gap:var(--gap);flex-wrap:nowrap;overflow-x:auto;padding-bottom:.25rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
     .thumbs button{
-      border:1px solid #eee;border-radius:10px;padding:0;background:#fff;overflow:hidden;
-      width:84px;height:84px; display:flex;align-items:center;justify-content:center;
+      flex:0 0 auto;scroll-snap-align:start;border:1px solid #eee;border-radius:10px;padding:0;background:#fff;overflow:hidden;
+      width:68px;height:68px;display:flex;align-items:center;justify-content:center;
     }
     .thumbs img{width:100%;height:100%;object-fit:contain;display:block}
 
@@ -75,52 +73,39 @@
     .x-sell .card{border:0;box-shadow:var(--shadow)}
     .x-sell .ratio img{object-fit:cover}
 
-    /* CTA mobile sticky */
-    .cta-sticky{
-      position:fixed;left:0;right:0;bottom:0;z-index:1040;
-      background:#fff;border-top:1px solid #eee;
-      padding:.6rem .9rem;
-      display:none;
-    }
-    .cta-sticky .price{font-weight:600}
-    .cta-sticky .stockbar{height:6px;border-radius:999px;background:#eee;overflow:hidden}
-    .cta-sticky .stockbar > span{display:block;height:100%;background:#111;width:25%}
-
-    @media (max-width:991.98px){
-      .cta-sticky{display:block}
-      .desktop-only{display:none !important}
-      .product-hero{margin-bottom:84px}
-    }
-
-    .promo-chip{display:inline-flex;align-items:center;gap:.4rem;border:1px solid #111;border-radius:999px;padding:.18rem .6rem;font-size:.8rem}
-    .promo-chip small{opacity:.75}
-
-    /* Header: icônes visibles aussi sur mobile */
-    .nav-ic {display:flex;gap:.5rem;align-items:center}
-    .nav-ic a{display:inline-flex;align-items:center}
-
-    /* Réassurance mobile (doublon, visible seulement mobile avant Description) */
-    .reassure-mobile{display:none}
-    @media (max-width: 991.98px){
-      .reassure-mobile{display:block}
-    }
-
-    /* Countbar sous les CTA (desktop) */
-    .countbar{height:var(--pbar-h);background:#eee;border-radius:999px;overflow:hidden}
+    /* Countbar sous les CTA */
+    .countbar{height:var(--pbar-h);background:#e9ecef;border-radius:999px;overflow:hidden}
     .countbar > span{display:block;height:100%;background:#111;width:30%}
+
+    /* Promo -10% */
+    .promo-today{display:inline-block;background:#111;color:#fff;border-radius:999px;padding:.15rem .6rem;font-size:.8rem}
+
+    /* Bulle panier fixe */
+    .cart-fab{
+      position:fixed;right:16px;bottom:16px;z-index:1100;background:var(--blue);color:#fff;border-radius:999px;
+      box-shadow:0 12px 30px rgba(13,110,253,.3);display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;text-decoration:none;
+    }
+    .cart-fab .badge{background:#fff;color:var(--blue);border-radius:999px}
+    .cart-fab:hover{opacity:.95}
+
+    /* Réassurance mobile */
+    .reassure-mobile{display:none}
+    @media (max-width: 991.98px){ .reassure-mobile{display:block} }
+
+    /* supprime l’ancienne cta-sticky */
+    .cta-sticky{display:none !important}
   </style>
 
-  <!-- Fallback auto: si pas de sku/slug dans l’URL, redirige vers un produit par défaut -->
+  <!-- Fallback auto vers un produit -->
   <script>
     (function () {
       try {
         var url = new URL(location.href);
         if (!url.searchParams.get('sku') && !url.searchParams.get('slug')) {
-          // Change ce slug par celui que tu veux en défaut
           url.searchParams.set('slug', 'doudoune-a-capuche-maire-girl');
           location.replace(url.toString());
         }
-      } catch (e) { /* no-op */ }
+      } catch (e) {}
     })();
   </script>
 </head>
@@ -136,7 +121,6 @@
       <symbol id="truck" viewBox="0 0 24 24"><path fill="currentColor" d="M3 7h11v7h2l3-3h2v7h-2a3 3 0 0 1-6 0H9a3 3 0 0 1-6 0H1V9a2 2 0 0 1 2-2Zm3 10a1 1 0 1 0 1 1 1 1 0 0 0-1-1Zm10 0a1 1 0 1 0 1 1 1 1 0 0 0-1-1Z"/></symbol>
       <symbol id="refresh" viewBox="0 0 24 24"><path fill="currentColor" d="M21 12a9 9 0 1 1-3-6.7V3a1 1 0 0 1 2 0v5h-5a1 1 0 0 1 0-2h2.64A7 7 0 1 0 19 12a1 1 0 1 1 2 0Z"/></symbol>
       <symbol id="shield" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 3 5v6c0 5 3.8 9.7 9 11 5.2-1.3 9-6 9-11V5l-9-3Z"/></symbol>
-      <symbol id="bank" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3 3 7v2h18V7l-9-4Zm-7 6v8H3v2h18v-2h-2V9H5Zm2 2h2v6H7v-6Zm4 0h2v6h-2v-6Zm4 0h2v6h-2v-6Z"/></symbol>
       <symbol id="check" viewBox="0 0 24 24"><path fill="currentColor" d="M20 6 9 17l-5-5 1.41-1.41L9 14.17 18.59 4.59 20 6z"/></symbol>
     </defs>
   </svg>
@@ -144,7 +128,7 @@
   <!-- HEADER -->
   <nav class="navbar navbar-expand-lg bg-light text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="index.html">GF Store</a>
+      <a class="navbar-brand" href="index.html">GF STORE</a>
 
       <div class="nav-ic ms-auto d-lg-none">
         <a class="search-button me-2" href="catalogue.html" aria-label="Recherche">
@@ -193,22 +177,23 @@
     </div>
   </nav>
 
-  <!-- Panier (géré par app.js) -->
+  <!-- Panier (géré par data/products.js + app.js) -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
-    <div class="offcanvas-header justify-content-center">
+    <div class="offcanvas-header justify-content-between">
+      <h5 class="m-0">Votre panier</h5>
       <button class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
     </div>
     <div class="offcanvas-body">
-      <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-primary">Votre panier</span>
-        <span class="badge bg-primary rounded-pill cart-count">0</span>
-      </h4>
-      <p class="text-body-secondary">Votre panier est vide.</p>
+      <div id="cart-items" class="vstack gap-2"></div>
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <strong>Total</strong>
+        <strong id="cart-total">—</strong>
+      </div>
       <a class="w-100 btn btn-dark btn-lg mt-3" href="checkout.html">Passer au paiement</a>
     </div>
   </div>
 
-  <!-- Fil d’Ariane + Badge confiance -->
+  <!-- Fil d’Ariane + badge -->
   <header class="product-hero">
     <div class="container">
       <nav aria-label="breadcrumb" class="mb-2" id="p-breadcrumbs">
@@ -221,7 +206,7 @@
       </nav>
 
       <div class="d-flex flex-wrap align-items-center gap-2">
-        <span class="promo-chip"><strong>-10%</strong> <small>avec code <b>GF-FIRST10</b></small></span>
+        <span class="promo-chip"><strong>-10%</strong> <small>aujourd’hui</small></span>
         <span class="badge text-bg-light p-badge text-uppercase d-none" id="p-badge-new">Nouveauté</span>
         <small class="text-secondary">Livraison & retours gratuits</small>
       </div>
@@ -235,13 +220,13 @@
         <!-- Galerie -->
         <div class="col-lg-7">
           <div class="gallery-main">
-            <div class="media">
-              <img id="p-hero" src="images/product-item-1.jpg" alt="Visuel produit" loading="eager" decoding="async" />
+            <div class="media" id="p-hero-wrap">
+              <img id="p-hero" src="images/product-item-1.jpg" alt="Visuel produit" />
             </div>
           </div>
           <div class="thumbs mt-2" id="p-thumbs"></div>
 
-          <!-- Réassurance sous galerie (desktop) -->
+          <!-- Réassurance desktop -->
           <section class="reassure mt-4 d-none d-lg-block">
             <div class="row text-center g-3">
               <div class="col-6 col-md-4">
@@ -269,7 +254,10 @@
         <!-- Panneau achat -->
         <div class="col-lg-5">
           <aside class="sticky-col">
-            <h1 id="p-title" class="h2 mb-1">Nom du produit</h1>
+            <div class="d-flex align-items-center justify-content-between">
+              <h1 id="p-title" class="h2 mb-1">Nom du produit</h1>
+              <span class="promo-today">-10% aujourd’hui</span>
+            </div>
             <div class="text-secondary" id="p-subtitle">Sous-titre / tagline</div>
 
             <div class="d-flex align-items-center gap-3 mt-2">
@@ -281,18 +269,21 @@
                 <svg width="16" height="16" style="opacity:.5"><use xlink:href="#star"/></svg>
                 <span class="ms-1 text-secondary">4,8/5 (128)</span>
               </div>
-              <span class="small text-secondary">SKU : <span id="p-sku">—</span></span>
             </div>
 
+            <!-- Prix (total dynamique) -->
             <div class="d-flex align-items-end justify-content-between mt-3">
-              <div class="p-price display-6 fw-normal" id="p-price">—</div>
+              <div>
+                <div class="small text-secondary" id="p-unit">—</div>
+                <div class="p-price display-6 fw-normal" id="p-total">—</div>
+              </div>
               <div class="text-end">
                 <div class="small text-success">Livraison & retours gratuits</div>
                 <div class="small text-secondary">Taxes incluses</div>
               </div>
             </div>
 
-            <!-- Catégorie (badge) -->
+            <!-- Catégorie -->
             <div class="mt-2">
               <span id="p-cat" class="badge text-bg-light text-uppercase">Produit</span>
             </div>
@@ -310,40 +301,29 @@
                 <a href="#" class="small">Guide des tailles</a>
               </div>
               <div class="d-flex flex-wrap gap-2" id="p-sizes"></div>
-              <div class="small text-secondary mt-2" id="p-stock">—</div>
+              <div class="small text-secondary mt-2" id="p-stock">Disponibilité : en stock</div>
             </div>
 
-            <!-- Quantité -->
+            <!-- Quantité + CTAs simplifiés -->
             <div class="mt-3">
               <div class="sec-title mb-2">Quantité</div>
-              <div class="input-group" style="max-width:220px">
+              <div class="input-group mb-3" style="max-width:220px">
                 <button class="btn btn-outline-secondary" type="button" aria-label="Diminuer" id="p-qty-dec">−</button>
                 <input class="form-control text-center" type="number" value="1" min="1" id="p-qty" aria-label="Quantité">
                 <button class="btn btn-outline-secondary" type="button" aria-label="Augmenter" id="p-qty-inc">+</button>
               </div>
+
+              <div class="d-grid gap-2">
+                <a class="btn btn-dark btn-lg text-uppercase" href="checkout.html" id="p-buy">Acheter</a>
+                <button class="btn btn-outline-dark btn-lg text-uppercase" id="p-add">Ajouter au panier</button>
+                <button class="btn btn-outline-secondary" id="p-like">♡ J’aime</button>
+                <a class="btn btn-outline-secondary btn-sm" id="p-deeplink" href="#">Copier le lien de cette configuration</a>
+                <div class="countbar mt-1" aria-hidden="true"><span id="p-countbar"></span></div>
+              </div>
             </div>
 
-            <!-- CTA -->
-            <div class="d-grid gap-2 mt-4 desktop-only">
-              <button class="btn btn-dark btn-lg text-uppercase" id="p-add">Ajouter au panier</button>
-              <a class="btn btn-outline-dark btn-lg text-uppercase" href="checkout.html" id="p-buy">Acheter maintenant</a>
-              <a class="btn btn-outline-secondary btn-sm" id="p-deeplink" href="#">Copier le lien de cette configuration</a>
-              <!-- Countbar sous CTA -->
-              <div class="countbar mt-2" aria-hidden="true"><span id="p-countbar"></span></div>
-            </div>
-
-            <!-- Bloc infos mobile après Couleur/Taille/Quantité -->
-            <div class="d-block d-lg-none mt-3" id="p-info-mobile">
-              <ul class="small text-secondary mb-0">
-                <li><strong>Disponibilité :</strong> <span id="p-stock-mobile">en stock</span></li>
-                <li>Expédition 24h (jours ouvrés)</li>
-                <li>Retours faciles sous 30 jours</li>
-                <li>Support 7j/7 — réponse moyenne &lt; 1h</li>
-              </ul>
-            </div>
-
-            <!-- Avantages (desktop) -->
-            <ul class="small text-secondary mt-3 mb-0 d-none d-lg-block">
+            <!-- Avantages -->
+            <ul class="small text-secondary mt-3 mb-0">
               <li>Expédition 24h (jours ouvrés)</li>
               <li>Retours faciles sous 30 jours</li>
               <li>Support 7j/7 — réponse moyenne &lt; 1h</li>
@@ -376,14 +356,12 @@
         </div>
       </section>
 
-      <!-- Détails / Caractéristiques / Entretien -->
+      <!-- Description / Caractéristiques / Entretien -->
       <section class="mt-4">
         <div class="row g-4">
           <div class="col-lg-7">
             <h3 class="h5 sec-title">Description</h3>
-            <p id="p-description" class="mb-4">
-              Conçue pour l’hiver actif : isolation premium, tissu technique et finitions maîtrisées.
-            </p>
+            <p id="p-description" class="mb-4">Conçue pour l’hiver actif : isolation premium, tissu technique et finitions maîtrisées.</p>
 
             <div class="row">
               <div class="col-md-6">
@@ -430,74 +408,20 @@
         </div>
         <div class="row g-3" id="p-cross"></div>
       </section>
-
-      <!-- Avis -->
-      <section class="mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h3 class="h5 m-0">Avis clients</h3>
-          <span class="small text-secondary">Note moyenne : <strong>4,8/5</strong></span>
-        </div>
-        <div class="row g-3" id="p-reviews"></div>
-        <div class="text-center mt-3">
-          <a href="#" class="btn btn-outline-dark btn-sm text-uppercase">Voir tous les avis</a>
-        </div>
-      </section>
     </div>
   </main>
 
-  <!-- CTA mobile sticky -->
-  <div class="cta-sticky">
-    <div class="container d-flex align-items-center justify-content-between gap-3">
-      <div>
-        <div class="small text-secondary" id="m-title">Produit</div>
-        <div class="price" id="m-price">—</div>
-      </div>
-      <div class="d-flex gap-2">
-        <a href="checkout.html" class="btn btn-outline-dark text-uppercase">Acheter</a>
-        <button class="btn btn-dark text-uppercase" id="m-add">Ajouter</button>
-      </div>
-    </div>
-    <div class="container mt-2">
-      <div class="stockbar" aria-hidden="true"><span id="m-stockbar"></span></div>
-    </div>
-  </div>
+  <!-- Bulle panier fixe -->
+  <a href="#" class="cart-fab" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Panier">
+    <svg width="22" height="22"><use xlink:href="#cart"/></svg>
+    <span>Panier</span>
+    <span class="badge cart-count ms-1">0</span>
+  </a>
 
-  <!-- FOOTER (sans infos de paiement) -->
+  <!-- FOOTER -->
   <footer class="border-top mt-5">
     <div class="container">
-      <div class="row py-5">
-        <div class="col-md-4">
-          <h5 class="text-uppercase mb-3">GF Store</h5>
-          <p>Du suivi expert aux rendez-vous sur mesure : une expérience dédiée à l’hiver.</p>
-        </div>
-        <div class="col-6 col-md-2">
-          <h6 class="text-uppercase mb-3">Boutique</h6>
-          <ul class="list-unstyled">
-            <li><a href="index.html#hommes">Hommes</a></li>
-            <li><a href="index.html#femmes">Femmes</a></li>
-            <li><a href="index.html#enfants">Enfants</a></li>
-            <li><a href="catalogue.html">Catalogue</a></li>
-          </ul>
-        </div>
-        <div class="col-6 col-md-3">
-          <h6 class="text-uppercase mb-3">Aide</h6>
-          <ul class="list-unstyled">
-            <li><a href="#">Livraison</a></li>
-            <li><a href="#">Retours & échanges</a></li>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </div>
-        <div class="col-md-3">
-          <h6 class="text-uppercase mb-3">Newsletter</h6>
-          <form class="d-flex gap-2">
-            <input type="email" class="form-control" placeholder="Votre email" required>
-            <button class="btn btn-dark" type="submit">OK</button>
-          </form>
-          <small class="text-secondary d-block mt-2">En vous inscrivant, vous acceptez notre politique de confidentialité.</small>
-        </div>
-      </div>
-      <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top small">
+      <div class="d-flex flex-wrap justify-content-between align-items-center py-3 small">
         <span>© 2025 GF Store. Tous droits réservés.</span>
         <span>Livraison & retours gratuits • Service client dédié</span>
       </div>
