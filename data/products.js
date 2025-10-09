@@ -1,478 +1,505 @@
- /*!
- * GF Store — products.js
- * Page Produit: chargement data, rendu, interactions (couleurs/tailles), ajout panier.
- * - Aucune dépendance (Vanilla JS)
- * - Coopère avec app.js (évènement 'gf:add' + data-* sur le bouton)
- * - Fallbacks de chargement JSON robustes (local → racine → domaine prod)
- * - Cache localStorage 5 min (clé gf:data:products*)
- */
-(function (global, doc) {
-  "use strict";
+/* products.js — GF Store
+   - Charge data/products.json avec fallback multi-URLs
+   - Sélection produit par ?slug= ou ?sku=, remplit products.html
+   - SEO dynamique, galerie, variantes, tailles, stock, CTA, deep-link
+*/
 
-  /* -----------------------------------------------------------------------
-   * Mini utils
-   * --------------------------------------------------------------------- */
-  const U = {
-    qs: (sel, root = doc) => root.querySelector(sel),
-    qsa: (sel, root = doc) => Array.from(root.querySelectorAll(sel)),
-    on: (el, evt, cb, opt) => el && el.addEventListener(evt, cb, opt),
-    fmtPrice(n, currency = "EUR", locale = "fr-FR") {
-      try {
-        return Number(n || 0).toLocaleString(locale, { style: "currency", currency });
-      } catch {
-        return (n || 0) + " " + currency;
-      }
-    },
-    slug(s) {
-      return String(s || "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)/g, "");
-    },
-    getParam(name, def = "") {
-      const url = new URL(global.location.href);
-      return url.searchParams.get(name) || def;
-    },
-    setParams(obj, push = true) {
-      const url = new URL(global.location.href);
-      Object.entries(obj).forEach(([k, v]) => {
-        if (v === null || v === undefined || v === "") url.searchParams.delete(k);
-        else url.searchParams.set(k, v);
-      });
-      if (push) history.pushState({}, "", url);
-      else history.replaceState({}, "", url);
-    },
-    clamp(n, a, b) {
-      return Math.max(a, Math.min(b, n));
-    },
-  };
+(() => {
+  // -------- Config & Utils --------
+  const DATA_URLS = [
+    "https://gfstore.store/data/products.json",
+    `${location.origin}/data/products.json`,
+    "/data/products.json",
+    "data/products.json",
+    "products.json",
+  ];
 
-  /* -----------------------------------------------------------------------
-   * Cache localStorage
-   * --------------------------------------------------------------------- */
-  const LS = {
-    get(k, def) {
-      try {
-        const v = localStorage.getItem(k);
-        return v ? JSON.parse(v) : def;
-      } catch {
-        return def;
-      }
-    },
-    set(k, val) {
-      try {
-        localStorage.setItem(k, JSON.stringify(val));
-      } catch {}
-    },
-    remove(k) {
-      try {
-        localStorage.removeItem(k);
-      } catch {}
-    },
-  };
+  const EUR = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
+  const $ = (sel, ctx = document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+  const byId = (id) => document.getElementById(id);
 
-  /* -----------------------------------------------------------------------
-   * Normalisation produit
-   * --------------------------------------------------------------------- */
-  function normalizeProduct(p) {
-    const n = JSON.parse(JSON.stringify(p || {}));
+  const qs = new URLSearchParams(location.search);
+  const wantSlug = (qs.get("slug") || "").trim().toLowerCase();
+  const wantSku = (qs.get("sku") || "").trim().toLowerCase();
 
-    // Identifiants
-    n.sku = n.sku || n.id || n.SKU || n.code || U.slug(n.title || n.name || "prod");
-    n.slug = n.slug || U.slug(n.title || n.name || n.sku);
+  const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
-    // Libellés/prix
-    n.title = n.title || n.name || "Produit";
-    n.subtitle = n.subtitle || n.tagline || "";
-    n.currency = (n.currency || "EUR").toUpperCase();
-    n.price = Number(n.price ?? n.prix ?? 0);
-    n.vat_included = n.vat_included ?? true;
-
-    // Catégorie/gender
-    const rawCat = (n.category || n.categorie || n.gender || n.genre || "").toString().toLowerCase();
-    const map = {
-      homme: "homme",
-      men: "homme",
-      man: "homme",
-      femmes: "femme",
-      femme: "femme",
-      women: "femme",
-      woman: "femme",
-      enfants: "enfant",
-      enfant: "enfant",
-      kids: "enfant",
-      kid: "enfant",
-      boy: "enfant",
-      girl: "enfant",
-      accessoires: "accessoires",
-      accessories: "accessoires",
-    };
-    n.category = map[rawCat] || rawCat || "autre";
-
-    // Couleurs/images
-    if (!Array.isArray(n.colors) || !n.colors.length) {
-      const img =
-        n.image ||
-        (Array.isArray(n.images) && n.images[0]) ||
-        (n.thumbnail ? n.thumbnail : "images/product-fallback.jpg");
-      n.colors = [{ code: "default", label: "Par défaut", images: [img].filter(Boolean) }];
-    }
-    n.colors = n.colors.map((c, i) => {
-      const images = Array.from(new Set((c.images || []).filter(Boolean)));
-      return {
-        code: c.code || `c${i + 1}`,
-        label: c.label || `Couleur ${i + 1}`,
-        images: images.length ? images : ["images/product-fallback.jpg"],
-      };
-    });
-
-    // Tailles / stock
-    if (!Array.isArray(n.sizes)) n.sizes = [];
-    n.stock = n.stock || {};
-    n.sizes.forEach((sz) => {
-      if (typeof n.stock[sz] !== "number") n.stock[sz] = 10;
-    });
-
-    // Tags / nouveauté
-    n.tags = Array.isArray(n.tags) ? n.tags : [];
-    n.is_new =
-      !!n.is_new ||
-      n.tags.some((t) => ["new", "nouveau", "nouveauté", "nouveautes"].includes(String(t).toLowerCase()));
-
-    return n;
+  function setText(id, val, fallback = "—") {
+    const el = byId(id);
+    if (el) el.textContent = val ?? fallback;
   }
 
-  /* -----------------------------------------------------------------------
-   * Chargement produits — robustifier le fetch (et exposer window.Products)
-   * --------------------------------------------------------------------- */
-  const CACHE_KEY = "gf:data:products";
-  const STAMP_KEY = "gf:data:products:ts";
-  const TTL = 5 * 60 * 1000;
-
-  async function fetchCandidates() {
-    // Ordre: data/ → racine → domaine prod
-    return [
-      new URL("data/products.json", location.href).href,
-      new URL("products.json", location.href).href,
-      "https://gfstore.store/data/products.json",
-    ];
+  function safeHTML(el, html) {
+    if (!el) return;
+    el.innerHTML = "";
+    if (html == null) return;
+    if (typeof html === "string") {
+      el.insertAdjacentHTML("beforeend", html);
+    } else {
+      el.appendChild(html);
+    }
   }
 
-  async function loadAllInternal() {
-    // 0) Si une implémentation existe déjà (ex: data/products.js), utilise-la.
-    if (global.Products && typeof global.Products.all === "function" && !global.__GF_FORCE_LOCAL_LOAD__) {
-      try {
-        const pre = await global.Products.all();
-        if (Array.isArray(pre) && pre.length) return pre.map(normalizeProduct);
-      } catch {
-        // on bascule sur notre chargeur
-      }
-    }
+  function copyToClipboard(text) {
+    if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch {}
+    document.body.removeChild(ta);
+    return Promise.resolve();
+  }
 
-    // 1) Cache
-    const now = Date.now();
-    const stamp = LS.get(STAMP_KEY, 0);
-    let list = LS.get(CACHE_KEY, null);
-    if (Array.isArray(list) && list.length && now - stamp <= TTL) {
-      return list;
+  function setMeta(nameOrProp, value, isOG = false) {
+    const attr = isOG ? "property" : "name";
+    let el = document.head.querySelector(`meta[${attr}="${nameOrProp}"]`);
+    if (!el) {
+      el = document.createElement("meta");
+      el.setAttribute(attr, nameOrProp);
+      document.head.appendChild(el);
     }
+    el.setAttribute("content", value);
+  }
 
-    // 2) Fallbacks
-    const urls = await fetchCandidates();
+  function fmtPrice(p) {
+    if (p == null) return "—";
+    return EUR.format(Number(p));
+  }
+
+  function getFirstImage(p, optColorKey) {
+    // image priority: color.images > product.images > hero
+    if (optColorKey) {
+      const variant = (p.colors || []).find(c => (c.key || c.name || "").toLowerCase() === optColorKey);
+      if (variant?.images?.length) return variant.images[0];
+    }
+    if (p.images?.length) return p.images[0];
+    return p.hero || "images/product-item-1.jpg";
+  }
+
+  function normaliseData(raw) {
+    // Accept either array of products or { products: [...] }
+    const products = Array.isArray(raw) ? raw : Array.isArray(raw?.products) ? raw.products : [];
+    // Ensure minimal shape
+    return products.map((p, i) => ({
+      index: i,
+      title: p.title || p.name || "Produit",
+      subtitle: p.subtitle || "",
+      slug: (p.slug || p.handle || (p.title || "").toLowerCase().replace(/\s+/g, "-")).toLowerCase(),
+      sku: (p.sku || "").toLowerCase(),
+      category: p.category || p.cat || "Produit",
+      isNew: !!(p.isNew || p.new || p.badges?.includes?.("new")),
+      price: p.price ?? p.prix ?? null,
+      compareAt: p.compareAt ?? p.compare_at ?? null,
+      currency: p.currency || "EUR",
+      stock: Number.isFinite(p.stock) ? p.stock : null,
+      description: p.description || p.desc || "",
+      features: Array.isArray(p.features) ? p.features : [],
+      care: Array.isArray(p.care) ? p.care : [],
+      images: Array.isArray(p.images) ? p.images : [],
+      hero: p.hero || null,
+      colors: Array.isArray(p.colors) ? p.colors.map((c, idx) => ({
+        name: c.name || c.label || c.title || `Couleur ${idx + 1}`,
+        key: (c.key || c.name || c.label || `c${idx+1}`).toLowerCase(),
+        hex: c.hex || c.code || null,
+        images: Array.isArray(c.images) ? c.images : [],
+      })) : [],
+      sizes: Array.isArray(p.sizes) ? p.sizes.map((s, idx) => ({
+        label: s.label || s.size || s.name || `T${idx+1}`,
+        stock: Number.isFinite(s.stock) ? s.stock : (s.available === false ? 0 : null),
+      })) : [],
+      specs: {
+        outer: p.specs?.outer ?? p.outer ?? "",
+        lining: p.specs?.lining ?? p.lining ?? "",
+        fill: p.specs?.fill ?? p.fill ?? "",
+        madein: p.specs?.madein ?? p.madein ?? p.made_in ?? "",
+        code: p.specs?.code ?? p.code ?? p.sku ?? "",
+      },
+      crossSell: Array.isArray(p.crossSell) ? p.crossSell : [],
+      ogImage: p.ogImage || p.images?.[0] || null,
+    }));
+  }
+
+  async function fetchFirstJson(urls) {
+    let lastErr;
     for (const url of urls) {
       try {
-        const res = await fetch(url, { cache: "no-store" });
-        if (!res.ok) continue;
+        const res = await fetch(url, { cache: "no-cache" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        const raw = Array.isArray(data) ? data : data.products || [];
-        if (Array.isArray(raw) && raw.length) {
-          list = raw.map(normalizeProduct);
-          LS.set(CACHE_KEY, list);
-          LS.set(STAMP_KEY, now);
-          return list;
-        }
-      } catch {
-        // essayer url suivante
+        return { data, from: url };
+      } catch (e) {
+        lastErr = e;
       }
     }
-    return [];
+    throw lastErr || new Error("Aucune source JSON n’a fonctionné.");
   }
 
-  // On expose/complète window.Products (API stable utilisée par app.js)
-  if (!global.Products) global.Products = {};
-  const API = {
-    async all() {
-      const list = await loadAllInternal();
-      return list;
-    },
-    async currentFromURL() {
-      const list = await loadAllInternal();
-      const sku = U.getParam("sku", "");
-      const slug = U.getParam("slug", "");
-      const color = U.getParam("color", "");
-      const size = U.getParam("size", "");
-
-      let product = null;
-      if (sku) product = list.find((p) => String(p.sku) === sku) || null;
-      if (!product && slug) product = list.find((p) => String(p.slug) === slug) || null;
-
-      return { product, color: color || null, size: size || null };
-    },
-    async find(query) {
-      const list = await loadAllInternal();
-      if (typeof query === "function") return list.find(query) || null;
-      return list.find((p) => p.sku === query || p.slug === query) || null;
-    },
-    async filter(predicate) {
-      const list = await loadAllInternal();
-      if (typeof predicate !== "function") return list;
-      return list.filter(predicate);
-    },
-    utils: {
-      fmtPrice: U.fmtPrice,
-      setParams: U.setParams,
-      getParam: U.getParam,
-      slug: U.slug,
-      clamp: U.clamp,
-      firstImage(product, colorCode) {
-        const c =
-          (product.colors || []).find((x) => x.code === colorCode) ||
-          (product.colors || [])[0] ||
-          { images: [] };
-        return c.images[0] || "images/product-fallback.jpg";
-      },
-      getColor(product, colorCode) {
-        const colors = product.colors || [];
-        if (!colors.length) return null;
-        return colors.find((c) => c.code === colorCode) || colors[0];
-      },
-      inStock(product, size) {
-        if (!size) return true;
-        const stock = product.stock || {};
-        const n = Number(stock[size] ?? 0);
-        return n > 0;
-      },
-    },
-  };
-  // Merge (sans écraser une autre implémentation complète)
-  global.Products.all = API.all;
-  global.Products.currentFromURL = API.currentFromURL;
-  global.Products.find = API.find;
-  global.Products.filter = API.filter;
-  global.Products.utils = { ...(global.Products.utils || {}), ...API.utils };
-
-  /* -----------------------------------------------------------------------
-   * Rendu page produit (optionnel, s’active si les éléments existent)
-   * --------------------------------------------------------------------- */
-  async function bootProductPage() {
-    // Détecte si on est sur la page produit (ou si des hooks existent)
-    const hasRoot =
-      U.qs('[data-product-root]') ||
-      U.qs("#product-root") ||
-      U.qs("#p-title") ||
-      U.qs(".product-title") ||
-      /produit\.html|product\.html|products\.html/i.test(location.pathname);
-
-    if (!hasRoot) return;
-
-    // Résout produit
-    const { product, color: colorQS, size: sizeQS } = await API.currentFromURL();
-
-    const $title = U.qs("#p-title") || U.qs(".product-title");
-    const $subtitle = U.qs("#p-subtitle") || U.qs(".product-subtitle");
-    const $price = U.qs("#p-price") || U.qs(".product-price");
-    const $cat = U.qs("#p-cat") || U.qs(".product-cat");
-    const $madein = U.qs("#p-madein") || U.qs(".product-madein");
-    const $features = U.qs("#p-features");
-    const $care = U.qs("#p-care");
-    const $colors = U.qs("#p-colors") || U.qs(".product-colors");
-    const $sizes = U.qs("#p-sizes") || U.qs(".product-sizes");
-    const $hero = U.qs("#p-hero") || U.qs(".product-hero img") || U.qs(".product-hero");
-    const $thumbs = U.qs("#p-thumbs") || U.qs(".product-thumbs");
-    const $add = U.qs("#p-add") || U.qs('[data-action="add-to-cart"]') || U.qs(".btn-add");
-    const $link = U.qs("#p-deeplink") || U.qs(".product-deeplink");
-    const $crumbs = U.qs("#p-breadcrumbs") || U.qs(".product-breadcrumbs");
-    const $stock = U.qs("#p-stock") || U.qs(".product-stock");
-
-    // Si produit introuvable
-    if (!product) {
-      if ($title) $title.textContent = "Produit introuvable";
-      if ($price) $price.textContent = "—";
-      if ($hero && $hero.setAttribute) $hero.setAttribute("src", "images/product-fallback.jpg");
-      const $msg = U.qs("#product-mount") || U.qs("#product-root");
-      if ($msg) $msg.innerHTML = `<div class="alert alert-warning">Aucun produit trouvé pour ces paramètres d’URL.</div>`;
-      return;
+  function selectProduct(products) {
+    let found = null;
+    if (wantSlug) {
+      found = products.find(p => p.slug === wantSlug);
     }
+    if (!found && wantSku) {
+      found = products.find(p => (p.sku || "").toLowerCase() === wantSku);
+    }
+    return found || products[0] || null;
+  }
 
-    // État courant sélection
-    let current = {
-      color: global.Products.utils.getColor(product, colorQS)?.code || product.colors[0].code,
-      size: sizeQS || (product.sizes[0] || null),
-      image: null,
-    };
+  // -------- Renderers --------
+  function renderSEO(p) {
+    const base = "GF Store";
+    const t = `${p.title} — ${base}`;
+    document.title = t;
+    setMeta("description", p.subtitle || p.description?.slice(0, 160) || "Découvrez nos doudounes et parkas techniques. Livraison & retours gratuits.");
+    setMeta("og:title", t, true);
+    setMeta("og:description", p.subtitle || p.description?.slice(0, 160) || "", true);
+    setMeta("og:type", "product", true);
+    setMeta("og:image", p.ogImage || getFirstImage(p), true);
+  }
 
-    // Helpers UI
-    function refreshHero(imgUrl) {
-      const url = imgUrl || global.Products.utils.firstImage(product, current.color);
-      current.image = url;
-      if ($hero) {
-        if ($hero.tagName === "IMG") $hero.src = url;
-        else $hero.style.backgroundImage = `url("${url}")`;
+  function renderBreadcrumb(p) {
+    setText("bc-category", p.category || "—");
+    setText("bc-title", p.title || "Produit");
+  }
+
+  function renderTop(p, state) {
+    setText("p-title", p.title);
+    setText("p-subtitle", p.subtitle || "");
+    setText("p-sku", p.sku || "");
+    byId("p-cat")?.classList.remove("text-bg-dark");
+    byId("p-cat")?.classList.add("text-bg-light");
+    setText("p-cat", p.category || "Produit");
+    // Badge "Nouveauté"
+    const badgeNew = byId("p-badge-new");
+    if (badgeNew) badgeNew.classList.toggle("d-none", !p.isNew);
+
+    // Prix
+    const price = p.price;
+    setText("p-price", fmtPrice(price));
+    setText("m-price", fmtPrice(price));
+    setText("m-title", p.title);
+  }
+
+  function renderSpecs(p) {
+    setText("p-spec-outer", p.specs.outer || "—");
+    setText("p-spec-lining", p.specs.lining || "—");
+    setText("p-spec-fill", p.specs.fill || "—");
+    setText("p-madein", p.specs.madein || "—");
+    setText("p-code", p.specs.code || p.sku || "—");
+  }
+
+  function renderDescription(p) {
+    setText("p-description", p.description || "");
+    const ulFeatures = byId("p-features"); safeHTML(ulFeatures, "");
+    (p.features || []).forEach(f => {
+      const li = document.createElement("li");
+      li.textContent = f;
+      ulFeatures?.appendChild(li);
+    });
+    const ulCare = byId("p-care"); safeHTML(ulCare, "");
+    (p.care || []).forEach(c => {
+      const li = document.createElement("li");
+      li.textContent = c;
+      ulCare?.appendChild(li);
+    });
+  }
+
+  function renderGallery(p, state) {
+    const hero = byId("p-hero");
+    const thumbs = byId("p-thumbs");
+    safeHTML(thumbs, "");
+    let images = [];
+    // Priorité aux images de la couleur sélectionnée
+    if (state.colorKey) {
+      const v = (p.colors || []).find(c => c.key === state.colorKey);
+      if (v?.images?.length) images = v.images;
+    }
+    if (!images.length) images = p.images?.length ? p.images : [getFirstImage(p)];
+    hero.src = images[0] || "images/product-item-1.jpg";
+    hero.alt = p.title;
+
+    images.slice(0, 8).forEach((src, idx) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("aria-label", `Voir image ${idx + 1}`);
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = p.title;
+      btn.appendChild(img);
+      btn.addEventListener("click", () => { hero.src = src; });
+      thumbs.appendChild(btn);
+    });
+  }
+
+  function renderColors(p, state, onChange) {
+    const wrap = byId("p-colors");
+    safeHTML(wrap, "");
+    const colors = p.colors || [];
+    if (!colors.length) return;
+    colors.forEach(c => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn btn-outline-secondary btn-sm d-flex align-items-center gap-2";
+      btn.setAttribute("data-color", c.key);
+      const dot = document.createElement("span");
+      dot.className = "p-dot";
+      if (c.hex) dot.style.background = c.hex;
+      btn.append(dot, document.createTextNode(c.name));
+      if (state.colorKey === c.key) btn.classList.add("active", "btn-dark");
+      btn.addEventListener("click", () => onChange(c.key));
+      wrap.appendChild(btn);
+    });
+  }
+
+  function renderSizes(p, state, onChange) {
+    const wrap = byId("p-sizes");
+    safeHTML(wrap, "");
+    const sizes = p.sizes || [];
+    if (!sizes.length) return;
+    sizes.forEach(s => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn btn-outline-secondary btn-sm";
+      btn.textContent = s.label;
+      const out = Number.isFinite(s.stock) && s.stock <= 0;
+      if (state.size === s.label) btn.classList.add("active", "btn-dark");
+      if (out) {
+        btn.disabled = true;
+        btn.title = "Indisponible";
+        btn.classList.add("disabled");
+      } else {
+        btn.addEventListener("click", () => onChange(s.label));
       }
-      if ($thumbs) {
-        U.qsa("img", $thumbs).forEach((im) => im.classList.toggle("active", im.src === url));
+      wrap.appendChild(btn);
+    });
+
+    // Affiche stock
+    let stockText = "—";
+    const cur = sizes.find(x => x.label === state.size);
+    if (cur) {
+      if (Number.isFinite(cur.stock)) {
+        stockText = cur.stock > 5 ? "En stock" : (cur.stock > 0 ? `Dernières pièces (${cur.stock})` : "Rupture");
+      } else {
+        stockText = "Disponibilité : en stock";
       }
+    } else if (Number.isFinite(p.stock)) {
+      stockText = p.stock > 5 ? "En stock" : (p.stock > 0 ? `Dernières pièces (${p.stock})` : "Rupture");
     }
+    setText("p-stock", stockText);
+  }
 
-    function renderThumbs() {
-      if (!$thumbs) return;
-      const c = global.Products.utils.getColor(product, current.color);
-      const imgs = (c?.images || []).slice(0, 8);
-      $thumbs.innerHTML = imgs
-        .map((src, i) => `<img src="${src}" alt="" class="${i === 0 ? "active" : ""}" loading="lazy">`)
-        .join("");
-      U.qsa("img", $thumbs).forEach((im) =>
-        U.on(im, "click", () => {
-          refreshHero(im.src);
-        })
-      );
-    }
+  function updateDeeplink(p, state) {
+    const a = byId("p-deeplink");
+    if (!a) return;
+    const url = new URL(location.href);
+    url.searchParams.set("slug", p.slug);
+    if (state.colorKey) url.searchParams.set("color", state.colorKey);
+    else url.searchParams.delete("color");
+    if (state.size) url.searchParams.set("size", state.size);
+    else url.searchParams.delete("size");
+    const qty = Number(byId("p-qty")?.value || 1);
+    if (qty > 1) url.searchParams.set("qty", String(qty));
+    else url.searchParams.delete("qty");
+    a.href = url.toString();
+  }
 
-    function renderColors() {
-      if (!$colors) return;
-      const html = (product.colors || [])
-        .map((c) => {
-          const label = c.label || c.code;
-          return `
-          <button class="btn btn-sm ${c.code === current.color ? "btn-dark" : "btn-outline-secondary"} me-1 mb-1"
-                  data-color="${c.code}" type="button">${label}</button>`;
-        })
-        .join("");
-      $colors.innerHTML = html;
-      U.qsa("[data-color]", $colors).forEach((btn) =>
-        U.on(btn, "click", () => {
-          current.color = btn.getAttribute("data-color");
-          U.setParams({ color: current.color }, false);
-          renderColors(); // re-highlight
-          renderThumbs();
-          refreshHero();
-        })
-      );
-    }
+  function bindQuantity() {
+    const dec = byId("p-qty-dec");
+    const inc = byId("p-qty-inc");
+    const inp = byId("p-qty");
+    const fix = () => { inp.value = String(Math.max(1, parseInt(inp.value || "1", 10) || 1)); };
+    dec?.addEventListener("click", () => { inp.value = String(Math.max(1, (parseInt(inp.value || "1", 10) || 1) - 1)); inp.dispatchEvent(new Event("change")); });
+    inc?.addEventListener("click", () => { inp.value = String((parseInt(inp.value || "1", 10) || 1) + 1); inp.dispatchEvent(new Event("change")); });
+    inp?.addEventListener("change", fix);
+  }
 
-    function renderSizes() {
-      if (!$sizes) return;
-      const html = (product.sizes || [])
-        .map((s) => {
-          const instock = global.Products.utils.inStock(product, s);
-          const active = s === current.size;
-          return `
-          <button class="btn btn-sm ${active ? "btn-dark" : "btn-outline-secondary"} me-1 mb-1"
-                  data-size="${s}" type="button" ${instock ? "" : "disabled"}>${s}</button>`;
-        })
-        .join("");
-      $sizes.innerHTML = html;
-      U.qsa("[data-size]", $sizes).forEach((btn) =>
-        U.on(btn, "click", () => {
-          current.size = btn.getAttribute("data-size");
-          U.setParams({ size: current.size }, false);
-          updateStockState();
-          renderSizes(); // re-highlight
-        })
-      );
-    }
+  function bindAddToCart(p, getState) {
+    const addDesktop = byId("p-add");
+    const addMobile = byId("m-add");
+    const buyNow = byId("p-buy");
 
-    function updateStockState() {
-      if (!$stock && !$add) return;
-      const ok = current.size ? global.Products.utils.inStock(product, current.size) : true;
-      if ($stock) $stock.textContent = ok ? "En stock" : "Indisponible";
-      if ($add) $add.disabled = !ok;
-    }
+    function add(qtyOverride) {
+      const state = getState();
+      const qty = clamp(qtyOverride ?? Number(byId("p-qty")?.value || 1), 1, 999);
+      const payload = {
+        sku: p.sku,
+        title: p.title,
+        price: p.price,
+        slug: p.slug,
+        image: getFirstImage(p, state.colorKey),
+        category: p.category,
+        color: state.colorKey || null,
+        size: state.size || null,
+        qty
+      };
 
-    // Rendu statique
-    if ($title) $title.textContent = product.title;
-    if ($subtitle) $subtitle.textContent = product.subtitle || "";
-    if ($price) $price.textContent = U.fmtPrice(product.price, product.currency);
-    if ($cat)
-      $cat.textContent =
-        product.category === "homme"
-          ? "Hommes"
-          : product.category === "femme"
-          ? "Femmes"
-          : product.category === "enfant"
-          ? "Enfants"
-          : "Produit";
-    if ($madein && product.made_in) $madein.textContent = "Fabriqué en " + product.made_in;
+      // 1) Événement standard que app.js peut écouter
+      document.dispatchEvent(new CustomEvent("cart:add", { detail: payload }));
 
-    if ($features && Array.isArray(product.features)) {
-      $features.innerHTML = product.features.map((f) => `<li>${f}</li>`).join("");
-    }
-    if ($care && Array.isArray(product.care)) {
-      $care.innerHTML = product.care.map((f) => `<li>${f}</li>`).join("");
-    }
-    if ($crumbs) {
-      $crumbs.innerHTML = `
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
-          <li class="breadcrumb-item"><a href="catalogue.html">Catalogue</a></li>
-          <li class="breadcrumb-item active" aria-current="page">${product.title}</li>
-        </ol>`;
-    }
-
-    // Galerie & sélecteurs
-    renderColors();
-    renderSizes();
-    renderThumbs();
-    refreshHero();
-
-    // Lien "ouvrir la fiche dédiée" si tu utilises plusieurs pages
-    if ($link) {
-      const params = new URLSearchParams();
-      params.set("sku", product.sku);
-      params.set("color", current.color || "");
-      if (current.size) params.set("size", current.size);
-      $link.href = `products.html?${params.toString()}`;
-    }
-
-    // Bouton Ajouter au panier — double intégration
-    if ($add) {
-      // Data-* pour que app.js intercepte automatiquement
-      $add.setAttribute("data-add", "");
-      $add.setAttribute("data-id", product.sku);
-      $add.setAttribute("data-name", product.title);
-      $add.setAttribute("data-price", String(product.price));
-      $add.setAttribute(
-        "data-image",
-        current.image || global.Products.utils.firstImage(product, current.color)
-      );
-
-      U.on($add, "click", (e) => {
-        e.preventDefault();
-        // Évènement custom pour app.js (Cart.add via listener 'gf:add')
-        const payload = {
-          id: product.sku,
-          sku: product.sku,
-          title: product.title,
-          name: product.title,
-          price: product.price,
-          currency: product.currency,
-          image: current.image || global.Products.utils.firstImage(product, current.color),
-          images: (global.Products.utils.getColor(product, current.color)?.images || []).slice(0, 4),
-          size: current.size || null,
-          color: current.color || null,
-        };
-        doc.dispatchEvent(new CustomEvent("gf:add", { detail: { product: payload } }));
-        // NB: le délégué data-add d’app.js capte aussi le clic, donc double sécurité.
+      // 2) Fallback ultra-simple : mise à jour du badge
+      const badges = $$(".cart-count");
+      badges.forEach(b => {
+        const v = parseInt(b.textContent || "0", 10) || 0;
+        b.textContent = String(v + qty);
       });
     }
 
-    // Met à jour l’état “stock” initial
-    updateStockState();
+    addDesktop?.addEventListener("click", () => add());
+    addMobile?.addEventListener("click", () => add());
+    buyNow?.addEventListener("click", (e) => {
+      // On pousse dans le panier puis on laisse le lien aller vers checkout.html
+      add(1);
+    });
   }
 
-  // DOM Ready
-  if (doc.readyState !== "loading") bootProductPage();
-  else doc.addEventListener("DOMContentLoaded", bootProductPage);
-})(window, document);
+  function bindDeeplink() {
+    const a = byId("p-deeplink");
+    if (!a) return;
+    a.addEventListener("click", async (e) => {
+      e.preventDefault();
+      try {
+        await copyToClipboard(a.href);
+        a.textContent = "Lien copié ✅";
+        setTimeout(() => (a.textContent = "Copier le lien de cette configuration"), 1600);
+      } catch {
+        location.href = a.href;
+      }
+    });
+  }
+
+  function renderCrossSell(p) {
+    const root = byId("p-cross");
+    if (!root) return;
+    safeHTML(root, "");
+    const items = p.crossSell || [];
+    items.slice(0, 4).forEach(x => {
+      const col = document.createElement("div");
+      col.className = "col-6 col-md-3";
+      const card = document.createElement("div");
+      card.className = "card h-100";
+      const ratio = document.createElement("div");
+      ratio.className = "ratio ratio-4x3";
+      const img = document.createElement("img");
+      img.src = x.image || "images/product-item-1.jpg";
+      img.alt = x.title || "Produit";
+      ratio.appendChild(img);
+      const body = document.createElement("div");
+      body.className = "card-body";
+      const h = document.createElement("h5");
+      h.className = "card-title h6";
+      h.textContent = x.title || "Produit";
+      const pz = document.createElement("div");
+      pz.className = "small text-secondary";
+      pz.textContent = x.price != null ? fmtPrice(x.price) : "";
+      body.append(h, pz);
+      const a = document.createElement("a");
+      a.href = `products.html?slug=${encodeURIComponent(x.slug || "")}`;
+      a.className = "stretched-link";
+      a.setAttribute("aria-label", `Voir ${x.title || "produit"}`);
+      card.append(ratio, body, a);
+      col.appendChild(card);
+      root.appendChild(col);
+    });
+  }
+
+  // -------- Main flow --------
+  (async function init() {
+    try {
+      const { data, from } = await fetchFirstJson(DATA_URLS);
+      const products = normaliseData(data);
+      if (!products.length) throw new Error("Le catalogue est vide.");
+
+      // Choix produit
+      let current = selectProduct(products);
+      if (!current) throw new Error("Produit introuvable.");
+
+      // État local (couleur, taille)
+      const state = {
+        colorKey: (qs.get("color") || "").toLowerCase() || (current.colors[0]?.key ?? null),
+        size: qs.get("size") || (current.sizes[0]?.label ?? null),
+      };
+
+      // Render
+      renderSEO(current);
+      renderBreadcrumb(current);
+      renderTop(current, state);
+      renderSpecs(current);
+      renderDescription(current);
+      renderGallery(current, state);
+
+      const onColorChange = (key) => {
+        state.colorKey = key;
+        renderGallery(current, state);
+        updateDeeplink(current, state);
+        // Marquer active
+        $$("#p-colors .btn").forEach(b => b.classList.toggle("btn-dark", b.getAttribute("data-color") === key));
+      };
+
+      const onSizeChange = (label) => {
+        state.size = label;
+        renderSizes(current, state, onSizeChange);
+        updateDeeplink(current, state);
+      };
+
+      renderColors(current, state, onColorChange);
+      renderSizes(current, state, onSizeChange);
+
+      bindQuantity();
+      bindAddToCart(current, () => ({ ...state }));
+      bindDeeplink();
+      updateDeeplink(current, state);
+      renderCrossSell(current);
+
+      // Expose global
+      window.Products = {
+        source: from,
+        all: products,
+        current,
+        getBySlug: (slug) => products.find(p => p.slug === String(slug).toLowerCase()) || null,
+        getBySku: (sku) => products.find(p => (p.sku || "").toLowerCase() === String(sku).toLowerCase()) || null,
+        select: (slugOrSku) => {
+          const next = window.Products.getBySlug(slugOrSku) || window.Products.getBySku(slugOrSku);
+          if (!next) return null;
+          // Met à jour l’URL proprement
+          const url = new URL(location.href);
+          url.searchParams.delete("sku");
+          url.searchParams.set("slug", next.slug);
+          history.replaceState(null, "", url.toString());
+          // Réinitialise état & re-render
+          current = next;
+          state.colorKey = next.colors[0]?.key ?? null;
+          state.size = next.sizes[0]?.label ?? null;
+          renderSEO(next);
+          renderBreadcrumb(next);
+          renderTop(next, state);
+          renderSpecs(next);
+          renderDescription(next);
+          renderGallery(next, state);
+          renderColors(next, state, onColorChange);
+          renderSizes(next, state, onSizeChange);
+          updateDeeplink(next, state);
+          renderCrossSell(next);
+          return next;
+        }
+      };
+
+    } catch (err) {
+      console.error(err);
+      // Message d’erreur user-friendly dans la page
+      const container = document.createElement("div");
+      container.className = "container my-5";
+      container.innerHTML = `
+        <div class="alert alert-danger" role="alert">
+          Impossible de charger le produit pour le moment. Réessayez plus tard.
+          <div class="small text-muted mt-2">${String(err?.message || err)}</div>
+        </div>
+      `;
+      document.body.prepend(container);
+    }
+  })();
+
+})();
