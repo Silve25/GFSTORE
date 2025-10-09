@@ -1,638 +1,411 @@
-/*!
- * GF Store — data/products.js
- * Utilitaires produits (chargement multi-URL, normalisation, panier, helpers page produit).
- * - Expose window.Products
- * - Fallbacks robustes pour charger /data/products.json (CDN / origin / relatif)
- * - Panier : délègue à window.App.addToCart si présent, sinon localStorage
- * - UI facultative : Products.mountProductPage() peuple la page products.html si les IDs existent
- */
-(function (global) {
-  "use strict";
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Catalogue — GF Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
 
-  /* -----------------------------------------------------------------------
-   * Mini utils
-   * --------------------------------------------------------------------- */
-  const U = {
-    fmtPrice(n, currency = "EUR", locale = "fr-FR") {
-      return Number(n || 0).toLocaleString(locale, { style: "currency", currency });
-    },
-    getParam(name, def = "") {
-      const url = new URL(global.location.href);
-      return url.searchParams.get(name) || def;
-    },
-    setParams(obj, push = true) {
-      const url = new URL(global.location.href);
-      Object.entries(obj).forEach(([k, v]) => {
-        if (v === null || v === undefined || v === "") url.searchParams.delete(k);
-        else url.searchParams.set(k, v);
-      });
-      if (push) history.pushState({}, "", url);
-      else history.replaceState({}, "", url);
-    },
-    toSlug(s) {
-      return String(s || "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)/g, "");
-    },
-    clamp(n, a, b) {
-      return Math.max(a, Math.min(b, n));
-    },
-    escapeHtml(str) {
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    },
-  };
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-  /* -----------------------------------------------------------------------
-   * Cache localStorage
-   * --------------------------------------------------------------------- */
-  const LS = {
-    get(k, def) {
-      try {
-        const v = localStorage.getItem(k);
-        return v ? JSON.parse(v) : def;
-      } catch {
-        return def;
-      }
-    },
-    set(k, val) {
-      try {
-        localStorage.setItem(k, JSON.stringify(val));
-      } catch {}
-    },
-    remove(k) {
-      try {
-        localStorage.removeItem(k);
-      } catch {}
-    },
-  };
+  <!-- Vendor + Theme CSS -->
+  <link rel="stylesheet" href="css/vendor.css">
+  <link rel="stylesheet" href="style.css">
 
-  /* -----------------------------------------------------------------------
-   * Normalisation Produit
-   * --------------------------------------------------------------------- */
-  function normalizeProduct(p) {
-    const n = JSON.parse(JSON.stringify(p || {}));
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet" />
 
-    // Identifiants
-    n.sku = n.sku || n.id || n.SKU || n.code || U.toSlug(n.title || n.name || "prod");
-    n.slug = n.slug || U.toSlug(n.title || n.name || n.sku);
-
-    // Base
-    n.title = n.title || n.name || "Produit";
-    n.subtitle = n.subtitle || n.tagline || "";
-    n.currency = (n.currency || "EUR").toUpperCase();
-    n.price = Number(n.price ?? n.prix ?? 0);
-    n.vat_included = n.vat_included ?? true;
-
-    // Catégorie / genre
-    const rawCat = (n.category || n.categorie || n.gender || n.genre || "")
-      .toString()
-      .toLowerCase();
-    const map = {
-      homme: "homme",
-      men: "homme",
-      man: "homme",
-      femmes: "femme",
-      femme: "femme",
-      women: "femme",
-      woman: "femme",
-      enfants: "enfant",
-      enfant: "enfant",
-      kids: "enfant",
-      kid: "enfant",
-      boy: "enfant",
-      girl: "enfant",
-      accessoires: "accessoires",
-      accessories: "accessoires",
-    };
-    n.category = map[rawCat] || rawCat || "autre";
-
-    // Images & couleurs
-    if (!Array.isArray(n.colors) || !n.colors.length) {
-      const img =
-        n.image ||
-        (Array.isArray(n.images) && n.images[0]) ||
-        (n.thumbnail ? n.thumbnail : "images/product-fallback.jpg");
-      n.colors = [
-        { code: "default", label: "Par défaut", images: [img].filter(Boolean) },
-      ];
+  <style>
+    :root{
+      --navH: 64px;
+      --fomoH: 40px;
+      --anchorOffset: calc(var(--navH) + var(--fomoH) + 12px);
+      --radius: 14px;
     }
-    n.colors = n.colors.map((c) => {
-      const imgs = Array.from(new Set((c.images || []).filter(Boolean)));
-      return { ...c, images: imgs.length ? imgs : ["images/product-fallback.jpg"] };
-    });
+    html{scroll-behavior:smooth}
+    body{background:#fff;color:#111}
+    body.has-fixed-nav #content{ padding-top: calc(var(--navH) + 8px) }
 
-    // Tailles & stock
-    if (!Array.isArray(n.sizes)) n.sizes = [];
-    n.stock = n.stock || {};
-    n.sizes.forEach((sz) => {
-      if (typeof n.stock[sz] !== "number") n.stock[sz] = 10; // défaut
-    });
+    /* NAV */
+    .navbar{min-height:64px}
+    .navbar.fixed-top{transition:background-color .25s ease, box-shadow .25s ease}
+    .navbar-ghost{background:transparent !important; box-shadow:none}
+    .navbar-solid{background:#ffffff !important; box-shadow:0 6px 20px rgba(0,0,0,.06)}
 
-    // Tags / nouveauté
-    n.tags = Array.isArray(n.tags) ? n.tags : [];
-    n.is_new =
-      n.is_new ||
-      n.tags.some((t) => ["new", "nouveau", "nouveauté", "nouveautes"].includes(String(t).toLowerCase()));
+    /* FOMO bar */
+    .fomo-bar{position:sticky; top:0; z-index:1020; background:#111; color:#fff; font-size:.92rem; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);}
+    .fomo-bar small{opacity:.85}
+    .badge-dot{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#22c55e;margin-right:.5rem}
 
-    return n;
-  }
-
-  /* -----------------------------------------------------------------------
-   * Chargement multi-URL de products.json (+ cache 5 min)
-   * --------------------------------------------------------------------- */
-  const CACHE_KEY = "gf:data:products";
-  const STAMP_KEY = "gf:data:products:ts";
-  const TTL = 5 * 60 * 1000;
-
-  const DATA_URLS = [
-    "https://gfstore.store/data/products.json",
-    `${location.origin}/data/products.json`,
-    "/data/products.json",
-    "data/products.json",
-    "products.json",
-  ];
-
-  async function fetchWithTimeout(url, opts = {}, timeout = 12000) {
-    const ctrl = new AbortController();
-    const id = setTimeout(() => ctrl.abort(), timeout);
-    try {
-      const res = await fetch(url, { ...opts, signal: ctrl.signal });
-      clearTimeout(id);
-      return res;
-    } catch (e) {
-      clearTimeout(id);
-      throw e;
+    /* Grid header layout (mobile like index) */
+    .nav-grid{display:flex; align-items:center; width:100%;}
+    @media (max-width: 991.98px){
+      .nav-grid{display:grid; grid-template-columns: 1fr auto auto; column-gap:.5rem;}
+      .nav-brand{grid-column:1}
+      .nav-cart-right{grid-column:2; justify-self:end}
+      .nav-toggle-right{grid-column:3; justify-self:end}
+      .nav-desktop-icons{display:none !important;}
     }
-  }
+    @media (min-width: 992px){ .nav-cart-right{display:none !important;} }
+    .nav-cart-right .badge{font-size:.65rem; line-height:1; padding:.25em .35em; transform:translate(15%, -35%); }
 
-  async function loadAll() {
-    const now = Date.now();
-    const stamp = LS.get(STAMP_KEY, 0);
-    let list = LS.get(CACHE_KEY, null);
+    /* HERO */
+    .catalog-hero{background:#0f0f10 url('images/banner-image-6.jpg') center/cover no-repeat; color:#fff; padding:92px 0 56px; margin-top:56px; position:relative;}
+    .catalog-hero::after{content:""; position:absolute; inset:0; background:rgba(0,0,0,.35)}
+    .catalog-hero .container{position:relative; z-index:2}
 
-    if (!list || now - stamp > TTL) {
-      let data = null;
-      let lastErr = null;
-      for (const u of DATA_URLS) {
-        try {
-          const res = await fetchWithTimeout(u, { cache: "no-store" }, 12000);
-          if (res.ok) {
-            data = await res.json();
-            break;
-          } else {
-            lastErr = new Error(`HTTP ${res.status} sur ${u}`);
-          }
-        } catch (e) {
-          lastErr = e;
-        }
-      }
-      if (!data) {
-        console.error("Impossible de charger products.json", lastErr);
-        throw lastErr || new Error("products.json introuvable");
-      }
-      const rawList = Array.isArray(data) ? data : data.products || [];
-      list = rawList.map(normalizeProduct);
-      LS.set(CACHE_KEY, list);
-      LS.set(STAMP_KEY, now);
-    }
-    return list;
-  }
+    /* Cards / placeholders */
+    .product-card .ratio img{object-fit:cover}
+    .badge-new{background:#111}
+    .cursor-pointer{cursor:pointer}
+    .skeleton{background:linear-gradient(90deg,#eee 25%,#f6f6f6 37%,#eee 63%); background-size:400% 100%; animation:shimmer 1.1s infinite linear}
+    @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
 
-  /* -----------------------------------------------------------------------
-   * Sélection / Recherche / Helpers
-   * --------------------------------------------------------------------- */
-  function firstImage(product, colorCode) {
-    const c =
-      (product.colors || []).find((x) => x.code === colorCode) ||
-      (product.colors || [])[0] ||
-      { images: [] };
-    return c.images[0] || "images/product-fallback.jpg";
-  }
+    /* Offcanvas fiche produit quick-view */
+    .p-color-dot{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid #ddd}
+    .thumbs img{height:64px;width:64px;object-fit:cover;border:1px solid #eee;border-radius:6px}
+    .thumbs img.active{outline:2px solid #111}
 
-  function getColor(product, colorCode) {
-    const colors = product.colors || [];
-    if (!colors.length) return null;
-    return colors.find((c) => c.code === colorCode) || colors[0];
-  }
+    .footer-mini-logo{height:22px;opacity:.8}
+  </style>
+</head>
+<body class="homepage">
 
-  function inStock(product, size) {
-    if (!size) return true;
-    const stock = product.stock || {};
-    const n = Number(stock[size] ?? 0);
-    return n > 0;
-  }
+  <!-- SVG icons -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <defs>
+      <symbol id="search" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></symbol>
+      <symbol id="cart" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.49a3 3 0 0 0 2.89-2.18l1.58-5.55A1 1 0 0 0 19 5H6.74a3 3 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.92l.16.55 1.64 5.74A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Z"/></symbol>
+      <symbol id="heart" viewBox="0 0 24 24"><path fill="currentColor" d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Z"/></symbol>
+      <symbol id="trash" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3h6a1 1 0 0 1 1 1v1h4a1 1 0 0 1 0 2h-1v12a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4a1 1 0 0 1 0-2h4V4a1 1 0 0 1 1-1Zm1 3h4V5h-4v1Zm-1 5a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Zm6 0a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Z"/></symbol>
+      <symbol id="close" viewBox="0 0 24 24"><path fill="currentColor" d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></symbol>
+      <symbol id="user" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></symbol>
+    </defs>
+  </svg>
 
-  function productUrl(product, opts = {}) {
-    const base = "products.html"; // ta page fiche produit
-    const sku = encodeURIComponent(product.sku);
-    const params = new URLSearchParams();
-    params.set("sku", sku);
+  <!-- FOMO bar -->
+  <div class="fomo-bar py-2" id="fomoBar">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge-dot"></span>
+        <span><strong id="watching">18</strong> personnes consultent cette page</span>
+      </div>
+      <div>-10% première commande : <strong>GF-FIRST10</strong> · se termine dans <strong id="countdown">00:00:00</strong></div>
+    </div>
+  </div>
 
-    if (opts.color) params.set("color", String(opts.color));
-    if (opts.size) params.set("size", String(opts.size));
-    if (opts.utm) Object.entries(opts.utm).forEach(([k, v]) => v && params.set(k, v));
+  <!-- HEADER -->
+  <nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top navbar-ghost" id="siteNav" style="top: var(--fomoH)">
+    <div class="container-fluid nav-grid">
+      <!-- Logo -->
+      <a class="navbar-brand nav-brand" href="index.html">GF Store</a>
 
-    return `${base}?${params.toString()}`;
-  }
+      <!-- Panier mobile -->
+      <a class="nav-cart-right d-lg-none position-relative" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
+        <svg width="26" height="26"><use xlink:href="#cart"/></svg>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark cart-count">0</span>
+      </a>
 
-  function resolveFromURL(products) {
-    const sku = U.getParam("sku", "");
-    const slug = U.getParam("slug", "");
-    const color = U.getParam("color", "");
-    const size = U.getParam("size", "");
+      <!-- Burger -->
+      <button class="navbar-toggler nav-toggle-right" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    let prod = null;
-    if (sku) prod = products.find((p) => String(p.sku) === sku) || null;
-    if (!prod && slug) prod = products.find((p) => String(p.slug) === slug) || null;
+      <!-- Menu -->
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title">Menu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav ms-auto gap-3">
+            <li class="nav-item"><a class="nav-link" href="index.html#hommes">Hommes</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#femmes">Femmes</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#enfants">Enfants</a></li>
+            <li class="nav-item"><a class="nav-link active" href="catalogue.html">Catalogue</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                <svg width="20" height="20" class="me-1"><use xlink:href="#user"/></svg>Compte
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="login.html">Se connecter</a></li>
+                <li><a class="dropdown-item" href="register.html">Créer un compte</a></li>
+                <li><a class="dropdown-item" href="password-reset.html">Mot de passe oublié</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="commande.html">Suivre ma commande</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
 
-    return { product: prod, color: color || null, size: size || null };
-  }
+      <!-- Icônes desktop -->
+      <ul class="list-unstyled d-flex m-0 ms-3 nav-desktop-icons">
+        <li class="me-3 d-none d-lg-block"><a href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
+        <li class="d-none d-lg-block">
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier"><svg width="24" height="24"><use xlink:href="#cart"/></svg></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-  function formatBreadcrumbs(product) {
-    return [
-      { label: "Accueil", href: "index.html" },
-      { label: "Catalogue", href: "catalogue.html" },
-      {
-        label:
-          product.category === "homme"
-            ? "Hommes"
-            : product.category === "femme"
-            ? "Femmes"
-            : product.category === "enfant"
-            ? "Enfants"
-            : "Produits",
-        href:
-          product.category === "homme"
-            ? "catalogue.html?filter=homme"
-            : product.category === "femme"
-            ? "catalogue.html?filter=femme"
-            : product.category === "enfant"
-            ? "catalogue.html?filter=enfant"
-            : "catalogue.html",
-      },
-      { label: product.title, href: productUrl(product) },
-    ];
-  }
+  <!-- Panier -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
+    <div class="offcanvas-header justify-content-center">
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+    </div>
+    <div class="offcanvas-body">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-primary">Votre panier</span>
+        <span class="badge bg-primary rounded-pill cart-count">0</span>
+      </h4>
+      <p class="text-body-secondary">Votre panier est vide.</p>
+      <a class="w-100 btn btn-dark btn-lg mt-3" href="checkout.html">Passer au paiement</a>
+    </div>
+  </div>
 
-  /* -----------------------------------------------------------------------
-   * Panier (App.js si dispo, sinon localStorage)
-   * --------------------------------------------------------------------- */
-  const Cart = {
-    key: "gf:cart",
-    add(item, qty = 1) {
-      if (global.App && typeof global.App.addToCart === "function") {
-        global.App.addToCart(item, qty);
-        return;
-      }
-      // fallback local
-      const arr = LS.get(this.key, []);
-      const idx = arr.findIndex((x) => x.id === item.id);
-      if (idx >= 0) arr[idx].qty += qty;
-      else arr.push({ ...item, qty });
-      LS.set(this.key, arr);
-      this.syncBadge();
-      toast(`${item.name} ajouté au panier`);
-    },
-    count() {
-      const arr = global.App?.Cart?.state?.items || LS.get(this.key, []);
-      return (arr || []).reduce((s, it) => s + (it.qty || 0), 0);
-    },
-    syncBadge() {
-      const n = this.count();
-      document.querySelectorAll(".cart-count").forEach((el) => (el.textContent = n));
-    },
-  };
+  <!-- HERO + Fil d'Ariane -->
+  <header class="catalog-hero text-center">
+    <div class="container">
+      <nav aria-label="breadcrumb" class="mb-2">
+        <ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a class="link-light text-decoration-none" href="index.html">Accueil</a></li>
+          <li class="breadcrumb-item active text-white-50" aria-current="page">Catalogue</li>
+        </ol>
+      </nav>
+      <h1 class="display-5 mb-1">Catalogue Hiver 2025</h1>
+      <p class="mb-0">Doudounes, parkas, mailles & accessoires</p>
+    </div>
+  </header>
 
-  function toast(msg) {
-    let t = document.getElementById("gf-toast");
-    if (!t) {
-      t = document.createElement("div");
-      t.id = "gf-toast";
-      t.style.cssText =
-        "position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 14px;border-radius:10px;z-index:2000;opacity:0;transition:opacity .25s";
-      document.body.appendChild(t);
-    }
-    t.textContent = msg;
-    t.style.opacity = "1";
-    setTimeout(() => (t.style.opacity = "0"), 1200);
-  }
+  <main id="content">
 
-  /* -----------------------------------------------------------------------
-   * UI facultative pour products.html
-   * - N’opère que si les éléments existent
-   * - IDs attendus par défaut : p-hero, p-thumbs, p-title, p-subtitle, p-price, p-cat,
-   *   p-colors, p-sizes, p-features, p-care, p-madein, p-add, p-deeplink, [data-breadcrumbs]
-   * --------------------------------------------------------------------- */
-  async function mountProductPage() {
-    // éléments (si absents, on n'intervient pas)
-    const elHero = document.getElementById("p-hero");
-    const elThumbs = document.getElementById("p-thumbs");
-    const elTitle = document.getElementById("p-title");
-    const elSubtitle = document.getElementById("p-subtitle");
-    const elPrice = document.getElementById("p-price");
-    const elCat = document.getElementById("p-cat");
-    const elColors = document.getElementById("p-colors");
-    const elSizes = document.getElementById("p-sizes");
-    const elFeatures = document.getElementById("p-features");
-    const elCare = document.getElementById("p-care");
-    const elMadeIn = document.getElementById("p-madein");
-    const elAdd = document.getElementById("p-add");
-    const elDeep = document.getElementById("p-deeplink");
-    const crumbMount = document.querySelector("[data-breadcrumbs]");
-    const errorBox = document.getElementById("p-error");
+    <!-- Filtres -->
+    <section class="py-4">
+      <div class="container">
+        <div class="row g-3 align-items-end">
+          <div class="col-lg-4">
+            <label class="form-label" for="q">Recherche</label>
+            <input id="q" type="search" class="form-control" placeholder="Doudoune, parka, bonnet…">
+          </div>
+          <div class="col-6 col-lg-2">
+            <label class="form-label" for="filter">Catégorie</label>
+            <select id="filter" class="form-select">
+              <option value="all">Tout</option>
+              <option value="homme">Hommes</option>
+              <option value="femme">Femmes</option>
+              <option value="enfant">Enfants</option>
+              <option value="accessoires">Accessoires</option>
+            </select>
+          </div>
+          <div class="col-6 col-lg-2">
+            <label class="form-label" for="sort">Tri</label>
+            <select id="sort" class="form-select">
+              <option value="relevance">Pertinence</option>
+              <option value="price-asc">Prix : croissant</option>
+              <option value="price-desc">Prix : décroissant</option>
+              <option value="newest">Nouveautés</option>
+            </select>
+          </div>
+          <div class="col-6 col-lg-2">
+            <label class="form-label" for="min">Prix min (€)</label>
+            <input type="number" id="min" class="form-control" placeholder="0" min="0" step="1">
+          </div>
+          <div class="col-6 col-lg-2">
+            <label class="form-label" for="max">Prix max (€)</label>
+            <input type="number" id="max" class="form-control" placeholder="2000" min="0" step="1">
+          </div>
 
-    // si pas de conteneurs produits (probablement pas la page), on s'arrête
-    if (!elTitle && !elHero) return;
+          <div class="col-6 col-lg-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="only-new">
+              <label class="form-check-label" for="only-new">Nouveaux</label>
+            </div>
+          </div>
+          <div class="col-6 col-lg-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="in-stock">
+              <label class="form-check-label" for="in-stock">En stock</label>
+            </div>
+          </div>
 
-    try {
-      const list = await loadAll();
-      const { product, color, size } = resolveFromURL(list);
+          <div class="col-lg-2 ms-auto d-grid">
+            <button id="reset" class="btn btn-outline-secondary" type="button">Réinitialiser</button>
+          </div>
+        </div>
 
-      if (!product) {
-        if (errorBox) errorBox.innerHTML = `<div class="alert alert-warning">Produit introuvable.</div>`;
-        if (elTitle) elTitle.textContent = "Produit introuvable";
-        return;
-      }
+        <!-- chips actifs -->
+        <div id="chips" class="d-flex flex-wrap gap-2 mt-3"></div>
+      </div>
+    </section>
 
-      let currentColor = getColor(product, color)?.code || (product.colors?.[0]?.code || null);
-      let currentSize = size || null;
+    <!-- Résultats -->
+    <section class="pb-5">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div id="count" class="small text-secondary">Chargement…</div>
+          <div class="small text-secondary">Livraison & retours gratuits</div>
+        </div>
 
-      // -------- Visuels
-      if (elHero) {
-        elHero.src = firstImage(product, currentColor);
-        elHero.alt = product.title;
-        elHero.style.objectFit = "cover";
-      }
-      if (elThumbs) {
-        elThumbs.innerHTML = "";
-        const col = getColor(product, currentColor) || { images: [] };
-        (col.images || []).slice(0, 8).forEach((u, i) => {
-          const im = document.createElement("img");
-          im.src = u;
-          im.alt = `${product.title} ${i + 1}`;
-          im.width = 64;
-          im.height = 64;
-          im.className = "me-2 mb-2";
-          im.style.objectFit = "cover";
-          im.style.borderRadius = "6px";
-          im.style.border = "1px solid #eee";
-          if (i === 0) im.style.outline = "2px solid #111";
-          im.addEventListener("click", () => {
-            if (elHero) elHero.src = u;
-            elThumbs.querySelectorAll("img").forEach((x) => (x.style.outline = ""));
-            im.style.outline = "2px solid #111";
-          });
-          elThumbs.appendChild(im);
-        });
-      }
+        <div id="grid" class="row g-4">
+          <!-- Skeleton template -->
+          <template id="tpl-skel">
+            <div class="col-6 col-md-4 col-lg-3">
+              <div class="card h-100 border-0">
+                <div class="ratio ratio-4x3 skeleton rounded"></div>
+                <div class="card-body">
+                  <div class="skeleton" style="height:16px;width:70%;border-radius:6px"></div>
+                  <div class="skeleton mt-2" style="height:12px;width:40%;border-radius:6px"></div>
+                </div>
+              </div>
+            </div>
+          </template>
 
-      // -------- Textes
-      if (elTitle) elTitle.textContent = product.title;
-      if (elSubtitle) elSubtitle.textContent = product.subtitle || "";
-      if (elPrice) elPrice.textContent = U.fmtPrice(product.price, product.currency);
-      if (elCat)
-        elCat.textContent =
-          product.category === "homme"
-            ? "Hommes"
-            : product.category === "femme"
-            ? "Femmes"
-            : product.category === "enfant"
-            ? "Enfants"
-            : "Produits";
+          <div class="col-12">
+            <div id="empty" class="alert alert-warning d-none mt-2">Aucun article à afficher.</div>
+          </div>
+        </div>
 
-      if (elFeatures) elFeatures.innerHTML = (product.features || []).map((f) => `<li>${U.escapeHtml(f)}</li>`).join("");
-      if (elCare) elCare.innerHTML = (product.care || []).map((f) => `<li>${U.escapeHtml(f)}</li>`).join("");
-      if (elMadeIn) elMadeIn.textContent = product.made_in ? "Fabriqué en " + product.made_in : "";
+        <!-- Pagination -->
+        <nav class="d-flex justify-content-center mt-4" aria-label="Pagination catalogue">
+          <ul id="pager" class="pagination m-0"></ul>
+        </nav>
+      </div>
+    </section>
 
-      // -------- Couleurs
-      if (elColors) {
-        elColors.innerHTML = "";
-        (product.colors || []).forEach((c) => {
-          const dot = document.createElement("span");
-          dot.className = "p-color-dot";
-          dot.title = c.label || c.code || "";
-          dot.style.cssText =
-            "width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid #ddd;cursor:pointer";
-          // Couleur indicative
-          const code = (c.code || "").toLowerCase();
-          dot.style.background =
-            code === "white" || code === "ivory"
-              ? "#fff"
-              : code === "black"
-              ? "#000"
-              : code === "navy"
-              ? "#001f3f"
-              : code === "lightblue"
-              ? "#cde5ff"
-              : code === "pink"
-              ? "#ffd6e7"
-              : "#eee";
+  </main>
 
-          if (c.code === currentColor) dot.style.outline = "2px solid #111";
+  <!-- Template carte produit (rempli par catalogue.js) -->
+  <template id="tpl-card">
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="card product-card h-100 border-0 shadow-sm">
+        <a class="stretched-link text-reset text-decoration-none p-link" href="products.html">
+          <div class="position-relative">
+            <span class="position-absolute top-0 start-0 m-2 badge badge-new text-uppercase d-none">Nouveau</span>
+            <div class="ratio ratio-4x3">
+              <img class="w-100 h-100" alt="">
+            </div>
+          </div>
+        </a>
+        <div class="card-body">
+          <h6 class="text-uppercase mb-1 name">Produit</h6>
+          <div class="small text-secondary mb-2 meta">—</div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="fw-semibold price">—</div>
+            <button class="btn btn-sm btn-dark text-uppercase add cursor-pointer" type="button">Ajouter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
 
-          dot.addEventListener("click", () => {
-            currentColor = c.code || null;
-            // MAJ hero + thumbs
-            if (elHero) elHero.src = firstImage(product, currentColor);
-            if (elThumbs) {
-              elThumbs.innerHTML = "";
-              (c.images || []).slice(0, 8).forEach((u, i) => {
-                const im = document.createElement("img");
-                im.src = u;
-                im.alt = `${product.title} ${i + 1}`;
-                im.width = 64;
-                im.height = 64;
-                im.className = "me-2 mb-2";
-                im.style.objectFit = "cover";
-                im.style.borderRadius = "6px";
-                im.style.border = "1px solid #eee";
-                if (i === 0) im.style.outline = "2px solid #111";
-                im.addEventListener("click", () => {
-                  if (elHero) elHero.src = u;
-                  elThumbs.querySelectorAll("img").forEach((x) => (x.style.outline = ""));
-                  im.style.outline = "2px solid #111";
-                });
-                elThumbs.appendChild(im);
-              });
-            }
-            // MAJ URL
-            U.setParams({ color: currentColor }, false);
-          });
+  <!-- Offcanvas Quick-view produit (utilisé par catalogue.js si tu l’actives) -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasProduct" aria-labelledby="offcanvasProductLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasProductLabel">Fiche produit</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="ratio ratio-4x3 border rounded">
+            <img id="p-hero" src="" alt="" class="w-100 h-100" style="object-fit:cover">
+          </div>
+        </div>
+        <div class="col-12">
+          <div id="p-thumbs" class="thumbs d-flex flex-wrap gap-2"></div>
+        </div>
+        <div class="col-12">
+          <h4 id="p-title" class="mb-1"></h4>
+          <div id="p-subtitle" class="text-secondary mb-2"></div>
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div id="p-price" class="fs-5 fw-semibold"></div>
+            <span id="p-cat" class="badge text-bg-light text-uppercase"></span>
+          </div>
+          <div id="p-colors" class="d-flex align-items-center gap-2 mb-3"></div>
+          <div id="p-sizes" class="d-flex align-items-center gap-2 mb-3"></div>
+          <div class="d-grid gap-2">
+            <button id="p-add" class="btn btn-dark text-uppercase" type="button">Ajouter au panier</button>
+            <a id="p-deeplink" href="products.html" class="btn btn-outline-secondary">Ouvrir la fiche dédiée</a>
+          </div>
+          <hr>
+          <div>
+            <h6 class="text-uppercase">Détails</h6>
+            <ul id="p-features" class="small ps-3"></ul>
+          </div>
+          <div>
+            <h6 class="text-uppercase">Entretien</h6>
+            <ul id="p-care" class="small ps-3"></ul>
+          </div>
+          <small id="p-madein" class="text-secondary d-block mt-2"></small>
+        </div>
+      </div>
+    </div>
+  </div>
 
-          elColors.appendChild(dot);
-        });
-      }
+  <!-- FOOTER -->
+  <footer class="border-top">
+    <div class="container">
+      <div class="row py-5">
+        <div class="col-md-4">
+          <h5 class="text-uppercase mb-3">GF Store</h5>
+          <p>Expédition & retours gratuits. Service client dédié.</p>
+          <div class="d-flex gap-3">
+            <img src="images/visa-card.png" class="footer-mini-logo" alt="Visa">
+            <img src="images/paypal-card.png" class="footer-mini-logo" alt="PayPal">
+            <img src="images/master-card.png" class="footer-mini-logo" alt="Mastercard">
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <h6 class="text-uppercase mb-3">Boutique</h6>
+          <ul class="list-unstyled">
+            <li><a href="index.html#hommes">Hommes</a></li>
+            <li><a href="index.html#femmes">Femmes</a></li>
+            <li><a href="index.html#enfants">Enfants</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3">
+          <h6 class="text-uppercase mb-3">Aide</h6>
+          <ul class="list-unstyled">
+            <li><a href="livraison.html">Livraison</a></li>
+            <li><a href="retours.html">Retours & échanges</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h6 class="text-uppercase mb-3">Newsletter</h6>
+          <form class="d-flex gap-2">
+            <input type="email" class="form-control" placeholder="Votre email" required>
+            <button class="btn btn-dark" type="submit">OK</button>
+          </form>
+          <small class="text-secondary d-block mt-2">En vous inscrivant, vous acceptez notre politique de confidentialité.</small>
+        </div>
+      </div>
+      <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top small">
+        <span>© 2025 GF Store. Tous droits réservés.</span>
+        <span>Livraison & retours gratuits • Service client dédié</span>
+      </div>
+    </div>
+  </footer>
 
-      // -------- Tailles
-      if (elSizes) {
-        elSizes.innerHTML = "";
-        if (Array.isArray(product.sizes) && product.sizes.length) {
-          const label = document.createElement("div");
-          label.className = "text-secondary small me-2";
-          label.textContent = "Tailles :";
-          elSizes.appendChild(label);
+  <!-- JS (Bootstrap + tes apps). Le peu de JS d’ambiance (FOMO/header) vit dans app.js si tu préfères -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-          product.sizes.forEach((s) => {
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.className = "btn btn-sm btn-outline-secondary me-2 mb-2";
-            btn.textContent = s;
-            if (!inStock(product, s)) {
-              btn.disabled = true;
-              btn.classList.add("disabled");
-              btn.title = "Indisponible";
-            }
-            if (s === currentSize) btn.classList.add("active");
+  <!-- Data helpers (facultatif si déjà inclus ailleurs) -->
+  <script src="data/products.js"></script>
 
-            btn.addEventListener("click", () => {
-              currentSize = s;
-              elSizes.querySelectorAll("button").forEach((b) => b.classList.remove("active"));
-              btn.classList.add("active");
-              U.setParams({ size: currentSize }, false);
-            });
-            elSizes.appendChild(btn);
-          });
-        }
-      }
+  <!-- Catalogue logic (remplira la grille + quick-view + pagination) -->
+  <script src="catalogue.js"></script>
 
-      // -------- Actions
-      if (elAdd) {
-        elAdd.onclick = () => {
-          const item = {
-            id: String(product.sku + (currentSize ? "|" + currentSize : "")),
-            name: product.title + (currentSize ? " — " + currentSize : ""),
-            price: product.price,
-            image: firstImage(product, currentColor),
-          };
-          Cart.add(item, 1);
-          elAdd.textContent = "Ajouté ✓";
-          elAdd.disabled = true;
-          setTimeout(() => {
-            elAdd.textContent = "Ajouter au panier";
-            elAdd.disabled = false;
-          }, 900);
-        };
-      }
-      if (elDeep) {
-        elDeep.href = productUrl(product, { color: currentColor, size: currentSize });
-      }
-
-      // -------- Fil d’Ariane
-      if (crumbMount) {
-        const crumbs = formatBreadcrumbs(product);
-        crumbMount.innerHTML = `
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              ${crumbs
-                .map(
-                  (c, i) =>
-                    `<li class="breadcrumb-item ${i === crumbs.length - 1 ? "active" : ""}">
-                      ${i === crumbs.length - 1 ? U.escapeHtml(c.label) : `<a href="${c.href}">${U.escapeHtml(c.label)}</a>`}
-                    </li>`
-                )
-                .join("")}
-            </ol>
-          </nav>`;
-      }
-
-      // MAJ badge panier au montage
-      Cart.syncBadge();
-    } catch (e) {
-      console.error(e);
-      if (errorBox) errorBox.innerHTML = `<div class="alert alert-danger">Erreur de chargement de la fiche produit.</div>`;
-    }
-  }
-
-  /* -----------------------------------------------------------------------
-   * API publique
-   * --------------------------------------------------------------------- */
-  const API = {
-    // Data
-    async all() {
-      return loadAll();
-    },
-    async currentFromURL() {
-      const list = await loadAll();
-      return resolveFromURL(list);
-    },
-    async find(query) {
-      const list = await loadAll();
-      if (typeof query === "function") return list.find(query) || null;
-      return list.find((p) => p.sku === query || p.slug === query) || null;
-    },
-    async filter(predicate) {
-      const list = await loadAll();
-      if (typeof predicate !== "function") return list;
-      return list.filter(predicate);
-    },
-
-    // Utils
-    utils: {
-      fmtPrice: U.fmtPrice,
-      productUrl,
-      firstImage,
-      getColor,
-      inStock,
-      formatBreadcrumbs,
-      setParams: U.setParams,
-      getParam: U.getParam,
-      clamp: U.clamp,
-      escapeHtml: U.escapeHtml,
-    },
-
-    // Panier
-    cart: {
-      add: (product, { size = null, color = null } = {}) => {
-        const item = {
-          id: String((product.sku || product.id || product.title) + (size ? "|" + size : "")),
-          name: product.title + (size ? " — " + size : ""),
-          price: Number(product.price || 0),
-          image: firstImage(product, color),
-        };
-        Cart.add(item, 1);
-      },
-      syncBadge: () => Cart.syncBadge(),
-      count: () => Cart.count(),
-    },
-
-    // UI facultative pour la page produit
-    mountProductPage,
-  };
-
-  // Exporte sur window
-  global.Products = API;
-
-  // Si on est sur products.html on peut auto-monter (facultatif, inoffensif)
-  if (location.pathname.toLowerCase().includes("products.html")) {
-    // démarre après DOMReady
-    if (document.readyState !== "loading") API.mountProductPage();
-    else document.addEventListener("DOMContentLoaded", API.mountProductPage);
-  }
-})(window);
-
-/* -------------------------------------------------------------------------
- * EXEMPLES RAPIDES
- * -------------------------------------------------------------------------
- * // 1) Dans products.html (automatique via mountProductPage),
- * //    sinon manuel :
- * (async () => {
- *   const { product, color, size } = await Products.currentFromURL();
- *   if (!product) return;
- *   console.log(product.title, Products.utils.fmtPrice(product.price), color, size);
- * })();
- *
- * // 2) Lien vers une fiche produit :
- * const href = Products.utils.productUrl(p, { color: p.colors?.[0]?.code, utm: { src: 'cat' } });
- *
- * // 3) Ajouter au panier :
- * Products.cart.add(product, { size: '10A', color: 'navy' });
- * Products.cart.syncBadge();
- * ------------------------------------------------------------------------- */
+  <!-- App globale (panier, auth, etc.) -->
+  <script src="js/app.js"></script>
+</body>
+</html>
