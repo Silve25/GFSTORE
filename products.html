@@ -28,15 +28,41 @@
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet" />
 
   <style>
-    /* === Spécifiques page produit (sans JS) === */
+    /* === Spécifiques page produit === */
+    :root{
+      --gap: .5rem;
+      --shadow: 0 6px 18px rgba(0,0,0,.06);
+      --pbar-h: 8px;
+    }
     body{scroll-behavior:smooth}
     .product-hero{margin-top:64px}
     .breadcrumb a{text-decoration:none}
+
+    /* Galerie – images HD, non-croppées */
     .gallery-main{border:1px solid #eee;border-radius:10px;overflow:hidden;background:#fafafa}
-    .gallery-main .ratio img{object-fit:cover}
-    .thumbs{display:flex;gap:.5rem;flex-wrap:wrap}
-    .thumbs button{border:1px solid #eee;border-radius:10px;padding:0;background:#fff;overflow:hidden;width:76px;height:76px}
-    .thumbs img{width:100%;height:100%;object-fit:cover;display:block}
+    .gallery-main .media{
+      width:100%;
+      background:#fafafa;
+      display:flex;align-items:center;justify-content:center;
+      min-height: 280px;
+    }
+    @media (min-width: 992px){
+      .gallery-main .media{min-height:520px}
+    }
+    .gallery-main img{
+      max-width:100%;
+      max-height:80vh;
+      height:auto;width:auto;
+      object-fit:contain; /* pas de crop */
+      image-rendering:auto;
+    }
+    .thumbs{display:flex;gap:var(--gap);flex-wrap:wrap}
+    .thumbs button{
+      border:1px solid #eee;border-radius:10px;padding:0;background:#fff;overflow:hidden;
+      width:84px;height:84px; display:flex;align-items:center;justify-content:center;
+    }
+    .thumbs img{width:100%;height:100%;object-fit:contain;display:block}
+
     .p-badge{letter-spacing:.08em}
     .p-price{font-variant-numeric:tabular-nums}
     .p-dot{width:18px;height:18px;border-radius:999px;border:1px solid #ddd;display:inline-block}
@@ -57,14 +83,31 @@
       display:none;
     }
     .cta-sticky .price{font-weight:600}
+    .cta-sticky .stockbar{height:6px;border-radius:999px;background:#eee;overflow:hidden}
+    .cta-sticky .stockbar > span{display:block;height:100%;background:#111;width:25%}
+
     @media (max-width:991.98px){
       .cta-sticky{display:block}
       .desktop-only{display:none !important}
-      .product-hero{margin-bottom:72px}
+      .product-hero{margin-bottom:84px}
     }
 
     .promo-chip{display:inline-flex;align-items:center;gap:.4rem;border:1px solid #111;border-radius:999px;padding:.18rem .6rem;font-size:.8rem}
     .promo-chip small{opacity:.75}
+
+    /* Header: icônes visibles aussi sur mobile */
+    .nav-ic {display:flex;gap:.5rem;align-items:center}
+    .nav-ic a{display:inline-flex;align-items:center}
+
+    /* Réassurance mobile (doublon, visible seulement mobile avant Description) */
+    .reassure-mobile{display:none}
+    @media (max-width: 991.98px){
+      .reassure-mobile{display:block}
+    }
+
+    /* Countbar sous les CTA (desktop) */
+    .countbar{height:var(--pbar-h);background:#eee;border-radius:999px;overflow:hidden}
+    .countbar > span{display:block;height:100%;background:#111;width:30%}
   </style>
 
   <!-- Fallback auto: si pas de sku/slug dans l’URL, redirige vers un produit par défaut -->
@@ -103,7 +146,18 @@
     <div class="container-fluid">
       <a class="navbar-brand" href="index.html">GF Store</a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
+      <div class="nav-ic ms-auto d-lg-none">
+        <a class="search-button me-2" href="catalogue.html" aria-label="Recherche">
+          <svg width="24" height="24"><use xlink:href="#search"/></svg>
+        </a>
+        <a class="me-2" href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a>
+        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Panier">
+          <svg width="24" height="24"><use xlink:href="#cart"/></svg>
+          <span class="badge bg-dark ms-1 cart-count align-middle">0</span>
+        </a>
+      </div>
+
+      <button class="navbar-toggler ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -122,14 +176,14 @@
         </div>
       </div>
 
-      <ul class="list-unstyled d-flex m-0 ms-3 align-items-center">
+      <ul class="list-unstyled d-none d-lg-flex m-0 ms-3 align-items-center">
         <li class="search-box me-3">
           <a class="search-button" href="catalogue.html" aria-label="Recherche">
             <svg width="24" height="24"><use xlink:href="#search"/></svg>
           </a>
         </li>
-        <li class="me-3 d-none d-lg-block"><a href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
-        <li class="d-none d-lg-block">
+        <li class="me-3"><a href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
+        <li>
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
             <svg width="24" height="24"><use xlink:href="#cart"/></svg>
             <span class="badge bg-dark ms-1 cart-count align-middle">0</span>
@@ -181,14 +235,14 @@
         <!-- Galerie -->
         <div class="col-lg-7">
           <div class="gallery-main">
-            <div class="ratio ratio-4x3">
-              <img id="p-hero" src="images/product-item-1.jpg" alt="Visuel produit">
+            <div class="media">
+              <img id="p-hero" src="images/product-item-1.jpg" alt="Visuel produit" loading="eager" decoding="async" />
             </div>
           </div>
           <div class="thumbs mt-2" id="p-thumbs"></div>
 
-          <!-- Réassurance sous galerie -->
-          <section class="reassure mt-4">
+          <!-- Réassurance sous galerie (desktop) -->
+          <section class="reassure mt-4 d-none d-lg-block">
             <div class="row text-center g-3">
               <div class="col-6 col-md-4">
                 <div class="p-3 border rounded-3 h-100">
@@ -274,10 +328,22 @@
               <button class="btn btn-dark btn-lg text-uppercase" id="p-add">Ajouter au panier</button>
               <a class="btn btn-outline-dark btn-lg text-uppercase" href="checkout.html" id="p-buy">Acheter maintenant</a>
               <a class="btn btn-outline-secondary btn-sm" id="p-deeplink" href="#">Copier le lien de cette configuration</a>
+              <!-- Countbar sous CTA -->
+              <div class="countbar mt-2" aria-hidden="true"><span id="p-countbar"></span></div>
             </div>
 
-            <!-- Avantages (paiement supprimé) -->
-            <ul class="small text-secondary mt-3 mb-0">
+            <!-- Bloc infos mobile après Couleur/Taille/Quantité -->
+            <div class="d-block d-lg-none mt-3" id="p-info-mobile">
+              <ul class="small text-secondary mb-0">
+                <li><strong>Disponibilité :</strong> <span id="p-stock-mobile">en stock</span></li>
+                <li>Expédition 24h (jours ouvrés)</li>
+                <li>Retours faciles sous 30 jours</li>
+                <li>Support 7j/7 — réponse moyenne &lt; 1h</li>
+              </ul>
+            </div>
+
+            <!-- Avantages (desktop) -->
+            <ul class="small text-secondary mt-3 mb-0 d-none d-lg-block">
               <li>Expédition 24h (jours ouvrés)</li>
               <li>Retours faciles sous 30 jours</li>
               <li>Support 7j/7 — réponse moyenne &lt; 1h</li>
@@ -286,8 +352,32 @@
         </div>
       </div>
 
+      <!-- Réassurance mobile AVANT description -->
+      <section class="reassure-mobile mt-4">
+        <div class="row text-center g-3">
+          <div class="col-4">
+            <div class="p-3 border rounded-3 h-100">
+              <div class="icon mx-auto mb-2"><svg width="22" height="22"><use xlink:href="#truck"/></svg></div>
+              <div class="small"><strong>Livraison gratuite</strong><br>24–72 h en France</div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="p-3 border rounded-3 h-100">
+              <div class="icon mx-auto mb-2"><svg width="22" height="22"><use xlink:href="#refresh"/></svg></div>
+              <div class="small"><strong>Retours 30 jours</strong><br>Étiquette prépayée</div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="p-3 border rounded-3 h-100">
+              <div class="icon mx-auto mb-2"><svg width="22" height="22"><use xlink:href="#shield"/></svg></div>
+              <div class="small"><strong>Qualité contrôlée</strong><br>27 points</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Détails / Caractéristiques / Entretien -->
-      <section class="mt-5">
+      <section class="mt-4">
         <div class="row g-4">
           <div class="col-lg-7">
             <h3 class="h5 sec-title">Description</h3>
@@ -332,7 +422,7 @@
         </div>
       </section>
 
-      <!-- Cross-sell -->
+      <!-- Compléter le look (même catégorie) -->
       <section class="x-sell mt-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h3 class="h5 m-0">Compléter le look</h3>
@@ -367,9 +457,12 @@
         <button class="btn btn-dark text-uppercase" id="m-add">Ajouter</button>
       </div>
     </div>
+    <div class="container mt-2">
+      <div class="stockbar" aria-hidden="true"><span id="m-stockbar"></span></div>
+    </div>
   </div>
 
-  <!-- FOOTER (toutes infos de paiement supprimées) -->
+  <!-- FOOTER (sans infos de paiement) -->
   <footer class="border-top mt-5">
     <div class="container">
       <div class="row py-5">
