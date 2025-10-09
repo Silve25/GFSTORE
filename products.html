@@ -3,70 +3,55 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Produit — GF Store</title>
+  <title>Fiche produit — GF Store</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="format-detection" content="telephone=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
 
-  <!-- SEO (remplacés par product.js plus tard) -->
-  <meta name="description" content="Découvrez nos doudounes et parkas techniques. Livraison & retours gratuits." />
-  <meta property="og:title" content="GF Store — Produit" />
-  <meta property="og:description" content="Isolation premium, tissus techniques, SAV réactif." />
-  <meta property="og:type" content="product" />
-  <meta property="og:image" content="images/product-item-1.jpg" />
-
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-  <!-- Vendor + Theme CSS -->
+  <!-- Vendor + thème (si présents) -->
   <link rel="stylesheet" href="css/vendor.css">
   <link rel="stylesheet" href="style.css">
 
   <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet"/>
 
   <style>
-    /* === Spécifiques page produit (sans JS) === */
-    body{scroll-behavior:smooth}
-    .product-hero{margin-top:64px}
-    .breadcrumb a{text-decoration:none}
-    .gallery-main{border:1px solid #eee;border-radius:10px;overflow:hidden;background:#fafafa}
-    .gallery-main .ratio img{object-fit:cover}
-    .thumbs{display:flex;gap:.5rem;flex-wrap:wrap}
-    .thumbs button{border:1px solid #eee;border-radius:10px;padding:0;background:#fff;overflow:hidden;width:76px;height:76px}
-    .thumbs img{width:100%;height:100%;object-fit:cover;display:block}
-    .p-badge{letter-spacing:.08em}
-    .p-price{font-variant-numeric:tabular-nums}
-    .p-dot{width:18px;height:18px;border-radius:999px;border:1px solid #ddd;display:inline-block}
-    .p-size .btn{min-width:44px}
-    .sticky-col{position:sticky;top:96px}
-    .reassure .icon{width:22px;height:22px}
-    .pay-badge{border:1px dashed #bcc7d4;background:#f7fbff}
-    .sec-title{text-transform:uppercase;letter-spacing:.12em;font-size:.85rem}
-    .specs td{padding:.4rem .5rem;border-bottom:1px solid #eee}
-    .review-stars{color:#f5b301}
-    .x-sell .card{border:0;box-shadow:var(--shadow)}
-    .x-sell .ratio img{object-fit:cover}
-
-    /* CTA mobile sticky */
-    .cta-sticky{
-      position:fixed;left:0;right:0;bottom:0;z-index:1040;
-      background:#fff;border-top:1px solid #eee;
-      padding:.6rem .9rem;
-      display:none;
+    :root{
+      --navH: 64px;
+      --radius: 14px;
     }
-    .cta-sticky .price{font-weight:600}
-    @media (max-width:991.98px){
-      .cta-sticky{display:block}
-      .desktop-only{display:none !important}
-      .product-hero{margin-bottom:72px}
-    }
+    body{background:#fff;color:#111}
+    .navbar{min-height:64px}
+    .navbar.fixed-top{transition:background-color .25s ease, box-shadow .25s ease}
+    .navbar-ghost{background:transparent !important; box-shadow:none}
+    .navbar-solid{background:#ffffff !important; box-shadow:0 6px 20px rgba(0,0,0,.06)}
 
-    /* Petite pastille promo */
-    .promo-chip{display:inline-flex;align-items:center;gap:.4rem;border:1px solid #111;border-radius:999px;padding:.18rem .6rem;font-size:.8rem}
-    .promo-chip small{opacity:.75}
+    .page-hero{
+      background:#0f0f10 url('images/banner-image-6.jpg') center/cover no-repeat;
+      color:#fff; padding:96px 0 52px; margin-top:56px; position:relative;
+    }
+    .page-hero::after{content:""; position:absolute; inset:0; background:rgba(0,0,0,.35)}
+    .page-hero .container{position:relative; z-index:2}
+
+    /* Fiche */
+    .media-hero{border-radius:var(--radius); overflow:hidden; border:1px solid #eee}
+    .media-hero img{width:100%; height:auto; object-fit:cover}
+    .thumbs{display:flex; gap:.5rem; flex-wrap:wrap}
+    .thumbs img{width:70px;height:70px;object-fit:cover;border:1px solid #eee;border-radius:10px;cursor:pointer}
+    .thumbs img.active{outline:2px solid #111}
+    .p-color button, .p-size button{min-width:48px}
+    .badge-new{background:#111}
+    .small-muted{opacity:.75}
+    .list-dots{padding-left:1.1rem}
+    .list-dots li{margin:.25rem 0}
+    .sticky-col{position:sticky; top:calc(var(--navH) + 16px)}
+    .product-meta small{opacity:.75}
+    .product-title{font-family:'Marcellus', serif}
   </style>
 </head>
 <body>
@@ -77,16 +62,14 @@
       <symbol id="search" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></symbol>
       <symbol id="cart" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.49a3 3 0 0 0 2.89-2.18l1.58-5.55A1 1 0 0 0 19 5H6.74a3 3 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.92l.16.55 1.64 5.74A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Z"/></symbol>
       <symbol id="heart" viewBox="0 0 24 24"><path fill="currentColor" d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Z"/></symbol>
-      <symbol id="star" viewBox="0 0 24 24"><path fill="currentColor" d="m12 17.27 6.18 3.73-1.64-7.03L21 9.24l-7.19-.62L12 2 10.19 8.62 3 9.24l4.46 4.73-1.64 7.03L12 17.27Z"/></symbol>
-      <symbol id="truck" viewBox="0 0 24 24"><path fill="currentColor" d="M3 7h11v7h2l3-3h2v7h-2a3 3 0 0 1-6 0H9a3 3 0 0 1-6 0H1V9a2 2 0 0 1 2-2Zm3 10a1 1 0 1 0 1 1 1 1 0 0 0-1-1Zm10 0a1 1 0 1 0 1 1 1 1 0 0 0-1-1Z"/></symbol>
-      <symbol id="refresh" viewBox="0 0 24 24"><path fill="currentColor" d="M21 12a9 9 0 1 1-3-6.7V3a1 1 0 0 1 2 0v5h-5a1 1 0 0 1 0-2h2.64A7 7 0 1 0 19 12a1 1 0 1 1 2 0Z"/></symbol>
-      <symbol id="shield" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 3 5v6c0 5 3.8 9.7 9 11 5.2-1.3 9-6 9-11V5l-9-3Z"/></symbol>
       <symbol id="bank" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3 3 7v2h18V7l-9-4Zm-7 6v8H3v2h18v-2h-2V9H5Zm2 2h2v6H7v-6Zm4 0h2v6h-2v-6Zm4 0h2v6h-2v-6Z"/></symbol>
+      <symbol id="check" viewBox="0 0 24 24"><path fill="currentColor" d="M20 6 9 17l-5-5 1.41-1.41L9 14.17 18.59 4.59 20 6z"/></symbol>
+      <symbol id="close" viewBox="0 0 24 24"><path fill="currentColor" d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
     </defs>
   </svg>
 
   <!-- HEADER -->
-  <nav class="navbar navbar-expand-lg bg-light text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top">
+  <nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top navbar-ghost" id="siteNav">
     <div class="container-fluid">
       <a class="navbar-brand" href="index.html">GF Store</a>
 
@@ -110,12 +93,7 @@
       </div>
 
       <ul class="list-unstyled d-flex m-0 ms-3 align-items-center">
-        <li class="search-box me-3">
-          <a class="search-button" href="catalogue.html" aria-label="Recherche">
-            <svg width="24" height="24"><use xlink:href="#search"/></svg>
-          </a>
-        </li>
-        <li class="me-3 d-none d-lg-block"><a href="#" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
+        <li class="me-3 d-none d-lg-block"><a href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
         <li class="d-none d-lg-block">
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
             <svg width="24" height="24"><use xlink:href="#cart"/></svg>
@@ -126,10 +104,10 @@
     </div>
   </nav>
 
-  <!-- Panier -->
+  <!-- Panier (géré par app.js) -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
     <div class="offcanvas-header justify-content-center">
-      <button class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
     </div>
     <div class="offcanvas-body">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -141,375 +119,179 @@
     </div>
   </div>
 
-  <!-- Fil d’Ariane + Badge confiance -->
-  <header class="product-hero">
+  <!-- HERO -->
+  <header class="page-hero text-center">
     <div class="container">
-      <nav aria-label="breadcrumb" class="mb-2">
-        <ol class="breadcrumb small mb-1">
-          <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
-          <li class="breadcrumb-item"><a href="catalogue.html">Catalogue</a></li>
-          <li class="breadcrumb-item" id="bc-category">—</li>
-          <li class="breadcrumb-item active" aria-current="page" id="bc-title">Produit</li>
+      <nav aria-label="breadcrumb" id="p-breadcrumbs" class="mb-2">
+        <!-- rempli en JS -->
+        <ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a class="link-light text-decoration-none" href="index.html">Accueil</a></li>
+          <li class="breadcrumb-item"><a class="link-light text-decoration-none" href="catalogue.html">Catalogue</a></li>
+          <li class="breadcrumb-item active text-white-50" aria-current="page">Produit</li>
         </ol>
       </nav>
-
-      <div class="d-flex flex-wrap align-items-center gap-2">
-        <span class="promo-chip"><strong>-10%</strong> <small>avec code <b>GF-FIRST10</b></small></span>
-        <span class="badge text-bg-light p-badge text-uppercase" id="p-badge">Nouveauté</span>
-        <small class="text-secondary">Livraison & retours gratuits</small>
-      </div>
+      <h1 class="display-6 m-0">Fiche produit</h1>
     </div>
   </header>
 
-  <!-- Corps produit -->
-  <main class="py-4">
+  <main class="py-5" id="product-root" data-product-root>
     <div class="container">
       <div class="row g-4">
-        <!-- Galerie -->
-        <div class="col-lg-7">
-          <div class="gallery-main">
-            <div class="ratio ratio-4x3">
-              <img id="p-hero" src="images/product-item-1.jpg" alt="Visuel produit">
-            </div>
+        <!-- Colonne gauche : galerie -->
+        <div class="col-lg-6">
+          <div class="media-hero ratio ratio-4x3 mb-3">
+            <img id="p-hero" src="images/product-fallback.jpg" alt="Visuel produit">
           </div>
-          <div class="thumbs mt-2" id="p-thumbs">
-            <!-- vignettes (remplies plus tard) -->
-            <button><img src="images/product-item-1.jpg" alt=""></button>
-            <button><img src="images/product-item-2.jpg" alt=""></button>
-            <button><img src="images/product-item-3.jpg" alt=""></button>
+          <div id="p-thumbs" class="thumbs">
+            <!-- Thumbs injectées -->
           </div>
-
-          <!-- Réassurance sous galerie -->
-          <section class="reassure mt-4">
-            <div class="row text-center g-3">
-              <div class="col-6 col-md-4">
-                <div class="p-3 border rounded-3 h-100">
-                  <div class="icon mx-auto mb-2"><svg width="22" height="22"><use xlink:href="#truck"/></svg></div>
-                  <div class="small"><strong>Livraison gratuite</strong><br>24–72 h en France</div>
-                </div>
-              </div>
-              <div class="col-6 col-md-4">
-                <div class="p-3 border rounded-3 h-100">
-                  <div class="icon mx-auto mb-2"><svg width="22" height="22"><use xlink:href="#refresh"/></svg></div>
-                  <div class="small"><strong>Retours 30 jours</strong><br>Étiquette prépayée</div>
-                </div>
-              </div>
-              <div class="col-12 col-md-4">
-                <div class="p-3 border rounded-3 h-100">
-                  <div class="icon mx-auto mb-2"><svg width="22" height="22"><use xlink:href="#shield"/></svg></div>
-                  <div class="small"><strong>Qualité contrôlée</strong><br>27 points de contrôle</div>
-                </div>
-              </div>
-            </div>
-          </section>
         </div>
 
-        <!-- Panneau achat -->
-        <div class="col-lg-5">
-          <aside class="sticky-col">
-            <h1 id="p-title" class="h2 mb-1">Nom du produit</h1>
-            <div class="text-secondary" id="p-subtitle">Sous-titre / tagline</div>
-
-            <div class="d-flex align-items-center gap-3 mt-2">
-              <div class="review-stars small" aria-label="Note 4.8 sur 5">
-                <svg width="16" height="16"><use xlink:href="#star"/></svg>
-                <svg width="16" height="16"><use xlink:href="#star"/></svg>
-                <svg width="16" height="16"><use xlink:href="#star"/></svg>
-                <svg width="16" height="16"><use xlink:href="#star"/></svg>
-                <svg width="16" height="16" style="opacity:.5"><use xlink:href="#star"/></svg>
-                <span class="ms-1 text-secondary">4,8/5 (128)</span>
-              </div>
-              <span class="small text-secondary">SKU : <span id="p-sku">—</span></span>
+        <!-- Colonne droite : infos -->
+        <div class="col-lg-6">
+          <div class="sticky-col">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span id="p-cat" class="badge text-bg-light text-uppercase">Produit</span>
+              <span class="badge badge-new text-uppercase d-none" id="p-badge-new">Nouveau</span>
             </div>
 
-            <div class="d-flex align-items-end justify-content-between mt-3">
-              <div class="p-price display-6 fw-normal" id="p-price">—</div>
-              <div class="text-end">
-                <div class="small text-success">Livraison & retours gratuits</div>
-                <div class="small text-secondary">Taxes incluses</div>
+            <h2 id="p-title" class="product-title h3 mb-1">Titre produit</h2>
+            <div id="p-subtitle" class="text-secondary mb-2">Sous-titre</div>
+
+            <div class="product-meta d-flex align-items-center gap-3 mb-3">
+              <div id="p-price" class="fs-4 fw-semibold">—</div>
+              <div class="small d-flex align-items-center gap-1">
+                <svg width="18" height="18"><use xlink:href="#check"/></svg>
+                <span id="p-stock">—</span>
               </div>
             </div>
 
             <!-- Couleurs -->
-            <div class="mt-3">
-              <div class="sec-title mb-2">Couleur</div>
-              <div class="d-flex align-items-center gap-2" id="p-colors">
-                <!-- Exemple visuel -->
-                <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
-                  <span class="p-dot" style="background:#000"></span> Noir
-                </button>
-                <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
-                  <span class="p-dot" style="background:#fff"></span> Blanc
-                </button>
+            <div class="mb-3">
+              <div class="small-muted mb-1">Couleur</div>
+              <div id="p-colors" class="p-color d-flex flex-wrap gap-2">
+                <!-- boutons injectés -->
               </div>
             </div>
 
             <!-- Tailles -->
-            <div class="mt-3 p-size">
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="sec-title mb-2">Taille</div>
-                <a href="#" class="small">Guide des tailles</a>
-              </div>
-              <div class="d-flex flex-wrap gap-2" id="p-sizes">
-                <button class="btn btn-outline-secondary btn-sm">XS</button>
-                <button class="btn btn-outline-secondary btn-sm">S</button>
-                <button class="btn btn-outline-secondary btn-sm">M</button>
-                <button class="btn btn-outline-secondary btn-sm">L</button>
-                <button class="btn btn-outline-secondary btn-sm">XL</button>
-              </div>
-              <div class="small text-secondary mt-2" id="p-stock">En stock</div>
-            </div>
-
-            <!-- Quantité -->
-            <div class="mt-3">
-              <div class="sec-title mb-2">Quantité</div>
-              <div class="input-group" style="max-width:220px">
-                <button class="btn btn-outline-secondary" type="button" aria-label="Diminuer">−</button>
-                <input class="form-control text-center" type="number" value="1" min="1" id="p-qty" aria-label="Quantité">
-                <button class="btn btn-outline-secondary" type="button" aria-label="Augmenter">+</button>
+            <div class="mb-3">
+              <div class="small-muted mb-1">Taille</div>
+              <div id="p-sizes" class="p-size d-flex flex-wrap gap-2">
+                <!-- boutons injectés -->
               </div>
             </div>
 
-            <!-- CTA -->
-            <div class="d-grid gap-2 mt-4 desktop-only">
-              <button class="btn btn-dark btn-lg text-uppercase" id="p-add">Ajouter au panier</button>
-              <a class="btn btn-outline-dark btn-lg text-uppercase" href="checkout.html" id="p-buy">Acheter maintenant</a>
+            <!-- Actions -->
+            <div class="d-grid gap-2 mb-2">
+              <button id="p-add" class="btn btn-dark btn-lg text-uppercase" type="button">Ajouter au panier</button>
+              <a id="p-deeplink" class="btn btn-outline-secondary" href="#">Ouvrir la fiche dédiée</a>
             </div>
+            <small id="p-madein" class="text-secondary d-block">Fabriqué —</small>
 
-            <!-- Paiement accepté -->
-            <div class="pay-badge border rounded-3 p-3 mt-3">
-              <div class="d-flex align-items-center gap-2">
-                <svg width="20" height="20"><use xlink:href="#bank"/></svg>
-                <strong>Paiement accepté :</strong> <span class="ms-1">Virement SEPA instant</span>
+            <hr class="my-4">
+
+            <!-- Détails -->
+            <div class="row g-4">
+              <div class="col-md-6">
+                <h6 class="text-uppercase mb-2">Détails</h6>
+                <ul id="p-features" class="list-dots small">
+                  <!-- features injectées -->
+                </ul>
               </div>
-              <small class="text-secondary d-block mt-1">Traitement prioritaire à réception du virement.</small>
+              <div class="col-md-6">
+                <h6 class="text-uppercase mb-2">Entretien</h6>
+                <ul id="p-care" class="list-dots small">
+                  <!-- care injecté -->
+                </ul>
+              </div>
             </div>
 
-            <!-- Avantages -->
-            <ul class="small text-secondary mt-3 mb-0">
-              <li>Expédition 24h (jours ouvrés)</li>
-              <li>Retours faciles sous 30 jours</li>
-              <li>Support 7j/7 — réponse moyenne &lt; 1h</li>
-            </ul>
-          </aside>
+            <div class="alert alert-info mt-4 mb-0 small">
+              Paiement par virement bancaire uniquement. Livraison & retours gratuits.
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Détails / Caractéristiques / Entretien -->
-      <section class="mt-5">
-        <div class="row g-4">
-          <div class="col-lg-7">
-            <h3 class="h5 sec-title">Description</h3>
-            <p id="p-description" class="mb-4">
-              Conçue pour l’hiver actif : isolation premium, tissu technique et finitions maîtrisées.
-            </p>
-
-            <div class="row">
-              <div class="col-md-6">
-                <h4 class="h6 sec-title">Points forts</h4>
-                <ul id="p-features" class="mb-4">
-                  <li>Capuche amovible</li>
-                  <li>Rembourrage duvet 90/10</li>
-                  <li>Fermeture zippée YKK</li>
-                </ul>
-              </div>
-              <div class="col-md-6">
-                <h4 class="h6 sec-title">Entretien</h4>
-                <ul id="p-care" class="mb-4">
-                  <li>Lavage machine 30°C – cycle doux</li>
-                  <li>Séchage à plat, à l’ombre</li>
-                  <li>Ne pas utiliser de javel</li>
-                </ul>
-              </div>
-            </div>
-
-            <h4 class="h6 sec-title">Composition & détails</h4>
-            <table class="w-100 specs">
-              <tbody id="p-specs">
-                <tr><td class="text-secondary">Extérieur</td><td>—</td></tr>
-                <tr><td class="text-secondary">Doublure</td><td>—</td></tr>
-                <tr><td class="text-secondary">Rembourrage</td><td>—</td></tr>
-                <tr><td class="text-secondary">Fabrication</td><td id="p-madein">—</td></tr>
-                <tr><td class="text-secondary">Code produit</td><td id="p-code">—</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="col-lg-5">
-            <div class="p-4 border rounded-3">
-              <h4 class="h6 sec-title">Pourquoi choisir GF Store ?</h4>
-              <ul class="mb-0">
-                <li>Qualité contrôlée sur 27 points</li>
-                <li>Matériaux premium & pièces durables</li>
-                <li>Service client humain, 7j/7</li>
-                <li>Livraison et retours gratuits en France</li>
-              </ul>
-            </div>
-
-            <div class="p-4 border rounded-3 mt-3">
-              <h4 class="h6 sec-title">Virement SEPA instant</h4>
-              <p class="mb-1">RIB : <strong>GF STORE</strong> — <strong>FR76 1234 5678 9012 3456 7890 123</strong></p>
-              <p class="mb-0">BIC : <strong>GFSTFRPPXXX</strong><br><small class="text-secondary">La commande est validée dès réception du virement.</small></p>
-            </div>
-          </div>
+      <!-- Bloc “autres infos” -->
+      <div class="row mt-5">
+        <div class="col-lg-8">
+          <h5 class="mb-2">À propos de GF Store</h5>
+          <p class="text-secondary">
+            Isolation premium, tissus techniques certifiés et contrôle qualité en atelier européen.
+            Conçu pour durer et pensé pour la ville comme la montagne.
+          </p>
         </div>
-      </section>
-
-      <!-- Cross-sell -->
-      <section class="x-sell mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h3 class="h5 m-0">Compléter le look</h3>
-          <a class="btn btn-sm btn-outline-dark text-uppercase" href="catalogue.html">Tout voir</a>
-        </div>
-        <div class="row g-3" id="p-cross">
-          <!-- Cartes suggestions (placeholders statiques sans JS) -->
-          <div class="col-6 col-md-3">
-            <div class="card h-100">
-              <div class="ratio ratio-4x3"><img src="images/product-item-2.jpg" class="w-100 h-100" alt=""></div>
-              <div class="card-body">
-                <div class="small text-uppercase">Accessoires</div>
-                <h6 class="mb-1">Bonnet Thermo</h6>
-                <div class="small text-secondary mb-2">—</div>
-                <a href="catalogue.html" class="btn btn-sm btn-dark text-uppercase">Ajouter</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-md-3">
-            <div class="card h-100">
-              <div class="ratio ratio-4x3"><img src="images/product-item-3.jpg" class="w-100 h-100" alt=""></div>
-              <div class="card-body">
-                <div class="small text-uppercase">Accessoires</div>
-                <h6 class="mb-1">Écharpe Mérinos</h6>
-                <div class="small text-secondary mb-2">—</div>
-                <a href="catalogue.html" class="btn btn-sm btn-dark text-uppercase">Ajouter</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-md-3">
-            <div class="card h-100">
-              <div class="ratio ratio-4x3"><img src="images/product-item-1.jpg" class="w-100 h-100" alt=""></div>
-              <div class="card-body">
-                <div class="small text-uppercase">Entretien</div>
-                <h6 class="mb-1">Spray déperlant</h6>
-                <div class="small text-secondary mb-2">—</div>
-                <a href="catalogue.html" class="btn btn-sm btn-dark text-uppercase">Ajouter</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-md-3">
-            <div class="card h-100">
-              <div class="ratio ratio-4x3"><img src="images/product-item-2.jpg" class="w-100 h-100" alt=""></div>
-              <div class="card-body">
-                <div class="small text-uppercase">Entretien</div>
-                <h6 class="mb-1">Lessive spéciale duvet</h6>
-                <div class="small text-secondary mb-2">—</div>
-                <a href="catalogue.html" class="btn btn-sm btn-dark text-uppercase">Ajouter</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Avis (markup prêt) -->
-      <section class="mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h3 class="h5 m-0">Avis clients</h3>
-          <span class="small text-secondary">Note moyenne : <strong>4,8/5</strong></span>
-        </div>
-        <div class="row g-3" id="p-reviews">
-          <div class="col-md-6">
-            <div class="border rounded-3 p-3 h-100">
-              <div class="d-flex align-items-center gap-2 mb-1">
-                <strong>Gauthier</strong> <span class="badge text-bg-light">Achat vérifié</span>
-                <span class="ms-auto review-stars">
-                  ★★★★☆
-                </span>
-              </div>
-              <div class="small text-secondary mb-2">Doudoune — Taille M</div>
-              <p class="mb-0">Chaud & léger, parfait pour l’hiver à vélo. Taille conforme.</p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="border rounded-3 p-3 h-100">
-              <div class="d-flex align-items-center gap-2 mb-1">
-                <strong>Amina</strong> <span class="badge text-bg-light">Achat vérifié</span>
-                <span class="ms-auto review-stars">
-                  ★★★★★
-                </span>
-              </div>
-              <div class="small text-secondary mb-2">Parka — Taille S</div>
-              <p class="mb-0">Finitions propres, échange rapide. Je recommande.</p>
-            </div>
-          </div>
-        </div>
-        <div class="text-center mt-3">
-          <a href="#" class="btn btn-outline-dark btn-sm text-uppercase">Voir tous les avis</a>
-        </div>
-      </section>
+      </div>
     </div>
   </main>
 
-  <!-- CTA mobile sticky -->
-  <div class="cta-sticky">
-    <div class="container d-flex align-items-center justify-content-between gap-3">
-      <div>
-        <div class="small text-secondary" id="m-title">Produit</div>
-        <div class="price" id="m-price">—</div>
-      </div>
-      <div class="d-flex gap-2">
-        <a href="checkout.html" class="btn btn-outline-dark text-uppercase">Acheter</a>
-        <button class="btn btn-dark text-uppercase" id="m-add">Ajouter</button>
-      </div>
-    </div>
-  </div>
-
   <!-- FOOTER -->
-  <footer class="border-top mt-5">
+  <footer class="border-top">
     <div class="container">
       <div class="row py-5">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <h5 class="text-uppercase mb-3">GF Store</h5>
-          <p>Du suivi expert aux rendez-vous sur mesure : une expérience dédiée à l’hiver.</p>
-          <div class="d-flex align-items-center gap-2">
-            <svg width="22" height="22"><use xlink:href="#bank"/></svg>
-            <span class="small">Paiement accepté : <strong>Virement SEPA instant</strong></span>
-          </div>
+          <p>Expédition & retours gratuits. Service client dédié.</p>
         </div>
-        <div class="col-6 col-md-2">
-          <h6 class="text-uppercase mb-3">Boutique</h6>
+        <div class="col-md-3">
+          <h5 class="text-uppercase mb-3">Services</h5>
           <ul class="list-unstyled">
-            <li><a href="index.html#hommes">Hommes</a></li>
-            <li><a href="index.html#femmes">Femmes</a></li>
-            <li><a href="index.html#enfants">Enfants</a></li>
-            <li><a href="catalogue.html">Catalogue</a></li>
-          </ul>
-        </div>
-        <div class="col-6 col-md-3">
-          <h6 class="text-uppercase mb-3">Aide</h6>
-          <ul class="list-unstyled">
-            <li><a href="#">Livraison</a></li>
-            <li><a href="#">Retours & échanges</a></li>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="commande.html">Suivre ma commande</a></li>
+            <li><a href="contact.html">Conseils d’achat</a></li>
+            <li><a href="entretien.html">Entretien produit</a></li>
           </ul>
         </div>
         <div class="col-md-3">
-          <h6 class="text-uppercase mb-3">Newsletter</h6>
-          <form class="d-flex gap-2">
-            <input type="email" class="form-control" placeholder="Votre email" required>
-            <button class="btn btn-dark" type="submit">OK</button>
-          </form>
-          <small class="text-secondary d-block mt-2">En vous inscrivant, vous acceptez notre politique de confidentialité.</small>
+          <h5 class="text-uppercase mb-3">Aide</h5>
+          <ul class="list-unstyled">
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="retours.html">Retours & échanges</a></li>
+            <li><a href="livraison.html">Livraison</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5 class="text-uppercase mb-3">Compte</h5>
+          <ul class="list-unstyled">
+            <li><a href="login.html">Connexion</a></li>
+            <li><a href="register.html">Créer un compte</a></li>
+            <li><a href="password-reset.html">Mot de passe oublié</a></li>
+          </ul>
         </div>
       </div>
-      <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top small">
-        <span>© 2025 GF Store. Tous droits réservés.</span>
-        <span>Livraison & retours gratuits • Service client dédié</span>
+      <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top">
+        <small>© 2025 GF Store. Tous droits réservés.</small>
+        <div class="d-flex align-items-center gap-2">
+          <svg width="22" height="22"><use xlink:href="#bank"/></svg>
+          <span class="small">Paiement accepté : <strong>Virement bancaire uniquement</strong></span>
+        </div>
       </div>
     </div>
   </footer>
 
-  <!-- JS vendor (aucun JS custom ici) -->
+  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+  <!-- Optionnel : si tu as un data/products.js maison, tu peux le charger AVANT products.js -->
+  <!-- <script src="data/products.js"></script> -->
+
+  <!-- Le contrôleur de fiche produit -->
+  <script src="js/products.js"></script>
+
+  <!-- Ton orchestrateur global (panier, auth, etc.) -->
+  <script src="js/app.js"></script>
+
+  <script>
+    // Petit effet header (ghost → solid)
+    const siteNav = document.getElementById('siteNav');
+    function onScrollHeader(){
+      const y = window.scrollY || document.documentElement.scrollTop;
+      siteNav.classList.toggle('navbar-solid', y > 12);
+      siteNav.classList.toggle('navbar-ghost', y <= 12);
+    }
+    window.addEventListener('scroll', onScrollHeader, {passive:true});
+    onScrollHeader();
+  </script>
 </body>
 </html>
