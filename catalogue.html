@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -23,41 +22,30 @@
 
   <style>
     :root{
-      /* Seront mis à jour par JS pour éviter les “sauts” */
       --navH: 64px;
       --fomoH: 40px;
       --radius: 14px;
     }
-    html{
-      scroll-behavior: smooth;
-      /* Décalage automatique des ancres sous header + fomo */
-      scroll-padding-top: calc(var(--fomoH, 0px) + var(--navH, 64px) + 12px);
-    }
+    html{scroll-behavior:smooth}
     body{background:#fff;color:#111}
+    body.has-fixed-nav #content{ padding-top: calc(var(--navH) + 8px) }
 
     /* NAV */
-    .navbar{min-height:64px}
-    .navbar.fixed-top{transition:background-color .25s ease, box-shadow .25s ease, transform .2s ease; top: var(--fomoH, 0px);}
+    .navbar{min-height:calc(var(--navH) + var(--fomoH) + 12px);}
+    .navbar.fixed-top{transition:all .25s ease; background:rgba(255,255,255,0)}
     .navbar-ghost{background:transparent !important; box-shadow:none}
     .navbar-solid{background:#ffffff !important; box-shadow:0 6px 20px rgba(0,0,0,.06)}
-    /* Couleurs adaptatives */
-    .navbar-ghost .navbar-brand,
-    .navbar-ghost .nav-link{color:#fff !important}
-    .navbar-ghost .nav-desktop-icons svg{color:#fff}
-    .navbar-ghost .navbar-toggler{border-color:rgba(255,255,255,.5)}
-    .navbar-ghost .navbar-toggler-icon{filter:invert(1); opacity:.9}
-    .navbar-solid .navbar-brand,
-    .navbar-solid .nav-link{color:#111 !important}
-    .navbar-solid .nav-desktop-icons svg{color:#111}
-    .navbar .navbar-toggler{border:0}
+    
+    /* Header height fix for calculation */
+    #siteNav{top: var(--navH)}
 
     /* FOMO bar */
-    .fomo-bar{position:sticky; top:0; z-index:1020; background:#111; color:#fff; font-size:.92rem; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);}
+    .fomo-bar{position:fixed; top:0; width:100%; z-index:1020; background:#111; color:#fff; font-size:.92rem; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);}
     .fomo-bar small{opacity:.85}
     .badge-dot{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#22c55e;margin-right:.5rem}
 
     /* Grid header layout (mobile like index) */
-    .nav-grid{display:flex; align-items:center; width:100%;}
+    .nav-grid{display:flex; align-items:center; width:100%; transition:all .3s ease}
     @media (max-width: 991.98px){
       .nav-grid{display:grid; grid-template-columns: 1fr auto auto; column-gap:.5rem;}
       .nav-brand{grid-column:1}
@@ -68,48 +56,70 @@
     @media (min-width: 992px){ .nav-cart-right{display:none !important;} }
     .nav-cart-right .badge{font-size:.65rem; line-height:1; padding:.25em .35em; transform:translate(15%, -35%); }
 
-    /* HERO (nouvelle image + overlay) */
-    .catalog-hero{
-      /* Pousse le hero sous fomo + nav dynamiquement */
-      margin-top: calc(var(--fomoH, 0px) + var(--navH, 64px));
-      background:#0f0f10 url('https://azure-eu-images.contentstack.com/v3/assets/blt70cb06b4414428cc/blt70e742eb576b00d4/68d2a81416d9319f7a72e26f/ASSET-HERO-HP-PRESS-RELEASE-SECONDHERO-ENFANT-DESK.jpg?branch=prod_1&format=avif&auto=auto&width=100p&quality=90') center/cover no-repeat;
-      color:#fff; padding:92px 0 56px; position:relative;
-    }
+    /* Positions fixes pour le responsive */
+    .navbar-fixed-top{position:fixed; top:0; width:100% !important;}
+
+    /* HERO */
+    .catalog-hero{background:#0f0f10; color:#fff; padding:92px 0 56px; margin-top:0; position:relative; min-height:450px;}
+    .catalog-hero::before{content:""; position:absolute; inset:0; background:url('https://azure-eu-images.contentstack.com/v3/assets/blt70cb06b4414428cc/blt70e742eb576b00d4/68d2a81416d9319f7a72e26f/ASSET-HERO-HP-PRESS-RELEASE-SECONDHERO-ENFANT-DESK.jpg?branch=prod_1&format=avif&auto=auto&width=100p&quality=90') center/cover no-repeat; }
     .catalog-hero::after{content:""; position:absolute; inset:0; background:rgba(0,0,0,.35)}
     .catalog-hero .container{position:relative; z-index:2}
 
     /* Cards / placeholders */
-    .product-card .ratio{background:#f8f9fa; border-radius:12px; overflow:hidden}
-    /* Ne pas croper: contain + centrage + marges internes */
-    .product-card .ratio img{
-      object-fit:contain;
-      object-position:center;
-      background:#f8f9fa;
-      padding:6px;
-    }
+    .product-card .ratio { padding-bottom: 75%; /* Same as 4:3 ratio */ max-height: 400px !important; }
+    .product-card .ratio img{object-fit:cover; width:100%; height:100%;}
     .badge-new{background:#111}
     .cursor-pointer{cursor:pointer}
     .skeleton{background:linear-gradient(90deg,#eee 25%,#f6f6f6 37%,#eee 63%); background-size:400% 100%; animation:shimmer 1.1s infinite linear}
     @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
 
-    /* Offcanvas fiche produit quick-view - pas de crop non plus */
-    #p-hero{object-fit:contain !important; background:#f8f9fa}
+    /* Offcanvas fiche produit quick-view */
     .p-color-dot{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid #ddd}
-    .thumbs img{height:64px;width:64px;object-fit:contain;border:1px solid #eee;border-radius:6px;background:#f8f9fa}
+    .thumbs img{height:64px;width:64px;object-fit:cover;border:1px solid #eee;border-radius:6px}
     .thumbs img.active{outline:2px solid #111}
 
     .footer-mini-logo{height:22px;opacity:.8}
+
+    /* HEADER STABILIZATION */
+    body {
+      overflow-x: hidden;
+      scroll-padding-top: 80px;
+    }
+
+    /* Optimized Nav Cart badge */
+    .offcanvasCart {
+      min-width: 350px;
+    }
+
+    .navbar-nav .dropdown-toggle::after {
+      display: none;
+    }
+    .navbar-nav .dropdown-item:hover {
+      background-color: #f8f9fa;
+    }
+
+    /* Stabilized Product Cards */
+    .product-card .p-link:hover,
+    .product-card .add:hover {
+      opacity: 0.9;
+    }
+
+    .product-card .p-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
   </style>
 </head>
 <body class="homepage">
-
   <!-- SVG icons -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     <defs>
       <symbol id="search" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></symbol>
       <symbol id="cart" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.49a3 3 0 0 0 2.89-2.18l1.58-5.55A1 1 0 0 0 19 5H6.74a3 3 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.92l.16.55 1.64 5.74A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Z"/></symbol>
       <symbol id="heart" viewBox="0 0 24 24"><path fill="currentColor" d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Z"/></symbol>
-      <symbol id="trash" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3h6a1 1 0 0 1 1 1v1h4a1 1 0 0 1 0 2h-1v12a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4a1 1 0 0 0 0-2h4V4a1 1 0 0 1 1-1Zm1 3h4V5h-4v1Zm-1 5a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Zm6 0a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Z"/></symbol>
+      <symbol id="trash" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3h6a1 1 0 0 1 1 1v1h4a1 1 0 0 1 0 2h-1v12a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4a1 1 0 0 1 0-2h4V4a1 1 0 0 1 1-1Zm1 3h4V5h-4v1Zm-1 5a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Zm6 0a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Z"/></symbol>
       <symbol id="close" viewBox="0 0 24 24"><path fill="currentColor" d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
       <symbol id="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></symbol>
       <symbol id="user" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></symbol>
@@ -127,8 +137,8 @@
     </div>
   </div>
 
-  <!-- HEADER -->
-  <nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top navbar-ghost" id="siteNav">
+  <!-- HEADER FIX: Applying styles inline for better rendering -->
+  <nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top navbar-ghost" id="siteNav" style="top: 64px; transition: all .3s ease; position: fixed; width: 100%; z-index: 1000;">
     <div class="container-fluid nav-grid">
       <!-- Logo -->
       <a class="navbar-brand nav-brand" href="index.html">GF Store</a>
@@ -150,13 +160,13 @@
           <h5 class="offcanvas-title">Menu</h5>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
         </div>
-        <div class="offcanvas-body">
+        <div class="offcanvas-body" style="max-height: calc(100vh - 130px);">
           <ul class="navbar-nav ms-auto gap-3">
             <li class="nav-item"><a class="nav-link" href="index.html#hommes">Hommes</a></li>
             <li class="nav-item"><a class="nav-link" href="index.html#femmes">Femmes</a></li>
             <li class="nav-item"><a class="nav-link" href="index.html#enfants">Enfants</a></li>
             <li class="nav-item"><a class="nav-link active" href="catalogue.html">Catalogue</a></li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" style="height: 1px;">
               <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
                 <svg width="20" height="20" class="me-1"><use xlink:href="#user"/></svg>Compte
               </a>
@@ -182,24 +192,24 @@
     </div>
   </nav>
 
-  <!-- Panier -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
+  <!-- Enhanced Product Cart Styles -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" style="max-height: 90vh; overflow-y: auto;">
     <div class="offcanvas-header justify-content-center">
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
     </div>
-    <div class="offcanvas-body">
+    <div class="offcanvas-body" style="max-height: calc(100vh - 130px);">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-primary">Votre panier</span>
         <span class="badge bg-primary rounded-pill cart-count">0</span>
       </h4>
-      <p class="text-body-secondary">Votre panier est vide.</p>
-      <a class="w-100 btn btn-dark btn-lg mt-3" href="checkout.html">Passer au paiement</a>
+      <p class="text-body-secondary">Panier vide</p>
+      <a class="w-100 btn btn-dark btn-lg mt-3" href="checkout.html">Passer à la caisse</a>
     </div>
   </div>
 
   <!-- HERO + Fil d'Ariane -->
   <header class="catalog-hero text-center">
-    <div class="container">
+    <div class="container position-relative" style="padding-top: 40px;">
       <nav aria-label="breadcrumb" class="mb-2">
         <ol class="breadcrumb justify-content-center">
           <li class="breadcrumb-item"><a class="link-light text-decoration-none" href="index.html">Accueil</a></li>
@@ -214,9 +224,9 @@
   <main id="content">
 
     <!-- Filtres -->
-    <section class="py-4">
-      <div class="container">
-        <div class="row g-3 align-items-end">
+    <section class="py-4 sticky-top" style="background: rgba(255, 255, 255, .85); z-index: 1025;">
+      <div class="container" style="position: relative; padding-top: 80px !important;">
+        <div class="row g-3 align-items-end" style="position: relative; z-index: 1030;">
           <div class="col-lg-4">
             <label class="form-label" for="q">Recherche</label>
             <input id="q" type="search" class="form-control" placeholder="Doudoune, parka, bonnet…">
@@ -280,12 +290,13 @@
           <div class="small text-secondary">Livraison & retours gratuits</div>
         </div>
 
-        <div id="grid" class="row g-4">
+        <!-- Improved Product Grid -->
+        <div id="grid" class="row g-4 position-relative" style="min-height: 60vh;">
           <!-- Skeleton template -->
           <template id="tpl-skel">
             <div class="col-6 col-md-4 col-lg-3">
-              <div class="card h-100 border-0">
-                <div class="ratio ratio-4x3 skeleton rounded"></div>
+              <div class="card h-100 border-0 shadow-sm" style="min-height: auto;">
+                <div class="ratio ratio-4x3 skeleton rounded" style="height: 210px;"></div>
                 <div class="card-body">
                   <div class="skeleton" style="height:16px;width:70%;border-radius:6px"></div>
                   <div class="skeleton mt-2" style="height:12px;width:40%;border-radius:6px"></div>
@@ -308,69 +319,71 @@
 
   </main>
 
-  <!-- Template carte produit (rempli par catalogue.js) -->
+  <!-- Products List template with optimized images -->
   <template id="tpl-card">
     <div class="col-6 col-md-4 col-lg-3">
-      <div class="card product-card h-100 border-0 shadow-sm">
-        <a class="stretched-link text-reset text-decoration-none p-link" href="products.html">
+      <div class="card product-card h-100 border-0 shadow-sm" style="min-height: auto;">
+        <a class="stretched-link p-link" href="products.html" style="display: flex; align-items: center; justify-content: center; height: 100%;">
           <div class="position-relative">
-            <span class="position-absolute top-0 start-0 m-2 badge badge-new text-uppercase d-none">Nouveau</span>
-            <div class="ratio ratio-4x3">
-              <img class="w-100 h-100" alt="">
+            <span class="position-absolute top-0 start-0 m-2 badge badge-new text-uppercase d-none" style="border-radius: 20px; background: #111; padding: 2px 10px;">Nouveau</span>
+            <div class="ratio ratio-4x3" style="position: relative; overflow: hidden; height: 210px;">
+              <img class="img-fluid w-100 h-100 object-cover" style="object-fit: contain" alt="" loading="lazy">
             </div>
           </div>
         </a>
-        <div class="card-body">
-          <h6 class="text-uppercase mb-1 name">Produit</h6>
-          <div class="small text-secondary mb-2 meta">—</div>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="fw-semibold price">—</div>
-            <button class="btn btn-sm btn-dark text-uppercase add cursor-pointer" type="button">Ajouter</button>
+        <div class="card-body" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="flex-grow: 1;">
+            <h6 class="text-uppercase mb-1 name" style="font-weight: 700;">Produit</h6>
+            <div class="small text-secondary meta">—</div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <div class="fw-semibold price" style="color: #111;">—</div>
+            <button class="btn btn-sm btn-dark text-uppercase add cursor-pointer" type="button" style="min-width: 100px;">
+              Ajouter<span class="ms-1">+</span>
+            </button>
           </div>
         </div>
       </div>
     </div>
   </template>
 
-  <!-- Offcanvas Quick-view produit (utilisé par catalogue.js si activé) -->
+  <!-- Offcanvas Quick-view produit (utilisé par catalogue.js si tu l'actives) -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasProduct" aria-labelledby="offcanvasProductLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasProductLabel">Fiche produit</h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
     </div>
-    <div class="offcanvas-body">
+    <div class="offcanvas-body" style="max-height: calc(100vh - 130px); overflow-y: auto;">
       <div class="row g-3">
         <div class="col-12">
-          <div class="ratio ratio-4x3 border rounded">
-            <img id="p-hero" src="" alt="" class="w-100 h-100">
+          <div class="ratio ratio-4x3 border rounded" style="max-height: 300px;">
+            <img id="p-hero" src="" alt="" class="img-fluid w-100 h-100 object-cover" style="object-fit: contain;">
           </div>
         </div>
         <div class="col-12">
           <div id="p-thumbs" class="thumbs d-flex flex-wrap gap-2"></div>
         </div>
         <div class="col-12">
-          <h4 id="p-title" class="mb-1"></h4>
-          <div id="p-subtitle" class="text-secondary mb-2"></div>
-          <div class="d-flex align-items-center gap-3 mb-3">
-            <div id="p-price" class="fs-5 fw-semibold"></div>
-            <span id="p-cat" class="badge text-bg-light text-uppercase"></span>
+          <h4 id="p-title" class="mb-1" style="font-size: 1.25rem; font-weight: 700;"></h4>
+          <div id="p-subtitle" class="text-secondary mb-2" style="font-weight: 500;"></div>
+          <div class="d-flex align-items-center gap-3 mb-3" style="justify-content: center; flex-wrap: wrap;">
+            <div id="p-price" class="fs-5 fw-semibold" style="color: #e12a2a;"></div>
+            <span id="p-cat" class="badge text-bg-light text-uppercase" style="padding: 4px 12px; border-radius: 20px; font-weight: 500;"></span>
           </div>
-          <div id="p-colors" class="d-flex align-items-center gap-2 mb-3"></div>
-          <div id="p-sizes" class="d-flex align-items-center gap-2 mb-3"></div>
           <div class="d-grid gap-2">
-            <button id="p-add" class="btn btn-dark text-uppercase" type="button">Ajouter au panier</button>
-            <a id="p-deeplink" href="products.html" class="btn btn-outline-secondary">Ouvrir la fiche dédiée</a>
+            <button id="p-add" class="btn btn-dark text-uppercase" type="button" style="font-size: 1.1rem; padding: 8px;">Ajouter au panier</button>
+            <a id="p-deeplink" href="products.html" class="btn btn-outline-secondary">Voir la fiche</a>
           </div>
           <hr>
           <div>
-            <h6 class="text-uppercase">Détails</h6>
-            <ul id="p-features" class="small ps-3"></ul>
+            <h6 class="text-uppercase" style="color: #495057; margin-bottom: 10px;">Détails</h6>
+            <ul id="p-features" class="small ps-3 list-unstyled"></ul>
           </div>
           <div>
-            <h6 class="text-uppercase">Entretien</h6>
-            <ul id="p-care" class="small ps-3"></ul>
+            <h6 class="text-uppercase" style="color: #495057; margin-top: 15px; margin-bottom: 10px;">Entretien</h6>
+            <ul id="p-care" class="small ps-3 list-unstyled"></ul>
           </div>
-          <small id="p-madein" class="text-secondary d-block mt-2"></small>
+          <small id="p-madein" class="text-secondary d-block mt-3" style="font-weight: 500;"></small>
         </div>
       </div>
     </div>
@@ -381,49 +394,49 @@
     <div class="container">
       <div class="row py-5">
         <div class="col-md-4">
-          <h5 class="text-uppercase mb-3">GF Store</h5>
+          <h5 class="text-uppercase mb-3" style="font-weight: 700;">GF Store</h5>
           <p>Expédition & retours gratuits. Service client dédié.</p>
-          <div class="d-flex gap-3">
-            <img src="images/visa-card.png" class="footer-mini-logo" alt="Visa">
-            <img src="images/paypal-card.png" class="footer-mini-logo" alt="PayPal">
-            <img src="images/master-card.png" class="footer-mini-logo" alt="Mastercard">
+          <div class="d-flex gap-3" style="margin-top: 10px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/179/179459.png" class="footer-mini-logo" alt="Visa" style="height: 30px; background-color: #ffcc00; padding: 6px; border-radius: 4px; width: auto;">
+            <img src="https://cdn-icons-png.flaticon.com/512/179/179451.png" class="footer-mini-logo" alt="PayPal" style="height: 30px; background-color: #003087; color: white; padding: 6px; border-radius: 4px; width: auto;">
+            <img src="https://cdn-icons-png.flaticon.com/512/179/179456.png" class="footer-mini-logo" alt="Mastercard" style="height: 30px; background-color: #0044cc; color: white; padding: 6px; border-radius: 4px; width: auto;">
           </div>
         </div>
         <div class="col-6 col-md-2">
-          <h6 class="text-uppercase mb-3">Boutique</h6>
+          <h6 class="text-uppercase mb-3" style="font-weight: 600;">Boutique</h6>
           <ul class="list-unstyled">
-            <li><a href="index.html#hommes">Hommes</a></li>
-            <li><a href="index.html#femmes">Femmes</a></li>
-            <li><a href="index.html#enfants">Enfants</a></li>
-            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="index.html#hommes" class="text-decoration-none text-secondary" style="transition: color .2s;">Hommes</a></li>
+            <li><a href="index.html#femmes" class="text-decoration-none text-secondary" style="transition: color .2s;">Femmes</a></li>
+            <li><a href="index.html#enfants" class="text-decoration-none text-secondary" style="transition: color .2s;">Enfants</a></li>
+            <li><a href="catalogue.html" class="text-decoration-none text-secondary" style="transition: color .2s;">Catalogue</a></li>
           </ul>
         </div>
         <div class="col-6 col-md-3">
-          <h6 class="text-uppercase mb-3">Aide</h6>
+          <h6 class="text-uppercase mb-3" style="font-weight: 600;">Aide</h6>
           <ul class="list-unstyled">
-            <li><a href="livraison.html">Livraison</a></li>
-            <li><a href="retours.html">Retours & échanges</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="livraison.html" class="text-decoration-none text-secondary" style="transition: color .2s;">Livraison</a></li>
+            <li><a href="retours.html" class="text-decoration-none text-secondary" style="transition: color .2s;">Retours & échanges</a></li>
+            <li><a href="faq.html" class="text-decoration-none text-secondary" style="transition: color .2s;">FAQ</a></li>
+            <li><a href="contact.html" class="text-decoration-none text-secondary" style="transition: color .2s;">Contact</a></li>
           </ul>
         </div>
         <div class="col-md-3">
-          <h6 class="text-uppercase mb-3">Newsletter</h6>
-          <form class="d-flex gap-2">
-            <input type="email" class="form-control" placeholder="Votre email" required>
-            <button class="btn btn-dark" type="submit">OK</button>
+          <h6 class="text-uppercase mb-3" style="font-weight: 600;">Newsletter</h6>
+          <form class="d-flex gap-2" style="position: relative;">
+            <input type="email" class="form-control" placeholder="Votre email" required style="padding-right: 32px;">
+            <button class="btn btn-dark" type="submit" style="padding: 6px 12px; height: auto;">OK</button>
           </form>
-          <small class="text-secondary d-block mt-2">En vous inscrivant, vous acceptez notre politique de confidentialité.</small>
+          <small class="text-secondary d-block mt-2" style="font-size: .9rem;">En vous inscrivant, vous acceptez notre politique de confidentialité.</small>
         </div>
       </div>
-      <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top small">
+      <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top small" style="border-top: 1px solid #e9ecef;">
         <span>© 2025 GF Store. Tous droits réservés.</span>
         <span>Livraison & retours gratuits • Service client dédié</span>
       </div>
     </div>
   </footer>
 
-  <!-- JS (Bootstrap + tes apps). Le JS ci-dessous corrige header + offsets + images non crop -->
+  <!-- JS (Bootstrap + tes apps). Le peu de JS d’ambiance (FOMO/header) vit dans app.js si tu préfères -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
   <!-- Data helpers (facultatif si déjà inclus ailleurs) -->
@@ -434,59 +447,5 @@
 
   <!-- App globale (panier, auth, etc.) -->
   <script src="js/app.js"></script>
-
-  <!-- Fixes robustes header/scroll + offsets dynamiques -->
-  <script>
-    (function(){
-      const html = document.documentElement;
-      const body = document.body;
-      const nav = document.getElementById('siteNav');
-      const fomo = document.getElementById('fomoBar');
-
-      function updateOffsets(){
-        // Mesurer les hauteurs réelles et pousser dans les CSS vars
-        const fH = fomo ? fomo.offsetHeight : 0;
-        const nH = nav ? nav.offsetHeight : 64;
-        html.style.setProperty('--fomoH', fH + 'px');
-        html.style.setProperty('--navH', nH + 'px');
-      }
-
-      // Scroll state: nav transparent au top, solide après 10px
-      let ticking = false;
-      function onScroll(){
-        if(ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          const solid = window.scrollY > 10;
-          nav && nav.classList.toggle('navbar-solid', solid);
-          nav && nav.classList.toggle('navbar-ghost', !solid);
-          ticking = false;
-        });
-      }
-
-      // Initialisation
-      function init(){
-        body.classList.add('has-fixed-nav'); // pour compat éventuelle
-        updateOffsets();
-        onScroll();
-      }
-
-      // Recalcule sur resize/orientationchange/offcanvas open (hauteur nav peut changer)
-      window.addEventListener('resize', updateOffsets, {passive:true});
-      window.addEventListener('orientationchange', updateOffsets, {passive:true});
-      window.addEventListener('scroll', onScroll, {passive:true});
-      document.addEventListener('DOMContentLoaded', init);
-
-      // Si des polices chargent après coup -> recalcul
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(updateOffsets).catch(()=>{});
-      }
-
-      // Sécurité: recalcul après ouverture/fermeture offcanvas (hauteur potentielle)
-      document.addEventListener('shown.bs.offcanvas', updateOffsets);
-      document.addEventListener('hidden.bs.offcanvas', updateOffsets);
-    })();
-  </script>
 </body>
 </html>
-```
