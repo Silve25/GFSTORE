@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -9,7 +10,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
 
   <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+    crossorigin="anonymous">
 
   <!-- Vendor + Theme CSS -->
   <link rel="stylesheet" href="css/vendor.css">
@@ -18,80 +20,235 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap"
+    rel="stylesheet" />
 
   <style>
-    :root{
+    :root {
       --navH: 64px;
       --fomoH: 40px;
       --anchorOffset: calc(var(--navH) + var(--fomoH) + 12px);
       --radius: 14px;
     }
-    html{scroll-behavior:smooth}
-    body{background:#fff;color:#111}
-    body.has-fixed-nav #content{ padding-top: calc(var(--navH) + 8px) }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      background: #fff;
+      color: #111;
+    }
+
+    body.has-fixed-nav #content {
+      padding-top: calc(var(--navH) + 8px)
+    }
 
     /* NAV */
-    .navbar{min-height:64px; transition: all 0.3s ease; z-index: 1025; background-color: transparent;}
-    .navbar.fixed-top{position: fixed !important; top: var(--fomoH) !important; transition: background-color .25s ease, box-shadow .25s ease;}
-    .navbar-ghost{background:transparent !important; box-shadow:none}
-    .navbar-solid{background:#ffffff !important; box-shadow:0 6px 20px rgba(0,0,0,.06)}
+    .navbar {
+      min-height: 64px;
+      transition: background-color .25s ease, box-shadow .25s ease;
+    }
+
+    .navbar.fixed-top {
+      transition: background-color .3s ease, box-shadow .3s ease;
+    }
+
+    .navbar-ghost {
+      background: transparent !important;
+      box-shadow: none;
+    }
+
+    .navbar-solid {
+      background: #ffffff !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .06)
+    }
 
     /* FOMO bar */
-    .fomo-bar{position:fixed; top:0; left: 0; right: 0; z-index:1030; background:#111; color:#fff; font-size:.92rem; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);}
-    .badge-dot{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#22c55e;margin-right:.5rem}
+    .fomo-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1020;
+      background: #111;
+      color: #fff;
+      font-size: .92rem;
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+    }
+
+    .fomo-bar small {
+      opacity: .85
+    }
+
+    .badge-dot {
+      display: inline-block;
+      width: .45rem;
+      height: .45rem;
+      border-radius: 50%;
+      background: #22c55e;
+      margin-right: .5rem
+    }
 
     /* Grid header layout (mobile like index) */
-    .nav-grid{display:flex; align-items:center; width:100%;}
-    @media (max-width: 991.98px){
-      .nav-grid{display:grid; grid-template-columns: 1fr auto auto; column-gap:.5rem;}
-      .nav-brand{grid-column:1}
-      .nav-cart-right{grid-column:2; justify-self:end}
-      .nav-toggle-right{grid-column:3; justify-self:end}
-      .nav-desktop-icons{display:none !important;}
+    .nav-grid {
+      display: flex;
+      align-items: center;
+      width: 100%;
     }
-    @media (min-width: 992px){ .nav-cart-right{display:none !important;} }
-    .nav-cart-right .badge{font-size:.65rem; line-height:1; padding:.25em .35em; transform:translate(15%, -35%); }
+
+    @media (max-width: 991.98px) {
+      .nav-grid {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        column-gap: .5rem;
+      }
+
+      .nav-brand {
+        grid-column: 1
+      }
+
+      .nav-cart-right {
+        grid-column: 2;
+        justify-self: end
+      }
+
+      .nav-toggle-right {
+        grid-column: 3;
+        justify-self: end
+      }
+
+      .nav-desktop-icons {
+        display: none !important;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .nav-cart-right {
+        display: none !important;
+      }
+    }
+
+    .nav-cart-right .badge {
+      font-size: .65rem;
+      line-height: 1;
+      padding: .25em .35em;
+      transform: translate(15%, -35%);
+    }
 
     /* HERO */
-    .catalog-hero{background:#0f0f10 url('https://azure-eu-images.contentstack.com/v3/assets/blt70cb06b4414428cc/blt70e742eb576b00d4/68d2a81416d9319f7a72e26f/ASSET-HERO-HP-PRESS-RELEASE-SECONDHERO-ENFANT-DESK.jpg?branch=prod_1&format=avif&auto=auto&width=100p&quality=90') center/cover no-repeat; color:#fff; padding:92px 0 56px; position:relative; margin-top: calc(var(--fomoH) + var(--navH));}
-    .catalog-hero::after{content:""; position:absolute; inset:0; background:rgba(0,0,0,.35)}
-    .catalog-hero .container{position:relative; z-index:2}
-    .catalog-hero *{color: white !important;}
+    .catalog-hero {
+      background: #0f0f10 url('https://azure-eu-images.contentstack.com/v3/assets/blt70cb06b4414428cc/blt70e742eb576b00d4/68d2a81416d9319f7a72e26f/ASSET-HERO-HP-PRESS-RELEASE-SECONDHERO-ENFANT-DESK.jpg?branch=prod_1&format=avif&auto=auto&width=100p&quality=90') center/cover no-repeat;
+      color: #fff;
+      padding: 150px 0 56px;
+      margin-top: 56px;
+      position: relative;
+    }
+
+    .catalog-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .35);
+    }
+
+    .catalog-hero .container {
+      position: relative;
+      z-index: 2;
+      color: white; /* Ensures text over the hero is white */
+    }
 
     /* Cards / placeholders */
-    .product-card .ratio img{object-fit: contain; width: 100%; height: 100%; padding: 10px;}
-    .badge-new{background:#111}
-    .cursor-pointer{cursor:pointer}
-    .skeleton{background:linear-gradient(90deg,#eee 25%,#f6f6f6 37%,#eee 63%); background-size:400% 100%; animation:shimmer 1.1s infinite linear}
-    @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+    .product-card .ratio img {
+      object-fit: contain;
+      width: 100%;
+      height: 100%;
+    }
+
+    .badge-new {
+      background: #111
+    }
+
+    .cursor-pointer {
+      cursor: pointer
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, #eee 25%, #f6f6f6 37%, #eee 63%);
+      background-size: 400% 100%;
+      animation: shimmer 1.1s infinite linear
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 100% 0
+      }
+
+      100% {
+        background-position: 0 0
+      }
+    }
 
     /* Offcanvas fiche produit quick-view */
-    .p-color-dot{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid #ddd}
-    .thumbs img{height:64px;width:64px;object-fit:cover;border:1px solid #eee;border-radius:6px}
-    .thumbs img.active{outline:2px solid #111}
+    .p-color-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 1px solid #ddd
+    }
 
-    .footer-mini-logo{height:22px;opacity:.8}
-    
-    /* Fix scroll position */
-    #content {position: relative; z-index: 100;}
-    
-    /* Breadcrumb */
-    .breadcrumb-item+.breadcrumb-item::before{color: white !important;}
+    .thumbs img {
+      height: 64px;
+      width: 64px;
+      object-fit: cover;
+      border: 1px solid #eee;
+      border-radius: 6px
+    }
+
+    .thumbs img.active {
+      outline: 2px solid #111
+    }
+
+    .footer-mini-logo {
+      height: 22px;
+      opacity: .8
+    }
   </style>
 </head>
+
 <body class="homepage">
 
   <!-- SVG icons -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     <defs>
-      <symbol id="search" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></symbol>
-      <symbol id="cart" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.49a3 3 0 0 0 2.89-2.18l1.58-5.55A1 1 0 0 0 19 5H6.74a3 3 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.92l.16.55 1.64 5.74A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Z"/></symbol>
-      <symbol id="heart" viewBox="0 0 24 24"><path fill="currentColor" d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Z"/></symbol>
-      <symbol id="trash" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3h6a1 1 0 0 1 1 1v1h4a1 1 0 0 1 0 2h-1v12a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4a1 1 0 0 1 0-2h4V4a1 1 0 0 1 1-1Zm1 3h4V5h-4v1Zm-1 5a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Zm6 0a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Z"/></symbol>
-      <symbol id="close" viewBox="0 0 24 24"><path fill="currentColor" d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
-      <symbol id="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></symbol>
-      <symbol id="user" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></symbol>
+      <symbol id="search" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z" />
+      </symbol>
+      <symbol id="cart" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.49a3 3 0 0 0 2.89-2.18l1.58-5.55A1 1 0 0 0 19 5H6.74a3 3 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.92l.16.55 1.64 5.74A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Z" />
+      </symbol>
+      <symbol id="heart" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Z" />
+      </symbol>
+      <symbol id="trash" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M9 3h6a1 1 0 0 1 1 1v1h4a1 1 0 0 1 0 2h-1v12a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4a1 1 0 0 1 0-2h4V4a1 1 0 0 1 1-1Zm1 3h4V5h-4v1Zm-1 5a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Zm6 0a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6Z" />
+      </symbol>
+      <symbol id="close" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </symbol>
+      <symbol id="chev" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M9 6l6 6-6 6" />
+      </symbol>
+      <symbol id="user" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z" />
+      </symbol>
     </defs>
   </svg>
 
@@ -102,24 +259,31 @@
         <span class="badge-dot"></span>
         <span><strong id="watching">18</strong> personnes consultent cette page</span>
       </div>
-      <div>-10% première commande : <strong>GF-FIRST10</strong> · se termine dans <strong id="countdown">00:00:00</strong></div>
+      <div>-10% première commande : <strong>GF-FIRST10</strong> · se termine dans <strong id="countdown">00:00:00</strong>
+      </div>
     </div>
   </div>
 
   <!-- HEADER -->
-  <nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top navbar-ghost" id="siteNav">
+  <nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top navbar-ghost"
+    id="siteNav" style="top: var(--fomoH)">
     <div class="container-fluid nav-grid">
       <!-- Logo -->
       <a class="navbar-brand nav-brand" href="index.html">GF Store</a>
 
       <!-- Panier mobile -->
-      <a class="nav-cart-right d-lg-none position-relative" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
-        <svg width="26" height="26"><use xlink:href="#cart"/></svg>
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark cart-count">0</span>
+      <a class="nav-cart-right d-lg-none position-relative" href="#" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
+        <svg width="26" height="26">
+          <use xlink:href="#cart" />
+        </svg>
+        <span
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark cart-count">0</span>
       </a>
 
       <!-- Burger -->
-      <button class="navbar-toggler nav-toggle-right" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
+      <button class="navbar-toggler nav-toggle-right" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -136,14 +300,19 @@
             <li class="nav-item"><a class="nav-link" href="index.html#enfants">Enfants</a></li>
             <li class="nav-item"><a class="nav-link active" href="catalogue.html">Catalogue</a></li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                <svg width="20" height="20" class="me-1"><use xlink:href="#user"/></svg>Compte
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+                data-bs-toggle="dropdown">
+                <svg width="20" height="20" class="me-1">
+                  <use xlink:href="#user" />
+                </svg>Compte
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="login.html">Se connecter</a></li>
                 <li><a class="dropdown-item" href="register.html">Créer un compte</a></li>
                 <li><a class="dropdown-item" href="password-reset.html">Mot de passe oublié</a></li>
-                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
                 <li><a class="dropdown-item" href="commande.html">Suivre ma commande</a></li>
               </ul>
             </li>
@@ -153,9 +322,14 @@
 
       <!-- Icônes desktop -->
       <ul class="list-unstyled d-flex m-0 ms-3 nav-desktop-icons">
-        <li class="me-3 d-none d-lg-block"><a href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
+        <li class="me-3 d-none d-lg-block"><a href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24">
+              <use xlink:href="#heart" />
+            </svg></a></li>
         <li class="d-none d-lg-block">
-          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier"><svg width="24" height="24"><use xlink:href="#cart"/></svg></a>
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier"><svg
+              width="24" height="24">
+              <use xlink:href="#cart" />
+            </svg></a>
         </li>
       </ul>
     </div>
@@ -392,7 +566,8 @@
             <input type="email" class="form-control" placeholder="Votre email" required>
             <button class="btn btn-dark" type="submit">OK</button>
           </form>
-          <small class="text-secondary d-block mt-2">En vous inscrivant, vous acceptez notre politique de confidentialité.</small>
+          <small class="text-secondary d-block mt-2">En vous inscrivant, vous acceptez notre politique de
+            confidentialité.</small>
         </div>
       </div>
       <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top small">
@@ -403,7 +578,8 @@
   </footer>
 
   <!-- JS (Bootstrap + tes apps). Le peu de JS d’ambiance (FOMO/header) vit dans app.js si tu préfères -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"></script>
 
   <!-- Data helpers (facultatif si déjà inclus ailleurs) -->
   <script src="data/products.js"></script>
@@ -413,50 +589,6 @@
 
   <!-- App globale (panier, auth, etc.) -->
   <script src="js/app.js"></script>
-  
-  <script>
-    // Fix header behavior on scroll
-    document.addEventListener('DOMContentLoaded', function() {
-      const navbar = document.getElementById('siteNav');
-      const fomoBar = document.getElementById('fomoBar');
-      
-      // Set initial styles
-      navbar.style.position = 'fixed';
-      navbar.style.top = fomoBar.offsetHeight + 'px';
-      navbar.style.width = '100%';
-      
-      let lastScrollTop = 0;
-      let ticking = false;
-      
-      function updateHeader() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (scrollTop > 10) {
-          navbar.classList.remove('navbar-ghost');
-          navbar.classList.add('navbar-solid');
-        } else {
-          navbar.classList.remove('navbar-solid');
-          navbar.classList.add('navbar-ghost');
-        }
-        
-        lastScrollTop = scrollTop;
-        ticking = false;
-      }
-      
-      function requestTick() {
-        if (!ticking) {
-          requestAnimationFrame(updateHeader);
-          ticking = true;
-        }
-      }
-      
-      window.addEventListener('scroll', requestTick);
-      
-      // Handle resize events
-      window.addEventListener('resize', function() {
-        navbar.style.top = fomoBar.offsetHeight + 'px';
-      });
-    });
-  </script>
 </body>
+
 </html>
