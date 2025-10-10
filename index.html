@@ -25,59 +25,70 @@
   <!-- Micro styles/overrides -->
   <style>
     :root{
-      --navH: 64px;              /* MAJ en JS */
-      --fomoH: 40px;             /* MAJ en JS */
+      --navH: 64px;
+      --fomoH: 40px;
       --anchorOffset: calc(var(--navH) + var(--fomoH) + 12px);
       --radius: 14px;
     }
     html{scroll-behavior:smooth}
     body{background:#fff;color:#111}
-    /* padding de sécurité pour éviter tout recouvrement au scroll */
     body.has-fixed-nav #content{ padding-top: calc(var(--navH) + 8px) }
     .anchor-offset{scroll-margin-top: var(--anchorOffset)}
 
-    /* ===== HERO : textes parfaitement blancs */
+    /* ===== HERO ===== */
     #hero, #hero * { color:#fff !important; }
     #hero .hero-overlay{background:linear-gradient(0deg, rgba(0,0,0,.55), rgba(0,0,0,.35));}
     #hero .btn{transition:transform .2s ease, opacity .2s ease}
     #hero .btn:hover{transform:translateY(-2px);opacity:.95}
+    #hero .hero-cta{
+      display:flex; flex-wrap:wrap; justify-content:center; gap:.8rem;
+      max-width:640px; margin:0 auto;
+    }
+    #hero .hero-cta .btn{min-width:220px}
+    @media (max-width:575.98px){
+      #hero .hero-cta .btn{flex:1 1 100%}
+      #hero .lead{font-size:1rem}
+    }
 
     /* ===== Reveal */
     .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease, transform .6s ease}
     .reveal.show{opacity:1;transform:none}
 
-    /* ===== Header (fix no-jump) */
-    .navbar{min-height:64px} /* verrouille la hauteur → pas de "saut" ghost→solid */
-    .navbar.fixed-top{transition:background-color .25s ease, box-shadow .25s ease}
-    .navbar-ghost{background:transparent !important; box-shadow:none}
-    .navbar-solid{background:#ffffff !important; box-shadow:0 6px 20px rgba(0,0,0,.06)}
+    /* ===== Header solide (blanc) ===== */
+    .navbar{
+      min-height:64px;
+      background:#ffffff !important;
+      border-bottom:1px solid #eee;
+      box-shadow:0 6px 20px rgba(0,0,0,.06);
+    }
     .navbar a.nav-link, .navbar .navbar-brand{color:#111 !important}
+    .navbar .navbar-toggler{border:none}
 
-    /* ===== Barre FOMO (au-dessus du header) */
+    /* ===== FOMO bar ===== */
     .fomo-bar{
-      position:sticky; top:0; z-index:1020; /* < offcanvas(1045), navbar(1030), modal(1055) */
+      position:sticky; top:0; z-index:1020;
       background:#111; color:#fff; font-size:.92rem;
       -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
     }
     .fomo-bar small{opacity:.85}
     .badge-dot{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#22c55e;margin-right:.5rem}
 
-    /* ===== Grille du header ===== */
+    /* ===== Grille header (mobile : logo | panier | menu) ===== */
     .nav-grid{display:flex; align-items:center; width:100%;}
     @media (max-width: 991.98px){
       .nav-grid{
         display:grid;
-        grid-template-columns: 1fr auto auto; /* logo | panier | burger */
+        grid-template-columns: 1fr auto auto; /* logo | cart | burger */
         align-items:center;
-        column-gap:.5rem;
+        column-gap:.45rem;
       }
       .nav-brand{grid-column:1; justify-self:start;}
-      .nav-cart-right{grid-column:2; justify-self:end;}
-      .nav-toggle-right{grid-column:3; justify-self:end;}
+      .nav-cart-right{grid-column:2; justify-self:end;}   /* Panier à gauche du menu */
+      .nav-toggle-right{grid-column:3; justify-self:end;} /* Menu totalement à droite */
       .nav-desktop-icons{display:none !important;}
     }
     @media (min-width: 992px){
-      .nav-cart-right{display:none !important;} /* version mobile uniquement */
+      .nav-cart-right{display:none !important;}
     }
 
     /* Panier mobile : badge */
@@ -86,25 +97,24 @@
       transform:translate(15%, -35%);
     }
 
-    /* ===== Images “libres” (non recadrées, non déformées) */
+    /* ===== Cartes & images ===== */
     .media-free{display:block;width:100%;height:auto;border-radius:var(--radius)}
     .card-free{border:1px solid #eee;border-radius:var(--radius);overflow:hidden;background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.04)}
     .card-free .card-body{padding:1rem 1.1rem}
     .hover-zoom img{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
     .hover-zoom:hover img{transform:scale(1.03)}
 
-    /* Les cartes catégories acceptent hauteurs variables sans rognage */
     .category-grid .card-free figure{margin:0}
     .category-grid .card-free img{width:100%;height:auto;object-fit:contain;background:#fafafa}
 
     .section-lede{max-width:920px;margin:0 auto 1.25rem;opacity:.8}
 
-    /* ===== Collection overlay title */
+    /* ===== Collection overlay title ===== */
     .collection .title-xlarge{position:absolute;top:-18px;left:0;right:0;z-index:3;pointer-events:none}
     .collection .hover-zoom{position:relative;z-index:1;overflow:hidden;border-radius:var(--radius)}
     .collection .bg-white{position:relative;z-index:2}
 
-    /* ===== Testimonials (crédibles) */
+    /* ===== Testimonials ===== */
     .testimonials{background:#f7f7f7}
     .t-card{background:#fff;border:1px solid #eee;border-radius:var(--radius); height:100%}
     .t-body{padding:1.1rem 1.1rem 1rem}
@@ -119,12 +129,7 @@
     .t-badges .b-mid{background:#fff7ed;color:#9a3412}
     .t-badges .badge{border-radius:999px}
 
-    /* ===== Flèches carrousel */
     .carousel-arrow .btn{width:44px;height:44px}
-    @media (max-width:575.98px){
-      .carousel-arrow .btn{width:48px;height:48px}
-      #hero .lead{font-size:1rem}
-    }
   </style>
 </head>
 <body class="homepage">
@@ -145,7 +150,7 @@
 
   <div class="preloader" aria-hidden="true"></div>
 
-  <!-- FOMO bar tout en haut -->
+  <!-- FOMO bar -->
   <div class="fomo-bar py-2" id="fomoBar">
     <div class="container d-flex flex-wrap justify-content-between align-items-center">
       <div class="d-flex align-items-center gap-2">
@@ -156,20 +161,20 @@
     </div>
   </div>
 
-  <!-- HEADER -->
-  <nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top navbar-ghost" id="siteNav" style="top: var(--fomoH)">
+  <!-- HEADER (blanc, solide) -->
+  <nav class="navbar navbar-light navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top bg-white" id="siteNav" style="top: var(--fomoH)">
     <div class="container-fluid nav-grid">
       <!-- Logo -->
       <a class="navbar-brand nav-brand" href="index.html">GF Store</a>
 
-      <!-- Panier mobile (à droite, hors menu) -->
+      <!-- Panier (mobile) : à droite, juste à gauche du menu -->
       <a class="nav-cart-right d-lg-none position-relative" href="#"
          data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
         <svg width="26" height="26"><use xlink:href="#cart"/></svg>
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark cart-count">0</span>
       </a>
 
-      <!-- Burger -->
+      <!-- Burger (mobile) : tout à droite -->
       <button class="navbar-toggler nav-toggle-right" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -242,10 +247,8 @@
           Isolation premium, tissus techniques certifiés et contrôle qualité en atelier européen. <br class="d-none d-md-inline">
           <strong>Conçu pour durer</strong> et pensé pour la ville comme la montagne.
         </p>
-        <div class="d-inline-flex gap-3">
-          <a href="catalogue.html?filter=homme" class="btn btn-dark text-uppercase px-4">Hommes</a>
-          <a href="catalogue.html?filter=femme" class="btn btn-dark text-uppercase px-4">Femmes</a>
-          <a href="catalogue.html?filter=enfant" class="btn btn-dark text-uppercase px-4">Enfants</a>
+        <div class="hero-cta">
+          <a href="catalogue.html" class="btn btn-dark text-uppercase px-4">Découvrir le catalogue</a>
         </div>
         <div class="small mt-3 opacity-75">Expédition 24h · <strong>Livraison gratuite</strong> · Retours 30 jours · Support 7j/7</div>
       </div>
@@ -259,7 +262,7 @@
       </div>
     </section>
 
-    <!-- Collections (images libres, non recadrées) -->
+    <!-- Collections -->
     <section id="collections" class="pb-5 bg-light anchor-offset">
       <div class="container category-grid">
         <div class="row g-4">
@@ -276,7 +279,7 @@
               </div>
             </article>
           </div>
-          <!-- Femmes (image MAJ) -->
+          <!-- Femmes -->
           <div class="col-md-4 reveal anchor-offset" id="femmes">
             <article class="card-free hover-zoom h-100">
               <figure><img class="media-free"
@@ -289,7 +292,7 @@
               </div>
             </article>
           </div>
-          <!-- Enfants (image MAJ) -->
+          <!-- Enfants -->
           <div class="col-md-4 reveal anchor-offset" id="enfants">
             <article class="card-free hover-zoom h-100">
               <figure><img class="media-free"
@@ -309,7 +312,7 @@
       </div>
     </section>
 
-    <!-- NOUVEAUTÉS (remplie en JS depuis data/products.json) -->
+    <!-- NOUVEAUTÉS (products.json à la racine) -->
     <section id="nouveautes" class="py-5 anchor-offset">
       <div class="container">
         <h2 class="display-5 text-center mb-3 reveal">Nouveautés</h2>
@@ -320,7 +323,7 @@
         <div class="position-relative reveal">
           <div class="swiper new-swiper">
             <div class="swiper-wrapper" id="new-products-wrapper">
-              <!-- Slides injectées depuis data/products.json -->
+              <!-- Slides injectées depuis products.json -->
             </div>
             <div class="swiper-pagination mt-3"></div>
           </div>
@@ -379,7 +382,6 @@
         <div class="position-relative mt-4 reveal">
           <div class="swiper test-swiper">
             <div class="swiper-wrapper">
-              <!-- cartes authentiques -->
               <div class="swiper-slide">
                 <article class="t-card">
                   <div class="t-body">
@@ -499,7 +501,7 @@
       </div>
     </section>
 
-    <!-- Bandeau garanties / réassurance -->
+    <!-- Bandeau garanties -->
     <section class="py-4 border-top anchor-offset">
       <div class="container">
         <div class="row text-center g-4">
@@ -580,9 +582,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
-  <!-- Animations + Swipers + FOMO + Header/Anchor fixes + Nouveautés JSON -->
+  <!-- Animations + Swipers + FOMO + Offsets + Nouveautés -->
   <script>
-    /* ===== Offsets (hauteurs FOMO + NAV) & padding contenu (FIX HEADER) ===== */
+    /* Offsets (FOMO + NAV) */
     function updateOffsets(){
       const nav = document.getElementById('siteNav');
       const fomo = document.getElementById('fomoBar');
@@ -594,7 +596,7 @@
     }
     window.addEventListener('resize', ()=> requestAnimationFrame(updateOffsets));
 
-    /* ===== Reveal on scroll ===== */
+    /* Reveal on scroll */
     const io = new IntersectionObserver(entries=>{
       entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); }});
     }, {threshold:.12});
@@ -602,17 +604,7 @@
       document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
     });
 
-    /* ===== Header contrast (ghost → solid) ===== */
-    const siteNav = document.getElementById('siteNav');
-    function onScrollHeader(){
-      const y = window.scrollY || document.documentElement.scrollTop;
-      siteNav.classList.toggle('navbar-solid', y > 12);
-      siteNav.classList.toggle('navbar-ghost', y <= 12);
-    }
-    window.addEventListener('scroll', onScrollHeader, {passive:true});
-    onScrollHeader();
-
-    /* ===== FOMO: countdown ===== */
+    /* FOMO: countdown */
     function updateCountdown(){
       const now = new Date();
       const end = new Date(); end.setHours(23,59,59,999);
@@ -624,7 +616,7 @@
     }
     setInterval(updateCountdown, 1000);
 
-    /* ===== FOMO : viewers wobble ===== */
+    /* FOMO : viewers wobble */
     const watchingEl = document.getElementById('watching');
     function wobble(){
       const base = 20; const noise = Math.floor(Math.random()*8) - 3;
@@ -632,7 +624,7 @@
     }
     setInterval(wobble, 4000);
 
-    /* ===== Fix hash initial + smooth anchors ===== */
+    /* Fix hash + init */
     function fixHashOnLoad(){
       updateOffsets(); updateCountdown(); wobble();
       if(location.hash){
@@ -655,38 +647,32 @@
       });
     });
 
-    /* ===== Util: charger le JSON produits ===== */
+    /* Charge products.json (racine) */
     async function loadProducts(){
-      const res = await fetch('data/products.json', {cache:'no-store'});
+      const res = await fetch('products.json', {cache:'no-store'});
       if(!res.ok) throw new Error('Products JSON load error');
       return res.json();
     }
 
-    /* ===== Rendu NOUVEAUTÉS depuis JSON ===== */
+    /* Helpers produits */
     function pickNewProducts(data, limit=12){
       let arr = Array.isArray(data.products) ? data.products.slice() : [];
       const tagged = arr.filter(p => (p.tags||[]).some(t => ['new','nouveau','nouveauté','nouveautes'].includes(String(t).toLowerCase())) || p.is_new);
-      const picked = (tagged.length ? tagged : arr).slice(0, limit);
-      return picked;
+      return (tagged.length ? tagged : arr).slice(0, limit);
     }
-
     function firstImageOfProduct(p){
       const imgs = (p.colors?.[0]?.images) || [];
       return imgs[0] || 'images/product-fallback.jpg';
     }
-
     function categoryLabel(data, p){
       const map = Object.fromEntries((data.categories||[]).map(c => [c.id, c.label]));
       return map[p.category] || (p.gender ? String(p.gender).charAt(0).toUpperCase()+String(p.gender).slice(1) : 'Produit');
     }
-
     function formatPrice(p){
       const curr = (p.currency || 'EUR').toUpperCase();
-      try{
-        return new Intl.NumberFormat('fr-FR', {style:'currency', currency: curr}).format(p.price || 0);
-      }catch{ return (p.price||0) + ' ' + curr; }
+      try{ return new Intl.NumberFormat('fr-FR', {style:'currency', currency: curr}).format(p.price || 0); }
+      catch{ return (p.price||0) + ' ' + curr; }
     }
-
     function productCardHTML(catLabel, p){
       const img = firstImageOfProduct(p);
       const price = formatPrice(p);
@@ -712,7 +698,6 @@
         const wrap = document.getElementById('new-products-wrapper');
         wrap.innerHTML = picked.map(p => productCardHTML(categoryLabel(data,p), p)).join('');
 
-        // Swiper Nouveautés (init APRÈS injection)
         new Swiper('.new-swiper', {
           loop:true,
           speed:600,
@@ -731,7 +716,7 @@
       }
     }
 
-    /* ===== Swiper Témoignages (statique) ===== */
+    /* Swiper Témoignages */
     new Swiper('.test-swiper', {
       loop:true,
       speed:600,
@@ -744,12 +729,10 @@
       autoplay:{delay:5200, disableOnInteraction:false}
     });
 
-    // Lancer le rendu Nouveautés
     renderNewProductsFromJSON();
   </script>
 
-  <!-- App custom -->
-  <script src="js/script.min.js"></script>
-  <script src="js/app.js"></script>
+  <!-- App custom (racine) -->
+  <script src="app.js"></script>
 </body>
 </html>
