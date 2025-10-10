@@ -1,393 +1,462 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Catalogue — GF Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="format-detection" content="telephone=no" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
+/* ==========================================================================
+   GF Store — catalogue.js (Hiver 2025)
+   - Lit data/products.json avec fallbacks + cache localStorage 5 min
+   - Recherche temps réel, filtres (catégorie, prix, nouveauté, stock), tri
+   - Pagination, "chips" de filtres actifs, skeletons
+   - Ajout panier: via window.App.addToCart ou fallback local (toast + badge)
+   ========================================================================== */
+(() => {
+  "use strict";
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  /* --------------------------
+   * DOM hooks (catalogue.html)
+   * ------------------------ */
+  const $grid   = document.getElementById("grid");
+  const $pager  = document.getElementById("pager");
+  const $count  = document.getElementById("count");
+  const $chips  = document.getElementById("chips");
 
-  <!-- Vendor + Theme CSS (mêmes chemins que la racine du repo) -->
-  <link rel="stylesheet" href="css/vendor.css">
-  <link rel="stylesheet" href="style.css">
+  const $q      = document.getElementById("q");
+  const $filter = document.getElementById("filter");
+  const $sort   = document.getElementById("sort");
+  const $min    = document.getElementById("min");
+  const $max    = document.getElementById("max");
+  const $onlyNew= document.getElementById("only-new");
+  const $inStock= document.getElementById("in-stock");
+  const $reset  = document.getElementById("reset");
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet" />
+  const $cartBadges = document.querySelectorAll(".cart-count");
 
-  <!-- Micro styles spécifiques catalogue -->
-  <style>
-    :root{
-      --navH:64px;             /* mis à jour en JS */
-      --fomoH:40px;            /* mis à jour en JS */
-      --anchorOffset: calc(var(--navH) + var(--fomoH) + 12px);
-      --radius:14px;
+  /* --------------------------
+   * Utils
+   * ------------------------ */
+  const U = {
+    fmtPrice(n, currency="EUR", locale="fr-FR"){
+      try{ return Number(n||0).toLocaleString(locale,{style:"currency",currency}); }
+      catch{ return (n||0)+" "+currency; }
+    },
+    esc(s){ return String(s)
+      .replaceAll("&","&amp;").replaceAll("<","&lt;")
+      .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); },
+    param(name, def=""){
+      const u = new URL(location.href); return u.searchParams.get(name) ?? def;
+    },
+    setParams(obj, push=true){
+      const u = new URL(location.href);
+      Object.entries(obj).forEach(([k,v])=>{
+        if(v===undefined||v===null||v==="") u.searchParams.delete(k);
+        else u.searchParams.set(k, v);
+      });
+      (push?history.pushState:history.replaceState).call(history, {}, "", u);
+    },
+    clamp(n,a,b){ return Math.max(a, Math.min(b, n)); },
+  };
+
+  /* --------------------------
+   * Local cache
+   * ------------------------ */
+  const LS = {
+    get(k,def){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):def; }catch{return def;} },
+    set(k,val){ try{ localStorage.setItem(k, JSON.stringify(val)); }catch{} },
+  };
+
+  /* --------------------------
+   * Normalisation produit
+   * ------------------------ */
+  function normalizeProduct(p){
+    const n = JSON.parse(JSON.stringify(p||{}));
+    n.sku   = n.sku || n.id || n.code || (n.title||"prod").toLowerCase().replace(/[^a-z0-9]+/g,"-");
+    n.slug  = n.slug || (n.title||n.name||n.sku||"").toLowerCase().normalize("NFD")
+                .replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+    n.title = n.title || n.name || "Produit";
+    n.subtitle = n.subtitle || "";
+    n.price = Number(n.price ?? n.prix ?? 0);
+    n.currency = (n.currency||"EUR").toUpperCase();
+
+    // Catégorie → clef courte
+    const raw = (n.category || n.categorie || n.gender || n.genre || "").toString().toLowerCase();
+    const map = { men:"homme", man:"homme", homme:"homme",
+                  women:"femme", woman:"femme", femme:"femme",
+                  kids:"enfant", kid:"enfant", enfant:"enfant",
+                  accessoires:"accessoires", accessories:"accessoires" };
+    n.category = map[raw] || raw || "autre";
+
+    // Images/couleurs
+    if (!Array.isArray(n.colors) || !n.colors.length){
+      const img = n.image || (Array.isArray(n.images)&&n.images[0]) || "images/product-fallback.jpg";
+      n.colors = [{ code:"default", label:"Par défaut", images:[img] }];
     }
-    html{scroll-behavior:smooth}
-    body{background:#fff;color:#111}
-    body.has-fixed-nav #content{padding-top:calc(var(--navH) + 8px)}
-    .anchor-offset{scroll-margin-top: var(--anchorOffset)}
+    n.colors = n.colors.map((c,i)=>({
+      code: c.code || `c${i+1}`,
+      label: c.label || `Couleur ${i+1}`,
+      images: Array.from(new Set((c.images||[]).filter(Boolean))).length
+        ? Array.from(new Set((c.images||[]).filter(Boolean)))
+        : ["images/product-fallback.jpg"]
+    }));
 
-    /* ===== FOMO bar (cohérent avec index) ===== */
-    .fomo-bar{
-      position:sticky; top:0; z-index:1020;
-      background:#111; color:#fff; font-size:.92rem;
-      -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    // Tailles/stock
+    if(!Array.isArray(n.sizes)) n.sizes = [];
+    n.stock = n.stock || {};
+    n.sizes.forEach(sz => { if(typeof n.stock[sz] !== "number") n.stock[sz]=10; });
+
+    // Tags / nouveauté
+    n.tags = Array.isArray(n.tags)?n.tags:[];
+    n.is_new = !!n.is_new || n.tags.some(t=>["new","nouveau","nouveauté","nouveautes"].includes(String(t).toLowerCase()));
+
+    // created_at (pour tri nouveautés)
+    if(!n.created_at && n.date) n.created_at = n.date;
+    return n;
+  }
+
+  const firstImage = (p) => {
+    if (Array.isArray(p.colors) && p.colors[0]?.images?.[0]) return p.colors[0].images[0];
+    if (Array.isArray(p.images) && p.images[0]) return p.images[0];
+    if (typeof p.image === "string") return p.image;
+    return "images/product-fallback.jpg";
+  };
+  const catLabel = (p) => {
+    const k = (p.category||"").toLowerCase();
+    return k==="homme" ? "Hommes" : k==="femme" ? "Femmes" : k==="enfant" ? "Enfants" :
+           k==="accessoires" ? "Accessoires" : "Produit";
+  };
+  const isNew = (p)=> !!p.is_new;
+  const hasStock = (p)=>{
+    if (p.stock && typeof p.stock === "object") return Object.values(p.stock).some(n => Number(n)>0);
+    if (typeof p.stock === "number") return p.stock>0;
+    return true;
+  };
+
+  /* --------------------------
+   * Chargement data (fallbacks)
+   * ------------------------ */
+  const CACHE_KEY = "gf:data:catalogue";
+  const STAMP_KEY = "gf:data:catalogue:ts";
+  const TTL = 5*60*1000;
+
+  function candidateURLs(){
+    // Absolutise intelligemment selon la page courante
+    const here = (path)=> new URL(path, location.href).href;
+    return [
+      here("data/products.json"),
+      here("/data/products.json"),
+      here("products.json"),
+      here("/products.json"),
+      "https://gfstore.store/data/products.json"
+    ];
+  }
+
+  async function fetchWithTimeout(url, timeout=12000){
+    const ctrl = new AbortController();
+    const id = setTimeout(()=>ctrl.abort(), timeout);
+    try{
+      const res = await fetch(url, { cache:"no-store", signal: ctrl.signal });
+      clearTimeout(id);
+      return res;
+    }catch(e){
+      clearTimeout(id);
+      throw e;
     }
-    .badge-dot{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#22c55e;margin-right:.5rem}
+  }
 
-    /* ===== Header : solide, blanc ===== */
-    .navbar{
-      min-height:64px;
-      background:#fff !important;
-      border-bottom:1px solid #eee;
-      box-shadow:0 6px 20px rgba(0,0,0,.06);
-    }
-    .navbar a.nav-link, .navbar .navbar-brand{color:#111 !important}
-    .navbar .navbar-toggler{border:none}
-
-    /* Grille mobile : logo | panier | burger (panier à gauche du menu) */
-    .nav-grid{display:flex; align-items:center; width:100%}
-    @media (max-width:991.98px){
-      .nav-grid{
-        display:grid;
-        grid-template-columns:1fr auto auto; /* logo | cart | burger */
-        align-items:center; column-gap:.45rem;
-      }
-      .nav-brand{grid-column:1; justify-self:start}
-      .nav-cart-right{grid-column:2; justify-self:end}
-      .nav-toggle-right{grid-column:3; justify-self:end}
-      .nav-desktop-icons{display:none !important}
-      .nav-cart-right .badge{
-        font-size:.65rem; line-height:1; padding:.25em .35em;
-        transform:translate(15%,-35%);
-      }
-    }
-    @media (min-width:992px){
-      .nav-cart-right{display:none !important}
+  async function loadProducts(){
+    // 0) si window.Products existe, on l'utilise (cohérence avec products.js)
+    if (window.Products && typeof window.Products.all === "function") {
+      try{
+        const list = await window.Products.all();
+        if (Array.isArray(list) && list.length) return list.map(normalizeProduct);
+      }catch{/* on bascule sur notre chargeur */}
     }
 
-    /* ===== Hero catalogue ===== */
-    .catalog-hero{
-      position:relative;
-      background:#0f0f10 url('https://azure-eu-images.contentstack.com/v3/assets/blt70cb06b4414428cc/blt70e742eb576b00d4/68d2a81416d9319f7a72e26f/ASSET-HERO-HP-PRESS-RELEASE-SECONDHERO-ENFANT-DESK.jpg?branch=prod_1&format=avif&auto=auto&width=100p&quality=90') center/cover no-repeat;
-      color:#fff;
-      padding: min(22vh,220px) 0 64px;
-      text-align:center;
+    // 1) cache
+    const now = Date.now();
+    const stamp = LS.get(STAMP_KEY, 0);
+    const cached = LS.get(CACHE_KEY, null);
+    if (Array.isArray(cached) && cached.length && (now - stamp) <= TTL) return cached;
+
+    // 2) fallbacks
+    const urls = candidateURLs();
+    for (const url of urls){
+      try{
+        const res = await fetchWithTimeout(url, 12000);
+        if (!res.ok) continue;
+        const data = await res.json();
+        const raw = Array.isArray(data) ? data : (data.products || []);
+        if (Array.isArray(raw) && raw.length){
+          const list = raw.map(normalizeProduct);
+          LS.set(CACHE_KEY, list);
+          LS.set(STAMP_KEY, now);
+          return list;
+        }
+      }catch{ /* try next */ }
     }
-    .catalog-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.55),rgba(0,0,0,.35))}
-    .catalog-hero > .container{position:relative;z-index:1}
-    .catalog-hero .crumbs a{opacity:.9}
-    .catalog-hero .crumbs .breadcrumb-item+.breadcrumb-item::before{color:rgba(255,255,255,.6)}
+    return [];
+  }
 
-    /* ===== Filtres & chips ===== */
-    .filter-chip{
-      display:inline-flex; align-items:center; gap:.5rem;
-      background:#f1f3f5; border:1px solid #e6e6e6; color:#333;
-      padding:.35rem .6rem; border-radius:999px; font-size:.85rem;
+  /* --------------------------
+   * Panier (fallback + badge)
+   * ------------------------ */
+  const LocalCart = {
+    key: "gf:cart",
+    get(){ try{ return JSON.parse(localStorage.getItem(this.key)||"[]"); }catch{ return []; } },
+    set(v){ try{ localStorage.setItem(this.key, JSON.stringify(v)); }catch{} },
+    add(item){
+      const arr = this.get();
+      const i = arr.findIndex(x=>x.id===item.id);
+      if(i>=0) arr[i].qty += item.qty; else arr.push(item);
+      this.set(arr); syncBadge();
     }
-    .filter-chip button{border:0;background:transparent;line-height:1;cursor:pointer}
-    .filter-chip button:hover{opacity:.65}
-
-    /* ===== Skeleton ===== */
-    .skeleton{
-      position:relative; overflow:hidden; background:#eff1f3;
+  };
+  function syncBadge(){
+    const qty = (window.App && typeof window.App.getCartQty==="function")
+      ? Number(window.App.getCartQty())||0
+      : LocalCart.get().reduce((s,it)=>s+Number(it.qty||0),0);
+    $cartBadges.forEach(el=> el.textContent = String(qty));
+  }
+  function addToCart(p){
+    const payload = {
+      id: String(p.sku),
+      name: p.title,
+      price: p.price,
+      image: firstImage(p),
+      qty: 1
+    };
+    if (window.App && typeof window.App.addToCart === "function"){
+      window.App.addToCart(payload, 1);
+    } else {
+      LocalCart.add(payload);
+      toast(`${payload.name} ajouté au panier`);
     }
-    .skeleton::after{
-      content:""; position:absolute; inset:0;
-      background:linear-gradient(90deg, rgba(238,240,243,0) 0%, rgba(255,255,255,.75) 50%, rgba(238,240,243,0) 100%);
-      transform:translateX(-100%); animation:shimmer 1.4s infinite;
+  }
+  function toast(msg){
+    let el = document.getElementById("gf-toast");
+    if(!el){
+      el = document.createElement("div");
+      el.id="gf-toast";
+      el.style.cssText="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 14px;border-radius:10px;z-index:2000;opacity:0;transition:opacity .25s";
+      document.body.appendChild(el);
     }
-    @keyframes shimmer{100%{transform:translateX(100%)}}
+    el.textContent = msg; el.style.opacity="1";
+    setTimeout(()=>{ el.style.opacity="0"; }, 1200);
+  }
 
-    /* ===== Cartes produits ===== */
-    .product-card{transition:transform .2s ease, box-shadow .2s ease}
-    .product-card:hover{transform:translateY(-2px); box-shadow:0 10px 30px rgba(0,0,0,.08)}
-    .badge-new{background:#111}
+  /* --------------------------
+   * State & filtres
+   * ------------------------ */
+  const PAGE_SIZE = 12;
+  let ALL = [];   // tous les produits
+  let VIEW = [];  // filtrés/triés
+  let page = 1;
 
-    /* ===== Util ===== */
-    .section-lede{max-width:920px;margin:0 auto 1.25rem;opacity:.8}
-  </style>
-</head>
-<body>
+  function matchesQuery(p, text){
+    if(!text) return true;
+    const hay = (p.title+" "+(p.subtitle||"")+" "+(p.brand||"")+" "+catLabel(p)+" "+(p.tags||[]).join(" ")+" "+(p.sku||""))
+      .toLowerCase();
+    return hay.includes(text.toLowerCase());
+  }
 
-  <!-- SVG symbols (icônes) -->
-  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-    <defs>
-      <symbol id="search" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></symbol>
-      <symbol id="cart" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.49a3 3 0 0 0 2.89-2.18l1.58-5.55A1 1 0 0 0 19 5H6.74a3 3 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.92l.16.55 1.64 5.74A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Z"/></symbol>
-      <symbol id="heart" viewBox="0 0 24 24"><path fill="currentColor" d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Z"/></symbol>
-      <symbol id="user" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></symbol>
-      <symbol id="bank" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3 3 7v2h18V7l-9-4Zm-7 6v8H3v2h18v-2h-2V9H5Zm2 2h2v6H7v-6Zm4 0h2v6h-2v-6Zm4 0h2v6h-2v-6Z"/></symbol>
-      <symbol id="star" viewBox="0 0 24 24"><path fill="currentColor" d="m12 17.27 6.18 3.73-1.64-7.03L21 9.24l-7.19-.62L12 2 10.19 8.62 3 9.24l4.46 4.73-1.64 7.03L12 17.27Z"/></symbol>
-    </defs>
-  </svg>
+  function matchFilter(p, val){
+    if (val==="all") return true;
+    const key = (p.category||"").toLowerCase();
+    const bag = {
+      homme: ["homme","men","man","hommes"],
+      femme: ["femme","women","woman","femmes"],
+      enfant:["enfant","kids","kid","junior","boy","girl","enfants"],
+      accessoires:["accessoires","accessory","accessories","bonnet","echarpe","scarf","gloves","cap","hat"]
+    };
+    return (bag[val]||[val]).some(k => key.includes(k));
+  }
 
-  <!-- FOMO -->
-  <div class="fomo-bar py-2" id="fomoBar">
-    <div class="container d-flex flex-wrap justify-content-between align-items-center">
-      <div class="d-flex align-items-center gap-2">
-        <span class="badge-dot"></span>
-        <span><strong id="watching">18</strong> personnes consultent cette page</span>
-      </div>
-      <div>-10% première commande : <strong>GF-FIRST10</strong> · se termine dans <strong id="countdown">00:00:00</strong></div>
-    </div>
-  </div>
+  function apply(){
+    const text = ($q?.value||"").trim();
+    const f    = $filter?.value || "all";
+    const minV = Number($min?.value||0);
+    const maxV = Number($max?.value||Infinity);
 
-  <!-- HEADER (mêmes règles que l'index) -->
-  <nav class="navbar navbar-light navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center fixed-top bg-white" id="siteNav" style="top: var(--fomoH)">
-    <div class="container-fluid nav-grid">
-      <a class="navbar-brand nav-brand" href="index.html">GF Store</a>
+    VIEW = ALL.filter(p=>{
+      const okQ = matchesQuery(p,text);
+      const okF = matchFilter(p,f);
+      const price = Number(p.price||0);
+      const okP = price>=minV && price<=maxV;
+      const okN = !$onlyNew?.checked || isNew(p);
+      const okS = !$inStock?.checked || hasStock(p);
+      return okQ && okF && okP && okN && okS;
+    });
 
-      <!-- Panier mobile : à droite, juste à gauche du menu -->
-      <a class="nav-cart-right d-lg-none position-relative" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
-        <svg width="26" height="26"><use xlink:href="#cart"/></svg>
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark cart-count">0</span>
-      </a>
+    switch($sort?.value){
+      case "price-asc":  VIEW.sort((a,b)=>a.price-b.price); break;
+      case "price-desc": VIEW.sort((a,b)=>b.price-a.price); break;
+      case "newest":     VIEW.sort((a,b)=> new Date(b.created_at||0)-new Date(a.created_at||0)); break;
+      default:
+        // "Pertinence" simple: nouveauté + match texte
+        VIEW.sort((a,b)=>{
+          const wa = (isNew(a)?1:0) + (matchesQuery(a,text)?1:0);
+          const wb = (isNew(b)?1:0) + (matchesQuery(b,text)?1:0);
+          return wb - wa;
+        });
+    }
 
-      <!-- Burger (mobile) -->
-      <button class="navbar-toggler nav-toggle-right" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-label="Ouvrir le menu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    page = 1;
+    renderChips();
+    render();
+    U.setParams({
+      q: text||null, filter: f!=="all"?f:null, sort: ($sort?.value!=="relevance"?$sort.value:null),
+      min: $min?.value||null, max: $max?.value||null,
+      "only-new": $onlyNew?.checked?"1":null, "in-stock": $inStock?.checked?"1":null
+    }, false);
+  }
 
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title">Menu</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
-        </div>
-        <div class="offcanvas-body">
-          <ul class="navbar-nav ms-auto gap-3">
-            <li class="nav-item"><a class="nav-link" href="index.html#nouveautes">Nouveautés</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#hommes">Hommes</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#femmes">Femmes</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html#enfants">Enfants</a></li>
-            <li class="nav-item"><a class="nav-link" href="catalogue.html">Catalogue</a></li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                <svg width="20" height="20" class="me-1"><use xlink:href="#user"/></svg>Compte
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="login.html">Se connecter</a></li>
-                <li><a class="dropdown-item" href="register.html">Créer un compte</a></li>
-                <li><a class="dropdown-item" href="password-reset.html">Mot de passe oublié</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="commande.html">Suivre ma commande</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
+  function renderChips(){
+    if(!$chips) return;
+    $chips.innerHTML = "";
+    const add = (label, onX)=>{
+      const s = document.createElement("span");
+      s.className = "filter-chip";
+      s.innerHTML = `<span>${label}</span><button title="Retirer" aria-label="Retirer">×</button>`;
+      s.querySelector("button").addEventListener("click", onX);
+      $chips.appendChild(s);
+    };
+    if($q?.value) add(`Recherche: "${$q.value}"`, ()=>{ $q.value=""; apply(); });
+    if($filter?.value!=="all") add(`Catégorie: ${$filter.options[$filter.selectedIndex].text}`,
+      ()=>{ $filter.value="all"; apply(); });
+    if($sort?.value!=="relevance") add(`Tri: ${$sort.options[$sort.selectedIndex].text}`,
+      ()=>{ $sort.value="relevance"; apply(); });
+    if($min?.value) add(`Min: ${$min.value}€`, ()=>{ $min.value=""; apply(); });
+    if($max?.value) add(`Max: ${$max.value}€`, ()=>{ $max.value=""; apply(); });
+    if($onlyNew?.checked) add("Nouveaux", ()=>{ $onlyNew.checked=false; apply(); });
+    if($inStock?.checked) add("En stock", ()=>{ $inStock.checked=false; apply(); });
+  }
 
-      <!-- Icônes desktop -->
-      <ul class="list-unstyled d-flex m-0 ms-3 nav-desktop-icons">
-        <li class="me-3 d-none d-lg-block"><a href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
-        <li class="d-none d-lg-block">
-          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier"><svg width="24" height="24"><use xlink:href="#cart"/></svg></a>
-          <span class="badge bg-dark ms-1 align-middle cart-count">0</span>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  /* --------------------------
+   * Rendu grid + pagination
+   * ------------------------ */
+  function render(){
+    const total = VIEW.length;
+    const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if(page>pages) page = pages;
 
-  <!-- Panier -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
-    <div class="offcanvas-header justify-content-center">
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
-    </div>
-    <div class="offcanvas-body">
-      <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-primary">Votre panier</span>
-        <span class="badge bg-primary rounded-pill cart-count">0</span>
-      </h4>
-      <p class="text-body-secondary">Votre panier est vide.</p>
-      <a class="w-100 btn btn-dark btn-lg mt-3" href="checkout.html">Passer au paiement</a>
-    </div>
-  </div>
+    if($count) $count.textContent = total
+      ? `${total} article${total>1?"s":""} — page ${page}/${pages}`
+      : "Aucun article";
 
-  <!-- HERO Catalogue -->
-  <header class="catalog-hero anchor-offset">
-    <div class="container">
-      <nav aria-label="breadcrumb" class="crumbs mb-2">
-        <ol class="breadcrumb justify-content-center">
-          <li class="breadcrumb-item"><a class="link-light text-decoration-none" href="index.html">Accueil</a></li>
-          <li class="breadcrumb-item active text-white-50" aria-current="page">Catalogue</li>
-        </ol>
-      </nav>
-      <h1 class="display-5 fw-normal mb-1">Catalogue Hiver 2025</h1>
-      <p class="mb-0 opacity-75">Doudounes, parkas, mailles & accessoires — <strong>livraison gratuite</strong> en France</p>
-    </div>
-  </header>
+    // Slice
+    const start = (page-1)*PAGE_SIZE;
+    const slice = VIEW.slice(start, start+PAGE_SIZE);
 
-  <main id="content">
-
-    <!-- Filtres -->
-    <section class="py-4">
-      <div class="container">
-        <div class="row g-3 align-items-end">
-          <div class="col-lg-4">
-            <label class="form-label" for="q">Recherche</label>
-            <input id="q" type="search" class="form-control" placeholder="Doudoune, parka, bonnet…">
-          </div>
-          <div class="col-6 col-lg-2">
-            <label class="form-label" for="filter">Catégorie</label>
-            <select id="filter" class="form-select">
-              <option value="all">Tout</option>
-              <option value="homme">Hommes</option>
-              <option value="femme">Femmes</option>
-              <option value="enfant">Enfants</option>
-              <option value="accessoires">Accessoires</option>
-            </select>
-          </div>
-          <div class="col-6 col-lg-2">
-            <label class="form-label" for="sort">Tri</label>
-            <select id="sort" class="form-select">
-              <option value="relevance">Pertinence</option>
-              <option value="price-asc">Prix : croissant</option>
-              <option value="price-desc">Prix : décroissant</option>
-              <option value="newest">Nouveautés</option>
-            </select>
-          </div>
-          <div class="col-6 col-lg-2">
-            <label class="form-label" for="min">Prix min (€)</label>
-            <input type="number" id="min" class="form-control" placeholder="0" min="0" step="1">
-          </div>
-          <div class="col-6 col-lg-2">
-            <label class="form-label" for="max">Prix max (€)</label>
-            <input type="number" id="max" class="form-control" placeholder="2000" min="0" step="1">
-          </div>
-
-          <div class="col-6 col-lg-2">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="only-new">
-              <label class="form-check-label" for="only-new">Nouveaux</label>
+    // Grid
+    $grid.innerHTML = "";
+    for(const p of slice){
+      const col = document.createElement("div");
+      col.className = "col-6 col-md-4 col-lg-3";
+      col.innerHTML = `
+        <div class="card product-card h-100 border-0 shadow-sm">
+          <a class="stretched-link text-reset text-decoration-none" href="products.html?sku=${encodeURIComponent(p.sku||"")}">
+            <div class="position-relative">
+              <span class="position-absolute top-0 start-0 m-2 badge badge-new text-uppercase ${isNew(p)?"":"d-none"}">Nouveau</span>
+              <div class="ratio ratio-4x3">
+                <img class="w-100 h-100" alt="${U.esc(p.title)}" src="${firstImage(p)}" style="object-fit:cover">
+              </div>
+            </div>
+          </a>
+          <div class="card-body">
+            <h6 class="text-uppercase mb-1">${U.esc(p.title)}</h6>
+            <div class="small text-secondary mb-2">${U.esc(catLabel(p))}</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="fw-semibold">${U.fmtPrice(p.price, p.currency)}</div>
+              <button class="btn btn-sm btn-dark text-uppercase add">Ajouter</button>
             </div>
           </div>
-          <div class="col-6 col-lg-2">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="in-stock">
-              <label class="form-check-label" for="in-stock">En stock</label>
-            </div>
+        </div>`;
+      const btn = col.querySelector(".add");
+      btn.addEventListener("click",(e)=>{
+        e.preventDefault();
+        addToCart(p);
+        btn.textContent="Ajouté ✓"; btn.disabled=true;
+        setTimeout(()=>{ btn.textContent="Ajouter"; btn.disabled=false; }, 900);
+      });
+      $grid.appendChild(col);
+    }
+
+    // Pagination
+    $pager.innerHTML = "";
+    const mk = (label, p, disabled=false, active=false)=>{
+      const li = document.createElement("li");
+      li.className = `page-item ${disabled?"disabled":""} ${active?"active":""}`;
+      const a = document.createElement("a");
+      a.className = "page-link"; a.href="#"; a.textContent=label;
+      a.addEventListener("click",(e)=>{ e.preventDefault(); if(!disabled){ page=p; render(); window.scrollTo({top:0,behavior:"smooth"}); }});
+      li.appendChild(a); return li;
+    };
+    $pager.appendChild(mk("«", 1, page===1));
+    $pager.appendChild(mk("‹", page-1, page===1));
+    const win = 3; let from = Math.max(1, page-win); let to = Math.min(pages, page+win);
+    for(let i=from;i<=to;i++) $pager.appendChild(mk(String(i), i, false, i===page));
+    $pager.appendChild(mk("›", page+1, page===pages));
+    $pager.appendChild(mk("»", pages, page===pages));
+  }
+
+  /* --------------------------
+   * Skeleton loader
+   * ------------------------ */
+  function showSkeleton(){
+    if(!$grid) return;
+    $grid.innerHTML = "";
+    for(let i=0;i<8;i++){
+      const sk = document.createElement("div");
+      sk.className = "col-6 col-md-4 col-lg-3";
+      sk.innerHTML = `
+        <div class="card h-100 border-0">
+          <div class="ratio ratio-4x3 skeleton rounded"></div>
+          <div class="card-body">
+            <div class="skeleton" style="height:16px;width:70%;border-radius:6px"></div>
+            <div class="skeleton mt-2" style="height:12px;width:40%;border-radius:6px"></div>
           </div>
-
-          <div class="col-lg-2 ms-auto d-grid">
-            <button id="reset" class="btn btn-outline-secondary" type="button">Réinitialiser</button>
-          </div>
-        </div>
-
-        <!-- Filtres actifs (chips) -->
-        <div id="chips" class="d-flex flex-wrap gap-2 mt-3"></div>
-      </div>
-    </section>
-
-    <!-- Résultats -->
-    <section class="pb-5">
-      <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <div id="count" class="small text-secondary">Chargement…</div>
-          <div class="small text-secondary">Retours 30 jours · Support 7j/7</div>
-        </div>
-
-        <div id="grid" class="row g-4">
-          <!-- Le contenu est injecté par catalogue.js (skeleton puis cartes) -->
-        </div>
-
-        <!-- Pagination -->
-        <nav class="d-flex justify-content-center mt-4" aria-label="Pagination catalogue">
-          <ul id="pager" class="pagination m-0"></ul>
-        </nav>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Footer -->
-  <footer id="footer" class="border-top">
-    <div class="container">
-      <div class="row py-5">
-        <div class="col-md-4">
-          <h5 class="text-uppercase mb-3">GF Store</h5>
-          <p>Expédition & retours gratuits. Service client dédié.</p>
-        </div>
-        <div class="col-6 col-md-2">
-          <h6 class="text-uppercase mb-3">Boutique</h6>
-          <ul class="list-unstyled">
-            <li><a href="index.html#hommes">Hommes</a></li>
-            <li><a href="index.html#femmes">Femmes</a></li>
-            <li><a href="index.html#enfants">Enfants</a></li>
-            <li><a href="catalogue.html">Catalogue</a></li>
-          </ul>
-        </div>
-        <div class="col-6 col-md-3">
-          <h6 class="text-uppercase mb-3">Aide</h6>
-          <ul class="list-unstyled">
-            <li><a href="livraison.html">Livraison</a></li>
-            <li><a href="retours.html">Retours & échanges</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </div>
-        <div class="col-md-3">
-          <h6 class="text-uppercase mb-3">Newsletter</h6>
-          <form class="d-flex gap-2">
-            <input type="email" class="form-control" placeholder="Votre email" required>
-            <button class="btn btn-dark" type="submit">OK</button>
-          </form>
-          <small class="text-secondary d-block mt-2">En vous inscrivant, vous acceptez notre politique de confidentialité.</small>
-        </div>
-      </div>
-      <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top small">
-        <span>© 2025 GF Store. Tous droits réservés.</span>
-        <span>Livraison & retours gratuits • Service client dédié</span>
-      </div>
-    </div>
-  </footer>
-
-  <!-- JS base -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-
-  <!-- Offsets FOMO + nav + compteur + wobble (mêmes helpers que l’index) -->
-  <script>
-    function updateOffsets(){
-      const nav = document.getElementById('siteNav');
-      const fomo = document.getElementById('fomoBar');
-      const navH = nav ? nav.offsetHeight : 56;
-      const fomoH = fomo ? fomo.offsetHeight : 0;
-      document.documentElement.style.setProperty('--navH', navH + 'px');
-      document.documentElement.style.setProperty('--fomoH', fomoH + 'px');
-      document.body.classList.add('has-fixed-nav');
+        </div>`;
+      $grid.appendChild(sk);
     }
-    window.addEventListener('resize', ()=> requestAnimationFrame(updateOffsets));
+    if($count) $count.textContent = "Chargement…";
+  }
 
-    function updateCountdown(){
-      const now = new Date();
-      const end = new Date(); end.setHours(23,59,59,999);
-      const diff = Math.max(0, end - now);
-      const h = String(Math.floor(diff/3.6e6)).padStart(2,'0');
-      const m = String(Math.floor((diff%3.6e6)/6e4)).padStart(2,'0');
-      const s = String(Math.floor((diff%6e4)/1000)).padStart(2,'0');
-      const el = document.getElementById('countdown');
-      if(el) el.textContent = `${h}:${m}:${s}`;
-    }
-    setInterval(updateCountdown, 1000);
+  /* --------------------------
+   * Events
+   * ------------------------ */
+  $q      && $q.addEventListener("input", apply);
+  $min    && $min.addEventListener("input", apply);
+  $max    && $max.addEventListener("input", apply);
+  $filter && $filter.addEventListener("change", apply);
+  $sort   && $sort.addEventListener("change", apply);
+  $onlyNew&& $onlyNew.addEventListener("change", apply);
+  $inStock&& $inStock.addEventListener("change", apply);
+  $reset  && $reset.addEventListener("click", ()=>{
+    if($q) $q.value="";
+    if($filter) $filter.value="all";
+    if($sort) $sort.value="relevance";
+    if($min) $min.value="";
+    if($max) $max.value="";
+    if($onlyNew) $onlyNew.checked=false;
+    if($inStock) $inStock.checked=false;
+    apply();
+  });
 
-    const watchingEl = document.getElementById('watching');
-    function wobble(){
-      if(!watchingEl) return;
-      const base = 20; const noise = Math.floor(Math.random()*8) - 3;
-      watchingEl.textContent = base + noise;
-    }
-    setInterval(wobble, 4000);
+  // Si app.js envoie des événements de panier → synchro badge
+  document.addEventListener("gf:cart:sync", syncBadge);
+  document.addEventListener("gf:add", syncBadge);
 
-    window.addEventListener('load', ()=>{ updateOffsets(); updateCountdown(); wobble(); });
-  </script>
+  /* --------------------------
+   * Boot
+   * ------------------------ */
+  (async function boot(){
+    // Pré-remplir depuis l'URL
+    if($filter) $filter.value = U.param("filter", $filter.value||"all");
+    if($q)      $q.value      = U.param("q", $q.value||"");
+    if($sort)   $sort.value   = U.param("sort", $sort.value||"relevance");
+    if($min)    $min.value    = U.param("min", $min.value||"");
+    if($max)    $max.value    = U.param("max", $max.value||"");
+    if($onlyNew)$onlyNew.checked = U.param("only-new","")==="1";
+    if($inStock)$inStock.checked = U.param("in-stock","")==="1";
 
-  <!-- Catalogue logic + App globale -->
-  <script src="catalogue.js"></script>
-  <script src="app.js"></script>
-</body>
-</html>
+    syncBadge();
+    showSkeleton();
+    ALL = await loadProducts();
+    apply();
+  })();
+})();
