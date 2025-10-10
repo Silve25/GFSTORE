@@ -1,49 +1,49 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Catalogue — GF Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="format-detection" content="telephone=no"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-
-  <!-- Vendor + Theme -->
-  <link rel="stylesheet" href="css/vendor.css">
+  <!-- Theme -->
   <link rel="stylesheet" href="style.css">
 
   <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet" />
 
-  <!-- Micro styles spécifiques catalogue -->
   <style>
     :root{
-      --navH:64px;              /* maj en JS si besoin */
+      --navH:64px;
       --fomoH:40px;
-      --radius:14px;
+      --radius:12px;
     }
-    /* Ajuste le padding du contenu si header sticky + fomo */
-    body.has-fixed-nav #content{ padding-top: calc(var(--navH) + 8px) }
+    html{scroll-behavior:smooth}
+    body{background:#fff;color:#111}
+    body.has-fixed-nav #content{padding-top:calc(var(--navH) + 8px)}
+    .anchor-offset{scroll-margin-top:calc(var(--navH) + var(--fomoH) + 12px)}
 
-    /* FOMO */
+    /* --- FOMO bar --- */
     .fomo-bar{
       position:sticky; top:0; z-index:1020;
       background:#111; color:#fff; font-size:.92rem;
-      -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
+      -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
     }
     .badge-dot{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#22c55e;margin-right:.5rem}
 
-    /* Header : panier à gauche du burger (sur mobile), mais les deux à droite */
-    .nav-grid{display:flex; align-items:center; width:100%;}
-    @media (max-width: 991.98px){
+    /* --- Navbar (cart à droite du logo sur desktop, et A GAUCHE du burger sur mobile) --- */
+    .navbar{min-height:64px;background:#fff;border-bottom:1px solid #eee}
+    .nav-grid{display:flex;align-items:center;width:100%}
+    @media (max-width:991.98px){
       .nav-grid{
         display:grid;
-        grid-template-columns: 1fr auto auto; /* logo | panier | burger */
+        grid-template-columns: 1fr auto auto; /* logo | cart | burger */
         column-gap:.5rem; align-items:center;
       }
       .nav-brand{grid-column:1; justify-self:start;}
@@ -52,75 +52,68 @@
       .nav-desktop-icons{display:none !important;}
       .nav-cart-right .badge{
         font-size:.65rem; line-height:1; padding:.25em .35em;
-        transform:translate(15%, -35%);
+        transform:translate(20%,-35%);
       }
     }
-    @media (min-width: 992px){
+    @media (min-width:992px){
       .nav-cart-right{display:none !important;}
     }
 
-    /* Hero (sobre) */
+    /* --- Hero compact (espacement réduit) --- */
     .catalog-hero{
-      position:relative; text-align:center; color:#fff;
+      position:relative; color:#fff; text-align:center;
       background:#0f0f10 url('https://azure-eu-images.contentstack.com/v3/assets/blt70cb06b4414428cc/blt70e742eb576b00d4/68d2a81416d9319f7a72e26f/ASSET-HERO-HP-PRESS-RELEASE-SECONDHERO-ENFANT-DESK.jpg?branch=prod_1&format=avif&auto=auto&width=100p&quality=90') center/cover no-repeat;
-      padding: 140px 0 64px; margin-top: var(--fomoH);
+      padding: clamp(42px,6vw,64px) 0 clamp(22px,3vw,28px);
+      margin-top:var(--fomoH);
     }
-    .catalog-hero::after{content:""; position:absolute; inset:0; background:rgba(0,0,0,.35)}
-    .catalog-hero .container{position:relative; z-index:2}
+    .catalog-hero::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.35)}
+    .catalog-hero .container{position:relative;z-index:1}
+    .catalog-hero h1{margin:0 0 .25rem}
+    .catalog-hero p{margin:0;opacity:.9}
 
-    /* Filtres */
-    .filter-chip{display:inline-flex; align-items:center; gap:.35rem; border:1px solid #e5e7eb; background:#fff; padding:.35rem .6rem; border-radius:999px; font-size:.85rem}
-    .filter-chip button{border:0;background:transparent;line-height:1;cursor:pointer}
+    /* --- Filtres (compact) --- */
+    .filters-wrap{padding-block:14px}
+    .filters .form-label{font-size:.85rem;opacity:.8;margin-bottom:.25rem}
+    .filters .form-control,.filters .form-select{border-radius:12px}
+    .chips{display:flex;gap:.5rem;flex-wrap:wrap}
+    .filter-chip{display:inline-flex;align-items:center;gap:.5rem;border:1px solid #e5e7eb;border-radius:999px;padding:.35rem .6rem;background:#fff;font-size:.85rem}
+    .filter-chip button{border:0;background:transparent;cursor:pointer;line-height:1;font-size:1rem}
 
-    /* Cartes produits (images NON recadrées) */
-    .product-card{border:1px solid #eee; border-radius:var(--radius); background:#fff; box-shadow:0 10px 30px rgba(0,0,0,.04)}
-    .product-card .media-wrap{
-      aspect-ratio: 4/3;           /* ratio harmonisé sans recadrer */
-      background:#fff;
-      border:1px solid #eee;
-      border-radius: calc(var(--radius) - 4px);
-      margin: .75rem;              /* respiration autour de l’image */
-      display:grid; place-items:center;
-      overflow:hidden;             /* pour border radius propre */
-    }
-    .product-card .media-wrap img{
-      max-width:100%; max-height:100%;
-      width:auto; height:auto;
-      object-fit:contain;          /* ✅ pas de crop */
-      display:block;
-      background:#fff;
-    }
-    .product-card .card-body{padding: .75rem 1rem 1rem}
-    .product-card .title{margin:.25rem 0 .35rem; font-weight:600; text-transform:uppercase; font-size:.95rem}
-    .product-card .meta{font-size:.85rem; color:#6C7280}
+    /* --- Cards produits (images NON recadrées) --- */
+    .product-card{border:1px solid #eee;border-radius:var(--radius);overflow:hidden;background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.04)}
+    .product-card .thumb{padding:10px;background:#fff;border-bottom:1px solid #f1f1f1}
+    .product-card img.media-free{display:block;width:100%;height:auto;object-fit:contain;border-radius:10px;border:1px solid #eee;background:#fff}
+    .product-card .card-body{padding:10px 12px}
+    .product-card .title{font-size:.95rem;margin:.25rem 0}
+    .product-card .meta{font-size:.8rem;opacity:.7}
     .product-card .price{font-weight:600}
-    .product-card .btns .btn{letter-spacing:.05em}
+    .badge-new{background:#111}
 
-    /* Pagination compacte */
-    .pagination{--bs-pagination-border-radius:999px; --bs-pagination-border-width:0}
-    .pagination .page-link{border-radius:999px}
+    .card-cta{display:flex;gap:.5rem}
+    .card-cta .btn{flex:1; text-transform:uppercase; letter-spacing:.06em}
+    .btn-view{background:#fff;border:1px solid #111;color:#111}
+    .btn-view:hover{background:#111;color:#fff}
+    .btn-add{background:#111;border:1px solid #111;color:#fff}
+    .btn-add:hover{opacity:.9}
 
-    /* FAB panier */
+    /* --- FAB panier --- */
     .fab-cart{
-      position:fixed; right:16px; bottom:16px; z-index:1050;
-      display:inline-flex; align-items:center; gap:.5rem;
-      background: #111; color:#fff; border:0; border-radius:999px;
-      padding:.65rem .9rem; box-shadow:0 12px 28px rgba(0,0,0,.25);
+      position:fixed;right:16px;bottom:16px;z-index:1050;
+      background:#111;color:#fff;border:0;border-radius:999px;
+      display:inline-flex;align-items:center;gap:.5rem;
+      padding:10px 14px;box-shadow:0 12px 28px rgba(0,0,0,.25); text-transform:uppercase; letter-spacing:.06em;
     }
-    .fab-cart .badge{background:#fff; color:#111; border-radius:999px}
+    .fab-cart .badge{background:#fff;color:#111}
 
-    /* Skeleton (optionnel si pas de rendu direct) */
-    .skeleton{background:linear-gradient(90deg,#eee,#f6f7f8,#eee); background-size:200% 100%; animation:sk 1.4s ease infinite}
-    @keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    /* Petit toast */
+    #gf-toast{position:fixed;right:18px;bottom:18px;background:#111;color:#fff;padding:10px 14px;border-radius:12px;z-index:2000;opacity:0;transform:translateY(6px);transition:opacity .25s, transform .25s}
   </style>
 </head>
-<body class="catalogue-page">
-  <!-- SVG sprite basique -->
+<body>
+  <!-- SVG icons -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     <defs>
-      <symbol id="search" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></symbol>
       <symbol id="cart" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.49a3 3 0 0 0 2.89-2.18l1.58-5.55A1 1 0 0 0 19 5H6.74a3 3 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.92l.16.55 1.64 5.74A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Z"/></symbol>
-      <symbol id="heart" viewBox="0 0 24 24"><path fill="currentColor" d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Z"/></symbol>
       <symbol id="user" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></symbol>
     </defs>
   </svg>
@@ -130,20 +123,21 @@
     <div class="container d-flex flex-wrap justify-content-between align-items-center">
       <div class="d-flex align-items-center gap-2">
         <span class="badge-dot"></span>
-        <span><strong id="watching">18</strong> personnes consultent cette page</span>
+        <span><strong id="watching">22</strong> personnes consultent cette page</span>
       </div>
       <div>-10% première commande : <strong>GF-FIRST10</strong></div>
     </div>
   </div>
 
   <!-- HEADER -->
-  <nav class="navbar navbar-expand-lg align-items-center p-3 fixed-top navbar-light bg-white border-bottom" id="siteNav" style="top: var(--fomoH)">
+  <nav class="navbar navbar-expand-lg fixed-top" id="siteNav" style="top: var(--fomoH)">
     <div class="container-fluid nav-grid">
       <!-- Logo -->
       <a class="navbar-brand nav-brand" href="index.html">GF Store</a>
 
-      <!-- Panier mobile, à gauche du burger, tous deux à droite -->
-      <a class="nav-cart-right d-lg-none position-relative" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
+      <!-- Panier mobile (à GAUCHE du burger, tous deux à droite) -->
+      <a class="nav-cart-right d-lg-none position-relative" href="#"
+         data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
         <svg width="26" height="26"><use xlink:href="#cart"/></svg>
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark cart-count">0</span>
       </a>
@@ -157,7 +151,7 @@
       <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title">Menu</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+          <button class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
         </div>
         <div class="offcanvas-body">
           <ul class="navbar-nav ms-auto gap-3">
@@ -173,6 +167,8 @@
                 <li><a class="dropdown-item" href="login.html">Se connecter</a></li>
                 <li><a class="dropdown-item" href="register.html">Créer un compte</a></li>
                 <li><a class="dropdown-item" href="password-reset.html">Mot de passe oublié</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="commande.html">Suivre ma commande</a></li>
               </ul>
             </li>
           </ul>
@@ -180,24 +176,24 @@
       </div>
 
       <!-- Icônes desktop -->
-      <ul class="list-unstyled d-flex m-0 ms-3 align-items-center nav-desktop-icons">
-        <li class="me-3 d-none d-lg-block"><a href="wishlist.html" aria-label="Wishlist"><svg width="24" height="24"><use xlink:href="#heart"/></svg></a></li>
-        <li class="d-none d-lg-block">
-          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
+      <ul class="list-unstyled d-flex m-0 ms-3 nav-desktop-icons">
+        <li>
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier" class="position-relative d-inline-block">
             <svg width="24" height="24"><use xlink:href="#cart"/></svg>
-            <span class="badge bg-dark ms-1 cart-count align-middle">0</span>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark cart-count">0</span>
           </a>
         </li>
       </ul>
     </div>
   </nav>
 
-  <!-- Panier Offcanvas -->
+  <!-- Panier -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
     <div class="offcanvas-header justify-content-center">
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+      <button class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
     </div>
     <div class="offcanvas-body">
+      <!-- rempli par catalogue.js -->
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-primary">Votre panier</span>
         <span class="badge bg-primary rounded-pill cart-count">0</span>
@@ -207,31 +203,35 @@
     </div>
   </div>
 
-  <!-- HERO -->
-  <header class="catalog-hero">
-    <div class="container">
-      <nav aria-label="breadcrumb" class="mb-2">
-        <ol class="breadcrumb justify-content-center">
-          <li class="breadcrumb-item"><a class="link-light text-decoration-none" href="index.html">Accueil</a></li>
-          <li class="breadcrumb-item active text-white-50" aria-current="page">Catalogue</li>
-        </ol>
-      </nav>
-      <h1 class="display-5 mb-1">Catalogue Hiver 2025</h1>
-      <p class="mb-0">Doudounes, parkas, mailles & accessoires</p>
-    </div>
-  </header>
+  <!-- FAB Panier -->
+  <button class="fab-cart d-flex align-items-center" type="button"
+          data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-label="Ouvrir le panier">
+    <svg width="20" height="20" class="me-1"><use xlink:href="#cart"/></svg>
+    Panier <span class="badge ms-2" id="fabCount">0</span>
+  </button>
 
   <main id="content">
-    <!-- Filtres -->
-    <section class="py-4">
+    <!-- HERO compact -->
+    <header class="catalog-hero">
       <div class="container">
-        <div class="row g-3 align-items-end">
+        <nav aria-label="breadcrumb" class="mb-1">
+          <ol class="breadcrumb justify-content-center">
+            <li class="breadcrumb-item"><a class="link-light text-decoration-none" href="index.html">Accueil</a></li>
+            <li class="breadcrumb-item active text-white-50" aria-current="page">Catalogue</li>
+          </ol>
+        </nav>
+        <h1 class="display-6">Catalogue Hiver 2025</h1>
+        <p>Doudounes, parkas, mailles & accessoires</p>
+      </div>
+    </header>
+
+    <!-- FILTRES (espacement réduit) -->
+    <section class="filters-wrap">
+      <div class="container">
+        <div class="row g-3 align-items-end filters">
           <div class="col-lg-4">
             <label class="form-label" for="q">Recherche</label>
-            <div class="input-group">
-              <span class="input-group-text"><svg width="18" height="18"><use xlink:href="#search"/></svg></span>
-              <input id="q" type="search" class="form-control" placeholder="Doudoune, parka, bonnet…">
-            </div>
+            <input id="q" type="search" class="form-control" placeholder="Doudoune, parka, bonnet…">
           </div>
           <div class="col-6 col-lg-2">
             <label class="form-label" for="filter">Catégorie</label>
@@ -279,8 +279,8 @@
           </div>
         </div>
 
-        <!-- Chips d’état -->
-        <div id="chips" class="d-flex flex-wrap gap-2 mt-3"></div>
+        <!-- Chips -->
+        <div id="chips" class="chips mt-2"></div>
       </div>
     </section>
 
@@ -292,20 +292,46 @@
           <div class="small text-secondary">Livraison & retours gratuits</div>
         </div>
 
-        <!-- Grille produits (remplie par catalogue.js) -->
         <div id="grid" class="row g-4">
-          <!-- Squelettes (affichés avant le JS) -->
+          <!-- Skeleton template -->
           <template id="tpl-skel">
             <div class="col-6 col-md-4 col-lg-3">
               <div class="card h-100 border-0">
-                <div class="skeleton" style="aspect-ratio:4/3; border-radius:var(--radius)"></div>
+                <div class="rounded" style="height:240px;background:linear-gradient(90deg,#f3f4f6,#e5e7eb,#f3f4f6);animation:shine 1.2s infinite;background-size:200% 100%"></div>
                 <div class="card-body">
-                  <div class="skeleton" style="height:16px;width:70%;border-radius:6px"></div>
-                  <div class="skeleton mt-2" style="height:12px;width:40%;border-radius:6px"></div>
+                  <div class="rounded" style="height:16px;width:70%;background:#e5e7eb"></div>
+                  <div class="rounded mt-2" style="height:12px;width:40%;background:#e5e7eb"></div>
                 </div>
               </div>
             </div>
           </template>
+
+          <!-- Template CARTE produit (Doit matcher catalogue.js) -->
+          <template id="tpl-card">
+            <div class="col-6 col-md-4 col-lg-3">
+              <article class="product-card h-100">
+                <div class="thumb position-relative">
+                  <span class="position-absolute top-0 start-0 m-2 badge badge-new text-uppercase d-none">Nouveau</span>
+                  <img class="media-free w-100" alt="">
+                </div>
+                <div class="card-body">
+                  <h6 class="title text-uppercase mb-1">Produit</h6>
+                  <div class="meta small mb-2">—</div>
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="price">—</div>
+                  </div>
+                  <div class="card-cta">
+                    <a class="btn btn-view view" href="products.html">Voir</a>
+                    <button class="btn btn-add add" type="button">Ajouter</button>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </template>
+
+          <div class="col-12">
+            <div id="empty" class="alert alert-warning d-none mt-2">Aucun article à afficher.</div>
+          </div>
         </div>
 
         <!-- Pagination -->
@@ -316,37 +342,7 @@
     </section>
   </main>
 
-  <!-- Template carte produit (utilisée par le futur JS) -->
-  <template id="tpl-card">
-    <div class="col-6 col-md-4 col-lg-3">
-      <article class="product-card h-100">
-        <div class="media-wrap">
-          <img class="media-free" src="images/product-fallback.jpg" alt="">
-        </div>
-        <div class="card-body">
-          <h6 class="title">Produit</h6>
-          <div class="meta mb-2">Catégorie</div>
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="price">—</div>
-            <span class="badge text-bg-dark text-uppercase d-none">Nouveau</span>
-          </div>
-          <div class="btns d-grid gap-2">
-            <a class="btn btn-outline-dark btn-sm text-uppercase view" href="products.html">Voir le produit</a>
-            <button class="btn btn-dark btn-sm text-uppercase add" type="button"
-              data-add data-id="" data-name="" data-price="" data-image="">Ajouter au panier</button>
-          </div>
-        </div>
-      </article>
-    </div>
-  </template>
-
-  <!-- FAB panier -->
-  <button class="fab-cart" id="fabCart" type="button" aria-label="Ouvrir le panier" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart">
-    <svg width="18" height="18"><use xlink:href="#cart"/></svg>
-    <span class="badge" id="fabCount">0</span>
-  </button>
-
-  <!-- Footer -->
+  <!-- FOOTER -->
   <footer class="border-top">
     <div class="container">
       <div class="row py-5">
@@ -354,7 +350,7 @@
           <h5 class="text-uppercase mb-3">GF Store</h5>
           <p>Expédition & retours gratuits. Service client dédié.</p>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-2">
           <h6 class="text-uppercase mb-3">Boutique</h6>
           <ul class="list-unstyled">
             <li><a href="index.html#hommes">Hommes</a></li>
@@ -372,12 +368,13 @@
             <li><a href="contact.html">Contact</a></li>
           </ul>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
           <h6 class="text-uppercase mb-3">Newsletter</h6>
           <form class="d-flex gap-2">
             <input type="email" class="form-control" placeholder="Votre email" required>
             <button class="btn btn-dark" type="submit">OK</button>
           </form>
+          <small class="text-secondary d-block mt-2">En vous inscrivant, vous acceptez notre politique de confidentialité.</small>
         </div>
       </div>
       <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top small">
@@ -387,39 +384,31 @@
     </div>
   </footer>
 
-  <!-- JS base -->
+  <!-- JS (Bootstrap + app + catalogue) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-  <!-- (Optionnel) Pré-chargeur de data si présent -->
-  <script src="data/products.js"></script>
-  <!-- Catalogue logic (tu me diras de l’actualiser ensuite) -->
+  <!-- IMPORTANT : charge l’API produits si dispo (facultatif). Sinon, catalogue.js gère les fallbacks -->
+  <script src="products.js" defer></script>
+
+  <!-- Panier global (si tu as déjà app.js, laisse-le ; sinon c’est optionnel) -->
+  <script src="app.js" defer></script>
+
+  <!-- Catalogue logic -->
   <script src="catalogue.js"></script>
-  <!-- App globale (badge panier etc.) -->
-  <script src="app.js"></script>
 
-  <!-- Mini-boot pour padding & FOMO (facultatif) -->
   <script>
-    (function(){
-      const nav=document.getElementById('siteNav');
-      const fomo=document.getElementById('fomoBar');
-      function updateOffsets(){
-        const navH = nav?nav.offsetHeight:56;
-        const fomoH = fomo?fomo.offsetHeight:0;
-        document.documentElement.style.setProperty('--navH', navH+'px');
-        document.documentElement.style.setProperty('--fomoH', fomoH+'px');
-        document.body.classList.add('has-fixed-nav');
-      }
-      window.addEventListener('load', updateOffsets);
-      window.addEventListener('resize', ()=>requestAnimationFrame(updateOffsets));
-
-      // petit wobble viewers
-      const watching=document.getElementById('watching');
-      function wobble(){
-        const base=20; const noise=Math.floor(Math.random()*8)-3;
-        if(watching) watching.textContent = base + noise;
-      }
-      setInterval(wobble, 4000);
-    })();
+    // Ajuste offsets et active le padding safe
+    function updateOffsets(){
+      const nav = document.getElementById('siteNav');
+      const fomo = document.getElementById('fomoBar');
+      const navH = nav ? nav.offsetHeight : 56;
+      const fomoH = fomo ? fomo.offsetHeight : 0;
+      document.documentElement.style.setProperty('--navH', navH + 'px');
+      document.documentElement.style.setProperty('--fomoH', fomoH + 'px');
+      document.body.classList.add('has-fixed-nav');
+    }
+    window.addEventListener('load', updateOffsets);
+    window.addEventListener('resize', ()=> requestAnimationFrame(updateOffsets));
   </script>
 </body>
 </html>
